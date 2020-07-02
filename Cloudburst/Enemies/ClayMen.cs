@@ -1,4 +1,5 @@
-﻿using Cloudburst.Enemies.EntityStatez.ClayManMonster;
+﻿using Cloudburst;
+using Cloudburst.Enemies.EntityStatez.ClayManMonster;
 using EntityStates;
 using R2API;
 using R2API.Utils;
@@ -19,6 +20,7 @@ namespace CloudBurst.Enemies
         public static GameObject clayManMaster;
 
         public static SkillLocator skillLocator;
+
         public static void BuildClayMen()
         {
             clayMan = Resources.Load<GameObject>("prefabs/characterbodies/ClayBody");
@@ -82,13 +84,14 @@ namespace CloudBurst.Enemies
         {
             GameObject badVariableName = clayMan.GetComponent<ModelLocator>().modelTransform.gameObject;
             CapsuleCollider hitBox = badVariableName.gameObject.AddComponent<CapsuleCollider>();
+            ChildLocator childLocator = clayMan.GetComponentInChildren<ChildLocator>();
 
             hitBox.radius *= 2;
 
             badVariableName.gameObject.layer = LayerIndex.entityPrecise.intVal;
 
             HurtBox hurtBox = badVariableName.AddComponent<HurtBox>();
-            hurtBox.transform.localPosition = badVariableName.transform.up;
+
             HurtBoxGroup hurtBoxGroup = badVariableName.AddComponent<HurtBoxGroup>();
 
             hurtBox.damageModifier = HurtBox.DamageModifier.Normal;
@@ -126,13 +129,13 @@ namespace CloudBurst.Enemies
             {
                 LanguageAPI.Add("CLAYMAN_BODY_TOKEN", "Clay Man");
                 characterBody.baseAcceleration = 80f;
-                characterBody.baseArmor = 20; //Base armor this character has, set to 20 if this character is melee 
+                characterBody.baseArmor = 10; //Base armor this character has, set to 20 if this character is melee 
                 characterBody.baseAttackSpeed = 1; //Base attack speed, usually 1
                 characterBody.baseCrit = 1;  //Base crit, usually one
                 characterBody.baseDamage = 12; //Base damage
                 characterBody.baseJumpCount = 1; //Base jump amount, set to 2 for a double jump. 
                 characterBody.baseJumpPower = 14; //Base jump power
-                characterBody.baseMaxHealth = 220; //Base health, basically the health you have when you start a new run
+                characterBody.baseMaxHealth = 110; //Base health, basically the health you have when you start a new run
                 characterBody.baseMaxShield = 0; //Base shield, basically the same as baseMaxHealth but with shields
                 characterBody.baseMoveSpeed = 8; //Base move speed, this is usual 7
                 characterBody.baseNameToken = "CLAYMAN_BODY_TOKEN"; //The base name token. 
@@ -146,7 +149,7 @@ namespace CloudBurst.Enemies
                 characterBody.levelArmor = 0; //Armor gained when leveling up. 
                 characterBody.levelAttackSpeed = 0; //Attackspeed gained when leveling up. 
                 characterBody.levelCrit = 0; //Crit chance gained when leveling up. 
-                characterBody.levelDamage = 5f; //Damage gained when leveling up. 
+                characterBody.levelDamage = 2.5f; //Damage gained when leveling up. 
                 characterBody.levelArmor = 3; //Armor gaix; //Health gained when leveling up. 
                 characterBody.levelMaxShield = 0; //Shield gained when leveling up. 
                 characterBody.levelMoveSpeed = 0; //Move speed gained when leveling up. 

@@ -86,10 +86,10 @@ namespace Cloudburst
                     if (moneyOnInteractionCount > 0) {
                         master.GiveMoney(5U + (uint)(moneyOnInteractionCount * 3));
                     }
-                    if (eliteBuffOnInteractionCount > 0 && Util.CheckRoll(15 + (eliteBuffOnInteractionCount * 5), master)) {
+                    if (eliteBuffOnInteractionCount > 0) {
                         Util.PlaySound("Play_item_use_gainArmor", characterBody.gameObject);
                         int count = UnityEngine.Random.Range(0, eliteBuffList.Count);
-                        characterBody.AddTimedBuff(eliteBuffList[count], 5);
+                        characterBody.AddTimedBuff(eliteBuffList[count], 5 * eliteBuffOnInteractionCount);
                     }
                 }
             }
@@ -155,12 +155,12 @@ namespace Cloudburst
                                 int itemOnLevelUpCount = master.inventory.GetItemCount(Items.itemOnLevelUpIndex);
                                 int barrierOnLevelUpCount = master.inventory.GetItemCount(Items.barrierOnLevelIndex);
 
-                                if (itemOnLevelUpCount > 0 && Util.CheckRoll(75, master)) {
+                                if (itemOnLevelUpCount > 0 && Util.CheckRoll(50, master)) {
                                     NokiaCall(characterBody.transform, itemOnLevelUpCount);
                                 }
                                 if (barrierOnLevelUpCount > 0) {
                                     if (characterBody.healthComponent) {
-                                        characterBody.healthComponent.AddBarrier(15 + (5 * barrierOnLevelUpCount));
+                                        characterBody.healthComponent.AddBarrier(25 + (5 * barrierOnLevelUpCount));
 
                                     }
                                 }
@@ -182,18 +182,18 @@ namespace Cloudburst
         public static void BuffCatalog_RegisterBuff(On.RoR2.BuffCatalog.orig_RegisterBuff orig, BuffIndex buffIndex, BuffDef buffDef)
         {
             //Fixes deathmark
-            if (!Main.instance.deathMarkMod)
-            {
+
                 if (buffIndex == BuffIndex.DeathMark)
                 {
                     buffDef.canStack = true;
-                }
+                
             }
             onRegisterBuffSubscription = true;
             orig(buffIndex, buffDef);
         }
         public static bool EquipmentSlotOnPerformEquipmentAction(On.RoR2.EquipmentSlot.orig_PerformEquipmentAction orig, EquipmentSlot self, EquipmentIndex index)
         {
+
             if (index == Equipment.brokenPrinterIndex)
             {
                 Equipment.SummonMjnion(self.characterBody);

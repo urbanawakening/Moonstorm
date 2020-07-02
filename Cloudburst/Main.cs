@@ -15,7 +15,7 @@ namespace Cloudburst
     [R2APISubmoduleDependency(new string[]
     {
         "ItemAPI",
-        "ResourcesAPI", 
+        "ResourcesAPI",
         "PrefabAPI",
         "LanguageAPI",
         "BuffAPI",
@@ -34,10 +34,11 @@ namespace Cloudburst
         private List<PluginInfo> loadedPlugins;
 
         private bool archaicWispMod;
-        public bool deathMarkMod;
+        private bool deathMarkMod;
         private bool solidIceMod;
 
         internal event Action awake;
+        //internal event Action afterLoad;
         internal event Action start;
         public Main()
         {
@@ -49,7 +50,8 @@ namespace Cloudburst
         public void Awake()
         {
             Action awake = this.awake;
-            if (awake == null) {
+            if (awake == null)
+            {
                 return;
             }
             awake();
@@ -121,7 +123,8 @@ namespace Cloudburst
         private void CheckCompat() {
             replacedFuncs = new List<string>();
             this.replacedFuncs.Add("com.Rein.ReinDirectorCardDemoArchWisp"); //rein i BEG YOU please shorten that name PLEASE
-            foreach (PluginInfo pluginInfo in loadedPlugins) {
+            foreach (PluginInfo pluginInfo in loadedPlugins)
+            {
                 switch ((pluginInfo.Metadata.GUID))
                 {
                     case "com.Borbo.DeathMarkFix":
@@ -141,7 +144,8 @@ namespace Cloudburst
                 }
             }
         }
-        private void CharacterBody_OnInventoryChanged(On.RoR2.CharacterBody.orig_OnInventoryChanged orig, CharacterBody self) {
+        private void CharacterBody_OnInventoryChanged(On.RoR2.CharacterBody.orig_OnInventoryChanged orig, CharacterBody self)
+        {
             if (self && self.inventory)
             {
                 Inventory inventory = self.inventory;
@@ -160,49 +164,63 @@ namespace Cloudburst
                 #endregion
 
                 #region Hooks
-                if (moneyOnInteractionCount > 0 || eliteBuffOnInteractionCount > 0) {
-                    GlobalEventManager.OnInteractionsGlobal += Hooks.GlobalEventManager_OnInteractionsGlobal;
+                if (moneyOnInteractionCount > 0 || eliteBuffOnInteractionCount > 0)
+                {
+                    GlobalEventManager .OnInteractionsGlobal += Hooks.GlobalEventManager_OnInteractionsGlobal;
                 }
-                else if (Hooks.onInteractionSubscription) {
+                else if (Hooks.onInteractionSubscription)
+                {
                     GlobalEventManager.OnInteractionsGlobal -= Hooks.GlobalEventManager_OnInteractionsGlobal;
                 }
-                if (barrierOnCritCount > 0) {
+                if (barrierOnCritCount > 0)
+                {
                     On.RoR2.GlobalEventManager.OnCrit += Hooks.GlobalEventManager_OnCrit;
                 }
-                else if (Hooks.onCritSubscription) {
+                else if (Hooks.onCritSubscription)
+                {
                     On.RoR2.GlobalEventManager.OnCrit -= Hooks.GlobalEventManager_OnCrit;
                 }
-                if (crippleOnHitCount > 0 || randomDebuffOnHitCount > 0) {
+                if (crippleOnHitCount > 0 || randomDebuffOnHitCount > 0)
+                {
                     GlobalEventManager.onServerDamageDealt += Hooks.GlobalEventManager_onServerDamageDealt;
                 }
-                else if (Hooks.onDmgDealtSubscription) {
-                    GlobalEventManager.onServerDamageDealt-= Hooks.GlobalEventManager_onServerDamageDealt;
+                else if (Hooks.onDmgDealtSubscription)
+                {
+                    GlobalEventManager.onServerDamageDealt -= Hooks.GlobalEventManager_onServerDamageDealt;
                 }
-                if (itemChampionOnKillCount > 0) {
+                if (itemChampionOnKillCount > 0)
+                {
                     GlobalEventManager.onCharacterDeathGlobal += Hooks.GlobalEventManagerOnOnCharacterDeath;
                 }
-                else if (Hooks.onDeathSubscription) {
+                else if (Hooks.onDeathSubscription)
+                {
                     GlobalEventManager.onCharacterDeathGlobal -= Hooks.GlobalEventManagerOnOnCharacterDeath;
                 }
-                if (itemOnLevelUpCount > 0 ||  barrierOnLevelCount > 0) {
+                if (itemOnLevelUpCount > 0 || barrierOnLevelCount > 0)
+                {
                     On.RoR2.GlobalEventManager.OnTeamLevelUp += Hooks.GlobalEventManager_OnTeamLevelUp;
                 }
-                else if (Hooks.onTeamLevelUpSubscription) {  
+                else if (Hooks.onTeamLevelUpSubscription)
+                {
                     On.RoR2.GlobalEventManager.OnTeamLevelUp -= Hooks.GlobalEventManager_OnTeamLevelUp;
                 }
-                if (largerTeleporterRadius > 0) {
+                if (largerTeleporterRadius > 0)
+                {
                     TeleporterInteraction.onTeleporterBeginChargingGlobal += Hooks.TeleporterInteractionOnTeleporterBeginChargingGlobal;
                 }
-                else if (Hooks.onTeleporterBeginChargingSubscription) {
+                else if (Hooks.onTeleporterBeginChargingSubscription)
+                {
                     TeleporterInteraction.onTeleporterBeginChargingGlobal -= Hooks.TeleporterInteractionOnTeleporterBeginChargingGlobal;
                 }
-                if (cloakOnInteractionCount > 0) {
+                if (cloakOnInteractionCount > 0)
+                {
                     On.RoR2.GenericPickupController.GrantItem += Hooks.GrantItem;
                 }
-                else if (Hooks.grantItemSubscription) {
+                else if (Hooks.grantItemSubscription)
+                {
                     On.RoR2.GenericPickupController.GrantItem -= Hooks.GrantItem;
                 }
-                #endregion
+                #endregion 
             }
             orig(self);
         }

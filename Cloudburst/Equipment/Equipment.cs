@@ -12,6 +12,7 @@ namespace CloudBurst.Equipment
         public static EquipmentIndex lumpkinIndex { get; private set; }
         public static EquipmentIndex unstableQuantumReactorIndex { get; private set; }
         public static EquipmentIndex brokenPrinterIndex { get; private set; }
+        //public static EquipmentIndex cocktailIndex { get; }
         #endregion
         #region Lists
         public static List<GameObject> projectileList = new List<GameObject>{
@@ -37,6 +38,10 @@ namespace CloudBurst.Equipment
             Resources.Load<GameObject>("prefabs/projectiles/CrocoSpit"),
             Resources.Load<GameObject>("prefabs/projectiles/DaggerProjectile"),
         };
+        #endregion
+        #region GameObjects
+        //private static GameObject molotovCocktail;
+        //private static GameObject molotovCocktailZone;
         #endregion
         public Equipment()
         {
@@ -68,6 +73,10 @@ namespace CloudBurst.Equipment
             LanguageAPI.Add("EQUIPMENT_BROKENPRINTER_PICKUP", "Summon a powerful but fragile ally that aids you in combat.");
             LanguageAPI.Add("EQUIPMENT_BROKENPRINTER_DESC", "Summon a powerful ally that inherits your items but has half health.");
             LanguageAPI.Add("EQUIPMENT_BROKENPRINTER_LORE", "Order: \u201CBroken Printer\u201D\r\nTracking Number: 72******\r\nEstimated Delivery: 08\\25\\2057\\\r\nShipping Method:  High Priority\r\nShipping Address: 836 Lane, Lab [42], Mars\r\nShipping Details:\r\n\r\nI can't speak for the rest of the researchers here, but I have no clue why you decided to send this here. We don't know what's wrong with this thing, and we don't know if there\u2019s anything wrong with it, it\u2019s completely alien. I don\u2019t think a person actually made this thing, there are materials in it that we\u2019ve never seen before.\r\n\r\nI\u2019m sending this back to you because it\u2019s more trouble than it\u2019s worth to keep here, and frankly those things it prints are horrifyingly hollow.\r\n");
+
+            //LanguageAPI.Add("EQUIPMENT_VIVELAFRANCE_NAME", "Molotov Cocktail");
+            //LanguageAPI.Add("EQUIPMENT_VIVELAFRANCE_PICKUP", "Throw a molotov cocktail.");
+            //LanguageAPI.Add("EQUIPMENT_VIVELAFRANCE_DESC", "Throw a molotov cocktail that ignites enemies.");
             #endregion
             #region EquipmentDefs
             EquipmentDef lumpkinDef = new EquipmentDef()
@@ -130,16 +139,38 @@ namespace CloudBurst.Equipment
                 pickupToken = "EQUIPMENT_BROKENPRINTER_PICKUP",
                 unlockableName = "",
             };
+            /*EquipmentDef vivaLaFranceDef = new EquipmentDef()
+            {
+                addressToken = "",
+                appearsInMultiPlayer = true,
+                appearsInSinglePlayer = true,
+                canDrop = true,
+                colorIndex = ColorCatalog.ColorIndex.Equipment,
+                cooldown = 55,
+                descriptionToken = "EQUIPMENT_VIVELAFRANCE_DESC",
+                enigmaCompatible = true,
+                isBoss = false,
+                isLunar = false,
+                loreToken = "",
+                name = "Cocktail",
+                nameToken = "EQUIPMENT_VIVELAFRANCE_NAME",
+                pickupIconPath = pickUpIconPath,
+                pickupModelPath = pickUpModelPath,
+                pickupToken = "EQUIPMENT_VIVELAFRANCE_PICKUP",
+                unlockableName = "",
+            };*/
             #endregion
             #region CustomEquipments
             var lumpkin = new CustomEquipment(lumpkinDef, new[] { rule });
             var reactor = new CustomEquipment(reactorDef, new[] { rule });
             var printer = new CustomEquipment(printerDef, new[] { rule });
+            //var cocktail = new CustomEquipment(vivaLaFranceDef, new[] { rule });
             #endregion
             #region Setting Indexes
             lumpkinIndex = ItemAPI.Add(lumpkin);
             unstableQuantumReactorIndex = ItemAPI.Add(reactor);
             brokenPrinterIndex = ItemAPI.Add(printer);
+            //cocktailIndex = ItemAPI.Add(cocktail);
             #endregion
             #region Create CloudburstEquipmentDefs
             CloudburstEquipDef lumpkinEquipDef = new CloudburstEquipDef();
@@ -232,5 +263,42 @@ namespace CloudBurst.Equipment
             };
             ProjectileManager.instance.FireProjectile(projInfo);
         }
+        /*public static void ViveLaFrance(CharacterBody user)
+        {
+            InputBankTest aimRay = user.inputBank;
+            if (molotovCocktail == null)
+            {
+                molotovCocktail = Resources.Load<GameObject>("prefabs/projectiles/SporeGrenadeProjectile").InstantiateClone("MegaSporeGrenadeProjectile", false);
+                molotovCocktailZone = Resources.Load<GameObject>("prefabs/projectiles/BeetleQueenAcid").InstantiateClone("CIScepMageFlamethrowerCloud");
+
+                ProjectileController molotovController = molotovCocktail.GetComponent<ProjectileController>();
+                molotovController.procCoefficient = 1;
+                molotovController.ghostPrefab = Resources.Load<GameObject>("prefabs/projectileghosts/FireballGhost");
+
+                ProjectileDamage molotovDamage = molotovCocktail.GetComponent<ProjectileDamage>();
+                molotovDamage.damageType = DamageType.IgniteOnHit;
+
+                ProjectileImpactExplosion projectileImpactExplosion = molotovCocktail.GetComponent<ProjectileImpactExplosion>();
+                projectileImpactExplosion.childrenProjectilePrefab = molotovCocktailZone;
+                projectileImpactExplosion.impactEffect = Resources.Load<GameObject>("prefabs/effects/impacteffects/FireballVehicleDamageEffect");
+                molotovCocktailZone = Resources.Load<GameObject>("prefabs/projectiles/BeetleQueenAcid").InstantiateClone("CIScepMageFlamethrowerCloud");
+
+                ThreeEyedGames.Decal decal = molotovCocktailZone.GetComponent<ThreeEyedGames.Decal>();
+                decal.Material = Resources.Load<Material>("Materials/matBlighted");
+                BaseHelpers.RegisterNewProjectile(molotovCocktail);
+                BaseHelpers.RegisterNewProjectile(molotovCocktailZone);
+
+            }
+            var projInfo = new FireProjectileInfo
+            {
+                crit = false,
+                damage = 5 * user.damage,
+                owner = user.gameObject,
+                position = user.transform.position,
+                projectilePrefab = molotovCocktail,
+                rotation = Util.QuaternionSafeLookRotation(aimRay.aimDirection),
+            };
+            ProjectileManager.instance.FireProjectile(projInfo);
+        }*/
     }
 }

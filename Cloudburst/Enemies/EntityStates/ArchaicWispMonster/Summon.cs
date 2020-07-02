@@ -8,7 +8,7 @@ namespace Cloudburst.Enemies.EntityStatez.ArchaicWispMonster
     public class Summon : BaseState
     {
         public GameObject effectPrefab;
-        public float baseDuration = 2f;
+        public float baseDuration = 1f;
         private float duration;
         public string muzzleLeft = "MuzzleLeft";
         public string muzzleRight = "MuzzleRight";

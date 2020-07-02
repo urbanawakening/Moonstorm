@@ -44,8 +44,8 @@ namespace CloudBurst.Items
             LanguageAPI.Add("ITEM_LARGERTELEPORTERRADIUS_ITEM_PICKUP", "Increase teleporter radius.");
 
             LanguageAPI.Add("ITEM_ELITEBUFFONINTERACTION_NAME", "Rechargable Quantum Core");
-            LanguageAPI.Add("ITEM_ELITEBUFFONINTERACTION_DESC", "<style=cIsUtility>10 <style=cStack>(+5% chance per stack)</style> percent chance to become elite upon interaction.</style> ");
-            LanguageAPI.Add("ITEM_ELITEBUFFONINTERACTION_PICKUP", "Chance to become elite on activating an interactable.");
+            LanguageAPI.Add("ITEM_ELITEBUFFONINTERACTION_DESC", "<style=cIsUtility>Become elite upon interaction</style> for 5 seconds <style=cStack>(+5 seconds per stack)</style>.");
+            LanguageAPI.Add("ITEM_ELITEBUFFONINTERACTION_PICKUP", "Become elite on activating an interactable.");
 
             LanguageAPI.Add("ITEM_CRIPPLEONHIT_NAME", "Crippling Root");
             LanguageAPI.Add("ITEM_CRIPPLEONHIT_DESC", "20% Chance to <style=cIsDamage>cripple enemies</style> for 3 <style=cStack>(+3 seconds per stack)</style> seconds. ");
@@ -73,7 +73,7 @@ namespace CloudBurst.Items
             LanguageAPI.Add("ITEM_BARRIERONCRIT_PICKUP", "Gain barrier on critical hits");
 
             LanguageAPI.Add("ITEM_BARRIERONLEVEL_NAME", "Topaz Crown");
-            LanguageAPI.Add("ITEM_BARRIERONLEVEL_DESC", "Gain a <style=cIsHealing>temporary barrier</style> on level up for <style=cIsHealing>20 health</style> <style=cStack>(+5 per stack)</style>.");
+            LanguageAPI.Add("ITEM_BARRIERONLEVEL_DESC", "Gain a <style=cIsHealing>temporary barrier</style> on level up for <style=cIsHealing>30 health</style> <style=cStack>(+5 per stack)</style>.");
             LanguageAPI.Add("ITEM_BARRIERONLEVEL_PICKUP", "Gain barrier on level up");
 
             LanguageAPI.Add("ITEM_LIGHTNINGONHURT_NAME", "LIGHTNINGONHURT_NAME");
@@ -237,7 +237,7 @@ namespace CloudBurst.Items
                 pickupModelPath = pickUpModelPath,
                 pickupToken = "ITEM_MONEYONINTERACTION_PICKUP",
                 tags = moneyOnInteractionTags,
-                tier = ItemTier.Tier2,
+                tier = ItemTier.Tier1,
                 unlockableName = ""
             };
             ItemTag[] barrierOnCritTags = new ItemTag[2]
