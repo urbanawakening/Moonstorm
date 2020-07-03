@@ -41,7 +41,7 @@ namespace CloudBurst.Items
 
             LanguageAPI.Add("ITEM_LARGERTELEPORTERRADIUS_NAME", "Mechanical Trinket");
             LanguageAPI.Add("ITEM_LARGERTELEPORTERRADIUS_DESC", "<style=cIsUtility>Increase teleporter radius by 3m</style> <style=cStack>(+3m per stack)</style>.");
-            LanguageAPI.Add("ITEM_LARGERTELEPORTERRADIUS_ITEM_PICKUP", "Increase teleporter radius.");
+            LanguageAPI.Add("ITEM_LARGERTELEPORTERRADIUS_PICKUP", "Increase teleporter radius.");
 
             LanguageAPI.Add("ITEM_ELITEBUFFONINTERACTION_NAME", "Rechargable Quantum Core");
             LanguageAPI.Add("ITEM_ELITEBUFFONINTERACTION_DESC", "<style=cIsUtility>Become elite upon interaction</style> for 5 seconds <style=cStack>(+5 seconds per stack)</style>.");

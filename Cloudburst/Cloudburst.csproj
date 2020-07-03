@@ -344,6 +344,7 @@
     <Compile Include="CloudburstStuff\CloudCatalog.cs" />
     <Compile Include="CloudburstStuff\CloudburstItemDef.cs" />
     <Compile Include="CloudburstStuff\CloudburstEquipDef.cs" />
+    <Compile Include="Enemies\Wayfarer.cs" />
     <Compile Include="Helpers\BaseHelpers.cs" />
     <Compile Include="Hooks.cs" />
     <Compile Include="Enemies\MegeMushrum.cs" />

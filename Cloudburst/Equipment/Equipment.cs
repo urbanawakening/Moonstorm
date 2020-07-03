@@ -235,9 +235,9 @@ namespace CloudBurst.Equipment
                 rotation = user.transform.rotation,
                 summonerBodyObject = null,
                 ignoreTeamMemberLimit = false,
-                teamIndexOverride = user.teamComponent.teamIndex
+                teamIndexOverride = user.teamComponent.teamIndex,
             }.Perform();
-
+                
             characterMaster.bodyPrefab = user.master.bodyPrefab;
             characterMaster.Respawn(characterMaster.GetBody().footPosition, Quaternion.identity);
 

@@ -73,8 +73,8 @@ namespace Cloudburst
             CheckCompat();
             AddContent();
             ModifyContent();
+            Hook();
 
-            On.RoR2.CharacterBody.OnInventoryChanged += CharacterBody_OnInventoryChanged;
             if (!deathMarkMod)
             {
                 On.RoR2.BuffCatalog.RegisterBuff += Hooks.BuffCatalog_RegisterBuff;
@@ -82,10 +82,22 @@ namespace Cloudburst
             else {
                 BaseLogger.LogE("DeathMarkFix is installed, you can uninstall it for lesser loading times as its functionality is in cloudburst.");
             }
+
+            //On.RoR2.ArenaMissionController.EndRound += ArenaMissionController_EndRound;
+        }
+
+        private void Hook() {
+            //GlobalEventManager.OnInteractionsGlobal += Hooks.GlobalEventManager_OnInteractionsGlobal;
+            On.RoR2.GlobalEventManager.OnCrit += Hooks.GlobalEventManager_OnCrit;
+            On.RoR2.GlobalEventManager.OnInteractionBegin += Hooks.GlobalEventManager_OnInteractionBegin;
+            GlobalEventManager.onServerDamageDealt += Hooks.GlobalEventManager_onServerDamageDealt;
+            GlobalEventManager.onCharacterDeathGlobal += Hooks.GlobalEventManagerOnOnCharacterDeath;
+            On.RoR2.GlobalEventManager.OnTeamLevelUp += Hooks.GlobalEventManager_OnTeamLevelUp;
+            TeleporterInteraction.onTeleporterBeginChargingGlobal += Hooks.TeleporterInteractionOnTeleporterBeginChargingGlobal;
+            On.RoR2.GenericPickupController.GrantItem += Hooks.GrantItem;
             On.RoR2.EquipmentSlot.PerformEquipmentAction += Hooks.EquipmentSlotOnPerformEquipmentAction;
             On.EntityStates.Commando.DodgeState.OnEnter += Hooks.DodgeState_OnEnter;
             On.EntityStates.Barrel.Opened.OnEnter += Hooks.Opened_OnEnter;
-            //On.RoR2.ArenaMissionController.EndRound += ArenaMissionController_EndRound;
         }
 
 
@@ -143,86 +155,6 @@ namespace Cloudburst
                     BaseLogger.LogW("If you do not choose to disable these mod(s), Cloudburst will disable certain features to provide a bug free experenice at the cost of content.");
                 }
             }
-        }
-        private void CharacterBody_OnInventoryChanged(On.RoR2.CharacterBody.orig_OnInventoryChanged orig, CharacterBody self)
-        {
-            if (self && self.inventory)
-            {
-                Inventory inventory = self.inventory;
-
-                #region Item Counts
-                int barrierOnCritCount = inventory.GetItemCount(Items.barrierOnCritIndex); //done
-                int moneyOnInteractionCount = inventory.GetItemCount(Items.moneyOnInteractionIndex); //done
-                int eliteBuffOnInteractionCount = inventory.GetItemCount(Items.eliteBuffOnInteractionIndex); //done
-                int itemChampionOnKillCount = inventory.GetItemCount(Items.itemChampionOnKillIndex); //done
-                int crippleOnHitCount = inventory.GetItemCount(Items.crippleOnHitIndex); //done
-                int randomDebuffOnHitCount = inventory.GetItemCount(Items.randomDebuffOnHitIndex); //done
-                int itemOnLevelUpCount = inventory.GetItemCount(Items.itemOnLevelUpIndex); //done
-                int cloakOnInteractionCount = inventory.GetItemCount(Items.cloakOnInteractionIndex); //done
-                int largerTeleporterRadius = inventory.GetItemCount(Items.largerTeleporterRadiusIndex);//done
-                int barrierOnLevelCount = inventory.GetItemCount(Items.barrierOnLevelIndex); //done
-                #endregion
-
-                #region Hooks
-                if (moneyOnInteractionCount > 0 || eliteBuffOnInteractionCount > 0)
-                {
-                    GlobalEventManager .OnInteractionsGlobal += Hooks.GlobalEventManager_OnInteractionsGlobal;
-                }
-                else if (Hooks.onInteractionSubscription)
-                {
-                    GlobalEventManager.OnInteractionsGlobal -= Hooks.GlobalEventManager_OnInteractionsGlobal;
-                }
-                if (barrierOnCritCount > 0)
-                {
-                    On.RoR2.GlobalEventManager.OnCrit += Hooks.GlobalEventManager_OnCrit;
-                }
-                else if (Hooks.onCritSubscription)
-                {
-                    On.RoR2.GlobalEventManager.OnCrit -= Hooks.GlobalEventManager_OnCrit;
-                }
-                if (crippleOnHitCount > 0 || randomDebuffOnHitCount > 0)
-                {
-                    GlobalEventManager.onServerDamageDealt += Hooks.GlobalEventManager_onServerDamageDealt;
-                }
-                else if (Hooks.onDmgDealtSubscription)
-                {
-                    GlobalEventManager.onServerDamageDealt -= Hooks.GlobalEventManager_onServerDamageDealt;
-                }
-                if (itemChampionOnKillCount > 0)
-                {
-                    GlobalEventManager.onCharacterDeathGlobal += Hooks.GlobalEventManagerOnOnCharacterDeath;
-                }
-                else if (Hooks.onDeathSubscription)
-                {
-                    GlobalEventManager.onCharacterDeathGlobal -= Hooks.GlobalEventManagerOnOnCharacterDeath;
-                }
-                if (itemOnLevelUpCount > 0 || barrierOnLevelCount > 0)
-                {
-                    On.RoR2.GlobalEventManager.OnTeamLevelUp += Hooks.GlobalEventManager_OnTeamLevelUp;
-                }
-                else if (Hooks.onTeamLevelUpSubscription)
-                {
-                    On.RoR2.GlobalEventManager.OnTeamLevelUp -= Hooks.GlobalEventManager_OnTeamLevelUp;
-                }
-                if (largerTeleporterRadius > 0)
-                {
-                    TeleporterInteraction.onTeleporterBeginChargingGlobal += Hooks.TeleporterInteractionOnTeleporterBeginChargingGlobal;
-                }
-                else if (Hooks.onTeleporterBeginChargingSubscription)
-                {
-                    TeleporterInteraction.onTeleporterBeginChargingGlobal -= Hooks.TeleporterInteractionOnTeleporterBeginChargingGlobal;
-                }
-                if (cloakOnInteractionCount > 0)
-                {
-                    On.RoR2.GenericPickupController.GrantItem += Hooks.GrantItem;
-                }
-                else if (Hooks.grantItemSubscription)
-                {
-                    On.RoR2.GenericPickupController.GrantItem -= Hooks.GrantItem;
-                }
-                #endregion 
-            }
-            orig(self);
         }
     }
 }

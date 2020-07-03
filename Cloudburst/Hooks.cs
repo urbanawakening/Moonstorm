@@ -77,16 +77,20 @@ namespace Cloudburst
         public static void GlobalEventManager_OnInteractionsGlobal(Interactor interactor, IInteractable interactable, GameObject gameObject)
         {
             CharacterBody characterBody = interactor.GetComponent<CharacterBody>();
-            if (characterBody) {
+            if (characterBody)
+            {
                 Inventory inventory = characterBody.inventory;
                 CharacterMaster master = characterBody.master;
-                if (inventory && master) {
+                if (inventory && master && interactable != null && gameObject != null)
+                {
                     int moneyOnInteractionCount = inventory.GetItemCount(Items.moneyOnInteractionIndex);
                     int eliteBuffOnInteractionCount = inventory.GetItemCount(Items.eliteBuffOnInteractionIndex);
-                    if (moneyOnInteractionCount > 0) {
+                    if (moneyOnInteractionCount > 0)
+                    {
                         master.GiveMoney(5U + (uint)(moneyOnInteractionCount * 3));
                     }
-                    if (eliteBuffOnInteractionCount > 0) {
+                    if (eliteBuffOnInteractionCount > 0)
+                    {
                         Util.PlaySound("Play_item_use_gainArmor", characterBody.gameObject);
                         int count = UnityEngine.Random.Range(0, eliteBuffList.Count);
                         characterBody.AddTimedBuff(eliteBuffList[count], 5 * eliteBuffOnInteractionCount);
@@ -224,22 +228,10 @@ namespace Cloudburst
         }
         public static void TeleporterInteractionOnTeleporterBeginChargingGlobal(TeleporterInteraction obj)
         {
-            ReadOnlyCollection<TeamComponent> teamMembers = TeamComponent.GetTeamMembers(TeamIndex.Player);
-            int count = 0;
-            foreach (TeamComponent tc in teamMembers)
-            {
-                if (Util.LookUpBodyNetworkUser(tc.body))
-                {
-                    count += tc.body.inventory.GetItemCount(Items.largerTeleporterRadiusIndex);
-                }
-            }
+            int count = Util.GetItemCountForTeam(TeamIndex.Player, Items.largerTeleporterRadiusIndex, true, true);
             if (count > 0)
             {
-                foreach (TeamComponent tc in teamMembers)
-                {
-
-                    obj.holdoutZoneController.baseRadius = obj.holdoutZoneController.baseRadius + (count * 3);
-                }
+                obj.holdoutZoneController.baseRadius = obj.holdoutZoneController.baseRadius + (count * 3);
             }
             onTeleporterBeginChargingSubscription = true;
         }
@@ -247,6 +239,31 @@ namespace Cloudburst
         {
             orig(self);
             Object.Destroy(self.outer.gameObject, 1);
+        }
+        public static void GlobalEventManager_OnInteractionBegin(On.RoR2.GlobalEventManager.orig_OnInteractionBegin orig, GlobalEventManager self, Interactor interactor, IInteractable interactable, UnityEngine.GameObject interactableObject)
+        {
+            orig(self, interactor, interactable, interactableObject);
+            CharacterBody characterBody = interactor.GetComponent<CharacterBody>();
+            if (characterBody)
+            {
+                Inventory inventory = characterBody.inventory;
+                if (inventory && !interactableObject.HasComponent<GenericPickupController>())
+                {
+                    int moneyOnInteractionCount = inventory.GetItemCount(Items.moneyOnInteractionIndex);
+                    int eliteBuffOnInteractionCount = inventory.GetItemCount(Items.eliteBuffOnInteractionIndex);
+                    if (moneyOnInteractionCount > 0)
+                    {
+                        characterBody.master.GiveMoney(5U + (uint)(moneyOnInteractionCount * 3));
+                    }
+                    if (eliteBuffOnInteractionCount > 0)
+                    {
+                        Util.PlaySound("Play_item_use_gainArmor", characterBody.gameObject);
+                        int count = UnityEngine.Random.Range(0, eliteBuffList.Count);
+                        characterBody.AddTimedBuff(eliteBuffList[count], 5 * eliteBuffOnInteractionCount);
+                    }
+                }
+            }
+            onInteractionSubscription = true;
         }
     }
 }
