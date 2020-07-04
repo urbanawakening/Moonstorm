@@ -40,15 +40,13 @@ namespace Cloudburst
         internal event Action awake;
         //internal event Action afterLoad;
         internal event Action start;
-        public Main()
-        {
+        public Main() {
             awake += Load;
             items = new Items();
             equipment = new Equipment();
         }
         #region Basic
-        public void Awake()
-        {
+        public void Awake() {
             Action awake = this.awake;
             if (awake == null)
             {
@@ -73,6 +71,7 @@ namespace Cloudburst
             CheckCompat();
             AddContent();
             ModifyContent();
+            MiscModifications.Modify();
             Hook();
 
             if (!deathMarkMod)
@@ -95,13 +94,10 @@ namespace Cloudburst
             On.RoR2.GlobalEventManager.OnTeamLevelUp += Hooks.GlobalEventManager_OnTeamLevelUp;
             TeleporterInteraction.onTeleporterBeginChargingGlobal += Hooks.TeleporterInteractionOnTeleporterBeginChargingGlobal;
             On.RoR2.GenericPickupController.GrantItem += Hooks.GrantItem;
-            On.RoR2.EquipmentSlot.PerformEquipmentAction += Hooks.EquipmentSlotOnPerformEquipmentAction;
+            On.RoR2.EquipmentSlot.PerformEquipmentAction += Hooks.EquipmentSlotOnPerformEquipmentAction ;
             On.EntityStates.Commando.DodgeState.OnEnter += Hooks.DodgeState_OnEnter;
             On.EntityStates.Barrel.Opened.OnEnter += Hooks.Opened_OnEnter;
         }
-
-
-
         private void AddContent() {
             if (!archaicWispMod) {
                 ArchaicWisps.BuildArchWisps();
@@ -135,8 +131,7 @@ namespace Cloudburst
         private void CheckCompat() {
             replacedFuncs = new List<string>();
             this.replacedFuncs.Add("com.Rein.ReinDirectorCardDemoArchWisp"); //rein i BEG YOU please shorten that name PLEASE
-            foreach (PluginInfo pluginInfo in loadedPlugins)
-            {
+            foreach (PluginInfo pluginInfo in loadedPlugins) {
                 switch ((pluginInfo.Metadata.GUID))
                 {
                     case "com.Borbo.DeathMarkFix":

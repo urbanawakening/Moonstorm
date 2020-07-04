@@ -65,7 +65,7 @@ namespace CloudBurst.Items
             LanguageAPI.Add("ITEM_RANDOMDEBUFFONHIT_PICKUP", "[REDACTED]");
 
             LanguageAPI.Add("ITEM_MONEYONINTERACTION_NAME", "Broken Keycard");
-            LanguageAPI.Add("ITEM_MONEYONINTERACTION_DESC", "Gain <style=cIsUtility>5 dollars</style> <style=cStack>(+3 dollars chance per stack)</style> upon opening a chest. ");
+            LanguageAPI.Add("ITEM_MONEYONINTERACTION_DESC", "Gain <style=cIsUtility>10 dollars</style> <style=cStack>(+5 dollars chance per stack)</style> upon opening a chest. ");
             LanguageAPI.Add("ITEM_MONEYONINTERACTION_PICKUP", "Activating an interactable gives you money");
 
             LanguageAPI.Add("ITEM_BARRIERONCRIT_NAME", "Topaz Lense");

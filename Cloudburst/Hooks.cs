@@ -74,7 +74,7 @@ namespace Cloudburst
             onCritSubscription = true;
             orig(self, body, master, procCoefficient, procChainMask);
         }
-        public static void GlobalEventManager_OnInteractionsGlobal(Interactor interactor, IInteractable interactable, GameObject gameObject)
+        /*public static void GlobalEventManager_OnInteractionsGlobal(Interactor interactor, IInteractable interactable, GameObject gameObject)
         {
             CharacterBody characterBody = interactor.GetComponent<CharacterBody>();
             if (characterBody)
@@ -98,7 +98,7 @@ namespace Cloudburst
                 }
             }
             onInteractionSubscription = true;
-        }
+        }*/
         public static void GlobalEventManagerOnOnCharacterDeath(DamageReport damageReport)
         {
             if (!damageReport.attackerBody || !damageReport.victimBody || !damageReport.attacker || !damageReport.victim || !damageReport.attackerMaster || !damageReport.victimMaster || damageReport == null)
@@ -133,13 +133,11 @@ namespace Cloudburst
                 int scpRandom = UnityEngine.Random.Range(0, scpBuffList.Count);
                 int rootCount = attackerInventory.GetItemCount(Items.crippleOnHitIndex);
                 int scpCount = attackerInventory.GetItemCount(Items.randomDebuffOnHitIndex);
-                if (rootCount > 0 && Util.CheckRoll(20, attackerMaster) && attackerMaster && damageReport.victimBody)
-                {
+                if (rootCount > 0 && Util.CheckRoll(20, attackerMaster) && attackerMaster && damageReport.victimBody) {
                     Util.PlaySound("Play_nullifier_attack1_root", victimBody.gameObject);
                     victimBody.AddTimedBuff(BuffIndex.Cripple, 3);
                 }
-                if (scpCount > 0 && damageReport.victimBody && victimMaster)
-                {
+                if (scpCount > 0 && damageReport.victimBody && victimMaster) {
                     victimBody.AddTimedBuff(scpBuffList[scpRandom], (scpCount * 2));
                 }
             }
@@ -186,11 +184,8 @@ namespace Cloudburst
         public static void BuffCatalog_RegisterBuff(On.RoR2.BuffCatalog.orig_RegisterBuff orig, BuffIndex buffIndex, BuffDef buffDef)
         {
             //Fixes deathmark
-
-                if (buffIndex == BuffIndex.DeathMark)
-                {
-                    buffDef.canStack = true;
-                
+            if (buffIndex == BuffIndex.DeathMark) {
+                buffDef.canStack = true;
             }
             onRegisterBuffSubscription = true;
             orig(buffIndex, buffDef);
@@ -220,8 +215,7 @@ namespace Cloudburst
         {
             orig(self, body, inventory);
             int cloakOnInteractionCount = inventory.GetItemCount(Items.cloakOnInteractionIndex);
-            if (self && inventory && cloakOnInteractionCount > 0)
-            {
+            if (self && inventory && cloakOnInteractionCount > 0) {
                 body.AddTimedBuff(BuffIndex.Cloak, 2 * cloakOnInteractionCount);
             }
             grantItemSubscription = true;
@@ -229,8 +223,7 @@ namespace Cloudburst
         public static void TeleporterInteractionOnTeleporterBeginChargingGlobal(TeleporterInteraction obj)
         {
             int count = Util.GetItemCountForTeam(TeamIndex.Player, Items.largerTeleporterRadiusIndex, true, true);
-            if (count > 0)
-            {
+            if (count > 0) {
                 obj.holdoutZoneController.baseRadius = obj.holdoutZoneController.baseRadius + (count * 3);
             }
             onTeleporterBeginChargingSubscription = true;
@@ -251,12 +244,11 @@ namespace Cloudburst
                 {
                     int moneyOnInteractionCount = inventory.GetItemCount(Items.moneyOnInteractionIndex);
                     int eliteBuffOnInteractionCount = inventory.GetItemCount(Items.eliteBuffOnInteractionIndex);
-                    if (moneyOnInteractionCount > 0)
-                    {
-                        characterBody.master.GiveMoney(5U + (uint)(moneyOnInteractionCount * 3));
+
+                    if (moneyOnInteractionCount > 0) {
+                        characterBody.master.GiveMoney(5U + (uint)(moneyOnInteractionCount * 5));
                     }
-                    if (eliteBuffOnInteractionCount > 0)
-                    {
+                    if (eliteBuffOnInteractionCount > 0) {
                         Util.PlaySound("Play_item_use_gainArmor", characterBody.gameObject);
                         int count = UnityEngine.Random.Range(0, eliteBuffList.Count);
                         characterBody.AddTimedBuff(eliteBuffList[count], 5 * eliteBuffOnInteractionCount);

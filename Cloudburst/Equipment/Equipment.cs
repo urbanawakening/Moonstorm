@@ -241,12 +241,19 @@ namespace CloudBurst.Equipment
             characterMaster.bodyPrefab = user.master.bodyPrefab;
             characterMaster.Respawn(characterMaster.GetBody().footPosition, Quaternion.identity);
 
-            characterMaster.inventory.CopyItemsFrom(user.inventory);
-            characterMaster.inventory.ResetItem(ItemIndex.AutoCastEquipment);
-            characterMaster.inventory.ResetItem(ItemIndex.BeetleGland);
-            characterMaster.inventory.GiveItem(ItemIndex.BoostDamage, 5);
-            characterMaster.inventory.GiveItem(ItemIndex.CutHp, 2);
-            characterMaster.inventory.CopyEquipmentFrom(user.inventory);
+            Inventory inventory = characterMaster.inventory;
+            if (inventory) {
+                inventory.CopyItemsFrom(user.inventory);
+                inventory.ResetItem(ItemIndex.WardOnLevel);
+                inventory.ResetItem(ItemIndex.BeetleGland);
+                inventory.ResetItem(ItemIndex.CrippleWardOnLevel);
+                inventory.ResetItem(ItemIndex.TPHealingNova);
+                inventory.ResetItem(ItemIndex.FocusConvergence);
+                inventory.ResetItem(ItemIndex.TitanGoldDuringTP);
+                inventory.GiveItem(ItemIndex.BoostDamage, 5);
+                inventory.GiveItem(ItemIndex.CutHp, 2);
+                inventory.CopyEquipmentFrom(user.inventory);
+            }
         }
         public static void BecomeUnstable(CharacterBody user)
         {

@@ -15,6 +15,8 @@ namespace CloudBurst.Misc
             GameObject lunarTeleporter = Resources.Load<GameObject>("prefabs/networkedobjects/TeleporterLunar");
             GameObject teleporter = Resources.Load<GameObject>("prefabs/networkedobjects/Teleporter1");
 
+            lunarTeleporter.layer = teleporter.layer;
+
             TeleporterInteraction lunarInteraction = lunarTeleporter.GetComponent<TeleporterInteraction>();
             HoldoutZoneController teleporterZoneController = teleporter.GetComponent<HoldoutZoneController>();
             HoldoutZoneController lunarZoneController = lunarTeleporter.AddComponent<HoldoutZoneController>();
@@ -32,6 +34,7 @@ namespace CloudBurst.Misc
             lunarZoneController.radiusSmoothTime = teleporterZoneController.radiusSmoothTime;
             lunarZoneController.enabled = true;
 
+
             lunarInteractableLocker.updateInterval = 0.1f;
             lunarInteractableLocker.lockPrefab = Resources.Load<GameObject>("prefabs/networkedobjects/PurchaseLock");
 
@@ -43,6 +46,14 @@ namespace CloudBurst.Misc
 
             lunarInteraction.mainStateMachine = lunarStateMachine;
             lunarInteraction.outsideInteractableLocker = lunarInteractableLocker;
+
+            ChildLocator locator = lunarTeleporter.GetComponent<ChildLocator>();
+            int loc = locator.FindChildIndex("InitialBurst");
+            Transform loca = locator.FindChild(loc);
+            if (loca) {
+                BaseLogger.Log("fuck");
+            }
+
 
             foreach (CombatDirector combatDirector in lunarTeleporter.GetComponents<CombatDirector>())
             {
