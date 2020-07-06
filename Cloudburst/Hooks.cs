@@ -1,6 +1,4 @@
-﻿using CloudBurst.Equipment;
-using CloudBurst.Items;
-using RoR2;
+﻿using RoR2;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using UnityEngine;
@@ -19,7 +17,7 @@ namespace Cloudburst
         public static bool dodgeStateSubscription;
         public static bool onRegisterBuffSubscription;
         public static bool equipmentSlotSubscription;
-        public static bool grantItemSubscription;
+        public static bool grantItemClassubscription;
         public static bool onTeleporterBeginChargingSubscription;
         #endregion
         #region Voids
@@ -30,7 +28,7 @@ namespace Cloudburst
             ItemIndex.TitanGoldDuringTP,
             ItemIndex.SprintWisp,
             ItemIndex.Incubator
-            //Excluding pearls because those aren't boss items, they come from the Cleansing Pool 
+            //Excluding pearls because those aren't boss ItemClass, they come from the Cleansing Pool 
         };
 
         public static List<BuffIndex> scpBuffList = new List<BuffIndex>{
@@ -52,10 +50,10 @@ namespace Cloudburst
 
             PickupDropletController.CreatePickupDroplet(dropList[nextItem], transform.position, transform.forward * 155);
         }
-        public static ItemIndex GetRandomItem(List<ItemIndex> items)
+        public static ItemIndex GetRandomItem(List<ItemIndex> ItemClass)
         {
-            int itemID = UnityEngine.Random.Range(0, items.Count);
-            return items[itemID];
+            int itemID = UnityEngine.Random.Range(0, ItemClass.Count);
+            return ItemClass[itemID];
         }
 #endregion
         #region GlobalEventManager
@@ -65,7 +63,7 @@ namespace Cloudburst
             {
                 Inventory masterInventory = master.inventory;
                 HealthComponent healthComponent = body.healthComponent;
-                int topazLense = masterInventory.GetItemCount(Items.barrierOnCritIndex);
+                int topazLense = masterInventory.GetItemCount(ItemClass.barrierOnCritIndex);
                 if (topazLense > 0)
                 {
                     healthComponent.AddBarrier(2.5f + (topazLense * 2.5f));
@@ -83,8 +81,8 @@ namespace Cloudburst
                 CharacterMaster master = characterBody.master;
                 if (inventory && master && interactable != null && gameObject != null)
                 {
-                    int moneyOnInteractionCount = inventory.GetItemCount(Items.moneyOnInteractionIndex);
-                    int eliteBuffOnInteractionCount = inventory.GetItemCount(Items.eliteBuffOnInteractionIndex);
+                    int moneyOnInteractionCount = inventory.GetItemCount(ItemClass.moneyOnInteractionIndex);
+                    int eliteBuffOnInteractionCount = inventory.GetItemCount(ItemClass.eliteBuffOnInteractionIndex);
                     if (moneyOnInteractionCount > 0)
                     {
                         master.GiveMoney(5U + (uint)(moneyOnInteractionCount * 3));
@@ -110,8 +108,8 @@ namespace Cloudburst
             Inventory attackerInventory = attackerMaster ? attackerMaster.inventory : null;
             //Inventory victimInventory = victimMaster ? victimMaster.inventory : null;
 
-            int itemChampionOnKillCount = attackerInventory.GetItemCount(Items.itemChampionOnKillIndex);
-            if (itemChampionOnKillCount > 0 && attackerMaster && Util.CheckRoll(65 + (itemChampionOnKillCount * 5))&& damageReport.victim.body.isChampion == true) {
+            int itemChampionOnKillCount = attackerInventory.GetItemCount(ItemClass.itemChampionOnKillIndex);
+            if (itemChampionOnKillCount > 0 && attackerMaster && Util.CheckRoll(15 + (itemChampionOnKillCount * 10)) && damageReport.victim.body.isBoss == true) {
                 Util.PlaySound("ui_obj_casinoChest_open", attackerBody.gameObject);
                 attackerInventory.GiveItem(GetRandomItem(bossitemList), 1);
             }
@@ -131,8 +129,8 @@ namespace Cloudburst
                 Inventory attackerInventory = attackerMaster ? attackerMaster.inventory : null;
                 //Inventory victimInventory = victimMaster ? victimMaster.inventory : null;
                 int scpRandom = UnityEngine.Random.Range(0, scpBuffList.Count);
-                int rootCount = attackerInventory.GetItemCount(Items.crippleOnHitIndex);
-                int scpCount = attackerInventory.GetItemCount(Items.randomDebuffOnHitIndex);
+                int rootCount = attackerInventory.GetItemCount(ItemClass.crippleOnHitIndex);
+                int scpCount = attackerInventory.GetItemCount(ItemClass.randomDebuffOnHitIndex);
                 if (rootCount > 0 && Util.CheckRoll(20, attackerMaster) && attackerMaster && damageReport.victimBody) {
                     Util.PlaySound("Play_nullifier_attack1_root", victimBody.gameObject);
                     victimBody.AddTimedBuff(BuffIndex.Cripple, 3);
@@ -154,16 +152,15 @@ namespace Cloudburst
                         if (NetworkServer.active) {
                             CharacterMaster master = characterBody.master;
                             if (master) {
-                                int itemOnLevelUpCount = master.inventory.GetItemCount(Items.itemOnLevelUpIndex);
-                                int barrierOnLevelUpCount = master.inventory.GetItemCount(Items.barrierOnLevelIndex);
+                                int itemOnLevelUpCount = master.inventory.GetItemCount(ItemClass.itemOnLevelUpIndex);
+                                int barrierOnLevelUpCount = master.inventory.GetItemCount(ItemClass.barrierOnLevelIndex);
 
                                 if (itemOnLevelUpCount > 0 && Util.CheckRoll(50, master)) {
-                                    NokiaCall(characterBody.transform, itemOnLevelUpCount);
+                                    NokiaCall(characterBody.transform, itemOnLevelUpCount); 
                                 }
                                 if (barrierOnLevelUpCount > 0) {
                                     if (characterBody.healthComponent) {
                                         characterBody.healthComponent.AddBarrier(25 + (5 * barrierOnLevelUpCount));
-
                                     }
                                 }
                             }
@@ -214,15 +211,15 @@ namespace Cloudburst
         public static void GrantItem(On.RoR2.GenericPickupController.orig_GrantItem orig, GenericPickupController self, CharacterBody body, Inventory inventory)
         {
             orig(self, body, inventory);
-            int cloakOnInteractionCount = inventory.GetItemCount(Items.cloakOnInteractionIndex);
+            int cloakOnInteractionCount = inventory.GetItemCount(ItemClass.cloakOnInteractionIndex);
             if (self && inventory && cloakOnInteractionCount > 0) {
                 body.AddTimedBuff(BuffIndex.Cloak, 2 * cloakOnInteractionCount);
             }
-            grantItemSubscription = true;
+            grantItemClassubscription = true;
         }
         public static void TeleporterInteractionOnTeleporterBeginChargingGlobal(TeleporterInteraction obj)
         {
-            int count = Util.GetItemCountForTeam(TeamIndex.Player, Items.largerTeleporterRadiusIndex, true, true);
+            int count = Util.GetItemCountForTeam(TeamIndex.Player, ItemClass.largerTeleporterRadiusIndex, true, true);
             if (count > 0) {
                 obj.holdoutZoneController.baseRadius = obj.holdoutZoneController.baseRadius + (count * 3);
             }
@@ -242,8 +239,8 @@ namespace Cloudburst
                 Inventory inventory = characterBody.inventory;
                 if (inventory && !interactableObject.HasComponent<GenericPickupController>())
                 {
-                    int moneyOnInteractionCount = inventory.GetItemCount(Items.moneyOnInteractionIndex);
-                    int eliteBuffOnInteractionCount = inventory.GetItemCount(Items.eliteBuffOnInteractionIndex);
+                    int moneyOnInteractionCount = inventory.GetItemCount(ItemClass.moneyOnInteractionIndex);
+                    int eliteBuffOnInteractionCount = inventory.GetItemCount(ItemClass.eliteBuffOnInteractionIndex);
 
                     if (moneyOnInteractionCount > 0) {
                         characterBody.master.GiveMoney(5U + (uint)(moneyOnInteractionCount * 5));

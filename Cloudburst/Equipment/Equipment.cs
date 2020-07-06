@@ -4,7 +4,7 @@ using RoR2.Projectile;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace CloudBurst.Equipment
+namespace Cloudburst
 {
     public sealed class Equipment
     {
@@ -72,7 +72,7 @@ namespace CloudBurst.Equipment
             LanguageAPI.Add("EQUIPMENT_BROKENPRINTER_NAME", "Broken Printer");
             LanguageAPI.Add("EQUIPMENT_BROKENPRINTER_PICKUP", "Summon a powerful but fragile ally that aids you in combat.");
             LanguageAPI.Add("EQUIPMENT_BROKENPRINTER_DESC", "Summon a powerful ally that inherits your items but has half health.");
-            LanguageAPI.Add("EQUIPMENT_BROKENPRINTER_LORE", "Order: \u201CBroken Printer\u201D\r\nTracking Number: 72******\r\nEstimated Delivery: 08\\25\\2057\\\r\nShipping Method:  High Priority\r\nShipping Address: 836 Lane, Lab [42], Mars\r\nShipping Details:\r\n\r\nI can't speak for the rest of the researchers here, but I have no clue why you decided to send this here. We don't know what's wrong with this thing, and we don't know if there\u2019s anything wrong with it, it\u2019s completely alien. I don\u2019t think a person actually made this thing, there are materials in it that we\u2019ve never seen before.\r\n\r\nI\u2019m sending this back to you because it\u2019s more trouble than it\u2019s worth to keep here, and frankly those things it prints are horrifyingly hollow.\r\n");
+            LanguageAPI.Add("EQUIPMENT_BROKENPRINTER_LORE", "Order: \u201CBroken Printer\u201D\r\nTracking Number: 72******\r\nEstimated Delivery: 08\\25\\2057\\\r\nShipping Method: High Priority\r\nShipping Address: 836 Lane, Lab [42], Mars\r\nShipping Details:\r\n\r\nI can\u2019t speak for the rest of the researchers here, but I have no clue why you decided to send this here. We don\u2019t know what\u2019s wrong with this thing, and we don\u2019t know if there is anything wrong with it, it\u2019s completely alien. I don\u2019t think a person actually made this thing, there are materials in it that we\u2019ve never seen before.\r\n\r\nI\u2019m sending this back to you because it\u2019s more trouble than it\u2019s worth to keep here, and frankly those things it prints are horrifyingly hollow.\r\n");
 
             //LanguageAPI.Add("EQUIPMENT_VIVELAFRANCE_NAME", "Molotov Cocktail");
             //LanguageAPI.Add("EQUIPMENT_VIVELAFRANCE_PICKUP", "Throw a molotov cocktail.");
@@ -236,6 +236,7 @@ namespace CloudBurst.Equipment
                 summonerBodyObject = null,
                 ignoreTeamMemberLimit = false,
                 teamIndexOverride = user.teamComponent.teamIndex,
+                loadout = user.master.loadout
             }.Perform();
                 
             characterMaster.bodyPrefab = user.master.bodyPrefab;

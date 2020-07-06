@@ -341,9 +341,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets.cs" />
     <Compile Include="CloudburstStuff\CloudCatalog.cs" />
     <Compile Include="CloudburstStuff\CloudburstItemDef.cs" />
     <Compile Include="CloudburstStuff\CloudburstEquipDef.cs" />
+    <Compile Include="Enemies\SipSip.cs" />
     <Compile Include="Enemies\Wayfarer.cs" />
     <Compile Include="Helpers\BaseHelpers.cs" />
     <Compile Include="Hooks.cs" />
@@ -368,7 +370,9 @@
     <Compile Include="Misc\Misc.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="assetburst" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>copy /Y "$(TargetPath)" "E:\Steam\steamapps\common\Risk of Rain 2\BepInEx\plugins\"</PostBuildEvent>

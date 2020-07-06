@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Linq;
-using CloudBurst.Enemies;
+using Cloudburst.Enemies;
 using EntityStates;
 using RoR2;
 using RoR2.Projectile;

@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using static R2API.DirectorAPI;
 
-namespace CloudBurst.Enemies
+namespace Cloudburst.Enemies
 {
     //TODO:
     //Make an icon.
@@ -16,9 +16,13 @@ namespace CloudBurst.Enemies
         private static CharacterSpawnCard archWispCharacterSpawnCard;
         private static DirectorCard archWispDirectorCard;
         private static DirectorCardHolder archWispDirectorCardHolder;
+        public ArchaicWisps() {
+            Main.awake += BuildArchWisps;
+        }
         public static void BuildArchWisps()
         {
             archWisp = Resources.Load<GameObject>("prefabs/characterbodies/archwispbody");
+            archWisp.tag = "Finish";
             BuildBody();
             BuildDirectorCard();
             ModifyPrimary();

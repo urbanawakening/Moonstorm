@@ -1,8 +1,7 @@
-﻿using CloudBurst.Items;
-using R2API;
+﻿using R2API;
 using RoR2;
 
-namespace CloudBurst
+namespace Cloudburst
 {
     public class CloudburstItemDef
     {

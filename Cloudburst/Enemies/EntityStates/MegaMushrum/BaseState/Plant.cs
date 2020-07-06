@@ -4,7 +4,7 @@ using RoR2.Projectile;
 using UnityEngine;
 using UnityEngine.Networking;
 
-namespace CloudBurst.Weapon.MegaMushroom
+namespace Cloudburst.Weapon.MegaMushroom
 {
     public class Plant : BaseState
     {

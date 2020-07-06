@@ -10,7 +10,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using static RoR2.CharacterAI.AISkillDriver;
 
-namespace CloudBurst.Enemies
+namespace Cloudburst.Enemies
 {
     //TODO:
     //Fix stupid targeting issue ugh

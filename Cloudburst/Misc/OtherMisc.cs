@@ -2,7 +2,7 @@
 using RoR2;
 using UnityEngine;
 
-namespace CloudBurst.Misc
+namespace Cloudburst.Misc
 {
     internal sealed class MiscModifications
     {
@@ -46,14 +46,6 @@ namespace CloudBurst.Misc
 
             lunarInteraction.mainStateMachine = lunarStateMachine;
             lunarInteraction.outsideInteractableLocker = lunarInteractableLocker;
-
-            ChildLocator locator = lunarTeleporter.GetComponent<ChildLocator>();
-            int loc = locator.FindChildIndex("InitialBurst");
-            Transform loca = locator.FindChild(loc);
-            if (loca) {
-                BaseLogger.Log("fuck");
-            }
-
 
             foreach (CombatDirector combatDirector in lunarTeleporter.GetComponents<CombatDirector>())
             {

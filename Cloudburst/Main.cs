@@ -1,13 +1,12 @@
 ﻿using BepInEx;
 using BepInEx.Bootstrap;
-using CloudBurst.Enemies;
-using CloudBurst.Equipment;
-using CloudBurst.Items;
-using CloudBurst.Misc;
+using Cloudburst.Enemies;
+using Cloudburst.Misc;
 using R2API.Utils;
 using RoR2;
 using System;
 using System.Collections.Generic;
+using static RoR2.GivePickupsOnStart;
 
 namespace Cloudburst
 {
@@ -22,11 +21,12 @@ namespace Cloudburst
         "LoadoutAPI",
         "DirectorAPI",
         "LanguageAPI",
+        "ResourcesAPI"
     })]
     [BepInPlugin("com.AwokeinanEngima.CloudBurst", "CloudBurst", "1.0.0")]
     public class Main : BaseUnityPlugin
     {
-        public Items items;
+        public ItemClass items;
         public Equipment equipment;
         public static Main instance;
 
@@ -37,17 +37,17 @@ namespace Cloudburst
         private bool deathMarkMod;
         private bool solidIceMod;
 
-        internal event Action awake;
+        public static event Action awake;
         //internal event Action afterLoad;
-        internal event Action start;
+        public static event Action start;
         public Main() {
             awake += Load;
-            items = new Items();
+            items = new ItemClass();
             equipment = new Equipment();
         }
         #region Basic
         public void Awake() {
-            Action awake = this.awake;
+            Action awake = Main.awake;
             if (awake == null)
             {
                 return;
@@ -55,7 +55,7 @@ namespace Cloudburst
             awake();
         }
         public void Start() {
-            Action start = this.start;
+            Action start = Main.start;
             if (start == null) {
                 return;
             }
@@ -63,10 +63,13 @@ namespace Cloudburst
         }
         #endregion
         private void Load() {
-            if (instance == null || BaseLogger.logger == null) {
+            if (instance == null || BaseLogger.logger == null)
+            {
                 instance = this;
                 BaseLogger.logger = base.Logger;
             }
+            Assets.PopulateAssets();
+            Assets.Resize();
             CheckLoadedPlugins();
             CheckCompat();
             AddContent();
@@ -74,8 +77,7 @@ namespace Cloudburst
             MiscModifications.Modify();
             Hook();
 
-            if (!deathMarkMod)
-            {
+            if (!deathMarkMod) {
                 On.RoR2.BuffCatalog.RegisterBuff += Hooks.BuffCatalog_RegisterBuff;
             }
             else {

@@ -4,7 +4,7 @@ using RoR2;
 using RoR2.Projectile;
 using UnityEngine;
 
-namespace CloudBurst.Weapon.MegaMushroom
+namespace Cloudburst.Weapon.MegaMushroom
 {
     // Token: 0x020008A2 RID: 2210
     public class UnPlant : BaseState

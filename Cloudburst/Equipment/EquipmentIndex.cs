@@ -1,4 +1,4 @@
-﻿namespace CloudBurst.Equipment
+﻿namespace Cloudburst
 {
     public enum CloudburstEquipmentIndex
     {

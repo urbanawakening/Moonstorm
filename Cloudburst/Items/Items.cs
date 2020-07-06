@@ -2,9 +2,9 @@
 using RoR2;
 using UnityEngine;
 
-namespace CloudBurst.Items
+namespace Cloudburst
 {
-    public sealed class Items
+    public sealed class ItemClass
     {
         #region ItemIndexes
         public static ItemIndex itemChampionOnKillIndex { get; private set; }
@@ -18,7 +18,7 @@ namespace CloudBurst.Items
         public static ItemIndex barrierOnCritIndex { get; private set; }
         public static ItemIndex barrierOnLevelIndex { get; private set; }
         #endregion
-        public Items()
+        public ItemClass()
         {
             #region Basic
             var prefab = Resources.Load<GameObject>("Prefabs/PickupModels/PickupMystery");
@@ -36,8 +36,9 @@ namespace CloudBurst.Items
             #endregion
             #region Tokens
             LanguageAPI.Add("ITEM_ITEMONCHAMPIONKILL_NAME", "Portable Grinder");
-            LanguageAPI.Add("ITEM_ITEMONCHAMPIONKILL_DESC", "<style=cIsUtility>65% chance <style=cStack>(+5% per stack)</style> for bosses to drop a random boss item when killed.</style>");
+            LanguageAPI.Add("ITEM_ITEMONCHAMPIONKILL_DESC", "<style=cIsUtility>25% chance <style=cStack>(+10% per stack)</style> for bosses to drop a random boss item when killed.</style>");
             LanguageAPI.Add("ITEM_ITEMONCHAMPIONKILL_PICKUP", "Chance for bosses to drop boss items when killed");
+            LanguageAPI.Add("ITEM_ITEMONCHAMPIONKILL_LORE", "Order: \u201CPortable Grinder\u201D\r\nTracking Number: 56*****\r\nEstimated Delivery: 08\\25\\2057\\r\nShipping Method: Standard\r\nShipping Address: 836 Lane, Lab [42], Mars, \r\nShipping Details:\r\n\r\nHey man, I know you and your colleagues deal with paranormal stuff, so I thought you guys might be able to fix this. Basically, it's really funky, whenever I finish grinding something, my left hand will be holding something related to what I ground. For example I was grinding this steel box, and when I was finished a small steel box appeared in my hand. One time my curosity got the best of me, and I decided to grind a mouse. After I finished, it\u2019s tail appeared in my left hand. Anyways, I'm hoping you can fix it.\r\n");
 
             LanguageAPI.Add("ITEM_LARGERTELEPORTERRADIUS_NAME", "Mechanical Trinket");
             LanguageAPI.Add("ITEM_LARGERTELEPORTERRADIUS_DESC", "<style=cIsUtility>Increase teleporter radius by 3m</style> <style=cStack>(+3m per stack)</style>.");
@@ -46,7 +47,7 @@ namespace CloudBurst.Items
             LanguageAPI.Add("ITEM_ELITEBUFFONINTERACTION_NAME", "Rechargable Quantum Core");
             LanguageAPI.Add("ITEM_ELITEBUFFONINTERACTION_DESC", "<style=cIsUtility>Become elite upon interaction</style> for 5 seconds <style=cStack>(+5 seconds per stack)</style>.");
             LanguageAPI.Add("ITEM_ELITEBUFFONINTERACTION_PICKUP", "Become elite on activating an interactable.");
-
+                    
             LanguageAPI.Add("ITEM_CRIPPLEONHIT_NAME", "Crippling Root");
             LanguageAPI.Add("ITEM_CRIPPLEONHIT_DESC", "20% Chance to <style=cIsDamage>cripple enemies</style> for 3 <style=cStack>(+3 seconds per stack)</style> seconds. ");
             LanguageAPI.Add("ITEM_CRIPPLEONHIT_PICKUP", "Chance to cripple enemies.");
@@ -59,10 +60,10 @@ namespace CloudBurst.Items
             LanguageAPI.Add("ITEM_ITEMONLEVELUP_DESC", "<style=cIsUtility>75% Chance to gain an item on level up</style>. <style=cStack>+5% chance to gain a green item per stack</style>");
             LanguageAPI.Add("ITEM_ITEMONLEVELUP_PICKUP", "Chance to gain an item on level up");
 
-            LanguageAPI.Add("ITEM_RANDOMDEBUFFONHIT_LORE", "Order: \u201C[REDACTED]\u201D\r\nTracking Number: [REDACTED]\r\nEstimated Delivery: [REDACTED]\r\nShipping Method: [REDACTED]\r\nShipping Address: [REDACTED], [REDACTED]\r\nShipping Details:\r\n\r\nSecure, contain, protect.\r\n");
             LanguageAPI.Add("ITEM_RANDOMDEBUFFONHIT_NAME", "[REDACTED]");
             LanguageAPI.Add("ITEM_RANDOMDEBUFFONHIT_DESC", "[REDACTED]");
             LanguageAPI.Add("ITEM_RANDOMDEBUFFONHIT_PICKUP", "[REDACTED]");
+            LanguageAPI.Add("ITEM_RANDOMDEBUFFONHIT_LORE", "Order: \u201C[REDACTED]\u201D\r\nTracking Number: [REDACTED]\r\nEstimated Delivery: [REDACTED]\r\nShipping Method: [REDACTED]\r\nShipping Address: [REDACTED], [REDACTED]\r\nShipping Details:\r\n\r\nSecure, contain, protect.\r\n");
 
             LanguageAPI.Add("ITEM_MONEYONINTERACTION_NAME", "Broken Keycard");
             LanguageAPI.Add("ITEM_MONEYONINTERACTION_DESC", "Gain <style=cIsUtility>10 dollars</style> <style=cStack>(+5 dollars chance per stack)</style> upon opening a chest. ");
@@ -91,11 +92,11 @@ namespace CloudBurst.Items
                 canRemove = true,
                 descriptionToken = "ITEM_ITEMONCHAMPIONKILL_DESC",
                 hidden = false,
-                loreToken = "",
+                loreToken = "ITEM_ITEMONCHAMPIONKILL_LORE",
                 name = "ItemChampionOnKill",
                 nameToken = "ITEM_ITEMONCHAMPIONKILL_NAME",
                 pickupIconPath = pickUpIconPath,
-                pickupModelPath = pickUpModelPath,
+                pickupModelPath = "@Cloudburst:Assets/Import/belt/belt.prefab",
                 pickupToken = "ITEM_ITEMONCHAMPIONKILL_PICKUP",
                 tags = itemChampionOnKillTags,
                 tier = ItemTier.Tier3,
