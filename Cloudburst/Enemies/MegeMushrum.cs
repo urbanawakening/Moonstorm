@@ -45,14 +45,14 @@ namespace Cloudburst.Enemies
 
         private static void BuildDirectorCard()
         {
-            On.RoR2.CharacterSpawnCard.Awake += CharacterSpawnCard_Awake;
+            On.RoR2.CharacterSpawnCard.Awake += Hooks.CharacterSpawnCard_Awake;
             CharacterSpawnCard characterSpawnCard = ScriptableObject.CreateInstance<CharacterSpawnCard>();
-            On.RoR2.CharacterSpawnCard.Awake -= CharacterSpawnCard_Awake;
+            On.RoR2.CharacterSpawnCard.Awake -= Hooks.CharacterSpawnCard_Awake;
 
             DirectorAPI.DirectorCardHolder directorCardHolder = new DirectorAPI.DirectorCardHolder();
             DirectorCard directorCard = new DirectorCard();
 
-            characterSpawnCard.directorCreditCost = 325;
+            characterSpawnCard.directorCreditCost = 240;
             characterSpawnCard.forbiddenAsBoss = false;
             characterSpawnCard.name = "cscMegaMushrum";
             //characterSpawnCard.forbiddenFlags = RoR2.Navigation.NodeFlags.None;
@@ -85,11 +85,7 @@ namespace Cloudburst.Enemies
                 }
             };
         }
-        private static void CharacterSpawnCard_Awake(On.RoR2.CharacterSpawnCard.orig_Awake orig, CharacterSpawnCard self)
-        {
-            self.loadout = new SerializableLoadout();
-            orig(self);
-        }
+
         private static void BuildBody()
         {
             CharacterBody characterBody = megaMushrum.GetComponent<CharacterBody>();
@@ -100,10 +96,10 @@ namespace Cloudburst.Enemies
                 characterBody.baseArmor = 10; //Base armor this character has, set to 20 if this character is melee 
                 characterBody.baseAttackSpeed = 1; //Base attack speed, usually 1
                 characterBody.baseCrit = 0;  //Base crit, usually one
-                characterBody.baseDamage = 32; //Base damage
+                characterBody.baseDamage = 20; //Base damage
                 characterBody.baseJumpCount = 1; //Base jump amount, set to 2 for a double jump. 
                 characterBody.baseJumpPower = 14; //Base jump power
-                characterBody.baseMaxHealth = 720; //Base health, basically the health you have when you start a new run
+                characterBody.baseMaxHealth = 500; //Base health, basically the health you have when you start a new run
                 characterBody.baseMaxShield = 0; //Base shield, basically the same as baseMaxHealth but with shields
                 characterBody.baseMoveSpeed = 6; //Base move speed, this is usual 7
                 characterBody.baseNameToken = "MEGAMUSHRUM_BODY_TOKEN"; //The base name token. 

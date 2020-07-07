@@ -178,6 +178,11 @@ namespace Cloudburst
             dodgeStateSubscription = true;
             orig(self);
         }
+        public static void CharacterSpawnCard_Awake(On.RoR2.CharacterSpawnCard.orig_Awake orig, CharacterSpawnCard self)
+        {
+            self.loadout = new SerializableLoadout();
+            orig(self);
+        }
         public static void BuffCatalog_RegisterBuff(On.RoR2.BuffCatalog.orig_RegisterBuff orig, BuffIndex buffIndex, BuffDef buffDef)
         {
             //Fixes deathmark

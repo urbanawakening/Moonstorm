@@ -15,7 +15,7 @@ public static class BaseHelpers
     /// <returns></returns>
     public static System.Boolean RegisterNewBody(GameObject g)
     {
-        if (g != null)
+        if (g)
         {
             RoR2.BodyCatalog.getAdditionalEntries += list =>
             {
@@ -28,7 +28,7 @@ public static class BaseHelpers
     }
     public static System.Boolean RegisterNewMaster(GameObject g)
     {
-        if (g != null && g.HasComponent<CharacterMaster>())
+        if (g && g.HasComponent<CharacterMaster>())
         {
             RoR2.MasterCatalog.getAdditionalEntries += list =>
             {

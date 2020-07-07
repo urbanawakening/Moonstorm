@@ -87,7 +87,7 @@ namespace Cloudburst
                 ItemTag.OnKillEffect,
                 ItemTag.AIBlacklist
             };
-            ItemDef itemChampionOnKillItemDef = new ItemDef
+            ItemDef itemChampionOnKillItemDef = new ItemDef //OnPlayerCharacterDeath
             {
                 canRemove = true,
                 descriptionToken = "ITEM_ITEMONCHAMPIONKILL_DESC",
@@ -96,7 +96,7 @@ namespace Cloudburst
                 name = "ItemChampionOnKill",
                 nameToken = "ITEM_ITEMONCHAMPIONKILL_NAME",
                 pickupIconPath = pickUpIconPath,
-                pickupModelPath = "@Cloudburst:Assets/Import/belt/belt.prefab",
+                pickupModelPath = "@Cloudburst:Assets/Items/Grinder/MDLGrinder.prefab",
                 pickupToken = "ITEM_ITEMONCHAMPIONKILL_PICKUP",
                 tags = itemChampionOnKillTags,
                 tier = ItemTier.Tier3,
@@ -115,8 +115,8 @@ namespace Cloudburst
                 loreToken = "",
                 name = "LargerTeleporterRadius",
                 nameToken = "ITEM_LARGERTELEPORTERRADIUS_NAME",
-                pickupIconPath = pickUpIconPath,
-                pickupModelPath = pickUpModelPath,
+                pickupIconPath = "@Cloudburst:Assets/Items/MechanicalTrinket/Icon.png",
+                pickupModelPath = "@Cloudburst:Assets/Items/MechanicalTrinket/MDLMechanicalTrinket.prefab",
                 pickupToken = "ITEM_LARGERTELEPORTERRADIUS_PICKUP",
                 tags = largerTeleporterRadiusTags,
                 tier = ItemTier.Tier2,

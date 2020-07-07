@@ -6,6 +6,7 @@ using R2API.Utils;
 using RoR2;
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 using static RoR2.GivePickupsOnStart;
 
 namespace Cloudburst
@@ -77,6 +78,11 @@ namespace Cloudburst
             MiscModifications.Modify();
             Hook();
 
+            /*var allCSC = Resources.LoadAll<CharacterSpawnCard>("SpawnCards/CharacterSpawnCards");
+            for (int i = 0; i < allCSC.Length; i++) {
+                BaseLogger.Log(allCSC[i].name + ": " + allCSC[i].directorCreditCost.ToString());
+            }*/
+
             if (!deathMarkMod) {
                 On.RoR2.BuffCatalog.RegisterBuff += Hooks.BuffCatalog_RegisterBuff;
             }
@@ -109,6 +115,7 @@ namespace Cloudburst
             }
             MegaMushrumMonster.BuildMegaMushrums();
             ClayMan.BuildClayMen();
+            SipSip.BuildSipsip();
         }
         private void ModifyContent() {
             Modifications.MakeDeskPlantBetter();

@@ -24,7 +24,7 @@ namespace Cloudburst
                 }
             }
             // gather assets
-            grinderModel = mainAssetBundle.LoadAsset<GameObject>("Assets/Import/belt/belt.prefab");
+            grinderModel = mainAssetBundle.LoadAsset<GameObject>("Assets/Items/Grinder/MDLGrinder.prefab");
         }
         public static void Resize() {
             grinderModel.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
