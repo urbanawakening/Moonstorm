@@ -1,12 +1,17 @@
-﻿using RoR2;
+﻿using Cloudburst.Equipment;
+using Cloudburst.Items;
+using EntityStates.Mage.Weapon;
+using RoR2;
+using RoR2.Orbs;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Networking;
 
 namespace Cloudburst
 {
-    internal sealed class Hooks
+    public sealed class Hooks
     {
         #region Subscription Bools
         public static bool onCritSubscription;
@@ -17,21 +22,36 @@ namespace Cloudburst
         public static bool dodgeStateSubscription;
         public static bool onRegisterBuffSubscription;
         public static bool equipmentSlotSubscription;
-        public static bool grantItemClassubscription;
+        public static bool grantItemubscription;
         public static bool onTeleporterBeginChargingSubscription;
         #endregion
         #region Voids
-        public static List<ItemIndex> bossitemList = new List<ItemIndex>{
+        public List<ItemIndex> bossitemList = new List<ItemIndex>{
             ItemIndex.NovaOnLowHealth,
             ItemIndex.Knurl,
             ItemIndex.BeetleGland,
             ItemIndex.TitanGoldDuringTP,
             ItemIndex.SprintWisp,
             ItemIndex.Incubator
-            //Excluding pearls because those aren't boss ItemClass, they come from the Cleansing Pool 
+            //Excluding pearls because those aren't boss Item, they come from the Cleansing Pool 
         };
+        public HurtBox PickRandomTarget(Vector3 position, TeamIndex teamIndex, float range)
+        {
+            BullseyeSearch search = new BullseyeSearch();
 
-        public static List<BuffIndex> scpBuffList = new List<BuffIndex>{
+            search.searchOrigin = position;
+            search.searchDirection = Vector3.zero;
+            search.teamMaskFilter = TeamMask.allButNeutral;
+            search.teamMaskFilter.RemoveTeam(teamIndex);
+            search.filterByLoS = false;
+            search.sortMode = BullseyeSearch.SortMode.Distance;
+            search.maxDistanceFilter = range;
+            search.RefreshCandidates();
+            HurtBox hurtBox = (from v in search.GetResults()
+                               select v).FirstOrDefault<HurtBox>();
+            return hurtBox;
+        }
+        public List<BuffIndex> scpBuffList = new List<BuffIndex>{
             BuffIndex.NullifyStack,
             BuffIndex.ClayGoo,
             BuffIndex.BeetleJuice,
@@ -43,61 +63,109 @@ namespace Cloudburst
             BuffIndex.AffixBlue,
             BuffIndex.AffixWhite
         };
-        public static void NokiaCall(Transform transform, int itemCount)
+        public void NokiaCall(Transform transform, int itemCount)
         {
             var dropList = Util.CheckRoll((5 * itemCount)) ? Run.instance.availableTier2DropList : Run.instance.availableTier1DropList;
             int nextItem = Run.instance.treasureRng.RangeInt(0, dropList.Count);
 
             PickupDropletController.CreatePickupDroplet(dropList[nextItem], transform.position, transform.forward * 155);
         }
-        public static ItemIndex GetRandomItem(List<ItemIndex> ItemClass)
+        public ItemIndex GetRandomItem(List<ItemIndex> Item)
         {
-            int itemID = UnityEngine.Random.Range(0, ItemClass.Count);
-            return ItemClass[itemID];
+            int itemID = UnityEngine.Random.Range(0, Item.Count);
+            return Item[itemID];
         }
-#endregion
-        #region GlobalEventManager
-        public static void GlobalEventManager_OnCrit(On.RoR2.GlobalEventManager.orig_OnCrit orig, GlobalEventManager self, CharacterBody body, CharacterMaster master, float procCoefficient, ProcChainMask procChainMask)
+        #endregion
+
+        public Hooks() {
+            On.RoR2.GlobalEventManager.OnCrit += GlobalEventManager_OnCrit;
+            On.RoR2.GlobalEventManager.OnInteractionBegin += GlobalEventManager_OnInteractionBegin;
+            GlobalEventManager.onServerDamageDealt += GlobalEventManager_onServerDamageDealt;
+            GlobalEventManager.onCharacterDeathGlobal += GlobalEventManagerOnOnCharacterDeath;
+            On.RoR2.GlobalEventManager.OnTeamLevelUp += GlobalEventManager_OnTeamLevelUp;
+            TeleporterInteraction.onTeleporterBeginChargingGlobal += TeleporterInteractionOnTeleporterBeginChargingGlobal;
+            On.RoR2.GenericPickupController.GrantItem += GrantItem;
+            On.RoR2.EquipmentSlot.PerformEquipmentAction += EquipmentSlotOnPerformEquipmentAction;
+            On.EntityStates.Commando.DodgeState.OnEnter += DodgeState_OnEnter;
+            On.EntityStates.Barrel.Opened.OnEnter += Opened_OnEnter;
+            On.RoR2.EquipmentCatalog.RegisterEquipment += EquipmentCatalog_RegisterEquipment;
+            On.RoR2.HealthComponent.TakeDamage += HealthComponent_TakeDamage;
+        }
+
+        private void HealthComponent_TakeDamage(On.RoR2.HealthComponent.orig_TakeDamage orig, HealthComponent self, DamageInfo damageInfo)
         {
-            if (body && procCoefficient > 0f && body && master && master.inventory)
-            {
+            orig(self, damageInfo);
+            if (damageInfo.attacker && self) {
+                GameObject attacker = damageInfo.attacker;
+                if (damageInfo.attacker.HasComponent<CharacterBody>()) {
+                    CharacterBody attackerBody = attacker.GetComponent<CharacterBody>();
+                    if (attackerBody.inventory) {
+                        Inventory inv = attackerBody.inventory;
+                        int experienceOnHitCount = inv.GetItemCount(Item.experienceOnHitIndex);
+                        if (experienceOnHitCount > 0) {
+                            float exp = 0.1f + (experienceOnHitCount * 0.3f);
+                            ExperienceManager.instance.AwardExperience(self.transform.position, attackerBody, (ulong)(uint)exp);
+                        }
+                    }
+                }
+            }
+        }
+        #region GlobalEventManager
+        public void GlobalEventManager_OnCrit(On.RoR2.GlobalEventManager.orig_OnCrit orig, GlobalEventManager self, CharacterBody body, CharacterMaster master, float procCoefficient, ProcChainMask procChainMask)
+        {
+            if (body && procCoefficient > 0f && body && master && master.inventory) {
                 Inventory masterInventory = master.inventory;
                 HealthComponent healthComponent = body.healthComponent;
-                int topazLense = masterInventory.GetItemCount(ItemClass.barrierOnCritIndex);
-                if (topazLense > 0)
-                {
+                int topazLense = masterInventory.GetItemCount(Item.barrierOnCritIndex);
+                int lightningEye = masterInventory.GetItemCount(Item.lightningOnCritIndex);
+                if (topazLense > 0 && healthComponent) {
                     healthComponent.AddBarrier(2.5f + (topazLense * 2.5f));
+                }
+                if (lightningEye > 0 && Util.CheckRoll(20, master)) {
+                    HealthComponent com = PickRandomTarget(body.transform.position, body.teamComponent.teamIndex, 25).healthComponent;
+                    if (com)
+                    {
+                        Vector3 pos = com.transform.position;
+                        BlastAttack attack = new BlastAttack
+                        {
+                            attacker = body.gameObject,
+                            attackerFiltering = AttackerFiltering.Default,
+                            baseDamage = 1 + (2f * lightningEye),
+                            baseForce = 500,
+                            bonusForce = new Vector3(0, 0, 0),
+                            crit = false,
+                            damageColorIndex = DamageColorIndex.Default,
+                            damageType = DamageType.Stun1s,
+                            falloffModel = BlastAttack.FalloffModel.Linear,
+                            //impactEffect = EffectIndex.Invalid,
+                            inflictor = body.gameObject,
+                            losType = BlastAttack.LoSType.NearestHit,
+                            position = pos,
+                            procChainMask = procChainMask,
+                            procCoefficient = 0,
+                            radius = 15,
+                            teamIndex = body.teamComponent.teamIndex
+                        };
+                        EffectManager.SpawnEffect(ChargeMeteor.meteorEffect, new EffectData
+                        {
+                            origin = pos,
+                            scale = 15
+                        }, true);
+                        attack.Fire();
+                    }
                 }
             }
             onCritSubscription = true;
             orig(self, body, master, procCoefficient, procChainMask);
         }
-        /*public static void GlobalEventManager_OnInteractionsGlobal(Interactor interactor, IInteractable interactable, GameObject gameObject)
+        public void EquipmentCatalog_RegisterEquipment(On.RoR2.EquipmentCatalog.orig_RegisterEquipment orig, EquipmentIndex equipmentIndex, EquipmentDef equipmentDef)
         {
-            CharacterBody characterBody = interactor.GetComponent<CharacterBody>();
-            if (characterBody)
-            {
-                Inventory inventory = characterBody.inventory;
-                CharacterMaster master = characterBody.master;
-                if (inventory && master && interactable != null && gameObject != null)
-                {
-                    int moneyOnInteractionCount = inventory.GetItemCount(ItemClass.moneyOnInteractionIndex);
-                    int eliteBuffOnInteractionCount = inventory.GetItemCount(ItemClass.eliteBuffOnInteractionIndex);
-                    if (moneyOnInteractionCount > 0)
-                    {
-                        master.GiveMoney(5U + (uint)(moneyOnInteractionCount * 3));
-                    }
-                    if (eliteBuffOnInteractionCount > 0)
-                    {
-                        Util.PlaySound("Play_item_use_gainArmor", characterBody.gameObject);
-                        int count = UnityEngine.Random.Range(0, eliteBuffList.Count);
-                        characterBody.AddTimedBuff(eliteBuffList[count], 5 * eliteBuffOnInteractionCount);
-                    }
-                }
+            if (equipmentIndex == EquipmentIndex.Meteor) {
+                equipmentDef.enigmaCompatible = false;
             }
-            onInteractionSubscription = true;
-        }*/
-        public static void GlobalEventManagerOnOnCharacterDeath(DamageReport damageReport)
+            orig(equipmentIndex, equipmentDef);
+        }
+        public  void GlobalEventManagerOnOnCharacterDeath(DamageReport damageReport)
         {
             if (!damageReport.attackerBody || !damageReport.victimBody || !damageReport.attacker || !damageReport.victim || !damageReport.attackerMaster || !damageReport.victimMaster || damageReport == null)
                 return;
@@ -108,7 +176,7 @@ namespace Cloudburst
             Inventory attackerInventory = attackerMaster ? attackerMaster.inventory : null;
             //Inventory victimInventory = victimMaster ? victimMaster.inventory : null;
 
-            int itemChampionOnKillCount = attackerInventory.GetItemCount(ItemClass.itemChampionOnKillIndex);
+            int itemChampionOnKillCount = attackerInventory.GetItemCount(Item.itemChampionOnKillIndex);
             if (itemChampionOnKillCount > 0 && attackerMaster && Util.CheckRoll(15 + (itemChampionOnKillCount * 10)) && damageReport.victim.body.isBoss == true) {
                 Util.PlaySound("ui_obj_casinoChest_open", attackerBody.gameObject);
                 attackerInventory.GiveItem(GetRandomItem(bossitemList), 1);
@@ -116,7 +184,7 @@ namespace Cloudburst
 
             onDeathSubscription = true;
         }
-        public static void GlobalEventManager_onServerDamageDealt(DamageReport damageReport)
+        public void GlobalEventManager_onServerDamageDealt(DamageReport damageReport)
         {
             if (!damageReport.attackerBody || !damageReport.victimBody || !damageReport.attacker || !damageReport.victim || !damageReport.attackerMaster || !damageReport.victimMaster || damageReport == null)
                 return;
@@ -129,8 +197,8 @@ namespace Cloudburst
                 Inventory attackerInventory = attackerMaster ? attackerMaster.inventory : null;
                 //Inventory victimInventory = victimMaster ? victimMaster.inventory : null;
                 int scpRandom = UnityEngine.Random.Range(0, scpBuffList.Count);
-                int rootCount = attackerInventory.GetItemCount(ItemClass.crippleOnHitIndex);
-                int scpCount = attackerInventory.GetItemCount(ItemClass.randomDebuffOnHitIndex);
+                int rootCount = attackerInventory.GetItemCount(Item.crippleOnHitIndex);
+                int scpCount = attackerInventory.GetItemCount(Item.randomDebuffOnHitIndex);
                 if (rootCount > 0 && Util.CheckRoll(20, attackerMaster) && attackerMaster && damageReport.victimBody) {
                     Util.PlaySound("Play_nullifier_attack1_root", victimBody.gameObject);
                     victimBody.AddTimedBuff(BuffIndex.Cripple, 3);
@@ -141,7 +209,7 @@ namespace Cloudburst
             }
             onDmgDealtSubscription = true;
         }
-        public static void GlobalEventManager_OnTeamLevelUp(On.RoR2.GlobalEventManager.orig_OnTeamLevelUp orig, TeamIndex teamIndex)
+        public void GlobalEventManager_OnTeamLevelUp(On.RoR2.GlobalEventManager.orig_OnTeamLevelUp orig, TeamIndex teamIndex)
         {
             ReadOnlyCollection<TeamComponent> teamMembers = TeamComponent.GetTeamMembers(teamIndex);
             for (int i = 0; i < teamMembers.Count; i++) {
@@ -152,8 +220,8 @@ namespace Cloudburst
                         if (NetworkServer.active) {
                             CharacterMaster master = characterBody.master;
                             if (master) {
-                                int itemOnLevelUpCount = master.inventory.GetItemCount(ItemClass.itemOnLevelUpIndex);
-                                int barrierOnLevelUpCount = master.inventory.GetItemCount(ItemClass.barrierOnLevelIndex);
+                                int itemOnLevelUpCount = master.inventory.GetItemCount(Item.itemOnLevelUpIndex);
+                                int barrierOnLevelUpCount = master.inventory.GetItemCount(Item.barrierOnLevelIndex);
 
                                 if (itemOnLevelUpCount > 0 && Util.CheckRoll(50, master)) {
                                     NokiaCall(characterBody.transform, itemOnLevelUpCount); 
@@ -172,7 +240,7 @@ namespace Cloudburst
             orig(teamIndex);
         }
         #endregion
-        public static void DodgeState_OnEnter(On.EntityStates.Commando.DodgeState.orig_OnEnter orig, EntityStates.Commando.DodgeState self)
+        public void DodgeState_OnEnter(On.EntityStates.Commando.DodgeState.orig_OnEnter orig, EntityStates.Commando.DodgeState self)
         {
             self.outer.commonComponents.characterBody.isSprinting = true;
             dodgeStateSubscription = true;
@@ -192,39 +260,35 @@ namespace Cloudburst
             onRegisterBuffSubscription = true;
             orig(buffIndex, buffDef);
         }
-        public static bool EquipmentSlotOnPerformEquipmentAction(On.RoR2.EquipmentSlot.orig_PerformEquipmentAction orig, EquipmentSlot self, EquipmentIndex index)
+        public bool EquipmentSlotOnPerformEquipmentAction(On.RoR2.EquipmentSlot.orig_PerformEquipmentAction orig, EquipmentSlot self, EquipmentIndex index)
         {
-
-            if (index == Equipment.brokenPrinterIndex)
-            {
-                Equipment.SummonMjnion(self.characterBody);
+            if (index == Equip.brokenPrinterIndex) {
+                Equip.SummonMjnion(self.characterBody);
                 return true;
             }
-            if (index == Equipment.unstableQuantumReactorIndex)
-            {
-                Equipment.BecomeUnstable(self.characterBody);
+            if (index == Equip.unstableQuantumReactorIndex) {
+                Equip.BecomeUnstable(self.characterBody);
                 return true;
             }
-            if (index == Equipment.lumpkinIndex)
-            {
-                Equipment.Scream(self.characterBody);
+            if (index == Equip.lumpkinIndex) {
+                Equip.Scream(self.characterBody);
                 return true;
             }
             equipmentSlotSubscription = true;
             return orig(self, index); //must
         }
-        public static void GrantItem(On.RoR2.GenericPickupController.orig_GrantItem orig, GenericPickupController self, CharacterBody body, Inventory inventory)
+        public void GrantItem(On.RoR2.GenericPickupController.orig_GrantItem orig, GenericPickupController self, CharacterBody body, Inventory inventory)
         {
             orig(self, body, inventory);
-            int cloakOnInteractionCount = inventory.GetItemCount(ItemClass.cloakOnInteractionIndex);
+            int cloakOnInteractionCount = inventory.GetItemCount(Item.cloakOnInteractionIndex);
             if (self && inventory && cloakOnInteractionCount > 0) {
-                body.AddTimedBuff(BuffIndex.Cloak, 2 * cloakOnInteractionCount);
+                body.AddTimedBuff(BuffIndex.CloakSpeed, 2 * cloakOnInteractionCount);
             }
-            grantItemClassubscription = true;
+            grantItemubscription = true;
         }
-        public static void TeleporterInteractionOnTeleporterBeginChargingGlobal(TeleporterInteraction obj)
+        public void TeleporterInteractionOnTeleporterBeginChargingGlobal(TeleporterInteraction obj)
         {
-            int count = Util.GetItemCountForTeam(TeamIndex.Player, ItemClass.largerTeleporterRadiusIndex, true, true);
+            int count = Util.GetItemCountForTeam(TeamIndex.Player, Item.largerTeleporterRadiusIndex, true, true);
             if (count > 0) {
                 obj.holdoutZoneController.baseRadius = obj.holdoutZoneController.baseRadius + (count * 3);
             }
@@ -244,11 +308,12 @@ namespace Cloudburst
                 Inventory inventory = characterBody.inventory;
                 if (inventory && !interactableObject.HasComponent<GenericPickupController>())
                 {
-                    int moneyOnInteractionCount = inventory.GetItemCount(ItemClass.moneyOnInteractionIndex);
-                    int eliteBuffOnInteractionCount = inventory.GetItemCount(ItemClass.eliteBuffOnInteractionIndex);
+                    int moneyOnInteractionCount = inventory.GetItemCount(Item.moneyOnInteractionIndex);
+                    int eliteBuffOnInteractionCount = inventory.GetItemCount(Item.eliteBuffOnInteractionIndex);
 
                     if (moneyOnInteractionCount > 0) {
-                        characterBody.master.GiveMoney(5U + (uint)(moneyOnInteractionCount * 5));
+                        TeamManager.instance.GiveTeamMoney(characterBody.teamComponent.teamIndex, 5U + (uint)(moneyOnInteractionCount * 5));
+                        //characterBody.master.GiveMoney(5U + (uint)(moneyOnInteractionCount * 5));
                     }
                     if (eliteBuffOnInteractionCount > 0) {
                         Util.PlaySound("Play_item_use_gainArmor", characterBody.gameObject);

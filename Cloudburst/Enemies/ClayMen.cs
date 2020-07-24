@@ -6,22 +6,35 @@ using R2API.Utils;
 using RoR2;
 using RoR2.CharacterAI;
 using RoR2.Skills;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 using static RoR2.CharacterAI.AISkillDriver;
 
 namespace Cloudburst.Enemies
 {
     //TODO:
-    //Fix stupid targeting issue ugh
-    internal sealed class ClayMan
+    //Nothing!
+    public sealed class ClayMan
     {
-        public static GameObject clayMan;
-        public static GameObject clayManMaster;
+        private GameObject clayMan;
+        private GameObject clayManMaster;
 
-        public static SkillLocator skillLocator;
+        public static int clayManIndex;
 
-        public static void BuildClayMen()
+        private SkillLocator skillLocator;
+        public ClayMan() {
+            Main.awake += BuildClayMen;
+            Main.start += GetBodyIndex;
+        }
+
+        private void GetBodyIndex()
+        {
+            clayManIndex = BodyCatalog.FindBodyIndex(this.clayMan);
+        }
+
+        public void BuildClayMen()
         {
             clayMan = Resources.Load<GameObject>("prefabs/characterbodies/ClayBody");
             clayManMaster = Resources.Load<GameObject>("prefabs/charactermasters/ClaymanMaster");
@@ -33,14 +46,14 @@ namespace Cloudburst.Enemies
             RebuildSkills();
             FixHurtBox();
             FixInteractorandEquipment();
-            BaseLogger.Log("Built Clay Men!");
+            Main.LogM("Built Clay Men!");
         }
 
-        private static void BuildDirectorCard()
+        private void BuildDirectorCard()
         {
-            On.RoR2.CharacterSpawnCard.Awake += CharacterSpawnCard_Awake;
+            On.RoR2.CharacterSpawnCard.Awake += Hooks.CharacterSpawnCard_Awake;
             CharacterSpawnCard characterSpawnCard = ScriptableObject.CreateInstance<CharacterSpawnCard>();
-            On.RoR2.CharacterSpawnCard.Awake -= CharacterSpawnCard_Awake;
+            On.RoR2.CharacterSpawnCard.Awake -= Hooks.CharacterSpawnCard_Awake;
 
             DirectorAPI.DirectorCardHolder directorCardHolder = new DirectorAPI.DirectorCardHolder();
             DirectorCard directorCard = new DirectorCard();
@@ -80,34 +93,82 @@ namespace Cloudburst.Enemies
                 }
             };
         }
-        private static void FixHurtBox()
+        private void FixHurtBox()
         {
-            GameObject badVariableName = clayMan.GetComponent<ModelLocator>().modelTransform.gameObject;
-            CapsuleCollider hitBox = badVariableName.gameObject.AddComponent<CapsuleCollider>();
-            ChildLocator childLocator = clayMan.GetComponentInChildren<ChildLocator>();
+            //this is enigma's great spiral into insanity
+            //welcome to the repo, son
 
-            hitBox.radius *= 2;
+            //what the fuck is with the russian women talking??
 
-            badVariableName.gameObject.layer = LayerIndex.entityPrecise.intVal;
+            //This is mdlClay gameobject
+            GameObject mdlClayObject = clayMan.GetComponent<ModelLocator>().modelTransform.gameObject;
+            //This is mdlClay
+            Transform mdlClayTransform = clayMan.GetComponent<ModelLocator>().modelTransform;   
+            //Apparently mdlClay already has a HurtBoxGroup attached to it. That's nice and makes my job a hella lot easier.
+            //APPARENTLY FUCK THAT
+            //THERE WAS NO HURTBOXGROUP
+            //THANKS HOPOO
+            HurtBoxGroup hurtBoxGroup = mdlClayObject.AddComponent<HurtBoxGroup>();
 
-            HurtBox hurtBox = badVariableName.AddComponent<HurtBox>();
+            //unholy
+            //ChildLocator locator = clayMan.GetComponentInChildren<ChildLocator>();
 
-            HurtBoxGroup hurtBoxGroup = badVariableName.AddComponent<HurtBoxGroup>();
-
-            hurtBox.damageModifier = HurtBox.DamageModifier.Normal;
-            hurtBox.healthComponent = clayMan.GetComponent<HealthComponent>();
-            hurtBox.hurtBoxGroup = hurtBoxGroup;
-            hurtBox.indexInGroup = 0;
-            hurtBox.isBullseye = true;
-
-            hurtBoxGroup.bullseyeCount = 1;
-            hurtBoxGroup.hurtBoxes = new HurtBox[]
+            //if (stomach)
+            //{
+            Transform armature = mdlClayTransform.Find("ClaymanArmature");
+            if (armature)
             {
-                hurtBox
-            };
-            hurtBoxGroup.mainHurtBox = hurtBox;
+                Transform root = armature.Find("ROOT");
+                Main.LogD("armature");
+
+                if (root)
+                {
+                    Main.LogD("root");
+                    //FUCK CSHARP//
+                    Transform _base = root.Find("base");
+
+                    if (_base)
+                    {
+                        Main.LogD("base");
+                        Transform stomach = _base.Find("stomach");
+                        if (stomach)
+                        {
+                            Main.LogD("stomach");
+                            Transform chest = stomach.Find("chest");
+                            if (chest)
+                            {
+                                Main.LogD("chest");
+
+                                //AND HERE WE ARE
+                                //THE MOMENT OF TRUTH
+
+                                chest.gameObject.layer = LayerIndex.entityPrecise.intVal;
+
+                                CapsuleCollider capsuleCollider = chest.AddComponent<CapsuleCollider>();
+                                
+                                HurtBox hurtBox = chest.AddComponent<HurtBox>();
+                                hurtBox.damageModifier = HurtBox.DamageModifier.Normal;
+                                hurtBox.healthComponent = clayMan.GetComponent<HealthComponent>();
+                                hurtBox.hurtBoxGroup = hurtBoxGroup;
+                                hurtBox.indexInGroup = 1;
+                                hurtBox.isBullseye = true;
+
+                                hurtBoxGroup.bullseyeCount = 1;
+                                hurtBoxGroup.hurtBoxes = new HurtBox[] {
+                                    hurtBox
+                                };
+                                hurtBoxGroup.mainHurtBox = hurtBox;
+
+                                //PrefabAPI.RegisterNetworkPrefab(hurtBoxObject);
+                            }
+                        }
+                    }
+                }
+            }
+            mdlClayObject.gameObject.layer = LayerIndex.entityPrecise.intVal;
+
         }
-        private static void FixInteractorandEquipment()
+        private void FixInteractorandEquipment()
         {
             Interactor interactor = clayMan.AddOrGetComponent<Interactor>();
             clayMan.AddOrGetComponent<InteractionDriver>().highlightInteractor = true;
@@ -117,12 +178,7 @@ namespace Cloudburst.Enemies
 
             clayMan.AddComponent<EquipmentSlot>();
         }
-        private static void CharacterSpawnCard_Awake(On.RoR2.CharacterSpawnCard.orig_Awake orig, CharacterSpawnCard self)
-        {
-            self.loadout = new SerializableLoadout();
-            orig(self);
-        }
-        private static void BuildBody()
+        private void BuildBody()
         {
             CharacterBody characterBody = clayMan.GetComponent<CharacterBody>();
             if (characterBody)
@@ -158,7 +214,7 @@ namespace Cloudburst.Enemies
                                                  //characterBody.preferredPodPrefab = Resources.Load<GameObject>("prefabs/networkedobjects/robocratepod"); //The pod prefab this survivor spawns in. Options: Resources.Load<GameObject>("prefabs/networkedobjects/robocratepod"); Resources.Load<GameObject>("prefabs/networkedobjects/survivorpod"); 
             }
         }
-        private static void RebuildSkillDrivers()
+        private  void RebuildSkillDrivers()
         {
             BaseHelpers.DestroySkillDrivers(clayManMaster);
 
@@ -290,14 +346,14 @@ namespace Cloudburst.Enemies
             andAnotherSkillDriver.shouldFireEquipment = false;
             andAnotherSkillDriver.shouldTapButton = false;
         }
-        private static void RebuildSkills()
+        private void RebuildSkills()
         {
             BaseHelpers.DestroyGenericSkillComponents(clayMan);
             CreateSkillFamilies();
             CreatePrimary();
             CreateSecondary();
         }
-        private static void CreateSkillFamilies()
+        private  void CreateSkillFamilies()
         {
             skillLocator.SetFieldValue<GenericSkill[]>("allSkills", new GenericSkill[0]);
             {
@@ -329,7 +385,7 @@ namespace Cloudburst.Enemies
                 skillLocator.special.SetFieldValue("_skillFamily", newFamily);
             }*/
         }
-        private static void CreatePrimary()
+        private  void CreatePrimary()
         {
             SkillDef primarySkillDef = ScriptableObject.CreateInstance<SkillDef>();
             primarySkillDef.activationState = new SerializableEntityStateType(typeof(SwipeForward));
@@ -363,7 +419,7 @@ namespace Cloudburst.Enemies
 
             };
         }
-        private static void CreateSecondary()
+        private void CreateSecondary()
         {
 
             SkillDef secondarySkillDef = ScriptableObject.CreateInstance<SkillDef>();

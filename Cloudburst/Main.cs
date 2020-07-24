@@ -1,17 +1,23 @@
 ﻿using BepInEx;
 using BepInEx.Bootstrap;
+using BepInEx.Configuration;
+using BepInEx.Logging;
+//using Cloudburst.Achievements;
 using Cloudburst.Enemies;
+using Cloudburst.Equipment;
+using Cloudburst.Items;
 using Cloudburst.Misc;
+using R2API;
 using R2API.Utils;
 using RoR2;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using static RoR2.GivePickupsOnStart;
 
 namespace Cloudburst
 {
     [BepInDependency("com.bepis.r2api", BepInDependency.DependencyFlags.HardDependency)]
+    [BepInIncompatibility("")]
     [R2APISubmoduleDependency(new string[]
     {
         "ItemAPI",
@@ -22,14 +28,26 @@ namespace Cloudburst
         "LoadoutAPI",
         "DirectorAPI",
         "LanguageAPI",
-        "ResourcesAPI"
+        "ResourcesAPI",
+        "UnlockablesAPI"
     })]
-    [BepInPlugin("com.AwokeinanEngima.CloudBurst", "CloudBurst", "1.0.0")]
+    [BepInPlugin(guid, modName, version)]
     public class Main : BaseUnityPlugin
     {
-        public ItemClass items;
-        public Equipment equipment;
+        const string guid = "com.AwokeinanEngima.CloudBurst";
+        const string modName = "Cloudburst";
+        const string version = "1.0.0";
+        
+
+        public Item items;
+        public Equip equipment;
+        public SipSip sipSip;
+        public ClayMan clayMan;
+        public MegaMushrumMonster megaMushrum;
+        public Hooks hooks;
+
         public static Main instance;
+        public static ManualLogSource logger;
 
         private List<string> replacedFuncs;
         private List<PluginInfo> loadedPlugins;
@@ -38,16 +56,26 @@ namespace Cloudburst
         private bool deathMarkMod;
         private bool solidIceMod;
 
+        public DifficultyIndex cloudburst;
+        public DifficultyDef cloudburstDef;
+
         public static event Action awake;
         //internal event Action afterLoad;
         public static event Action start;
+
+        //public static ConfigEntry<bool> unlockAll;
         public Main() {
             awake += Load;
-            items = new ItemClass();
-            equipment = new Equipment();
+            items = new Item();
+            equipment = new Equip();
+            sipSip = new SipSip();
+            clayMan = new ClayMan();
+            megaMushrum = new MegaMushrumMonster();
+            hooks = new Hooks();
         }
         #region Basic
-        public void Awake() {
+        public void Awake()
+        {
             Action awake = Main.awake;
             if (awake == null)
             {
@@ -64,11 +92,13 @@ namespace Cloudburst
         }
         #endregion
         private void Load() {
-            if (instance == null || BaseLogger.logger == null)
+            if (instance == null || logger == null)
             {
                 instance = this;
-                BaseLogger.logger = base.Logger;
+                logger = this.Logger;
             }
+            //CreateConfig();
+
             Assets.PopulateAssets();
             Assets.Resize();
             CheckLoadedPlugins();
@@ -82,40 +112,62 @@ namespace Cloudburst
             for (int i = 0; i < allCSC.Length; i++) {
                 BaseLogger.Log(allCSC[i].name + ": " + allCSC[i].directorCreditCost.ToString());
             }*/
+        }
+        /*private void CreateConfig() {
+            unlockAll = Config.Bind<bool>(new ConfigDefinition("General", "UnlockAll"), false, new ConfigDescription("While Cloudburst is much more fun with unlockables, I understand that many might not want to spend time unlocking items and such. Therefore, I have created this config option so those who do not want to spend time unlocking content can just unlock everything right away.", null, Array.Empty<object>()));
+        }*/
+        public static int GetIQFromUser(string name) {
+            int IQ;
+            switch (name) {
+                default:
+                    LogE("Person not found!");
+                    IQ = 0;
+                    break;
+                case "Vulfoof":
+                    LogM("Fuckin' brainlet lmao.");
+                    IQ = int.MinValue;
+                    break; 
+                case "Enigma":
+                    LogM("Huge brain, fuckin' GENIUS!");
+                    IQ = int.MaxValue;
+                    break; 
+                case "ᴬ ˢᵐᵃˡˡ ᴮᵉʳ":
+                    LogM("Fuck your unicode-ass name.");
+                    IQ = 125;
+                    break; 
+                case "duck duck grey duck":
+                    LogM("Thank you for not using unicode in your username.");
+                    IQ = 145;
+                    break; 
+            }
+            return IQ;
+        }
+        private void Hook() {
 
-            if (!deathMarkMod) {
+            if (!deathMarkMod)
+            {
                 On.RoR2.BuffCatalog.RegisterBuff += Hooks.BuffCatalog_RegisterBuff;
             }
-            else {
-                BaseLogger.LogE("DeathMarkFix is installed, you can uninstall it for lesser loading times as its functionality is in cloudburst.");
+            else
+            {
+                LogW("DeathMarkFix is installed, you can uninstall it for lesser loading times as its functionality is in cloudburst.");
             }
-
-            //On.RoR2.ArenaMissionController.EndRound += ArenaMissionController_EndRound;
         }
+        private void AddAchivements() {
+            /*LanguageAPI.Add("CLOUDBURST_GRABORDIE_UNLOCKABLE_NAME", "Grab or Die!");
+            LanguageAPI.Add("CLOUDBURST_GRABORDIE_ACHIEVEMENT_NAME", "Grab or Die!");
+            LanguageAPI.Add("CLOUDBURST_GRABORDIE_ACHIEVEMENT_DESC", "Grab an item while below 30% health.");
 
-        private void Hook() {
-            //GlobalEventManager.OnInteractionsGlobal += Hooks.GlobalEventManager_OnInteractionsGlobal;
-            On.RoR2.GlobalEventManager.OnCrit += Hooks.GlobalEventManager_OnCrit;
-            On.RoR2.GlobalEventManager.OnInteractionBegin += Hooks.GlobalEventManager_OnInteractionBegin;
-            GlobalEventManager.onServerDamageDealt += Hooks.GlobalEventManager_onServerDamageDealt;
-            GlobalEventManager.onCharacterDeathGlobal += Hooks.GlobalEventManagerOnOnCharacterDeath;
-            On.RoR2.GlobalEventManager.OnTeamLevelUp += Hooks.GlobalEventManager_OnTeamLevelUp;
-            TeleporterInteraction.onTeleporterBeginChargingGlobal += Hooks.TeleporterInteractionOnTeleporterBeginChargingGlobal;
-            On.RoR2.GenericPickupController.GrantItem += Hooks.GrantItem;
-            On.RoR2.EquipmentSlot.PerformEquipmentAction += Hooks.EquipmentSlotOnPerformEquipmentAction ;
-            On.EntityStates.Commando.DodgeState.OnEnter += Hooks.DodgeState_OnEnter;
-            On.EntityStates.Barrel.Opened.OnEnter += Hooks.Opened_OnEnter;
+            UnlockablesAPI.AddUnlockable<GrabOrDie>(false);*/
         }
         private void AddContent() {
             if (!archaicWispMod) {
                 ArchaicWisps.BuildArchWisps();
             }
             else {
-                BaseLogger.LogE("ReinDirectorCardDemoArchWisp is installed, please uninstall it to have Cloudburst's Archaic Wisp enemy spawn.");
+                LogE("ReinDirectorCardDemoArchWisp is installed, please uninstall it to have Cloudburst's Archaic Wisp enemy spawn.");
             }
-            MegaMushrumMonster.BuildMegaMushrums();
-            ClayMan.BuildClayMen();
-            SipSip.BuildSipsip();
+            AddAchivements();
         }
         private void ModifyContent() {
             Modifications.MakeDeskPlantBetter();
@@ -123,10 +175,11 @@ namespace Cloudburst
                 Modifications.MakeIceWallSolid();
             }
             else {
-                BaseLogger.LogE("SolidIceWall is installed, you can uninstall it for lesser loading times as its functionality is in cloudburst.");
+                LogE("SolidIceWall is installed, you can uninstall it for lesser loading times as its functionality is in cloudburst.");
             }
             Modifications.ModifyPlasmaBolt();
             Modifications.RenameDaisy();
+            ArtificerExtended();
         }
         private void CheckLoadedPlugins() {
             loadedPlugins = new List<PluginInfo>();
@@ -136,6 +189,54 @@ namespace Cloudburst
                     loadedPlugins.Add(plugin);
                 }
             }
+        }
+        private void ArtificerExtended()
+        {
+            //would you give up your humanity for just a touch of sanity?
+            GameObject mage = Resources.Load<GameObject>("prefabs/characterbodies/MageBody");
+
+
+
+            Transform mdlMage = mage.GetComponent<ModelLocator>().modelTransform;
+            ChildLocator childLocator = mdlMage.GetComponentInChildren<ChildLocator>();
+            int headIndex = childLocator.FindChildIndex("Head");
+            Transform head = childLocator.FindChild(headIndex);
+            if (head)
+            {
+                LogD("FUCK HOPOO");
+                head.localScale *= 10;
+                GameObject headObject = head.gameObject;
+                headObject.GetComponent<Rigidbody>().mass *= 100;
+            }
+            /*if (armature) {
+                Transform root = armature.Find("ROOT");
+                LogD("magearmature");
+                if (root) {
+                    LogD("mageroot");
+                    //FUCK CSHARP//
+                    Transform _base = root.Find("base");
+                    if (_base) {
+                        LogD("magebase");
+                        Transform stomach = _base.Find("stomach");
+                        if (stomach) {
+                            LogD("magestomach");
+                            Transform chest = stomach.Find("chest");
+                            if (chest) {
+                                LogD("magechest");
+                                Transform neck = chest.Find("neck");
+                                if (neck) {
+                                    LogD("mageneck");
+                                    Transform head = neck.Find("head");
+                                    if (head) {
+                                        LogD("so no head?");
+                                        head.localScale = head.localScale * 5;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }*/
         }
         private void CheckCompat() {
             replacedFuncs = new List<string>();
@@ -155,10 +256,16 @@ namespace Cloudburst
                 }
                 //oh no, i'm checking plugins for incompats, how evil i am!
                 if (this.replacedFuncs.Contains(pluginInfo.Metadata.GUID)) {
-                    BaseLogger.LogW("Cloudburst may have conflicts with the following mod:" + pluginInfo.Metadata.Name + ". Please disable this mod, as it's functionality is in Cloudburst.");
-                    BaseLogger.LogW("If you do not choose to disable these mod(s), Cloudburst will disable certain features to provide a bug free experenice at the cost of content.");
+                    LogW("Cloudburst may have conflicts with the following mod:" + pluginInfo.Metadata.Name + ". Please disable this mod, as it's functionality is in Cloudburst.");
+                    LogW("If you do not choose to disable these mod(s), Cloudburst will disable certain features to provide a bug free experenice at the cost of content.");
                 }
             }
         }
+        public static void LogF(object data) => logger.LogFatal(data);
+        public static void LogE(object data) => logger.LogError(data);
+        public static void LogW(object data) => logger.LogDebug(data);
+        public static void LogM(object data) => logger.LogMessage(data);
+        public static void LogI(object data) => logger.LogInfo(data);
+        public static void LogD(object data) => logger.LogDebug(data);
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace Cloudburst
+﻿namespace Cloudburst.Items
 {
     public enum CloudburstItemIndex
     {
@@ -13,6 +13,7 @@
         RandomDebuffOnHit, //DONE
         BarrierOnCrit,
         HealOnLevelup,
+        LightningOnCrit,
         Count
     }
 }

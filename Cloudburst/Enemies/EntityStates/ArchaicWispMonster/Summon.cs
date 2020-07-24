@@ -26,8 +26,7 @@ namespace Cloudburst.Enemies.EntityStatez.ArchaicWispMonster
             base.PlayAnimation("Gesture", "FireCannons", "FireCannons.playbackRate", this.duration);
             if (base.isAuthority && base.modelLocator && base.modelLocator.modelTransform)
             {
-
-                if (base.modelLocator.modelTransform.GetComponent<ChildLocator>())
+                if (base.modelLocator.modelTransform.HasComponent<ChildLocator>())
                 {
                     ChildLocator childLocator = base.modelLocator.modelTransform.GetComponent<ChildLocator>();
                     //literally compiler names but who will look at this code anyways?

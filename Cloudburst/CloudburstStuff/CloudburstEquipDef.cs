@@ -1,4 +1,5 @@
-﻿using R2API;
+﻿using Cloudburst.Equipment;
+using R2API;
 using RoR2;
 
 namespace Cloudburst

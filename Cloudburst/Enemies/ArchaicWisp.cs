@@ -26,7 +26,7 @@ namespace Cloudburst.Enemies
             BuildBody();
             BuildDirectorCard();
             ModifyPrimary();
-            BaseLogger.Log("Built Archaic Wisps!");
+            Main.LogM("Built Archaic Wisps!");
 
         }
         private static void BuildDirectorCard()

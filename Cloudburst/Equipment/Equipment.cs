@@ -4,9 +4,9 @@ using RoR2.Projectile;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Cloudburst
+namespace Cloudburst.Equipment
 {
-    public sealed class Equipment
+    public sealed class Equip
     {
         #region Indexes
         public static EquipmentIndex lumpkinIndex { get; private set; }
@@ -43,7 +43,7 @@ namespace Cloudburst
         //private static GameObject molotovCocktail;
         //private static GameObject molotovCocktailZone;
         #endregion
-        public Equipment()
+        public Equip()
         {
             #region Basic
             var prefab = Resources.Load<GameObject>("Prefabs/PickupModels/PickupMystery");

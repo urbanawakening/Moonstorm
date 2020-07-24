@@ -13,7 +13,7 @@ public static class BaseHelpers
     /// </summary>
     /// <param Body Prefab="g"></param>
     /// <returns></returns>
-    public static System.Boolean RegisterNewBody(GameObject g)
+    public static bool RegisterNewBody(GameObject g)
     {
         if (g)
         {

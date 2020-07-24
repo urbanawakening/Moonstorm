@@ -4,7 +4,6 @@ using R2API;
 using R2API.Utils;
 using RoR2;
 using RoR2.CharacterAI;
-using RoR2.Projectile;
 using RoR2.Skills;
 using System.Collections.Generic;
 using UnityEngine;
@@ -15,14 +14,23 @@ namespace Cloudburst.Enemies
     //TODO:
     //Make an icon.
 
-    internal sealed class MegaMushrumMonster
+    public sealed class MegaMushrumMonster
     {
-        public static GameObject megaMushrum;
-        public static GameObject megaMushrumMaster;
+        private GameObject megaMushrum;
+        private GameObject megaMushrumMaster;
+        private SkillLocator skillLocator;
 
-        public static SkillLocator skillLocator;
-        public static void BuildMegaMushrums()
-        {
+        public static int megaMushrumIndex;    
+        public MegaMushrumMonster() {
+            Main.awake += BuildMegaMushrums;
+            Main.start += GetBodyIndex;
+        }
+
+        private void GetBodyIndex() {
+            megaMushrumIndex = BodyCatalog.FindBodyIndex(this.megaMushrum);
+        }
+
+        private void BuildMegaMushrums() {
             megaMushrum = Resources.Load<GameObject>("prefabs/characterbodies/MiniMushroomBody").InstantiateClone("MegaMushrumBody", true);
             megaMushrumMaster = Resources.Load<GameObject>("prefabs/charactermasters/MiniMushroomMaster").InstantiateClone("MegaMushrumMaster", true);
 
@@ -40,10 +48,10 @@ namespace Cloudburst.Enemies
             RebuildSkills();
 
 
-            BaseLogger.Log("Built Mega Mushrums!");
+            Main.LogM("Built Mega Mushrums!");
         }
 
-        private static void BuildDirectorCard()
+        private void BuildDirectorCard()
         {
             On.RoR2.CharacterSpawnCard.Awake += Hooks.CharacterSpawnCard_Awake;
             CharacterSpawnCard characterSpawnCard = ScriptableObject.CreateInstance<CharacterSpawnCard>();
@@ -86,7 +94,7 @@ namespace Cloudburst.Enemies
             };
         }
 
-        private static void BuildBody()
+        private void BuildBody()
         {
             CharacterBody characterBody = megaMushrum.GetComponent<CharacterBody>();
             if (characterBody)
@@ -125,22 +133,22 @@ namespace Cloudburst.Enemies
             }
 
         }
-        private static void SetupMegaMushrumSize()
+        private void SetupMegaMushrumSize()
         {
             GameObject gameObject = megaMushrum.GetComponent<ModelLocator>().modelBaseTransform.gameObject;
-            gameObject.transform.localScale = gameObject.transform.localScale * 2;
-            gameObject.transform.Translate(new Vector3(0, -2f, 0));
-            megaMushrum.GetComponent<CharacterBody>().aimOriginTransform.Translate(new Vector3(0, -2f, 0));
+            gameObject.transform.localScale = gameObject.transform.localScale * 3;
+            gameObject.transform.Translate(new Vector3(0, -3f, 0));
+            megaMushrum.GetComponent<CharacterBody>().aimOriginTransform.Translate(new Vector3(0, -3f, 0));
 
             foreach (KinematicCharacterController.KinematicCharacterMotor behaviour in megaMushrum.GetComponentsInChildren<KinematicCharacterController.KinematicCharacterMotor>())
             {
                 float currentY = behaviour.Capsule.center.y;
 
-                behaviour.SetCapsuleDimensions(behaviour.Capsule.radius * 2, behaviour.Capsule.height * 2, -0f);
+                behaviour.SetCapsuleDimensions(behaviour.Capsule.radius * 3, behaviour.Capsule.height * 3, -0f);
 
             }
         }
-        private static void RebuildSkillDrivers()
+        private void RebuildSkillDrivers()
         {
             BaseHelpers.DestroySkillDrivers(megaMushrumMaster);
 
@@ -307,7 +315,7 @@ namespace Cloudburst.Enemies
             StrafePath.shouldTapButton = false;
         }
         
-        private static void RebuildSkills()
+        private void RebuildSkills()
         {
             BaseHelpers.DestroyGenericSkillComponents(megaMushrum);
             CreateSkillFamilies();
@@ -316,7 +324,7 @@ namespace Cloudburst.Enemies
             CreateUtility();
             CreateSpecial();
         }
-        private static void CreateSkillFamilies()
+        private void CreateSkillFamilies()
         {
             skillLocator.SetFieldValue<GenericSkill[]>("allSkills", new GenericSkill[0]);
             {
@@ -348,7 +356,7 @@ namespace Cloudburst.Enemies
                 skillLocator.special.SetFieldValue("_skillFamily", newFamily);
             }
         }
-        private static void CreatePrimary()
+        private void CreatePrimary()
         {
             SkillDef primarySkillDef = ScriptableObject.CreateInstance<SkillDef>();
             primarySkillDef.activationState = new SerializableEntityStateType(typeof(SporeGrenade));
@@ -382,7 +390,7 @@ namespace Cloudburst.Enemies
 
             };
         }
-        private static void CreateSecondary()
+        private void CreateSecondary()
         {
             SkillDef secondarySkillDef = ScriptableObject.CreateInstance<SkillDef>();
             secondarySkillDef.activationState = new SerializableEntityStateType(typeof(SporeGrenade));
@@ -417,7 +425,7 @@ namespace Cloudburst.Enemies
             };
         }
 
-        private static void CreateUtility()
+        private void CreateUtility()
         {
             SkillDef utilitySkillDef = ScriptableObject.CreateInstance<SkillDef>();
             utilitySkillDef.activationState = new SerializableEntityStateType(typeof(Weapon.MegaMushroom.InPlant));
@@ -451,7 +459,7 @@ namespace Cloudburst.Enemies
 
             };
         }
-        private static void CreateSpecial()
+        private void CreateSpecial()
         {
             SkillDef specialSkillDef = ScriptableObject.CreateInstance<SkillDef>();
             //specialSkillDef.activationState = new SerializableEntityStateType(typeof(PortalJump));

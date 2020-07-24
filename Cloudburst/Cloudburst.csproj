@@ -341,7 +341,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Achievements\GrabOrDie.cs" />
     <Compile Include="Assets.cs" />
+    <Compile Include="CloudburstStuff\Class1.cs" />
     <Compile Include="CloudburstStuff\CloudCatalog.cs" />
     <Compile Include="CloudburstStuff\CloudburstItemDef.cs" />
     <Compile Include="CloudburstStuff\CloudburstEquipDef.cs" />
@@ -359,7 +361,6 @@
     <Compile Include="Enemies\EntityStates\MegaMushrum\SporeGrenade.cs" />
     <Compile Include="Equipment\Equipment.cs" />
     <Compile Include="Equipment\EquipmentIndex.cs" />
-    <Compile Include="Helpers\BaseLogger.cs" />
     <Compile Include="Enemies\EntityStates\ArchaicWispMonster\ChargeSummon.cs" />
     <Compile Include="Enemies\EntityStates\ArchaicWispMonster\Summon.cs" />
     <Compile Include="Items\ItemIndex.cs" />
