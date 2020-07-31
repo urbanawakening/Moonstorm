@@ -37,7 +37,8 @@ namespace Cloudburst
         const string guid = "com.AwokeinanEngima.CloudBurst";
         const string modName = "Cloudburst";
         const string version = "1.0.0";
-        
+
+        public BuffIndex olLoppin;
 
         public Item items;
         public Equip equipment;
@@ -168,6 +169,7 @@ namespace Cloudburst
                 LogE("ReinDirectorCardDemoArchWisp is installed, please uninstall it to have Cloudburst's Archaic Wisp enemy spawn.");
             }
             AddAchivements();
+            CreateBuff();   
         }
         private void ModifyContent() {
             Modifications.MakeDeskPlantBetter();
@@ -181,6 +183,19 @@ namespace Cloudburst
             Modifications.RenameDaisy();
             ArtificerExtended();
         }
+        private void CreateBuff() {
+            BuffDef olLoppinDef = new BuffDef
+            {
+                buffIndex = BuffIndex.Count,
+                buffColor = Color.yellow,
+                canStack = true,
+                eliteIndex = EliteIndex.None,
+                iconPath = "Textures/BuffIcons/TexMovespeedBuffIcon",
+                isDebuff = false,
+                name = "OlLopping"
+            };
+            olLoppin = BuffAPI.Add(new CustomBuff(olLoppinDef));
+        }
         private void CheckLoadedPlugins() {
             loadedPlugins = new List<PluginInfo>();
             foreach (PluginInfo plugin in Chainloader.PluginInfos.Values) {
@@ -193,7 +208,7 @@ namespace Cloudburst
         private void ArtificerExtended()
         {
             //would you give up your humanity for just a touch of sanity?
-            GameObject mage = Resources.Load<GameObject>("prefabs/characterbodies/MageBody");
+            /*GameObject mage = Resources.Load<GameObject>("prefabs/characterbodies/MageBody");
 
 
 
@@ -207,7 +222,7 @@ namespace Cloudburst
                 head.localScale *= 10;
                 GameObject headObject = head.gameObject;
                 headObject.GetComponent<Rigidbody>().mass *= 100;
-            }
+            }*/
             /*if (armature) {
                 Transform root = armature.Find("ROOT");
                 LogD("magearmature");

@@ -13,8 +13,8 @@ namespace Cloudburst.Misc
             GameObject deskPlant = Resources.Load<GameObject>("Prefabs/NetworkedObjects/InterstellarDeskPlant");
             DeskPlantController deskplantController = deskPlant.GetComponent<DeskPlantController>();
 
-            deskplantController.healingRadius = 6;
-            deskplantController.radiusIncreasePerStack = 3;
+            deskplantController.healingRadius = 10;
+            deskplantController.radiusIncreasePerStack = 5;
         }
         public static void RenameDaisy()
         {

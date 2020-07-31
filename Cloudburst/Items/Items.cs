@@ -19,10 +19,17 @@ namespace Cloudburst.Items
         public static ItemIndex barrierOnLevelIndex { get; private set; }
         public static ItemIndex lightningOnCritIndex { get; private set; }
         public static ItemIndex experienceOnHitIndex { get; private set; }
+        public static ItemIndex betterCritDamageOnLowHealthIndex { get; private set; }
+        public static ItemIndex increasedJumpHeightIndex { get; private set; }
         #endregion
         public Item()
         {
             #region Basic
+            //ITEM RULES//
+            //-Items must be original!! Every item should have a seperate effect and shouldn't just be X item but better.
+            //-Item names must fit RoR2!
+            //-Lastly, items need to be fun!
+
             var prefab = Resources.Load<GameObject>("Prefabs/PickupModels/PickupMystery");
             var rule = new ItemDisplayRule
             {
@@ -46,10 +53,10 @@ namespace Cloudburst.Items
             LanguageAPI.Add("ITEM_LARGERTELEPORTERRADIUS_DESC", "<style=cIsUtility>Increase teleporter radius by 3m</style> <style=cStack>(+3m per stack)</style>.");
             LanguageAPI.Add("ITEM_LARGERTELEPORTERRADIUS_PICKUP", "Increase teleporter radius.");
 
-            LanguageAPI.Add("ITEM_ELITEBUFFONINTERACTION_NAME", "Rechargable Quantum Core");
+            LanguageAPI.Add("ITEM_ELITEBUFFONINTERACTION_NAME", "Quantum Core");
             LanguageAPI.Add("ITEM_ELITEBUFFONINTERACTION_DESC", "<style=cIsUtility>Become elite upon interaction</style> for 5 seconds <style=cStack>(+5 seconds per stack)</style>.");
             LanguageAPI.Add("ITEM_ELITEBUFFONINTERACTION_PICKUP", "Become elite on activating an interactable.");
-                    
+
             LanguageAPI.Add("ITEM_CRIPPLEONHIT_NAME", "Fabinhoru's Dagger");
             LanguageAPI.Add("ITEM_CRIPPLEONHIT_DESC", "20% Chance to <style=cIsDamage>cripple enemies</style> for 3 <style=cStack>(+3 seconds per stack)</style> seconds. ");
             LanguageAPI.Add("ITEM_CRIPPLEONHIT_PICKUP", "Chance to cripple enemies.");
@@ -58,7 +65,7 @@ namespace Cloudburst.Items
             LanguageAPI.Add("ITEM_CLOAKBUFFONINTERACTION_DESC", "Become <style=cIsUtility>cloaked for 2 seconds</style> <style=cStack>(+2 seconds per stack)</style> when picking up an item.");
             LanguageAPI.Add("ITEM_CLOAKBUFFONINTERACTION_PICKUP", "Become cloaked when picking up an item.");
 
-            LanguageAPI.Add("ITEM_ITEMONLEVELUP_NAME", "Interstellar Nokia");
+            LanguageAPI.Add("ITEM_ITEMONLEVELUP_NAME", "Dropship Caller");
             LanguageAPI.Add("ITEM_ITEMONLEVELUP_DESC", "<style=cIsUtility>75% Chance to gain an item on level up</style>. <style=cStack>+5% chance to gain a green item per stack</style>");
             LanguageAPI.Add("ITEM_ITEMONLEVELUP_PICKUP", "Chance to gain an item on level up");
 
@@ -83,9 +90,17 @@ namespace Cloudburst.Items
             LanguageAPI.Add("ITEM_LIGHTNINGONHURT_DESC", "20% chance to <style=cIsDamage>strike lightning</style> on critical hits that does 350% <style=cStack>(+25% per stack)</style> damage.");
             LanguageAPI.Add("ITEM_LIGHTNINGONHURT_PICKUP", "Chance to strike lightning on critical hits.");
 
-            LanguageAPI.Add("ITEM_EXPERIENCEONHIT_NAME", "Glass Harvester"); 
-            LanguageAPI.Add("ITEM_EXPERIENCEONHIT_DESC", "Gain 3 <style=cStack>(+1 per stack)</style> <style=cIsUtility>experience</style> on hit.");
+            LanguageAPI.Add("ITEM_EXPERIENCEONHIT_NAME", "Glass Harvester");
+            LanguageAPI.Add("ITEM_EXPERIENCEONHIT_DESC", "Gain 0.5 <style=cStack>(+0.4 per stack)</style> <style=cIsUtility>experience</style> on hit.");
             LanguageAPI.Add("ITEM_EXPERIENCEONHIT_PICKUP", "Gain experience on hit");
+
+            LanguageAPI.Add("ITEM_BETTERCRITSONLOWHEALTH_NAME", "Glass Axe");
+            LanguageAPI.Add("ITEM_BETTERCRITSONLOWHEALTH_DESC", "Enemies take <style=cIsDamage>2 <style=cStack>(+2 per stack)</style> times damage from critical hits</style> when you're at low health.");
+            LanguageAPI.Add("ITEM_BETTERCRITSONLOWHEALTH_PICKUP", "Guaranteed critical hits when you're at low health");
+
+            LanguageAPI.Add("ITEM_INCREASEDJUMPHEIGHT_NAME", "Rocket Boosters");
+            LanguageAPI.Add("ITEM_INCREASEDJUMPHEIGHT_DESC", "<style=Utility>Increase your base jump height</style> by 30% <style=cStack>(+30% per stack)</style>");
+            LanguageAPI.Add("ITEM_INCREASEDJUMPHEIGHT_PICKUP", "Jump higher");
             #endregion
             #region ItemDefs
             ItemTag[] itemChampionOnKillTags = new ItemTag[2]
@@ -233,7 +248,7 @@ namespace Cloudburst.Items
                 ItemTag.Utility,
                 ItemTag.AIBlacklist
 };
-            ItemDef moneyOnInteractionItemDef = new ItemDef 
+            ItemDef moneyOnInteractionItemDef = new ItemDef
             {
                 canRemove = true,
                 descriptionToken = "ITEM_MONEYONINTERACTION_DESC",
@@ -241,7 +256,7 @@ namespace Cloudburst.Items
                 loreToken = "",
                 name = "MoneyOnInteraction",
                 nameToken = "ITEM_MONEYONINTERACTION_NAME",
-                pickupIconPath = pickUpIconPath,        
+                pickupIconPath = pickUpIconPath,
                 pickupModelPath = "@Cloudburst:Assets/Items/UESKeycard/MDLKeycard.prefab",
                 pickupToken = "ITEM_MONEYONINTERACTION_PICKUP",
                 tags = moneyOnInteractionTags,
@@ -278,7 +293,7 @@ namespace Cloudburst.Items
                 canRemove = true,
                 descriptionToken = "ITEM_LIGHTNINGONHURT_DESC",
                 hidden = false,
-                loreToken = "", 
+                loreToken = "",
                 name = "LightningOnHurt",
                 nameToken = "ITEM_LIGHTNINGONHURT_NAME",
                 pickupIconPath = pickUpIconPath,
@@ -328,6 +343,27 @@ namespace Cloudburst.Items
                 tier = ItemTier.Tier1,
                 unlockableName = ""
             };
+            ItemTag[] betterCritsOnLowHealthTags = new ItemTag[2]
+            {
+                    ItemTag.Damage,
+                    ItemTag.AIBlacklist
+            };
+            ItemDef betterCritsOnLowHealthItemDef = new ItemDef
+            {
+                canRemove = true,
+                descriptionToken = "ITEM_BETTERCRITSONLOWHEALTH_DESC",
+                hidden = false,
+                loreToken = "",
+                name = "BetterCrisOnLowHealth",
+                nameToken = "ITEM_BETTERCRITSONLOWHEALTH_NAME",
+                pickupIconPath = pickUpIconPath,
+                pickupModelPath = pickUpModelPath,
+                pickupToken = "ITEM_BETTERCRITSONLOWHEALTH_PICKUP",
+                tags = betterCritsOnLowHealthTags,
+                tier = ItemTier.Tier3,
+                unlockableName = ""
+            };
+            /* this is really cool!! */
             #endregion
             #region CustomItems 
             CustomItem itemChampionOnKill = new CustomItem(itemChampionOnKillItemDef, new[] { rule });
@@ -336,12 +372,13 @@ namespace Cloudburst.Items
             CustomItem crippleOnHit = new CustomItem(crippleOnHitItemDef, new[] { rule });
             CustomItem cloakOnInteraction = new CustomItem(cloakOnInteractionItemDef, new[] { rule });
             CustomItem itemOnLevelUp = new CustomItem(itemOnLevelUpItemDef, new[] { rule });
-            CustomItem randomDebuffOnHit = new CustomItem(randomDebuffOnHitItemDef, new[] {  rule });
+            CustomItem randomDebuffOnHit = new CustomItem(randomDebuffOnHitItemDef, new[] { rule });
             CustomItem moneyOnInteraction = new CustomItem(moneyOnInteractionItemDef, new[] { rule });
             CustomItem barrierOnCrit = new CustomItem(barrierOnCritItemDef, new[] { rule });
             CustomItem barrierOnLevel = new CustomItem(barrierOnLevelItemDef, new[] { rule });
             CustomItem lightningOnCrit = new CustomItem(lightningOnCritItemDef, new[] { rule });
             CustomItem experienceOnHit = new CustomItem(experienceOnHitItemDef, new[] { rule });
+            CustomItem betterCritsOnLowHealth = new CustomItem(betterCritsOnLowHealthItemDef, new[] { rule });
             #endregion
             #region Set indexes  
             itemChampionOnKillIndex = ItemAPI.Add(itemChampionOnKill);
@@ -356,7 +393,7 @@ namespace Cloudburst.Items
             barrierOnLevelIndex = ItemAPI.Add(barrierOnLevel);
             lightningOnCritIndex = ItemAPI.Add(lightningOnCrit);
             experienceOnHitIndex = ItemAPI.Add(experienceOnHit);
-
+            betterCritDamageOnLowHealthIndex = ItemAPI.Add(betterCritsOnLowHealth);
             #endregion
             #region CloudCatalog
             #endregion

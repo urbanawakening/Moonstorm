@@ -14,6 +14,7 @@
         BarrierOnCrit,
         HealOnLevelup,
         LightningOnCrit,
+        BetterCritDamageOnLowHealth,
         Count
     }
 }

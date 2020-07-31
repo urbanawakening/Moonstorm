@@ -1,6 +1,7 @@
 ﻿using Cloudburst.Equipment;
 using Cloudburst.Items;
 using EntityStates.Mage.Weapon;
+using R2API.Utils;
 using RoR2;
 using RoR2.Orbs;
 using System.Collections.Generic;
@@ -68,7 +69,13 @@ namespace Cloudburst
             var dropList = Util.CheckRoll((5 * itemCount)) ? Run.instance.availableTier2DropList : Run.instance.availableTier1DropList;
             int nextItem = Run.instance.treasureRng.RangeInt(0, dropList.Count);
 
-            PickupDropletController.CreatePickupDroplet(dropList[nextItem], transform.position, transform.forward * 155);
+            PickupDropletController.CreatePickupDroplet(dropList[nextItem], transform.position, new Vector3(0, 0, 0));
+
+            EffectManager.SpawnEffect(Resources.Load<GameObject>("prefabs/effects/impacteffects/PodGroundImpact"), new EffectData
+            {
+                origin = transform.position,
+                scale = 15
+            }, true);
         }
         public ItemIndex GetRandomItem(List<ItemIndex> Item)
         {
@@ -92,9 +99,10 @@ namespace Cloudburst
             On.RoR2.HealthComponent.TakeDamage += HealthComponent_TakeDamage;
         }
 
-        private void HealthComponent_TakeDamage(On.RoR2.HealthComponent.orig_TakeDamage orig, HealthComponent self, DamageInfo damageInfo)
+
+
+        private void HealthComponent_TakeDamage  (On.RoR2.HealthComponent.orig_TakeDamage orig, HealthComponent self, DamageInfo damageInfo)
         {
-            orig(self, damageInfo);
             if (damageInfo.attacker && self) {
                 GameObject attacker = damageInfo.attacker;
                 if (damageInfo.attacker.HasComponent<CharacterBody>()) {
@@ -103,12 +111,19 @@ namespace Cloudburst
                         Inventory inv = attackerBody.inventory;
                         int experienceOnHitCount = inv.GetItemCount(Item.experienceOnHitIndex);
                         if (experienceOnHitCount > 0) {
-                            float exp = 0.1f + (experienceOnHitCount * 0.3f);
+                            float exp = 0.1f + (experienceOnHitCount * 0.4f);
                             ExperienceManager.instance.AwardExperience(self.transform.position, attackerBody, (ulong)(uint)exp);
+                        }
+                        //Main.LogD(damageInfo.damage.ToString());
+                        int betterCritDamageOnLowHealth = inv.GetItemCount(Item.betterCritDamageOnLowHealthIndex);
+                        if (betterCritDamageOnLowHealth > 0 && damageInfo.crit && attackerBody.healthComponent && attackerBody.healthComponent.fullCombinedHealth < 0.4) {
+                            damageInfo.crit = true;
+                            //Main.LogD(damageInfo.damage.ToString());
                         }
                     }
                 }
             }
+            orig(self, damageInfo);
         }
         #region GlobalEventManager
         public void GlobalEventManager_OnCrit(On.RoR2.GlobalEventManager.orig_OnCrit orig, GlobalEventManager self, CharacterBody body, CharacterMaster master, float procCoefficient, ProcChainMask procChainMask)
@@ -205,13 +220,13 @@ namespace Cloudburst
                 }
                 if (scpCount > 0 && damageReport.victimBody && victimMaster) {
                     victimBody.AddTimedBuff(scpBuffList[scpRandom], (scpCount * 2));
+                    }
                 }
+                onDmgDealtSubscription = true;
             }
-            onDmgDealtSubscription = true;
-        }
-        public void GlobalEventManager_OnTeamLevelUp(On.RoR2.GlobalEventManager.orig_OnTeamLevelUp orig, TeamIndex teamIndex)
-        {
-            ReadOnlyCollection<TeamComponent> teamMembers = TeamComponent.GetTeamMembers(teamIndex);
+            public void GlobalEventManager_OnTeamLevelUp(On.RoR2.GlobalEventManager.orig_OnTeamLevelUp orig, TeamIndex teamIndex)
+            {
+                ReadOnlyCollection<TeamComponent> teamMembers = TeamComponent.GetTeamMembers(teamIndex);
             for (int i = 0; i < teamMembers.Count; i++) {
                 TeamComponent teamComponent = teamMembers[i];
                 if (teamComponent) {
@@ -224,7 +239,8 @@ namespace Cloudburst
                                 int barrierOnLevelUpCount = master.inventory.GetItemCount(Item.barrierOnLevelIndex);
 
                                 if (itemOnLevelUpCount > 0 && Util.CheckRoll(50, master)) {
-                                    NokiaCall(characterBody.transform, itemOnLevelUpCount); 
+                                    NokiaCall(characterBody.transform, itemOnLevelUpCount);
+    
                                 }
                                 if (barrierOnLevelUpCount > 0) {
                                     if (characterBody.healthComponent) {
