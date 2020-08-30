@@ -1,0 +1,70 @@
+﻿using Cloudburst.Cores.States.Commando;
+using R2API;
+using RoR2;
+using RoR2.Skills;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using UnityEngine;
+
+namespace Cloudburst.Cores
+{
+    public class StatsCore
+    {
+        public StatsCore() => Rebalance();
+        protected void Rebalance() {
+            Commando();
+        }
+        protected void Commando()
+        {
+            var commandoBody = Resources.Load<GameObject>("prefabs/characterbodies/CommandoBody");
+            var body = commandoBody.GetComponent<CharacterBody>();
+
+            body.baseMaxHealth = 110;
+            body.baseRegen = 1;
+            body.baseMaxShield = 0;
+            body.baseMoveSpeed = 7;
+            body.baseJumpPower = 15;
+            body.baseDamage = 12;
+            body.baseAttackSpeed = 1;
+            body.baseCrit = 1;
+            body.baseJumpCount = 1;
+            body.sprintingSpeedMultiplier = 1.45f;
+            body.baseJumpCount = 33;
+            body.levelRegen = 0.2f;
+            body.levelMaxShield = 0;
+            body.levelMoveSpeed = 0;
+            body.levelJumpPower = 0;
+            body.levelDamage = 2.4f;
+            body.levelAttackSpeed = 0;
+            body.levelCrit = 0;
+            body.levelArmor = 0;
+
+            LoadoutAPI.AddSkill(typeof(CommandoGrenade));
+
+            var locator = commandoBody.GetComponent<SkillLocator>();
+
+            var toolbotDef = Resources.Load<SkillDef>("skilldefs/toolbotbody/ToolBotBodyStunDrone");
+            var origDef = Resources.Load<SkillDef>("skilldefs/commandobody/ThrowGrenade");
+
+            var def = locator.special.skillFamily.variants[1].skillDef;
+
+            var icon = origDef.icon;
+            var skillNameToken = origDef.skillNameToken;
+            var skillDescriptionToken = origDef.skillDescriptionToken;
+
+            API.CloudAPI.CopySkillDefSettings(toolbotDef, def);
+
+            def.icon = icon;
+            def.skillNameToken = skillNameToken;
+            def.skillDescriptionToken = skillDescriptionToken;
+
+            def.activationState = new EntityStates.SerializableEntityStateType(typeof(CommandoGrenade));
+
+
+        }
+
+    }
+}
