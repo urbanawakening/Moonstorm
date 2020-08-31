@@ -219,7 +219,7 @@ namespace Cloudburst.HAND
             missile.giveupTimer = 4;
             missile.giveupTimer = 25;
 
-            API.CloudAPI.RegisterNewProjectile(winch);
+            API.RegisterNewProjectile(winch);
             #region Old
             /*this.winch = Resources.Load<GameObject>("prefabs/projectiles/SyringeProjectile").InstantiateClone("HANDWinch", true);
 

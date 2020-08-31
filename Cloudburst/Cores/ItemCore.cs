@@ -15,6 +15,10 @@ namespace Cloudburst.Cores
 {
     class ItemCore
     {
+        //TODO:
+        //Fix OnCrit
+        //Give Items Models
+        //Give items icons
         //These values are set by RegisterItem(ItemIndex, ItemDef).
         protected internal ItemIndex itemChampionOnKillIndex;
         protected internal ItemIndex largerTeleporterRadiusIndex;
@@ -27,7 +31,7 @@ namespace Cloudburst.Cores
         protected internal ItemIndex barrierOnLevelIndex;
         protected internal ItemIndex lightningOnCritIndex;
         protected internal ItemIndex experienceOnHitIndex;
-        protected internal ItemIndex betterCritDamageOnLowHealthIndex;
+        protected internal ItemIndex lemdogIndex;
 
         public List<ItemIndex> bossitemList = new List<ItemIndex>{
             ItemIndex.NovaOnLowHealth,
@@ -38,22 +42,38 @@ namespace Cloudburst.Cores
             ItemIndex.Incubator
             //Excluding pearls because those aren't boss Item, they come from the Cleansing Pool 
         };
-        public HurtBox PickRandomTarget(Vector3 position, TeamIndex teamIndex, float range)
-        {
-            BullseyeSearch search = new BullseyeSearch();
 
+        public HurtBox PickRandomTarget(Vector3 position, TeamIndex teamIndex, float range, GameObject filter)
+        {
+            //imagine stealing from game code
+            //couldn't be me :^)
+           
+            BullseyeSearch search = new BullseyeSearch();
+            search.teamMaskFilter = TeamMask.GetUnprotectedTeams(teamIndex);
+            search.filterByLoS = true;
             search.searchOrigin = position;
             search.searchDirection = Vector3.zero;
-            search.teamMaskFilter = TeamMask.allButNeutral;
-            search.teamMaskFilter.RemoveTeam(teamIndex);
-            search.filterByLoS = false;
-            search.sortMode = BullseyeSearch.SortMode.Distance;
+            search.sortMode = BullseyeSearch.SortMode.Angle;
             search.maxDistanceFilter = range;
+
             search.RefreshCandidates();
-            HurtBox hurtBox = (from v in search.GetResults()
-                               select v).FirstOrDefault<HurtBox>();
-            return hurtBox;
+            search.FilterOutGameObject(filter);
+
+            //wouldn't it be really fucking funny
+            //if this was the cause?
+            //return search.GetResults().FirstOrDefault<HurtBox>();
+
+            //it'd be really fucking funny if this caused a null reference 
+            //nope, i think this did something??
+            //i still got the error though
+            var result = search.GetResults().FirstOrDefault<HurtBox>();
+            if (result)
+            {
+                return result;
+            }
+            else return null;
         }
+
         public List<BuffIndex> scpBuffList = new List<BuffIndex>{
             BuffIndex.NullifyStack,
             BuffIndex.ClayGoo,
@@ -65,6 +85,15 @@ namespace Cloudburst.Cores
             BuffIndex.AffixRed,
             BuffIndex.AffixBlue,
             BuffIndex.AffixWhite
+        };
+        public List<BuffIndex> lemdogList = new List<BuffIndex>{
+            BuffIndex.Warbanner,
+            BuffIndex.Cloak,
+            BuffIndex.CloakSpeed,
+            BuffIndex.EngiShield,
+            BuffIndex.MeatRegenBoost,
+            BuffIndex.WhipBoost,
+            BuffIndex.TeamWarCry,
         };
         public void DropShipCall(Transform transform, int itemCount)
         {
@@ -314,7 +343,7 @@ namespace Cloudburst.Cores
                     ItemTag.Damage,
                     ItemTag.AIBlacklist
             };
-            RegisterItem(betterCritDamageOnLowHealthIndex, new ItemDef
+            RegisterItem(lemdogIndex, new ItemDef
             {
                 canRemove = true,
                 descriptionToken = "ITEM_LEMDOG_DESC",
@@ -371,7 +400,7 @@ namespace Cloudburst.Cores
             LanguageAPI.Add("ITEM_BARRIERONLEVEL_DESC", "Gain a <style=cIsHealing>temporary barrier</style> on level up for <style=cIsHealing>30 health</style> <style=cStack>(+5 per stack)</style>.");
             LanguageAPI.Add("ITEM_BARRIERONLEVEL_PICKUP", "Gain barrier on level up");
 
-            LanguageAPI.Add("ITEM_LIGHTNINGONCRIT_NAME", "Broken Orbital Caller"); //model(??)
+            LanguageAPI.Add("ITEM_LIGHTNINGONCRIT_NAME", "Broken Orbital Probe"); //model(??)
             LanguageAPI.Add("ITEM_LIGHTNINGONCRIT_DESC", "20% chance to <style=cIsDamage>strike lightning</style> on critical hits that does 350% <style=cStack>(+25% per stack)</style> damage.");
             LanguageAPI.Add("ITEM_LIGHTNINGONCRIT_PICKUP", "Chance to strike lightning on critical hits.");
 
@@ -380,8 +409,8 @@ namespace Cloudburst.Cores
             LanguageAPI.Add("ITEM_EXPERIENCEONHIT_PICKUP", "Gain experience on hit");
 
             LanguageAPI.Add("ITEM_LEMDOG_NAME", "LemDog");
-            LanguageAPI.Add("ITEM_LEMDOG_DESC", "Ascend");
-            LanguageAPI.Add("ITEM_LEMDOG_PICKUP", "Ascend");
+            LanguageAPI.Add("ITEM_LEMDOG_DESC", "25% <style=cStack>(+2.5)<style=cStack> chance for <style=cIsUtility>applied debuffs to become beneficial buffs</style>");
+            LanguageAPI.Add("ITEM_LEMDOG_PICKUP", "Chance for debuffs to become beneficial buffs when applied");
         }
 
         protected internal void RegisterItem(ItemIndex itemIndex, ItemDef itemDef)
@@ -441,7 +470,7 @@ namespace Cloudburst.Cores
                     experienceOnHitIndex = ItemAPI.Add(customItem);
                     break;
                 case "Lemdog":
-                    betterCritDamageOnLowHealthIndex = ItemAPI.Add(customItem);
+                    lemdogIndex = ItemAPI.Add(customItem);
                     break;
             }
         }
@@ -454,7 +483,28 @@ namespace Cloudburst.Cores
             On.RoR2.GlobalEventManager.OnTeamLevelUp += GlobalEventManager_OnTeamLevelUp;
             TeleporterInteraction.onTeleporterBeginChargingGlobal += TeleporterInteractionOnTeleporterBeginChargingGlobal;
             On.RoR2.GenericPickupController.GrantItem += GrantItem;
+            On.RoR2.CharacterBody.AddBuff += CharacterBody_AddBuff;
         }
+
+        private void CharacterBody_AddBuff(On.RoR2.CharacterBody.orig_AddBuff orig, CharacterBody self, BuffIndex buffType)
+        {
+            if (self) {
+                if (self.inventory)
+                {
+                    if (self.inventory.GetItemCount(lemdogIndex) > 0) {
+                        var def = BuffCatalog.GetBuffDef(buffType);
+                        if (def.isDebuff && Util.CheckRoll(25 + (self.inventory.GetItemCount(lemdogIndex) * 2.5f), self.master)) {
+                            var random = UnityEngine.Random.Range(0, lemdogList.Count);
+                            var buff = lemdogList[random];
+                            buffType = buff;
+                        }
+                    }
+                }
+            }
+            orig(self, buffType);
+
+        }
+
         public void GrantItem(On.RoR2.GenericPickupController.orig_GrantItem orig, GenericPickupController self, CharacterBody body, Inventory inventory)
         {
             orig(self, body, inventory);
@@ -478,12 +528,11 @@ namespace Cloudburst.Cores
                     {
                         Inventory inv = attackerBody.inventory;
                         int experienceOnHitCount = inv.GetItemCount(experienceOnHitIndex);
-                        if (experienceOnHitCount > 0)
+                        if (experienceOnHitCount > 0 && attackerBody.teamComponent)
                         {
                             float exp = 0.1f + (experienceOnHitCount * 0.4f);
                             TeamManager.instance.GiveTeamExperience(attackerBody.teamComponent.teamIndex, (ulong)(uint)exp);
                         }
-
                     }
                 }
             }
@@ -520,26 +569,26 @@ namespace Cloudburst.Cores
                 int lightningEye = masterInventory.GetItemCount(lightningOnCritIndex);
                 if (topazLense > 0 && healthComponent)
                 {
+                    //oddly, this doesn't null reference
                     healthComponent.AddBarrier(5f + (topazLense * 2.5f));
                 }
-                if (lightningEye > 0 && body && body.teamComponent)// && Util.CheckRoll(20, master))
+                if (lightningEye > 0 && body && body.gameObject && body.teamComponent)// && Util.CheckRoll(20, master))
                 {
                     //SOMEWHERE IN HERE
                     //IS AN EXCLUSIVE NULL REFERENCE EXCECPTION
                     //THAT I CAN'T FIND
-                    try
-                    {
-                        HealthComponent com = PickRandomTarget(body.transform.position, body.teamComponent.teamIndex, 25).healthComponent;
-                        if (com)
-                        {
+                    try {
+                        HealthComponent com = PickRandomTarget(body.transform.position, body.teamComponent.teamIndex, 25, body.gameObject).healthComponent;
+                        if (com != null) {
                             Vector3 pos = com.transform.position;
-                            if (pos != null)
+                            //add another fucking check
+                            if (pos != null && body.teamComponent && body.gameObject)
                             {
                                 BlastAttack attack = new BlastAttack
                                 {
                                     attacker = body.gameObject,
                                     attackerFiltering = AttackerFiltering.Default,
-                                    baseDamage = 1 + (2f * lightningEye),
+                                    baseDamage = 1 + (2f * lightningEye) * body.damage,
                                     baseForce = 500,
                                     bonusForce = new Vector3(0, 0, 0),
                                     crit = false,
@@ -553,18 +602,20 @@ namespace Cloudburst.Cores
                                     //COULD IT POSSIBLY
                                     //BE THE FUCKING PROC CHAIN?
                                     //???
+                                    //NOPE.
                                     procChainMask = default,
                                     procCoefficient = 0,
                                     radius = 15,
                                     teamIndex = body.teamComponent.teamIndex
                                 };
-                                EffectManager.SpawnEffect(ChargeMeteor.meteorEffect, new EffectData
-                                {
+                                EffectManager.SpawnEffect(ChargeMeteor.meteorEffect, new EffectData {
                                     origin = pos,
                                     scale = 15
                                 }, true);
                                 if (com && pos != null)
                                 {
+                                    //THIS STILL FUCKING THROWS A NULL REFERENCE EXCEPTION
+                                    //AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
                                     attack.Fire();
                                 }
                             }
@@ -572,6 +623,8 @@ namespace Cloudburst.Cores
                     }
                     catch (Exception e) {
                         LogCore.LogE(e);
+                        //...this doesn't help
+                        //at all
                     }
                 }
             }

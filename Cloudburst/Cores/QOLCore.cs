@@ -10,6 +10,8 @@ namespace Cloudburst.Cores
 {
     public class QOLCore
     {
+        //TODO:
+        //Add more qol.
         public QOLCore() => Hook();
         protected void Hook() {
             On.RoR2.GlobalEventManager.OnTeamLevelUp += GlobalEventManager_OnTeamLevelUp;

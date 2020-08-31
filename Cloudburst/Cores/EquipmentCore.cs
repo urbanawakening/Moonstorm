@@ -6,16 +6,21 @@ using UnityEngine;
 
 namespace Cloudburst.Cores
 {
-    public sealed class EquipmentCore
+    class EquipmentCore
     {
+        //TODO:
+        //Figure out why equipments aren't spawning properly
+        //Give equipments models
+        //Give equipment icons
+        //(Post 1.0)Give them display rules.
         #region Indexes
-        public static EquipmentIndex lumpkinIndex { get; private set; }
-        public static EquipmentIndex unstableQuantumReactorIndex { get; private set; }
-        public static EquipmentIndex brokenPrinterIndex { get; private set; }
+        protected EquipmentIndex lumpkinIndex;
+        protected EquipmentIndex unstableQuantumReactorIndex;
+        protected EquipmentIndex brokenPrinterIndex;
         //public static EquipmentIndex cocktailIndex { get; }
         #endregion
         #region Lists
-        public static List<GameObject> projectileList = new List<GameObject>{
+        protected List<GameObject> projectileList = new List<GameObject>{
 
             Resources.Load<GameObject>("prefabs/projectiles/ArtifactShellSeekingSolarFlare"),
             Resources.Load<GameObject>("prefabs/projectiles/BeetleQueenSpit"),
@@ -43,8 +48,9 @@ namespace Cloudburst.Cores
         //private static GameObject molotovCocktail;
         //private static GameObject molotovCocktailZone;
         #endregion
-        public EquipmentCore()
-        {
+        public EquipmentCore() {
+            RegisterTokens();
+            
             #region Basic
             var prefab = Resources.Load<GameObject>("Prefabs/PickupModels/PickupMystery");
             var rule = new ItemDisplayRule
@@ -59,27 +65,8 @@ namespace Cloudburst.Cores
             string pickUpIconPath = "Textures/MiscIcons/texMysteryIcon";
             string pickUpModelPath = "Prefabs/PickupModels/PickupMystery";
             #endregion 
-            #region Tokens
-            LanguageAPI.Add("EQUIPMENT_LUMPKIN_NAME", "The Lumpkin");
-            LanguageAPI.Add("EQUIPMENT_LUMPKIN_PICKUP", "And his screams were Brazilian...");
-            LanguageAPI.Add("EQUIPMENT_LUMPKIN_DESC", "Release a Brazilian scream that does your maximum health for damage and stuns enemies within 35m.");
-            LanguageAPI.Add("EQUIPMENT_LUMPKIN_LORE", "\"Lumpkin, one of the many commanders in the War of 2019 possessed a scream that could deafen his oppenents. It was unknown how he could scream so loudly, until he was killed in the final battle of WW19 and had his lungs ripped from his chest. \r\n\r\nHis lungs, pictured above, allowed him to scream loudly without injuring himself.\"\r\n\r\n-Exhibit at The National WW19 Museum");
 
-            LanguageAPI.Add("EQUIPMENT_UNSTABLEQUANTUMREACTOR_NAME", "Unstable Quantum Reactor");
-            LanguageAPI.Add("EQUIPMENT_UNSTABLEQUANTUMREACTOR_PICKUP", "Fire a random projectile on use.");
-            LanguageAPI.Add("EQUIPMENT_UNSTABLEQUANTUMREACTOR_DESC", "Fire a random projectile.");
-
-            LanguageAPI.Add("EQUIPMENT_BROKENPRINTER_NAME", "Broken Printer");
-            LanguageAPI.Add("EQUIPMENT_BROKENPRINTER_PICKUP", "Summon a powerful but fragile ally that aids you in combat.");
-            LanguageAPI.Add("EQUIPMENT_BROKENPRINTER_DESC", "Summon a powerful ally that inherits your items but has half health.");
-            LanguageAPI.Add("EQUIPMENT_BROKENPRINTER_LORE", "Order: \u201CBroken Printer\u201D\r\nTracking Number: 72******\r\nEstimated Delivery: 08\\25\\2057\\\r\nShipping Method: High Priority\r\nShipping Address: 836 Lane, Lab [42], Mars\r\nShipping Details:\r\n\r\nI can\u2019t speak for the rest of the researchers here, but I have no clue why you decided to send this here. We don\u2019t know what\u2019s wrong with this thing, and we don\u2019t know if there is anything wrong with it. I very much doubt that a person actually made this thing; there are materials in it that we\u2019ve never seen before.\r\n\r\nI\u2019m sending this back to you because it\u2019s more trouble than it\u2019s worth to it keep here and research, and frankly those things it prints are horrifyingly hollow.\r\n");
-
-            //LanguageAPI.Add("EQUIPMENT_VIVELAFRANCE_NAME", "Molotov Cocktail");
-            //LanguageAPI.Add("EQUIPMENT_VIVELAFRANCE_PICKUP", "Throw a molotov cocktail.");
-            //LanguageAPI.Add("EQUIPMENT_VIVELAFRANCE_DESC", "Throw a molotov cocktail that ignites enemies.");
-            #endregion
-            #region EquipmentDefs
-            EquipmentDef lumpkinDef = new EquipmentDef()
+            RegisterNewEquip(new EquipmentDef()
             {
                 addressToken = "",
                 appearsInMultiPlayer = true,
@@ -98,15 +85,15 @@ namespace Cloudburst.Cores
                 pickupModelPath = pickUpModelPath,
                 pickupToken = "EQUIPMENT_LUMPKIN_PICKUP",
                 unlockableName = "",
-            };
-            EquipmentDef reactorDef = new EquipmentDef()
+            });
+            RegisterNewEquip(new EquipmentDef()
             {
                 addressToken = "",
                 appearsInMultiPlayer = true,
                 appearsInSinglePlayer = true,
                 canDrop = true,
                 colorIndex = ColorCatalog.ColorIndex.Equipment,
-                cooldown = 25,
+                cooldown = 15,
                 descriptionToken = "EQUIPMENT_LUMPKIN_DESC",
                 enigmaCompatible = true,
                 isBoss = false,
@@ -118,8 +105,8 @@ namespace Cloudburst.Cores
                 pickupModelPath = pickUpModelPath,
                 pickupToken = "EQUIPMENT_UNSTABLEQUANTUMREACTOR_PICKUP",
                 unlockableName = "",
-            };
-            EquipmentDef printerDef = new EquipmentDef()
+            });
+            RegisterNewEquip(new EquipmentDef()
             {
                 addressToken = "",
                 appearsInMultiPlayer = true,
@@ -138,43 +125,12 @@ namespace Cloudburst.Cores
                 pickupModelPath = pickUpModelPath,
                 pickupToken = "EQUIPMENT_BROKENPRINTER_PICKUP",
                 unlockableName = "",
-            };
-            /*EquipmentDef vivaLaFranceDef = new EquipmentDef()
-            {
-                addressToken = "",
-                appearsInMultiPlayer = true,
-                appearsInSinglePlayer = true,
-                canDrop = true,
-                colorIndex = ColorCatalog.ColorIndex.Equipment,
-                cooldown = 55,
-                descriptionToken = "EQUIPMENT_VIVELAFRANCE_DESC",
-                enigmaCompatible = true,
-                isBoss = false,
-                isLunar = false,
-                loreToken = "",
-                name = "Cocktail",
-                nameToken = "EQUIPMENT_VIVELAFRANCE_NAME",
-                pickupIconPath = pickUpIconPath,
-                pickupModelPath = pickUpModelPath,
-                pickupToken = "EQUIPMENT_VIVELAFRANCE_PICKUP",
-                unlockableName = "",
-            };*/
-            #endregion
-            #region CustomEquipments
-            var lumpkin = new CustomEquipment(lumpkinDef, new[] { rule });
-            var reactor = new CustomEquipment(reactorDef, new[] { rule });
-            var printer = new CustomEquipment(printerDef, new[] { rule });
-            //var cocktail = new CustomEquipment(vivaLaFranceDef, new[] { rule });
-            #endregion
-            #region Setting Indexes
-            lumpkinIndex = ItemAPI.Add(lumpkin);
-            unstableQuantumReactorIndex = ItemAPI.Add(reactor);
-            brokenPrinterIndex = ItemAPI.Add(printer);
-            //cocktailIndex = ItemAPI.Add(cocktail);
-            #endregion
+            });
+
             On.RoR2.EquipmentSlot.PerformEquipmentAction += EquipmentSlot_PerformEquipmentAction;
 
         }
+
         private bool EquipmentSlot_PerformEquipmentAction(On.RoR2.EquipmentSlot.orig_PerformEquipmentAction orig, EquipmentSlot self, EquipmentIndex equipmentIndex)
         {
             if (equipmentIndex == brokenPrinterIndex) {
@@ -218,11 +174,12 @@ namespace Cloudburst.Cores
                 case "Reactor":
                     unstableQuantumReactorIndex = ItemAPI.Add(customEquip);
                     break;
-                case "BrokenPrinter":
+                case "Printer":
                     brokenPrinterIndex = ItemAPI.Add(customEquip);
                     break;
                 default:
-                    LogCore.LogF("EquipmentDef.Name not found!");
+
+                    LogCore.LogF(equipmentDef.name + " :: EquipmentDef.Name not found!");
                     break;
             }
         }

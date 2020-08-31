@@ -1,6 +1,7 @@
 ﻿using Cloudburst.Cores.States.Commando;
 using R2API;
 using RoR2;
+using RoR2.Projectile;
 using RoR2.Skills;
 using System;
 using System.Collections.Generic;
@@ -20,7 +21,7 @@ namespace Cloudburst.Cores
         protected void Commando()
         {
             var commandoBody = Resources.Load<GameObject>("prefabs/characterbodies/CommandoBody");
-            var body = commandoBody.GetComponent<CharacterBody>();
+            /*var body = commandoBody.GetComponent<CharacterBody>();
 
             body.baseMaxHealth = 110;
             body.baseRegen = 1;
@@ -32,7 +33,8 @@ namespace Cloudburst.Cores
             body.baseCrit = 1;
             body.baseJumpCount = 1;
             body.sprintingSpeedMultiplier = 1.45f;
-            body.baseJumpCount = 33;
+            //i *might* have forgotton about this
+            //body.baseJumpCount = 33;
             body.levelRegen = 0.2f;
             body.levelMaxShield = 0;
             body.levelMoveSpeed = 0;
@@ -40,7 +42,8 @@ namespace Cloudburst.Cores
             body.levelDamage = 2.4f;
             body.levelAttackSpeed = 0;
             body.levelCrit = 0;
-            body.levelArmor = 0;
+            body.levelArmor = 0;*/
+            //I wanted to a rebalance but decided against it
 
             LoadoutAPI.AddSkill(typeof(CommandoGrenade));
 
@@ -55,16 +58,17 @@ namespace Cloudburst.Cores
             var skillNameToken = origDef.skillNameToken;
             var skillDescriptionToken = origDef.skillDescriptionToken;
 
-            API.CloudAPI.CopySkillDefSettings(toolbotDef, def);
+            API.CopySkillDefSettings(toolbotDef, def);
 
             def.icon = icon;
             def.skillNameToken = skillNameToken;
             def.skillDescriptionToken = skillDescriptionToken;
-
+            def.baseMaxStock = 2;
             def.activationState = new EntityStates.SerializableEntityStateType(typeof(CommandoGrenade));
+            def.keywordTokens = Array.Empty<String>(); 
 
-
+            var grenade = Resources.Load<GameObject>("prefabs/projectiles/CommandoGrenadeProjectile");
+            grenade.GetComponent<ProjectileImpactExplosion>().lifetimeAfterImpact = 0;
         }
-
     }
 }

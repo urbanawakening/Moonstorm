@@ -26,8 +26,8 @@ namespace Cloudburst.Enemies
             sipSipBody = Resources.Load<GameObject>("prefabs/characterbodies/ScavLunar1Body").InstantiateClone("ScavLunar5Body", true);
             sipSipMaster = Resources.Load<GameObject>("prefabs/charactermasters/ScavLunar1Master").InstantiateClone("ScavLunar5Master", true);
 
-            API.CloudAPI.RegisterNewBody(sipSipBody);
-            API.CloudAPI.RegisterNewMaster(sipSipMaster);
+            API.RegisterNewBody(sipSipBody);
+            API.RegisterNewMaster(sipSipMaster);
 
             sipSipMaster.GetComponent<CharacterMaster>().bodyPrefab = sipSipBody;
 

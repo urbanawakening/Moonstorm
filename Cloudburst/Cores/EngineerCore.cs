@@ -18,6 +18,9 @@ namespace Cloudburst.Cores
 {
     class EngineerCore
     {
+        //TODO
+        //Fix skins
+        //Tweak primary
         protected GameObject flameTurret;
         public static GameObject flameTurretMaster;
         public static GameObject projectileGameObject;
@@ -37,7 +40,7 @@ namespace Cloudburst.Cores
 
         private void CreateAltPrimaryProjectile() {
             projectileGameObject = Resources.Load<GameObject>("prefabs/projectiles/EngiGrenadeProjectile").InstantiateClone("EngiGrenadeImpactProjectile", true);
-            API.CloudAPI.RegisterNewProjectile(projectileGameObject);
+            API.RegisterNewProjectile(projectileGameObject);
             ProjectileImpactExplosion impact = projectileGameObject.GetComponent<ProjectileImpactExplosion>();
             impact.destroyOnWorld = true;
             UnityEngine.Object.Destroy(projectileGameObject.GetComponent<ProjectileStickOnImpact>());
@@ -48,6 +51,7 @@ namespace Cloudburst.Cores
             bool engi = slot == DeployableSlot.EngiTurret;
             if (!engi) return orig(self, slot);
             else {
+                //Reflection will never fail me!
                 GameObject fuckIL = self.GetPropertyValue<GameObject>("bodyInstanceObject");
                 if (fuckIL) {
                     if (fuckIL.GetComponent<SkillLocator>().special.skillDef.skillName == "FUCKIL") {
@@ -121,9 +125,9 @@ namespace Cloudburst.Cores
 
         protected void RegisterNewTurret() {
             flameTurret = Resources.Load<GameObject>("prefabs/characterbodies/EngiWalkerTurretBody").InstantiateClone("EngiFlameTurretBody", true);
-            API.CloudAPI.RegisterNewBody(flameTurret);
+            API.RegisterNewBody(flameTurret);
             flameTurretMaster = Resources.Load<GameObject>("prefabs/charactermasters/EngiWalkerTurretMaster").InstantiateClone("EngiFlameTurretMaster", true);
-            API.CloudAPI.RegisterNewMaster(flameTurretMaster);
+            API.RegisterNewMaster(flameTurretMaster);
 
             flameTurretMaster.GetComponent<CharacterMaster>().bodyPrefab = flameTurret;
             FlameTurrets();
@@ -133,7 +137,7 @@ namespace Cloudburst.Cores
             SkillDef origDef = Resources.Load<SkillDef>("skilldefs/engibody/EngiBodyPlaceWalkerTurret");
             var newDef = ScriptableObject.CreateInstance<SkillDef>();
 
-            API.CloudAPI.CopySkillDefSettings(origDef, newDef);
+            API.CopySkillDefSettings(origDef, newDef);
 
             LoadoutAPI.AddSkill(typeof(PlaceFlameTurret));
             LoadoutAPI.AddSkillDef(newDef);
@@ -167,7 +171,7 @@ namespace Cloudburst.Cores
             SkillDef origDef = Resources.Load<SkillDef>("skilldefs/engibody/EngiBodyFireGrenade");
             var newDef = ScriptableObject.CreateInstance<SkillDef>();
 
-            API.CloudAPI.CopySkillDefSettings(origDef, newDef);
+            API.CopySkillDefSettings(origDef, newDef);
 
             LoadoutAPI.AddSkill(typeof(FireVolley));
             LoadoutAPI.AddSkillDef(newDef);

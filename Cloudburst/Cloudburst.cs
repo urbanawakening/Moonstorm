@@ -64,6 +64,10 @@ namespace Cloudburst
         private EngineerCore engineerCore;
         private QOLCore qol;
         private StatsCore stats;
+        private AncientWispCore ancientWisp;
+        private ClayMenCore clayCore;
+        private SipSipCore sipsipCore;
+        private ArchaicWispCore archwispCore;
         public Cloudburst()
         {
             LogCore.logger = Logger;
@@ -79,6 +83,10 @@ namespace Cloudburst
             engineerCore = new EngineerCore();
             qol = new QOLCore();
             stats = new StatsCore();
+            ancientWisp = new AncientWispCore();
+            clayCore = new ClayMenCore();
+            sipsipCore = new SipSipCore();
+            archwispCore = new ArchaicWispCore();
 
             LogCore.LogM("Cloudburst loaded!");
         }

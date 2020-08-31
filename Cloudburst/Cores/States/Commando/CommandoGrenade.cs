@@ -48,7 +48,7 @@ namespace Cloudburst.Cores.States.Commando {
 
         public override InterruptPriority GetMinimumInterruptPriority()
         {
-            return InterruptPriority.Skill;
+            return InterruptPriority.PrioritySkill;
         }
     }
 }

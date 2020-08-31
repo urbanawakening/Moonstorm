@@ -6,9 +6,9 @@ using RoR2.Projectile;
 using RoR2.Skills;
 using UnityEngine;
 
-namespace Cloudburst.API
-{
-    public static class CloudAPI
+
+
+    public static class API
     {
         #region Catalog Helpers
         /// <summary>
@@ -204,4 +204,3 @@ namespace Cloudburst.API
         }
         #endregion
     }
-}

@@ -16,7 +16,8 @@ namespace Cloudburst.Cores
         protected internal BuffIndex droneIndex;
         protected internal BuffIndex surgeIndex;
         protected internal BuffIndex cleanIndex;
-        
+        protected internal BuffIndex huntersMarkIndex;
+
         internal bool Loaded { get; private set; } = false;
         public BuffCore() => RegisterBuffs(); 
 
@@ -67,7 +68,7 @@ namespace Cloudburst.Cores
             });
 
             RegisterBuff(cleanIndex, new BuffDef
-            {   
+            {
                 buffColor = new Color(0.3764706f, 0.84313726f, 0.8980392f),
                 buffIndex = BuffIndex.Count,
                 canStack = false,
@@ -75,6 +76,17 @@ namespace Cloudburst.Cores
                 iconPath = "Textures/BuffIcons/texbuffonfireicon",
                 isDebuff = false,
                 name = "Sparkle"
+            });
+
+            RegisterBuff(huntersMarkIndex, new BuffDef
+            {
+                buffColor = new Color(0.3764706f, 0.84313726f, 0.8980392f),
+                buffIndex = BuffIndex.Count,
+                canStack = false,
+                eliteIndex = EliteIndex.None,
+                iconPath = "Textures/BuffIcons/texBuffFullCritIcon",
+                isDebuff = false,
+                name = "Marked"
             });
 
             On.RoR2.CharacterBody.RecalculateStats += CharacterBody_RecalculateStats;
@@ -149,6 +161,9 @@ namespace Cloudburst.Cores
                 case "Scrap":
                     scrapIndex = BuffAPI.Add(customBuff);
                     break;
+                case "Marked":
+                    break;
+                    //throw new System.NotImplementedException("not implemented yet!");
                 default:
                     LogCore.LogF(string.Format("{0} doesn't have a switch case!", buffDef));
                     break;

@@ -31,20 +31,30 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="API\CloudAPI.cs" />
+    <Compile Include="API\API.cs" />
     <Compile Include="API\ComponentHelpers.cs" />
     <Compile Include="API\LogCore.cs" />
+    <Compile Include="Cores\ArchaicWispCore.cs" />
     <Compile Include="Cores\AssetsCore.cs" />
     <Compile Include="Cores\BuffCore.cs" />
-    <Compile Include="Cores\States\CommandoGrenade.cs" />
+    <Compile Include="Cores\AncientWispCore.cs" />
+    <Compile Include="Cores\GlobalHooks.cs" />
+    <Compile Include="Cores\ClayMenCore.cs" />
+    <Compile Include="Cores\States\AncientWisp\FireCannon.cs" />
+    <Compile Include="Cores\States\ArchaicWispMonster\ChargeSummon.cs" />
+    <Compile Include="Cores\States\ClayManMonster\Leap.cs" />
+    <Compile Include="Cores\States\ArchaicWispMonster\Summon.cs" />
+    <Compile Include="Cores\States\ClayManMonster\SwipeForward.cs" />
+    <Compile Include="Cores\Core.cs" />
+    <Compile Include="Cores\States\Commando\CommandoGrenade.cs" />
     <Compile Include="Cores\States\Engineer\FireVolley.cs" />
     <Compile Include="Cores\States\Engineer\PlaceFlameTurret.cs" />
     <Compile Include="Cores\States\Engineer\Turret\DeathState.cs" />
     <Compile Include="Cores\States\Engineer\Turret\FireFlameThrower.cs" />
     <Compile Include="Cores\States\HAND\Home.cs" />
     <Compile Include="Cores\States\HAND\HomeRun.cs" />
-    <Compile Include="Cores\Class1.cs" />
-    <Compile Include="Cores\Class2.cs" />
+    <Compile Include="Cores\QOLCore.cs" />
+    <Compile Include="Cores\BalanceCore.cs" />
     <Compile Include="Cores\Components\ShockwaveComponent.cs" />
     <Compile Include="Cores\Components\ExtendedProjectileOverlapAttack.cs" />
     <Compile Include="Cores\Components\DroneSkillDef.cs" />
@@ -443,9 +453,7 @@
   <ItemGroup>
     <EmbeddedResource Include="hand_assets" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Cores\EnemyStates\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>copy /Y "$(TargetPath)" "E:\Steam\steamapps\common\Risk of Rain 2\BepInEx\plugins\"</PostBuildEvent>

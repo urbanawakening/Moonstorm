@@ -63,7 +63,7 @@ namespace Cloudburst.Cores.HAND
         #region Prefab Creation
         private void CreateSunderPrefab() {
             sunder = Resources.Load<GameObject>("prefabs/projectiles/Sunder").InstantiateClone("HANDSunder", true);
-            API.CloudAPI.RegisterNewProjectile(sunder);
+            API.RegisterNewProjectile(sunder);
             UnityEngine.Object.Destroy(sunder.GetComponent<ProjectileOverlapAttack>());
 
             var overlap = sunder.AddComponent<ShockwaveProjectileComponent>();
@@ -110,7 +110,7 @@ namespace Cloudburst.Cores.HAND
             missile.giveupTimer = 4;
             missile.giveupTimer = 25;
 
-            API.CloudAPI.RegisterNewProjectile(winch);
+            API.RegisterNewProjectile(winch);
             #region Old
             /*this.winch = Resources.Load<GameObject>("prefabs/projectiles/SyringeProjectile").InstantiateClone("HANDWinch", true);
 
@@ -293,7 +293,7 @@ namespace Cloudburst.Cores.HAND
 
         private void SetSkills()
         {
-            API.CloudAPI.CreateEmptySkills(HANDBody);
+            API.CreateEmptySkills(HANDBody);
             FixSkin();
             RepairSwingEffect();
             RegisterDamageTypes();
@@ -440,8 +440,8 @@ namespace Cloudburst.Cores.HAND
             armorDef.icon = AssetsCore.passiveDroneBuffIcon;
             armorDef.skillNameToken = "HAND_PASSIVE_NAME";
 
-            API.CloudAPI.CopySkillDefSettings(armorDef, regenDef);
-            API.CloudAPI.CopySkillDefSettings(armorDef, speedDef);
+            API.CopySkillDefSettings(armorDef, regenDef);
+            API.CopySkillDefSettings(armorDef, speedDef);
 
             regenDef.skillName = "Regen";
             regenDef.icon = null;
@@ -576,7 +576,7 @@ namespace Cloudburst.Cores.HAND
 
             };
         }
-            
+
         private void CreateUtility()
         {
             LoadoutAPI.AddSkill(typeof(BeginOverclock));
