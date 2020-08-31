@@ -27,6 +27,7 @@ namespace Cloudburst.Cores
             skillLocator = body.GetComponent<SkillLocator>();
 
             AI();
+            Skills();
             FixSwingEffect();
         }
 

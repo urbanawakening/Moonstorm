@@ -8,7 +8,7 @@ namespace Cloudburst.Cores.States.AncientWisp
         public static float baseDuration = 1;
         private float duration;
 
-        public static GameObject chargeEffect = EntityStates.AncientWispMonster.FireRHCannon.effectPrefab;
+        public static GameObject chargeEffect = Resources.Load<GameObject>("prefabs/effect");
 
         //GameObjects
         private GameObject chargeEffectRight;
@@ -28,12 +28,12 @@ namespace Cloudburst.Cores.States.AncientWisp
                     var rightHand = locator.FindChild("MuzzleRight");
                     var leftHand = locator.FindChild("MuzzleLeft");
                     if (rightHand) {
-                        chargeEffectRight = Object.Instantiate<GameObject>(chargeEffect, rightHand.position, rightHand.rotation);
-                        chargeEffectRight.transform.parent = rightHand;
+                        //chargeEffectRight = Object.Instantiate<GameObject>(chargeEffect, rightHand.position, rightHand.rotation);
+                        //chargeEffectRight.transform.parent = rightHand;
                     }
                     if (leftHand) {
-                        chargeEffectLeft = Object.Instantiate<GameObject>(chargeEffect, rightHand.position, rightHand.rotation);
-                        chargeEffectLeft.transform.parent = leftHand;
+                        //chargeEffectLeft = Object.Instantiate<GameObject>(chargeEffect, rightHand.position, rightHand.rotation);
+                        //chargeEffectLeft.transform.parent = leftHand;
                     }
                 }
             }

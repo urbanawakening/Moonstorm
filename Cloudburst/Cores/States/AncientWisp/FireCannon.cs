@@ -40,7 +40,8 @@ namespace Cloudburst.Cores.States.AncientWisp
                     }
                 }
             }
-            if (this.modelAnimator)
+            PlayCrossfade("Gesture", "Throw1", "Throw.playbackRate", this.duration / (1f - returnToIdlePercentage), 0.2f);
+            /*if (this.modelAnimator)
             {
                 var index = this.modelAnimator.GetLayerIndex("Gesture");
                 //If we're on the right hand
@@ -51,7 +52,7 @@ namespace Cloudburst.Cores.States.AncientWisp
                 else {
                     base.PlayCrossfade("Gesture", "Throw1", "Throw.playbackRate", this.duration / (1f - returnToIdlePercentage), 0.2f);
                 }
-            }
+            }*/
         }
 
         public override void FixedUpdate()
@@ -81,6 +82,12 @@ namespace Cloudburst.Cores.States.AncientWisp
                 this.outer.SetNextStateToMain();
                 return;
             }
+        }
+
+        public override void OnExit()
+        {
+            base.OnExit();
+            PlayCrossfade("Gesture", "Idle", .7f);
         }
 
         private void FireBlast(string muzzle) {
