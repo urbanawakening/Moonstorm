@@ -9,6 +9,7 @@ namespace Cloudburst.Cores.States.HAND
     public class FullSwing : BaseSkillState
     {
         public static float baseDuration = 1.1f;
+        //0.443662
         public static float returnToIdlePercentage = EntityStates.HAND.Weapon.FullSwing.returnToIdlePercentage;
         public static float damageCoefficient = 4f;
         public static float forceMagnitude = 1250;

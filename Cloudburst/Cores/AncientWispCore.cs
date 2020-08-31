@@ -1,4 +1,5 @@
-﻿using EntityStates;
+﻿using Cloudburst.Cores.States.AncientWisp;
+using EntityStates;
 using R2API;
 using RoR2;
 using RoR2.CharacterAI;
@@ -32,14 +33,20 @@ namespace Cloudburst.Cores
         protected void Skills() {
 
             API.CreateEmptySkills(body);
-
+            CreatePrimary();
+            CreateSecondary();
+            CreateUtility();
+            CreateSpecial();
 
         }
         private void CreatePrimary()
         {
+            LoadoutAPI.AddSkill(typeof(ChargeCannon));
+            LoadoutAPI.AddSkill(typeof(FireCannon));
+
             SkillDef primarySkillDef = ScriptableObject.CreateInstance<SkillDef>();
 
-            primarySkillDef.activationState = new SerializableEntityStateType(typeof(FullSwing));
+            primarySkillDef.activationState = new SerializableEntityStateType(typeof(ChargeCannon));
             primarySkillDef.activationStateMachineName = "Weapon";
             primarySkillDef.baseMaxStock = 1;
             primarySkillDef.baseRechargeInterval = 0f;
@@ -75,10 +82,10 @@ namespace Cloudburst.Cores
 
         private void CreateSecondary()
         {
-            LoadoutAPI.AddSkill(typeof(ChargeHomeRun));
+            //LoadoutAPI.AddSkill(typeof(ChargeHomeRun));
 
             SkillDef secondarySkillDef = ScriptableObject.CreateInstance<SkillDef>();
-            secondarySkillDef.activationState = new SerializableEntityStateType(typeof(ChargeHomeRun));
+            secondarySkillDef.activationState = new SerializableEntityStateType(typeof(ChargeCannon));
             secondarySkillDef.activationStateMachineName = "Weapon";
             secondarySkillDef.baseMaxStock = 1;
             secondarySkillDef.baseRechargeInterval = 3f;
@@ -119,7 +126,7 @@ namespace Cloudburst.Cores
         private void CreateUtility()
         {
             SkillDef utilitySkillDef = ScriptableObject.CreateInstance<SkillDef>();
-            utilitySkillDef.activationState = new SerializableEntityStateType(typeof(ChargeSlam));
+            utilitySkillDef.activationState = new SerializableEntityStateType(typeof(ChargeCannon));
             utilitySkillDef.activationStateMachineName = "Weapon";
             utilitySkillDef.baseMaxStock = 1;
             utilitySkillDef.baseRechargeInterval = 5f;
@@ -154,10 +161,10 @@ namespace Cloudburst.Cores
 
         private void CreateSpecial()
         {
-            LoadoutAPI.AddSkill(typeof(Drone));
+            //LoadoutAPI.AddSkill(typeof(Drone));
 
             SkillDef specialSkillDef = ScriptableObject.CreateInstance<SkillDef>();
-            specialSkillDef.activationState = new SerializableEntityStateType(typeof(Drone));
+            specialSkillDef.activationState = new SerializableEntityStateType(typeof(ChargeCannon));
             specialSkillDef.activationStateMachineName = "Weapon";
             specialSkillDef.baseMaxStock = 10;
             specialSkillDef.baseRechargeInterval = 0;

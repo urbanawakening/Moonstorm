@@ -40,6 +40,7 @@
     <Compile Include="Cores\AncientWispCore.cs" />
     <Compile Include="Cores\GlobalHooks.cs" />
     <Compile Include="Cores\ClayMenCore.cs" />
+    <Compile Include="Cores\States\AncientWisp\ChargeCannon.cs" />
     <Compile Include="Cores\States\AncientWisp\FireCannon.cs" />
     <Compile Include="Cores\States\ArchaicWispMonster\ChargeSummon.cs" />
     <Compile Include="Cores\States\ClayManMonster\Leap.cs" />
