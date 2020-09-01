@@ -19,7 +19,7 @@ namespace Cloudburst.Cores.States.AncientWisp
 
         public static int explosionCount = 10;
 
-        public static GameObject delayPrefab = EntityStates.AncientWispMonster.ChannelRain.delayPrefab;
+        public static GameObject delayPrefab = AncientWispCore.pillar;
 
         public static float damageCoefficient = 5;
         public static float randomRadius = 16;
@@ -32,6 +32,7 @@ namespace Cloudburst.Cores.States.AncientWisp
             duration = baseDuration / attackSpeedStat;
             sunTime = duration / (float)explosionCount / attackSpeedStat;
 
+            LogCore.LogI(delayPrefab.name);
 
             PlayCrossfade("Body", "ChannelRain", 0.3f);
         }
@@ -111,13 +112,14 @@ namespace Cloudburst.Cores.States.AncientWisp
 
                     effect.GetComponent<TeamFilter>().teamIndex = GetTeam();
 
-                    effect.transform.localScale = new Vector3(radius, radius, 1f);
+                    effect.transform.localScale = new Vector3(3, 3, 1);
 
                     var particles = gameObject.GetComponent<ScaleParticleSystemDuration>();
                     if (particles)
                     {
                         particles.newDuration = explosionDelay;
                     }
+
                 }
             }
         }

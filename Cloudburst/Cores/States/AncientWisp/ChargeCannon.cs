@@ -8,11 +8,11 @@ namespace Cloudburst.Cores.States.AncientWisp
         public static float baseDuration = 1;
         private float duration;
 
-        public static GameObject chargeEffect = Resources.Load<GameObject>("prefabs/effect");
+        //public static GameObject chargeEffect = Resources.Load<GameObject>("prefabs/effects");
 
         //GameObjects
-        private GameObject chargeEffectRight;
-        private GameObject chargeEffectLeft;
+        //private GameObject chargeEffectRight;
+        //private GameObject chargeEffectLeft;
 
         public override void OnEnter()
         {
@@ -53,14 +53,14 @@ namespace Cloudburst.Cores.States.AncientWisp
         public override void OnExit()
         {
             base.OnExit();
-            if (chargeEffectLeft)
+            /*if (chargeEffectLeft)
             {
                 Destroy(chargeEffectLeft);
             }
             if (chargeEffectRight)
             {
                 Destroy(chargeEffectRight);
-            }
+            }*/
         }
         public override InterruptPriority GetMinimumInterruptPriority()
         {

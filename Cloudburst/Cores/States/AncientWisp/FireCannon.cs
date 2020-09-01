@@ -92,7 +92,7 @@ namespace Cloudburst.Cores.States.AncientWisp
 
         private void FireBlast(string muzzle) {
             //TODO:
-            //Finish later
+            //Don't finish later.
             throw new System.NotImplementedException();
         }
 

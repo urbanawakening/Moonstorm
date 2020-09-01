@@ -206,6 +206,7 @@ namespace Cloudburst.Cores.HAND
             CharacterDeathBehavior characterDeathBehavior = HANDBody.GetComponent<CharacterDeathBehavior>();
             HANDDroneTracker tracker = HANDBody.AddComponent<HANDDroneTracker>();
             passiveContoller = HANDBody.AddComponent<HANDPassiveController>();
+
             //kil
             LoadoutAPI.AddSkill(typeof(DeathState));
             characterDeathBehavior.deathState = new SerializableEntityStateType(typeof(DeathState));

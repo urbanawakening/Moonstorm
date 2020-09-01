@@ -5,10 +5,6 @@ using RoR2;
 using RoR2.CharacterAI;
 using RoR2.Skills;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 using static RoR2.CharacterAI.AISkillDriver;
 
@@ -19,6 +15,7 @@ namespace Cloudburst.Cores
         protected GameObject master;
         protected GameObject body;
         protected SkillLocator skillLocator;
+        public static GameObject pillar;
         public AncientWispCore() => CreateAncientWisp();
 
         protected void CreateAncientWisp() {
@@ -29,6 +26,32 @@ namespace Cloudburst.Cores
             AI();
             Skills();
             FixSwingEffect();
+            Cloudburst.start += Cloudburst_start; 
+        }
+
+        private void Cloudburst_start()
+        {
+            //what the fuck, yo?
+            //ONE LINE AT A TIME
+
+            //maybe this??
+            var prefab = EntityStates.AncientWispMonster.ChannelRain.delayPrefab; //.InstantiateClone("AncientWispPillarExplosion", true);
+
+            //I think it might be this line that's causing things to be stretched out.
+            //IT IS THIS
+            //WHAT THE FUCK??
+            //var centralRing = prefab.transform.Find("Particles/Ring, Center");
+
+            //Gonna try this
+            //IT DOESN'T WORK
+            //IT DOESN'T FUCKING WOOOOOOOOOOOOOOOOOOOOOORK
+            //prefab.transform.Find("Particles/Ring, Center").GetComponent<Renderer>().material = Resources.Load<GameObject>("prefabs/effects/impacteffects/AncientWispPillar").transform.Find("Particles/Flames, Tube, CenterHuge").GetComponent<Renderer>().material;
+
+            //centralRing.GetComponent<Renderer>().material = Resources.Load<GameObject>("prefabs/effects/impacteffects/AncientWispPillar").transform.Find("Particles/Flames, Tube, CenterHuge").GetComponent<Renderer>().material;
+
+            //centralRing.gameObject.SetActive(false);
+
+            pillar = prefab;
         }
 
         protected void Skills() {
@@ -102,15 +125,11 @@ namespace Cloudburst.Cores
             secondarySkillDef.requiredStock = 1;
             secondarySkillDef.shootDelay = 0.08f;
             secondarySkillDef.stockToConsume = 1;
-            secondarySkillDef.skillDescriptionToken = "HAND_SECONDARY_DESCRIPTION";
+            secondarySkillDef.skillDescriptionToken = "aaaaaa";
             secondarySkillDef.skillName = "aaa";
-            secondarySkillDef.skillNameToken = "HAND_SECONDARY_NAME";
-            secondarySkillDef.icon = AssetsCore.forcedReassemblyIcon;
-            secondarySkillDef.keywordTokens = new string[] {
-                 "KEYWORD_AGILE",
-                 "KEYWORD_CHARGEABLE",
-                 "KEYWORD_CLOCKED"
-             };
+            secondarySkillDef.skillNameToken = "aaaaaaaaaaaaaaaaaa";
+            secondarySkillDef.icon = null;
+            secondarySkillDef.keywordTokens = Array.Empty<string>();
 
             LoadoutAPI.AddSkillDef(secondarySkillDef);
             SkillFamily secondarySkillFamily = skillLocator.secondary.skillFamily;
@@ -126,8 +145,12 @@ namespace Cloudburst.Cores
 
         private void CreateUtility()
         {
+            LoadoutAPI.AddSkill(typeof(StartRain));
+            LoadoutAPI.AddSkill(typeof(RAIN));
+            LoadoutAPI.AddSkill(typeof(EndRain));
+
             SkillDef utilitySkillDef = ScriptableObject.CreateInstance<SkillDef>();
-            utilitySkillDef.activationState = new SerializableEntityStateType(typeof(ChargeCannon));
+            utilitySkillDef.activationState = new SerializableEntityStateType(typeof(StartRain));
             utilitySkillDef.activationStateMachineName = "Weapon";
             utilitySkillDef.baseMaxStock = 1;
             utilitySkillDef.baseRechargeInterval = 5f;
