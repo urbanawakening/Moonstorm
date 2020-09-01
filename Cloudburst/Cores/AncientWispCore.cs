@@ -26,16 +26,16 @@ namespace Cloudburst.Cores
             AI();
             Skills();
             FixSwingEffect();
-            Cloudburst.start += Cloudburst_start; 
+            Cloudburst.start += FixAncientWispPillarEffect; 
         }
 
-        private void Cloudburst_start()
+        private void FixAncientWispPillarEffect()
         {
             //what the fuck, yo?
             //ONE LINE AT A TIME
 
             //maybe this??
-            var prefab = EntityStates.AncientWispMonster.ChannelRain.delayPrefab; //.InstantiateClone("AncientWispPillarExplosion", true);
+            pillar = EntityStates.AncientWispMonster.ChannelRain.delayPrefab; //.InstantiateClone("AncientWispPillarExplosion", true);
 
             //I think it might be this line that's causing things to be stretched out.
             //IT IS THIS
@@ -51,7 +51,18 @@ namespace Cloudburst.Cores
 
             //centralRing.gameObject.SetActive(false);
 
-            pillar = prefab;
+
+            //mone of this worked
+            //i have one last idea  
+            //this somewhat works
+            //ok so it stopped working.
+            //why? dunno
+            //another thing
+            //var locator = pillar.AddComponent<ChildLocator>();
+            //Resources.Load<GameObject>("prefabs/effects/impacteffects/AncientWispPillar").transform.Find("Particles/Flames, Tube, CenterHuge").GetComponent<Renderer>().material; 
+            //one last thing 
+            //there's a null reference somewhere in here
+            //locator.FindChild("Ring, Center").GetComponent<Renderer>().material = Resources.Load<GameObject>("prefabs/projectileghosts/AncientWispCannonGhost").transform.Find("Particles/FireSphere").GetComponent<Renderer>().material;
         }
 
         protected void Skills() {

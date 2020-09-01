@@ -12,12 +12,12 @@ namespace Cloudburst.Cores.States.AncientWisp
 
         private float sunTime;
 
-        public static float baseDuration = 4f;
+        public static float baseDuration = 15f;
         private float duration;
 
         public static float explosionDelay = 2f;
 
-        public static int explosionCount = 10;
+        public static int explosionCount = 30;
 
         public static GameObject delayPrefab = AncientWispCore.pillar;
 
