@@ -41,6 +41,7 @@
     <Compile Include="Cores\GlobalHooks.cs" />
     <Compile Include="Cores\ClayMenCore.cs" />
     <Compile Include="Cores\States\AncientWisp\ChargeCannon.cs" />
+    <Compile Include="Cores\States\AncientWisp\Enrage.cs" />
     <Compile Include="Cores\States\AncientWisp\StartRain.cs" />
     <Compile Include="Cores\States\AncientWisp\RAIN.cs" />
     <Compile Include="Cores\States\AncientWisp\EndRain.cs" />
@@ -49,7 +50,7 @@
     <Compile Include="Cores\States\ClayManMonster\Leap.cs" />
     <Compile Include="Cores\States\ArchaicWispMonster\Summon.cs" />
     <Compile Include="Cores\States\ClayManMonster\SwipeForward.cs" />
-    <Compile Include="Cores\Core.cs" />
+    <Compile Include="Cores\SipSipCore.cs" />
     <Compile Include="Cores\States\Commando\CommandoGrenade.cs" />
     <Compile Include="Cores\States\Engineer\FireVolley.cs" />
     <Compile Include="Cores\States\Engineer\PlaceFlameTurret.cs" />
@@ -58,7 +59,7 @@
     <Compile Include="Cores\States\HAND\Home.cs" />
     <Compile Include="Cores\States\HAND\HomeRun.cs" />
     <Compile Include="Cores\QOLCore.cs" />
-    <Compile Include="Cores\BalanceCore.cs" />
+    <Compile Include="Cores\ModificationCore.cs" />
     <Compile Include="Cores\Components\ShockwaveComponent.cs" />
     <Compile Include="Cores\Components\ExtendedProjectileOverlapAttack.cs" />
     <Compile Include="Cores\Components\DroneSkillDef.cs" />

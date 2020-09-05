@@ -176,7 +176,7 @@ namespace Cloudburst.Cores
             LoadoutAPI.AddSkill(typeof(FireVolley));
             LoadoutAPI.AddSkillDef(newDef);
 
-            LanguageAPI.Add("ENGINEER_PRIMARY_ALT_NAME", "Grenade Volley");
+            LanguageAPI.Add("ENGINEER_PRIMARY_ALT_NAME", "Impact Grenades");
 
             newDef.activationState = new SerializableEntityStateType(typeof(FireVolley));
             newDef.skillName = "GrenadeVolley";

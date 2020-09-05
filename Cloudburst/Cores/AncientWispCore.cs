@@ -26,11 +26,36 @@ namespace Cloudburst.Cores
             AI();
             Skills();
             FixSwingEffect();
-            Cloudburst.start += FixAncientWispPillarEffect; 
+            BuildBody();
+            Cloudburst.start += FixAncientWispEffects; 
+        }
+        private void FixAncientWispEffects()
+        {
+            FixAncientWispPillarEffect();
+            FixSwingEffect();
+            FixUntexturedEffects();
+        }
+
+        private void FixUntexturedEffects() {
+            var pillarEffect = Resources.Load<GameObject>("prefabs/effects/impacteffects/AncientWispPillar");
+            var sparks = pillarEffect.transform.Find("Particles/Sparks");
+            var centerHuge = pillarEffect.transform.Find("Particles/Flames, Tube (1)");
+            var flashWhite = pillarEffect.transform.Find("Particles/Flash,White");
+            var flash = pillarEffect.transform.Find("Particles/Flash");
+
+            var mat = pillarEffect.transform.Find("Particles/Flames, Tube, CenterHuge").GetComponent<Renderer>().material;
+
+            sparks.GetComponent<Renderer>().material = mat;
+            centerHuge.GetComponent<Renderer>().material = mat;
+            flashWhite.GetComponent<Renderer>().material = mat;
+            flash.GetComponent<Renderer>().material = mat;
+            //flash.GetComponent<Renderer>().material = mat;
         }
 
         private void FixAncientWispPillarEffect()
         {
+            //this is insanity
+
             //what the fuck, yo?
             //ONE LINE AT A TIME
 
@@ -40,14 +65,15 @@ namespace Cloudburst.Cores
             //I think it might be this line that's causing things to be stretched out.
             //IT IS THIS
             //WHAT THE FUCK??
-            //var centralRing = prefab.transform.Find("Particles/Ring, Center");
+            var centralRing = pillar.transform.Find("Particles/Ring, Center");
 
+            centralRing.gameObject.GetComponent<Renderer>().material = Resources.Load<GameObject>("prefabs/projectileghosts/AncientWispCannonGhost").transform.Find("Particles/FireSphere").GetComponent<Renderer>().material;
             //Gonna try this
             //IT DOESN'T WORK
             //IT DOESN'T FUCKING WOOOOOOOOOOOOOOOOOOOOOORK
-            //prefab.transform.Find("Particles/Ring, Center").GetComponent<Renderer>().material = Resources.Load<GameObject>("prefabs/effects/impacteffects/AncientWispPillar").transform.Find("Particles/Flames, Tube, CenterHuge").GetComponent<Renderer>().material;
+            //pillar.transform.Find("Particles/Ring, Center").GetComponent<Renderer>().material = Resources.Load<GameObject>("prefabs/effects/impacteffects/AncientWispPillar").transform.Find("Particles/Flames, Tube, CenterHuge").GetComponent<Renderer>().material;
 
-            //centralRing.GetComponent<Renderer>().material = Resources.Load<GameObject>("prefabs/effects/impacteffects/AncientWispPillar").transform.Find("Particles/Flames, Tube, CenterHuge").GetComponent<Renderer>().material;
+            centralRing.GetComponent<Renderer>().material = Resources.Load<GameObject>("prefabs/effects/impacteffects/AncientWispPillar").transform.Find("Particles/Flames, Tube, CenterHuge").GetComponent<Renderer>().material;
 
             //centralRing.gameObject.SetActive(false);
 
@@ -74,6 +100,47 @@ namespace Cloudburst.Cores
             CreateSpecial();
 
         }
+
+        private void BuildBody()
+        {
+            CharacterBody characterBody = body.GetComponent<CharacterBody>();
+            if (characterBody)
+            {
+                LanguageAPI.Add("ANCIENTWISP_BODY_NAME", "Ancient Wisp");
+                characterBody.baseAcceleration = 14f;
+                characterBody.baseArmor = 0; //Base armor this character has, set to 20 if this character is melee 
+                characterBody.baseAttackSpeed = 1; //Base attack speed, usually 1
+                characterBody.baseCrit = 0;  //Base crit, usually one
+                characterBody.baseDamage = 40; //Base damage
+                characterBody.baseJumpCount = 1; //Base jump amount, set to 2 for a double jump. 
+                characterBody.baseJumpPower = 0; //Base jump power
+                characterBody.baseMaxHealth = 2100; //Base health, basically the health you have when you start a new run
+                characterBody.baseMaxShield = 0; //Base shield, basically the same as baseMaxHealth but with shields
+                characterBody.baseMoveSpeed = 7; //Base move speed, this is usual 7
+                characterBody.baseNameToken = "ANCIENTWISP_BODY_NAME"; //The base name token. 
+                //characterBody.subtitleNameToken = "Hidden summoner"; //Set this to true if its a boss
+                characterBody.baseRegen = 0; //Base health regen.
+                characterBody.bodyFlags = (CharacterBody.BodyFlags.None); ///Base body flags, should be self explanatory 
+                characterBody.crosshairPrefab = characterBody.crosshairPrefab = Resources.Load<GameObject>("Prefabs/CharacterBodies/HuntressBody").GetComponent<CharacterBody>().crosshairPrefab; //The crosshair prefab.
+                characterBody.hideCrosshair = false; //Whether or not to hide the crosshair
+                characterBody.hullClassification = HullClassification.Golem; //The hull classification, usually used for AI
+                characterBody.isChampion = true; //Set this to true if its A. A boss or B. A miniboss
+                characterBody.levelArmor = 0; //Armor gained when leveling up. 
+                characterBody.levelAttackSpeed = 0; //Attackspeed gained when leveling up. 
+                characterBody.levelCrit = 0; //Crit chance gained when leveling up. 
+                characterBody.levelDamage = 8f; //Damage gained when leveling up. 
+                characterBody.levelArmor = 0; //Armor gained when leveling up. 
+                characterBody.levelJumpPower = 0; //Jump power gained when leveling up. 
+                characterBody.levelMaxHealth = 630; //Health gained when leveling up. 
+                characterBody.levelMaxShield = 0; //Shield gained when leveling up. 
+                characterBody.levelMoveSpeed = 0; //Move speed gained when leveling up. 
+                characterBody.levelRegen = 0f; //Regen gained when leveling up. 
+                                               //characterBody.portraitIcon = portrait; //The portrait icon, shows up in multiplayer and the death UI
+                //characterBody.preferredPodPrefab = Resources.Load<GameObject>("prefabs/networkedobjects/robocratepod"); //The pod prefab this survivor spawns in. Options: Resources.Load<GameObject>("prefabs/networkedobjects/robocratepod"); Resources.Load<GameObject>("prefabs/networkedobjects/survivorpod"); 
+            }
+        }
+
+
         private void CreatePrimary()
         {
             LoadoutAPI.AddSkill(typeof(ChargeCannon));
@@ -164,7 +231,7 @@ namespace Cloudburst.Cores
             utilitySkillDef.activationState = new SerializableEntityStateType(typeof(StartRain));
             utilitySkillDef.activationStateMachineName = "Weapon";
             utilitySkillDef.baseMaxStock = 1;
-            utilitySkillDef.baseRechargeInterval = 5f;
+            utilitySkillDef.baseRechargeInterval = 15f;
             utilitySkillDef.beginSkillCooldownOnSkillEnd = true;
             utilitySkillDef.canceledFromSprinting = false;
             utilitySkillDef.fullRestockOnAssign = false;
@@ -239,37 +306,126 @@ namespace Cloudburst.Cores
             
             API.DestroySkillDrivers(master);
 
-            var follow = master.AddComponent<AISkillDriver>();
+            //var follow = master.AddComponent<AISkillDriver>();
+
+            var chaseEnemy = master.AddComponent<AISkillDriver>();
 
             var strafe = master.AddComponent<AISkillDriver>();
 
-            var primary = master.AddComponent<AISkillDriver>();
+            //var primary = master.AddComponent<AISkillDriver>();
 
+            var pillar = master.AddComponent<AISkillDriver>();
+
+            strafe.customName = "StrafeEnemy";
+            strafe.skillSlot = SkillSlot.Primary ;
+            strafe.requireSkillReady = false;
+            strafe.requireEquipmentReady = false;
+            strafe.minUserHealthFraction = float.NegativeInfinity;
+            strafe.maxUserHealthFraction = float.PositiveInfinity;
+            strafe.minTargetHealthFraction = float.NegativeInfinity;
+            strafe.maxTargetHealthFraction = float.PositiveInfinity;
+            strafe.minDistance = 0;
+            strafe.maxDistance = 20;
+            strafe.selectionRequiresTargetLoS = false;
+            strafe.selectionRequiresOnGround = false;
+            strafe.moveTargetType = TargetType.CurrentEnemy;
+            strafe.activationRequiresTargetLoS = false;
+            strafe.activationRequiresAimConfirmation = false;
+            strafe.movementType = MovementType.StrafeMovetarget;
+            strafe.moveInputScale = 1;
+            strafe.aimType = AimType.AtMoveTarget;
+            strafe.ignoreNodeGraph = false;
+            strafe.shouldSprint = true;
+            strafe.shouldFireEquipment = false;
+            strafe.shouldTapButton = false;
+            strafe.buttonPressType = ButtonPressType.Hold;
+            strafe.driverUpdateTimerOverride = -1;
+            strafe.resetCurrentEnemyOnNextDriverSelection = false;
+            strafe.noRepeat = false;
+
+            chaseEnemy.customName = "ChaseEnemy";
+            chaseEnemy.skillSlot = SkillSlot.None;
+            chaseEnemy.requireSkillReady = false;
+            chaseEnemy.requireEquipmentReady = false;
+            chaseEnemy.minUserHealthFraction = float.NegativeInfinity;
+            chaseEnemy.maxUserHealthFraction = float.PositiveInfinity;
+            chaseEnemy.minTargetHealthFraction = float.NegativeInfinity;
+            chaseEnemy.maxTargetHealthFraction = float.PositiveInfinity;
+            chaseEnemy.minDistance = 0;
+            chaseEnemy.maxDistance = float.PositiveInfinity;
+            chaseEnemy.selectionRequiresTargetLoS = false;
+            chaseEnemy.selectionRequiresOnGround = false;
+            chaseEnemy.moveTargetType = TargetType.CurrentEnemy;
+            chaseEnemy.activationRequiresTargetLoS = false;
+            chaseEnemy.activationRequiresAimConfirmation = false;
+            chaseEnemy.movementType = MovementType.ChaseMoveTarget;
+            chaseEnemy.moveInputScale = 1;
+            chaseEnemy.aimType = AimType.AtMoveTarget;
+            chaseEnemy.ignoreNodeGraph = false;
+            chaseEnemy.shouldSprint = true;
+            chaseEnemy.shouldFireEquipment = false;
+            chaseEnemy.shouldTapButton = false;
+            chaseEnemy.buttonPressType = ButtonPressType.Hold;
+            chaseEnemy.driverUpdateTimerOverride = -1;
+            chaseEnemy.resetCurrentEnemyOnNextDriverSelection = false;
+            chaseEnemy.noRepeat = false;
+
+            /*primary.customName = "FireBlazingShot";
             primary.skillSlot = SkillSlot.Primary;
+            //primary.requiredSkill = CaptainTazer(RoR2.Skills.SkillDef)
             primary.requireSkillReady = true;
             primary.requireEquipmentReady = false;
-            primary.moveTargetType = TargetType.CurrentEnemy;
             primary.minUserHealthFraction = float.NegativeInfinity;
             primary.maxUserHealthFraction = float.PositiveInfinity;
             primary.minTargetHealthFraction = float.NegativeInfinity;
             primary.maxTargetHealthFraction = float.PositiveInfinity;
             primary.minDistance = 0;
-            primary.maxDistance = 100;
-            primary.selectionRequiresTargetLoS = false;
+            primary.maxDistance = 14;
+            primary.selectionRequiresTargetLoS = true;
+            primary.selectionRequiresOnGround = false;
+            primary.moveTargetType = TargetType.CurrentEnemy;
             primary.activationRequiresTargetLoS = false;
             primary.activationRequiresAimConfirmation = false;
-            primary.movementType = MovementType.ChaseMoveTarget;
+            primary.movementType = MovementType.StrafeMovetarget;
             primary.moveInputScale = 1;
             primary.aimType = AimType.AtMoveTarget;
             primary.ignoreNodeGraph = false;
-            primary.driverUpdateTimerOverride = -1;
-            primary.resetCurrentEnemyOnNextDriverSelection = false;
-            primary.noRepeat = false;
-            primary.shouldSprint = true;
+            primary.shouldSprint = false;                                                                               
             primary.shouldFireEquipment = false;
+            primary.shouldTapButton = false;
             primary.buttonPressType = ButtonPressType.Hold;
+primary.driverUpdateTimerOverride = -1;
+            primary.resetCurrentEnemyOnNextDriverSelection = false;
+            primary.noRepeat = false;*/
 
-            follow.skillSlot = SkillSlot.None;
+            pillar.customName = "Pillar";
+            pillar.skillSlot = SkillSlot.Special;
+            pillar.requireSkillReady = true;
+            pillar.requireEquipmentReady = false;
+            pillar.minUserHealthFraction = float.NegativeInfinity;
+            pillar.maxUserHealthFraction = float.PositiveInfinity;
+            pillar.minTargetHealthFraction = float.NegativeInfinity;
+            pillar.maxTargetHealthFraction = float.PositiveInfinity;
+            pillar.minDistance = 0;
+            pillar.maxDistance = 20;
+            pillar.selectionRequiresTargetLoS = true;
+            pillar.selectionRequiresOnGround = false;
+            pillar.moveTargetType = TargetType.CurrentEnemy;
+            pillar.activationRequiresTargetLoS = true;
+            pillar.activationRequiresAimConfirmation = true;
+            pillar.movementType = MovementType.ChaseMoveTarget;
+            pillar.moveInputScale = 1;
+            pillar.aimType = AimType.AtMoveTarget;
+            pillar.ignoreNodeGraph = false;
+            pillar.shouldSprint = false;
+            pillar.shouldFireEquipment = false;
+            pillar.shouldTapButton = false;
+            pillar.buttonPressType = ButtonPressType.Hold;
+            pillar.driverUpdateTimerOverride = 2;
+            pillar.resetCurrentEnemyOnNextDriverSelection = false;
+            pillar.noRepeat = false;
+
+            /*follow.skillSlot = SkillSlot.None;
             follow.requireSkillReady = false;
             follow.requireEquipmentReady = false;
             follow.minUserHealthFraction = float.NegativeInfinity;
@@ -320,7 +476,7 @@ namespace Cloudburst.Cores
             strafe.buttonPressType = ButtonPressType.Hold;
             strafe.driverUpdateTimerOverride = -1;
             strafe.resetCurrentEnemyOnNextDriverSelection = false;
-            strafe.noRepeat = false;
+            strafe.noRepeat = false;*/
         }
 
         protected void FixSwingEffect() {

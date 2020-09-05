@@ -44,19 +44,9 @@ namespace Cloudburst.Cores.States.HAND
             }
         }
 
-        protected virtual GenericDamageOrb CreateDroneOrb()
-        {
-            return new DroneOrb();
-        }
-
         private void DeployDrone()
         {
             this.hasFired = true;
-
-            if (initialOrbTarget == null)
-            {
-                return;
-            }
             base.GetComponent<DroneComponent>().FireDroneAuthority();
         }
         public override void FixedUpdate()

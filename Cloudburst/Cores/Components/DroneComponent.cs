@@ -41,8 +41,8 @@ namespace Cloudburst.Cores.HAND.Components
             HurtBox initialOrbTarget = tracker.GetTrackingTarget();
             bool isCrit = false;
             if (body && body.master) isCrit = Util.CheckRoll(body.crit, body.master);
-            GenericDamageOrb genericDamageOrb = new DroneOrb();
-            genericDamageOrb.damageValue = 0;
+            var genericDamageOrb = new DroneOrb();
+            genericDamageOrb.damageValue = 1 * body.damage;
             genericDamageOrb.isCrit = isCrit;
             genericDamageOrb.teamIndex = TeamComponent.GetObjectTeam(base.gameObject);
             genericDamageOrb.attacker = base.gameObject;

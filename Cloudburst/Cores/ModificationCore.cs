@@ -12,9 +12,9 @@ using UnityEngine;
 
 namespace Cloudburst.Cores
 {
-    public class StatsCore
+    public class ModificationCore
     {
-        public StatsCore() => Rebalance();
+        public ModificationCore() => Rebalance();
         protected void Rebalance() {
             Commando();
         }
@@ -43,7 +43,7 @@ namespace Cloudburst.Cores
             body.levelAttackSpeed = 0;
             body.levelCrit = 0;
             body.levelArmor = 0;*/
-            //I wanted to a rebalance but decided against it
+            //I wanted to do a rebalance but decided against it
 
             LoadoutAPI.AddSkill(typeof(CommandoGrenade));
 

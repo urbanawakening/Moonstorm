@@ -41,19 +41,28 @@ namespace Cloudburst.Cores
             teddie.itemString = "Bear";
                 
             ItemInfo brittle = new ItemInfo();
-            brittle.count = 6;
+            brittle.count = 4;
             brittle.itemString = "GoldOnHit";
 
             ItemInfo backup = new ItemInfo();
             backup.count = 10;
             backup.itemString = "SecondarySkillMagazine";
 
-                                                    
+            ItemInfo medkit = new ItemInfo();
+            medkit.count = 8;
+            medkit.itemString = "Medkit";
+
+            ItemInfo bloodTester = new ItemInfo();
+            bloodTester.count = 10;
+            bloodTester.itemString = "BloodTester";
+
             ItemInfo[] array = new ItemInfo[] {
                 ghor,
                 teddie,
                 brittle,
-                backup
+                backup,
+                medkit,
+                bloodTester
             };
 
             foreach (GivePickupsOnStart component in sipSipMaster.GetComponents<GivePickupsOnStart>()) {

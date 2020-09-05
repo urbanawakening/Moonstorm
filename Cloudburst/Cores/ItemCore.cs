@@ -32,6 +32,8 @@ namespace Cloudburst.Cores
         protected internal ItemIndex lightningOnCritIndex;
         protected internal ItemIndex experienceOnHitIndex;
         protected internal ItemIndex lemdogIndex;
+        protected internal ItemIndex moneyOnHealIndex;
+        protected internal ItemIndex extendEnemyBuffDurationIndex;
 
         public List<ItemIndex> bossitemList = new List<ItemIndex>{
             ItemIndex.NovaOnLowHealth,
@@ -47,7 +49,7 @@ namespace Cloudburst.Cores
         {
             //imagine stealing from game code
             //couldn't be me :^)
-           
+
             BullseyeSearch search = new BullseyeSearch();
             search.teamMaskFilter = TeamMask.GetUnprotectedTeams(teamIndex);
             search.filterByLoS = true;
@@ -358,6 +360,46 @@ namespace Cloudburst.Cores
                 tier = ItemTier.Tier3,
                 unlockableName = ""
             });
+            ItemTag[] moneyOnHealTags = new ItemTag[2]
+            {
+                    ItemTag.Utility,
+                    ItemTag.AIBlacklist
+            };
+            RegisterItem(moneyOnHealIndex, new ItemDef
+            {
+                canRemove = true,
+                descriptionToken = "ITEM_BLOODTESTER_DESC",
+                hidden = false,
+                loreToken = "",
+                name = "BloodTester",
+                nameToken = "ITEM_BLOODTESTER_NAME",
+                //pickupIconPath = "@Cloudburst:Assets/Items/Lemdog/LemDog_TexIcon.png",
+                ////pickupModelPath = "@Cloudburst:Assets/Items/Lemdog/MDLLemDog.prefab",
+                pickupToken = "ITEM_BLOODTESTER_PICKUP",
+                tags = moneyOnHealTags,
+                tier = ItemTier.Tier1,
+                unlockableName = ""
+            });
+            ItemTag[] extendEnemyBuffDurationTags = new ItemTag[2]
+{
+                    ItemTag.Damage,
+                    ItemTag.AIBlacklist
+};
+            RegisterItem(extendEnemyBuffDurationIndex, new ItemDef
+            {
+                canRemove = true,
+                descriptionToken = "ITEM_EXTENDEDENEMYBUFFDURATIOM_DESC",
+                hidden = false,
+                loreToken = "",
+                name = "ExtendedEnemyBuffDuration",
+                nameToken = "ITEM_EXTENDEDENEMYBUFFDURATIOM_NAME",
+                //pickupIconPath = "@Cloudburst:Assets/Items/Lemdog/LemDog_TexIcon.png",
+                ////pickupModelPath = "@Cloudburst:Assets/Items/Lemdog/MDLLemDog.prefab",
+                pickupToken = "ITEM_EXTENDEDENEMYBUFFDURATIOM_PICKUP",
+                tags = extendEnemyBuffDurationTags,
+                tier = ItemTier.Tier2,
+                unlockableName = ""
+            });
             Hook();
         }
 
@@ -408,9 +450,17 @@ namespace Cloudburst.Cores
             LanguageAPI.Add("ITEM_EXPERIENCEONHIT_DESC", "Gain 0.5 <style=cStack>(+0.4 per stack)</style> <style=cIsUtility>experience</style> on hit.");
             LanguageAPI.Add("ITEM_EXPERIENCEONHIT_PICKUP", "Gain experience on hit");
 
-            LanguageAPI.Add("ITEM_LEMDOG_NAME", "LemDog");
+            LanguageAPI.Add("ITEM_LEMDOG_NAME", "Lemdog");
             LanguageAPI.Add("ITEM_LEMDOG_DESC", "25% <style=cStack>(+2.5)<style=cStack> chance for <style=cIsUtility>applied debuffs to become beneficial buffs</style>");
             LanguageAPI.Add("ITEM_LEMDOG_PICKUP", "Chance for debuffs to become beneficial buffs when applied");
+
+            LanguageAPI.Add("ITEM_BLOODTESTER_NAME", "Portable Blood Tester");
+            LanguageAPI.Add("ITEM_BLOODTESTER_DESC", "Gain 15 <style=cStack>(+10 per stack)</style> <style=cIsUtility>money</style> when healed .");
+            LanguageAPI.Add("ITEM_BLOODTESTER_PICKUP", "Gain money when healed. ");
+
+            LanguageAPI.Add("ITEM_EXTENDEDENEMYBUFFDURATIOM_NAME", "Magican's Earrings");
+            LanguageAPI.Add("ITEM_EXTENDEDENEMYBUFFDURATIOM_DESC", "Extend <style=cIsUtility>positive buffs applied to you</style> by 2<style=cStack>(+1 per stack)</style> seconds.");
+            LanguageAPI.Add("ITEM_EXTENDEDENEMYBUFFDURATIOM_PICKUP", "Extend positive buff duration.");
         }
 
         protected internal void RegisterItem(ItemIndex itemIndex, ItemDef itemDef)
@@ -472,6 +522,12 @@ namespace Cloudburst.Cores
                 case "Lemdog":
                     lemdogIndex = ItemAPI.Add(customItem);
                     break;
+                case "BloodTester":
+                    moneyOnHealIndex = ItemAPI.Add(customItem);
+                    break;
+                case "ExtendedEnemyBuffDuration":
+                    extendEnemyBuffDurationIndex = ItemAPI.Add(customItem);
+                    break;
             }
         }
 
@@ -484,6 +540,44 @@ namespace Cloudburst.Cores
             TeleporterInteraction.onTeleporterBeginChargingGlobal += TeleporterInteractionOnTeleporterBeginChargingGlobal;
             On.RoR2.GenericPickupController.GrantItem += GrantItem;
             On.RoR2.CharacterBody.AddBuff += CharacterBody_AddBuff;
+            On.RoR2.HealthComponent.Heal += HealthComponent_Heal;
+            On.RoR2.CharacterBody.AddTimedBuff += CharacterBody_AddTimedBuff;
+        }
+
+        private void CharacterBody_AddTimedBuff(On.RoR2.CharacterBody.orig_AddTimedBuff orig, CharacterBody self, BuffIndex buffType, float duration)
+        {
+            if (self) {
+                var inv = self.inventory;
+                if (inv) {
+                    var earringsCount = inv.GetItemCount(extendEnemyBuffDurationIndex);
+                    if (earringsCount > 0 && buffType != BuffIndex.MedkitHeal) {
+                        //do thing???
+                        duration += 1 + (1 * earringsCount);
+                    }
+                }
+            }
+            orig(self, buffType, duration);
+        }
+
+        private float HealthComponent_Heal(On.RoR2.HealthComponent.orig_Heal orig, HealthComponent self, float amount, ProcChainMask procChainMask, bool nonRegen)
+        {
+            if (self)
+            {
+                var body = self.body;
+                if (body)
+                {
+                    var inventory = body.inventory;
+                    if (inventory)
+                    {
+                        var bloodTesters = inventory.GetItemCount(moneyOnHealIndex);
+                        var amountToGift = 5 + (bloodTesters * 10);
+                        if (bloodTesters > 0 && body.teamComponent && body.isPlayerControlled && nonRegen == true) {
+                            TeamManager.instance.GiveTeamMoney(body.teamComponent.teamIndex, (uint)amountToGift);
+                        }
+                    }
+                }
+            }
+            return orig(self, amount, procChainMask, nonRegen);
         }
 
         private void CharacterBody_AddBuff(On.RoR2.CharacterBody.orig_AddBuff orig, CharacterBody self, BuffIndex buffType)
@@ -514,7 +608,6 @@ namespace Cloudburst.Cores
                 body.AddTimedBuff(BuffIndex.Cloak, 2 * cloakOnInteractionCount);
             }
         }
-
 
         private void HealthComponent_TakeDamage(On.RoR2.HealthComponent.orig_TakeDamage orig, HealthComponent self, DamageInfo damageInfo)
         {

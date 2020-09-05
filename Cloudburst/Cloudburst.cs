@@ -63,7 +63,7 @@ namespace Cloudburst
         private HAN_DCore han_dCore;
         private EngineerCore engineerCore;
         private QOLCore qol;
-        private StatsCore stats;
+        private ModificationCore stats;
         private AncientWispCore ancientWisp;
         private ClayMenCore clayCore;
         private SipSipCore sipsipCore;
@@ -82,7 +82,7 @@ namespace Cloudburst
             han_dCore = new HAN_DCore();
             engineerCore = new EngineerCore();
             qol = new QOLCore();
-            stats = new StatsCore();
+            stats = new ModificationCore();
             ancientWisp = new AncientWispCore();
             clayCore = new ClayMenCore();
             sipsipCore = new SipSipCore();

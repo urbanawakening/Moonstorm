@@ -257,7 +257,7 @@ namespace Cloudburst.Cores.HAND
 
         private void SetCharacterBody()
         {
-            characterBody.baseAcceleration = 25f;
+            characterBody.baseAcceleration = 70f;
             characterBody.baseArmor = 20; //Base armor this character has, set to 20 if this character is melee 
             characterBody.baseAttackSpeed = 1; //Base attack speed, usually 1
             characterBody.baseCrit = 1;  //Base crit, usually one
@@ -774,6 +774,7 @@ namespace Cloudburst.Cores.HAND
             LanguageAPI.Add("HAND_BODY_SUBTITLE", "Lean, Mean, Cleaning Machine");
             LanguageAPI.Add("KEYWORD_CHARGEABLE", "<style=cKeywordName>Chargeable</style><style=cSub>This skill can be held down to enhance its function.</style>");
             LanguageAPI.Add("KEYWORD_CLOCKED", "<style=cKeywordName>Overclocked</style><style=cSub>This has a chance to become stunning when overclock is on.</style>");
+            LanguageAPI.Add("KEYWORD_CLEANS", "<style=cKeywordName>Cleaning</style><style=cSub>This skill cleans enemies, which deals damage overtime and doubles damage dealt to enemies..</style>");
             //LanguageAPI.Add("HAND_DESCRIPTION", Environment.NewLine + "NO MANUAL PROVIDED FOR SELECTED HAN-D UNIT.");
             LanguageAPI.Add("HAND_PASSIVE_NAME", "SCRAP_COLLECTOR");
             LanguageAPI.Add("HAND_PASSIVE_DESCRIPTION", "<style=cIsUtility>GENERATE SCRAP</style> WHEN HITTING AN ENEMY. <style=cIsUtility>TEN ARMOR</style> PER DRONE. MAXIMUM TEN SCRAP");
@@ -791,7 +792,7 @@ namespace Cloudburst.Cores.HAND
             LanguageAPI.Add("HAND_UTILITY_DESCRIPTION", "<style=cIsUtility>AGILE</style>. <style=cIsDamage>CHARGEABLE</style>. APPLY GREAT FORCE TO THE GROUND, DAMAGING NEARBY ENEMIES FOR <style=cIsDamage>400% DAMAGE</style>. <style=cIsDamage>OVERCLOCKED</style>");
 
             LanguageAPI.Add("HAND_SPECIAL_NAME", "DRONE");
-            LanguageAPI.Add("HAND_SPECIAL_DESCRIPTION", "DEPLOY A <style=cIsUtility>TARGETING HEALING DRONE</style> THAT <style=cIsHealing>HEALS ON HIT</style> AND DOES <style=cIsDamage>300% DAMAGE</style>.");
+            LanguageAPI.Add("HAND_SPECIAL_DESCRIPTION", "DEPLOY A <style=cIsDamage>CLEANING</style> DRONE THAT <style=cIsHealing>HEALS ON HIT</style> AND DOES <style=cIsDamage>300% DAMAGE</style>.");
 
             //LanguageAPI.Add("HAND_UTILITY_NAME", "EXPUNGE");
             //LanguageAPI.Add("HAND_UTILITY_DESCRIPTION", "<style=cIsUtility>AGILE</style>. EXPLUNGE HEAT SYSTEMS AND <style=cIsUtility>YOURSELF BOOST UPWARDS</style>.<style=cIsUtility> CHARGE TO BOOST YOURSELF FURTHER UPWARDS</style>");

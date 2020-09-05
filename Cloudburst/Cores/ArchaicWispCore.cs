@@ -62,7 +62,7 @@ namespace Cloudburst.Cores
             };
         }
 
-        private  void BuildBody()
+        private void BuildBody()
         {
             CharacterBody characterBody = archWisp.GetComponent<CharacterBody>();
             if (characterBody)
@@ -100,7 +100,7 @@ namespace Cloudburst.Cores
                                                //characterBody.preferredPodPrefab = Resources.Load<GameObject>("prefabs/networkedobjects/robocratepod"); //The pod prefab this survivor spawns in. Options: Resources.Load<GameObject>("prefabs/networkedobjects/robocratepod"); Resources.Load<GameObject>("prefabs/networkedobjects/survivorpod"); 
             }
         }
-        private  void ModifyPrimary()
+        private void ModifyPrimary()
         {
             SkillLocator skillLocator = archWisp.GetComponent<SkillLocator>();
             if (skillLocator)
