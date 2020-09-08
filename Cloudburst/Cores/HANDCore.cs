@@ -218,6 +218,7 @@ namespace Cloudburst.Cores.HAND
             tracker.maxTrackingAngle = 20;
             tracker.maxTrackingDistance = 100;
             tracker.trackerUpdateFrequency = 5;
+            tracker.indicatorPrefab = Resources.Load<GameObject>("Prefabs/EngiShieldRetractIndicator");
 
             SetCharacterBody();
             FixSetStateOnHurt();
@@ -296,7 +297,6 @@ namespace Cloudburst.Cores.HAND
         {
             API.CreateEmptySkills(HANDBody);
             FixSkin();
-            RepairSwingEffect();
             RegisterDamageTypes();
             CreatePassives();
             CreatePrimary();
@@ -411,34 +411,10 @@ namespace Cloudburst.Cores.HAND
             armorDef.skillDescriptionToken = "HAND_PASSIVE_DESCRIPTION";
             armorDef.skillName = "Armor";
             armorDef.skillNameToken = "HAND_PASSIVE_NAME";
-            armorDef.icon = AssetsCore.passiveDroneBuffIcon;
+            armorDef.icon = AssetsCore.overclockIcon;
             armorDef.keywordTokens = Array.Empty<string>();
             armorDef.skillDescriptionToken = "HAND_PASSIVE_DESCRIPTION";
-            armorDef.icon = AssetsCore.passiveDroneBuffIcon;
-            armorDef.skillNameToken = "HAND_PASSIVE_NAME";
-
-            armorDef.activationState = new SerializableEntityStateType(typeof(Uninitialized));
-            armorDef.activationStateMachineName = "Weapon";
-            armorDef.baseMaxStock = 1;
-            armorDef.baseRechargeInterval = 0f;
-            armorDef.beginSkillCooldownOnSkillEnd = true;
-            armorDef.canceledFromSprinting = false;
-            armorDef.fullRestockOnAssign = true;
-            armorDef.interruptPriority = InterruptPriority.Any;
-            armorDef.isBullets = false;
-            armorDef.isCombatSkill = true;
-            armorDef.mustKeyPress = false;
-            armorDef.noSprint = false;
-            armorDef.rechargeStock = 1;
-            armorDef.requiredStock = 1;
-            armorDef.shootDelay = 0.1f;
-            armorDef.stockToConsume = 0;
-            armorDef.skillName = "Armor";
-            armorDef.skillNameToken = "HAND_PASSIVE_NAME";
-            armorDef.icon = AssetsCore.passiveDroneBuffIcon;
-            armorDef.keywordTokens = Array.Empty<string>();
-            armorDef.skillDescriptionToken = "HAND_PASSIVE_DESCRIPTION";
-            armorDef.icon = AssetsCore.passiveDroneBuffIcon;
+            armorDef.icon = AssetsCore.overclockIcon;
             armorDef.skillNameToken = "HAND_PASSIVE_NAME";
 
             API.CopySkillDefSettings(armorDef, regenDef);
@@ -454,19 +430,19 @@ namespace Cloudburst.Cores.HAND
             speedDef.skillNameToken = "HAND_PASSIVE_ALT2_NAME";
             speedDef.skillDescriptionToken = "HAND_PASSIVE_ALT2_DESCRIPTION";
 
-            passiveFamily.variants = new SkillFamily.Variant[3] {
+            passiveFamily.variants = new SkillFamily.Variant[1] {
                 new SkillFamily.Variant {
                     skillDef = armorDef,
                     unlockableName = ""
                 },
-                new SkillFamily.Variant {
+                /*new SkillFamily.Variant {
                     skillDef = regenDef,
                     unlockableName = ""
                 },
                 new SkillFamily.Variant {
                     skillDef = speedDef,
                     unlockableName = ""
-                }
+                }*/
 
             };
 
@@ -494,6 +470,7 @@ namespace Cloudburst.Cores.HAND
             //FIX: Apparently I forgot to call base.FixedUpdate(); in its FixedUpdate void, whoops!
 
             LoadoutAPI.AddSkill(typeof(FullSwing));
+            LoadoutAPI.AddSkill(typeof(FullSwing2));
             SkillDef primarySkillDef = ScriptableObject.CreateInstance<SkillDef>();
 
             primarySkillDef.activationState = new SerializableEntityStateType(typeof(FullSwing));
@@ -685,41 +662,6 @@ namespace Cloudburst.Cores.HAND
             Burst.baseDuration = 0.2f;
             Burst.damageCoeff = 8;
         }
-
-        private void RepairSwingEffect()
-        {
-            GameObject swingTrail = Resources.Load<GameObject>("prefabs/effects/handslamtrail");
-            GameObject healEffect = Resources.Load<GameObject>("prefabs/effects/HANDheal");
-            GameObject lSwingTrail = Resources.Load<GameObject>("prefabs/effects/LemurianBiteTrail");
-
-            Transform lActualSwingTrail = lSwingTrail.transform.Find("SwingTrail");
-            GameObject lActualSwingTrailGameobject = lActualSwingTrail.gameObject;
-
-            Transform ringEffect = healEffect.transform.Find("SwingTrail");
-
-            Transform actualSwingTrail = swingTrail.transform.Find("SlamTrail");
-            GameObject actualSwingTrailGameobject = actualSwingTrail.gameObject;
-            //ModelLocator mdl = HANDBody.GetComponent<ModelLocator>();
-            //Transform mdlTransform = mdl.modelTransform;
-            //Transform form = mdlTransform.Find("HANDArmature/hammerBone/SwingCenter");
-            //Material mat = form.GetComponent<Renderer>().material;
-            //Debug.Log(form.name);
-
-            var ringRenderer = ringEffect.GetComponent<Renderer>();
-            Renderer render = actualSwingTrailGameobject.GetComponent<Renderer>();
-            Renderer lRender = lActualSwingTrailGameobject.GetComponent<Renderer>();
-            if (render)
-            {
-                //LogM("yes");
-                render.material = lRender.material;//Resources.Load<Material>("materials/matGrandparentMeleeSwipe");// mat;//Resources.Load<Material>("materials/matGrandparentMeleeSwipe"); //matGrandparentMeleeSwipe");
-                                                   //render.material.shader = Resources.Load<GameObject>("prefabs/effects/ParentSlamTrail").transform.Find("SwingTrail").GetComponent<Renderer>().material.shader;
-            }
-            if (ringRenderer) {
-                ringRenderer.material = lRender.material;
-            }
-            ringEffect.gameObject.SetActive(false);
-            //ParticleSystem particleSystem = actualSwingTrailGameobject.GetComponent<ParticleSystem>();
-        }
         #endregion
         #region Hooks
         private void Hook()
@@ -774,15 +716,20 @@ namespace Cloudburst.Cores.HAND
             LanguageAPI.Add("HAND_BODY_SUBTITLE", "Lean, Mean, Cleaning Machine");
             LanguageAPI.Add("KEYWORD_CHARGEABLE", "<style=cKeywordName>Chargeable</style><style=cSub>This skill can be held down to enhance its function.</style>");
             LanguageAPI.Add("KEYWORD_CLOCKED", "<style=cKeywordName>Overclocked</style><style=cSub>This has a chance to become stunning when overclock is on.</style>");
-            LanguageAPI.Add("KEYWORD_CLEANS", "<style=cKeywordName>Cleaning</style><style=cSub>This skill cleans enemies, which deals damage overtime and doubles damage dealt to enemies..</style>");
+            LanguageAPI.Add("KEYWORD_CLEANS", "<style=cKeywordName>Cleaning</style><style=cSub>This skill cleans enemies, which deals damage overtime and doubles melee damage dealt to enemies.</style>");
             //LanguageAPI.Add("HAND_DESCRIPTION", Environment.NewLine + "NO MANUAL PROVIDED FOR SELECTED HAN-D UNIT.");
-            LanguageAPI.Add("HAND_PASSIVE_NAME", "SCRAP_COLLECTOR");
-            LanguageAPI.Add("HAND_PASSIVE_DESCRIPTION", "<style=cIsUtility>GENERATE SCRAP</style> WHEN HITTING AN ENEMY. <style=cIsUtility>TEN ARMOR</style> PER DRONE. MAXIMUM TEN SCRAP");
 
-            LanguageAPI.Add("HAND_PASSIVE_ALT_NAME", "FLESH_COLLECTOR");
+            LanguageAPI.Add("HAND_PASSIVE_NAME", "OVERCLOCK");
+            LanguageAPI.Add("HAND_PASSIVE_DESCRIPTION", "<style=cIsDamage>USING MELEE SKILLS AND LANDING HITS</style> IN QUICK SUCCESSION ACTIVATES <style=cIsDamage>OVERCLOCK</style>.");
+
+            //LanguageAPI.Add("HAND_PASSIVE_NAME", "SCRAP_COLLECTOR");
+            //LanguageAPI.Add("HAND_PASSIVE_DESCRIPTION", "<style=cIsUtility>GENERATE SCRAP</style> WHEN HITTING AN ENEMY. <style=cIsUtility>TEN ARMOR</style> PER DRONE. MAXIMUM TEN SCRAP");
+
+            /*LanguageAPI.Add("HAND_PASSIVE_ALT_NAME", "FLESH_COLLECTOR");
             LanguageAPI.Add("HAND_PASSIVE_ALT_DESCRIPTION", "<style=cIsUtility>LEECH FLESH</style> AFTER HITTING AN ENEMY. GAIN <style=cIsHealing>25% REGEN</style> PER FLESH. MAXIMUM POUNDS OF FLESH");
 
             LanguageAPI.Add("HAND_PASSIVE_ALT2_NAME", "OLI_COLLECTOR");
+            */
             LanguageAPI.Add("HAND_PASSIVE_ALT2_DESCRIPTION", "<style=cIsUtility>GENERATE OLI</style> WHEN HITTING AN ENEMY. GAIN <style=cIsUtility>80% MOVE SPEED</style> PER PINT. MAXIMUM TEN PINTS OF OIL");
 
             LanguageAPI.Add("HAND_PRIMARY_NAME", "HURT");
@@ -805,11 +752,12 @@ namespace Cloudburst.Cores.HAND
             GameObject HANDDisplay = this.HANDBody.GetComponent<ModelLocator>().modelTransform.gameObject;
             string desc = "HAN-D is a strong bruiser who can dish out a beating and take one.<color=#CCD3E0>" + Environment.NewLine + Environment.NewLine;
             desc = desc + "< ! > Activate OVERCLOCK and use FORCED_REASSEMBLY to gain health when in a pitch!" + Environment.NewLine + Environment.NewLine;
-            desc = desc + "< ! > Hold down FORCED_REASSEMBLY to deal an extra 400% damage when fully charged!" + Environment.NewLine + Environment.NewLine;
+            desc = desc + "< ! > Target enemies you've hit with DRONE to deal double damage!" + Environment.NewLine + Environment.NewLine;
             desc = desc + "< ! > Use DRONE to gain health when in a pitch!" + Environment.NewLine + Environment.NewLine;
             desc = desc + "< ! > Hold FORCED_REASSEMBLY to charge it and boost yourself upwards!" + Environment.NewLine + Environment.NewLine;
 
             LanguageAPI.Add("HAND_DESCRIPTION", desc);
+            LanguageAPI.Add("HAND_FLAVORTOKEN", "And so it left, humanity growing within closed circuits...");
 
             SurvivorDef def = new SurvivorDef()
             {
@@ -818,7 +766,7 @@ namespace Cloudburst.Cores.HAND
                 displayNameToken = "HAND_BODY_NAME",
                 displayPrefab = HANDDisplay,
                 name = "AAAAAAAAA",
-                outroFlavorToken = "",
+                outroFlavorToken = "HAND_FLAVORTOKEN",
                 primaryColor = new Color(0.4862745098f, 0.94901960784f, 0.71764705882f),
                 unlockableName = "",
             };

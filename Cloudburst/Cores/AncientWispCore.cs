@@ -25,31 +25,9 @@ namespace Cloudburst.Cores
 
             AI();
             Skills();
-            FixSwingEffect();
+
             BuildBody();
-            Cloudburst.start += FixAncientWispEffects; 
-        }
-        private void FixAncientWispEffects()
-        {
-            FixAncientWispPillarEffect();
-            FixSwingEffect();
-            FixUntexturedEffects();
-        }
-
-        private void FixUntexturedEffects() {
-            var pillarEffect = Resources.Load<GameObject>("prefabs/effects/impacteffects/AncientWispPillar");
-            var sparks = pillarEffect.transform.Find("Particles/Sparks");
-            var centerHuge = pillarEffect.transform.Find("Particles/Flames, Tube (1)");
-            var flashWhite = pillarEffect.transform.Find("Particles/Flash,White");
-            var flash = pillarEffect.transform.Find("Particles/Flash");
-
-            var mat = pillarEffect.transform.Find("Particles/Flames, Tube, CenterHuge").GetComponent<Renderer>().material;
-
-            sparks.GetComponent<Renderer>().material = mat;
-            centerHuge.GetComponent<Renderer>().material = mat;
-            flashWhite.GetComponent<Renderer>().material = mat;
-            flash.GetComponent<Renderer>().material = mat;
-            //flash.GetComponent<Renderer>().material = mat;
+            Cloudburst.start += FixAncientWispPillarEffect;
         }
 
         private void FixAncientWispPillarEffect()
@@ -477,15 +455,6 @@ primary.driverUpdateTimerOverride = -1;
             strafe.driverUpdateTimerOverride = -1;
             strafe.resetCurrentEnemyOnNextDriverSelection = false;
             strafe.noRepeat = false;*/
-        }
-
-        protected void FixSwingEffect() {
-            var swingEffect = Resources.Load<GameObject>("prefabs/effects/AncientWispSwingTrail");
-            var swing = swingEffect.transform.Find("SwingTrail");
-            var renderer = swing.GetComponent<Renderer>();
-
-            renderer.material = Resources.Load<GameObject>("prefabs/projectileghosts/AncientWispCannonGhost").transform.Find("Particles/FireSphere").GetComponent<Renderer>().material;
-            //Resources.Load<Material>("materials/matGrandparentMeleeSwipe");
         }
     }
 }

@@ -455,7 +455,7 @@ namespace Cloudburst.Cores
             LanguageAPI.Add("ITEM_LEMDOG_PICKUP", "Chance for debuffs to become beneficial buffs when applied");
 
             LanguageAPI.Add("ITEM_BLOODTESTER_NAME", "Portable Blood Tester");
-            LanguageAPI.Add("ITEM_BLOODTESTER_DESC", "Gain 15 <style=cStack>(+10 per stack)</style> <style=cIsUtility>money</style> when healed .");
+            LanguageAPI.Add("ITEM_BLOODTESTER_DESC", "Gain 5 <style=cStack>(+5 per stack)</style> <style=cIsUtility>money</style> when healed .");
             LanguageAPI.Add("ITEM_BLOODTESTER_PICKUP", "Gain money when healed. ");
 
             LanguageAPI.Add("ITEM_EXTENDEDENEMYBUFFDURATIOM_NAME", "Magican's Earrings");
@@ -570,7 +570,7 @@ namespace Cloudburst.Cores
                     if (inventory)
                     {
                         var bloodTesters = inventory.GetItemCount(moneyOnHealIndex);
-                        var amountToGift = 5 + (bloodTesters * 10);
+                        var amountToGift = bloodTesters * 5;
                         if (bloodTesters > 0 && body.teamComponent && body.isPlayerControlled && nonRegen == true) {
                             TeamManager.instance.GiveTeamMoney(body.teamComponent.teamIndex, (uint)amountToGift);
                         }

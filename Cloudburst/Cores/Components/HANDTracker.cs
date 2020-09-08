@@ -11,6 +11,7 @@ namespace Cloudburst.Cores.HAND.Components
         public float maxTrackingDistance = 20f;
         public float maxTrackingAngle = 20f;
         public float trackerUpdateFrequency = 10f;
+        public GameObject indicatorPrefab;
         private HurtBox trackingTarget;
         private CharacterBody characterBody;
         private TeamComponent teamComponent;
@@ -20,11 +21,10 @@ namespace Cloudburst.Cores.HAND.Components
         private readonly BullseyeSearch search = new BullseyeSearch();
         private void Awake()
         {
-            this.indicator = new Indicator(base.gameObject, Resources.Load<GameObject>("Prefabs/EngiShieldRetractIndicator"));
+            this.indicator = new Indicator(base.gameObject, indicatorPrefab); //Resources.Load<GameObject>("Prefabs/EngiShieldRetractIndicator"));
         }
 
-        private void Start()
-        {
+        private void Start() {
             this.characterBody = base.GetComponent<CharacterBody>();
             this.inputBank = base.GetComponent<InputBankTest>();
             this.teamComponent = base.GetComponent<TeamComponent>();

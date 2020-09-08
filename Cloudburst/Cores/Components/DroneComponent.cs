@@ -15,18 +15,21 @@ namespace Cloudburst.Cores.HAND.Components
 
         #region Interface Implementation
         public void OnKilledOtherServer(DamageReport damageReport) {
-            if (skillLocator.special.stock < 10) {
-                skillLocator.special.AddOneStock();
-            }
-
-            
+            //using an orb now
+            //if (skillLocator.special.stock < 10) {
+            //    skillLocator.special.AddOneStock();
+            //}
+            var orb = new DroneRetrivalOrb();
+            orb.origin = damageReport.victim.transform.position;
+            orb.target = Util.FindBodyMainHurtBox(damageReport.attacker); 
+            OrbManager.instance.AddOrb(orb);
         }
         #endregion
         private void Awake() {
             body = base.GetComponent<CharacterBody>();
             skillLocator = base.GetComponent<SkillLocator>();
             tracker = base.GetComponent<HANDDroneTracker>();
-        }
+        }   
 
         public void FireDroneAuthority()
         {
@@ -41,7 +44,7 @@ namespace Cloudburst.Cores.HAND.Components
             HurtBox initialOrbTarget = tracker.GetTrackingTarget();
             bool isCrit = false;
             if (body && body.master) isCrit = Util.CheckRoll(body.crit, body.master);
-            var genericDamageOrb = new DroneOrb();
+            var genericDamageOrb = new DroneAttackOrb();
             genericDamageOrb.damageValue = 1 * body.damage;
             genericDamageOrb.isCrit = isCrit;
             genericDamageOrb.teamIndex = TeamComponent.GetObjectTeam(base.gameObject);

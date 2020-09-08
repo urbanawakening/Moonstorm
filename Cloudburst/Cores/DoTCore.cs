@@ -22,7 +22,7 @@ namespace Cloudburst.Cores
         {
             instance = this;
 
-            clean = RegisterDoT(1, 1f, DamageColorIndex.Default, BuffCore.instance.cleanIndex);
+            clean = RegisterDoT(1, 0.5f, DamageColorIndex.Default, BuffCore.instance.cleanIndex);
         }
 
         protected internal DotIndex RegisterDoT(float interval, float damageCoeff, DamageColorIndex colorIndex, BuffIndex assocatedBuff) {

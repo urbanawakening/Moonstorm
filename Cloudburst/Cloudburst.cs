@@ -2,10 +2,7 @@
 using Cloudburst.Cores;
 using Cloudburst.Cores.HAND;
 using R2API.Utils;
-using RoR2;
 using System;
-using UnityEngine;
-using UnityEngine.SceneManagement;
 
 namespace Cloudburst
 {
@@ -19,6 +16,7 @@ namespace Cloudburst
         "PrefabAPI",
         "LanguageAPI",
         "BuffAPI",
+        "EffectsAPI",
         "LoadoutAPI",
         "DirectorAPI",
         "LanguageAPI",
@@ -68,6 +66,7 @@ namespace Cloudburst
         private ClayMenCore clayCore;
         private SipSipCore sipsipCore;
         private ArchaicWispCore archwispCore;
+        private EffectCore effectCore;
         public Cloudburst()
         {
             LogCore.logger = Logger;
@@ -87,6 +86,7 @@ namespace Cloudburst
             clayCore = new ClayMenCore();
             sipsipCore = new SipSipCore();
             archwispCore = new ArchaicWispCore();
+            effectCore = new EffectCore();
 
             LogCore.LogM("Cloudburst loaded!");
         }

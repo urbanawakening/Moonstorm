@@ -38,6 +38,7 @@
     <Compile Include="Cores\AssetsCore.cs" />
     <Compile Include="Cores\BuffCore.cs" />
     <Compile Include="Cores\AncientWispCore.cs" />
+    <Compile Include="Cores\EffectCore.cs" />
     <Compile Include="Cores\GlobalHooks.cs" />
     <Compile Include="Cores\ClayMenCore.cs" />
     <Compile Include="Cores\States\AncientWisp\ChargeCannon.cs" />
@@ -56,6 +57,8 @@
     <Compile Include="Cores\States\Engineer\PlaceFlameTurret.cs" />
     <Compile Include="Cores\States\Engineer\Turret\DeathState.cs" />
     <Compile Include="Cores\States\Engineer\Turret\FireFlameThrower.cs" />
+    <Compile Include="Cores\States\HAND\FullSwing2.cs" />
+    <Compile Include="Cores\States\HAND\Dash.cs" />
     <Compile Include="Cores\States\HAND\Home.cs" />
     <Compile Include="Cores\States\HAND\HomeRun.cs" />
     <Compile Include="Cores\QOLCore.cs" />

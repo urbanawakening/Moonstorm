@@ -13,7 +13,7 @@ namespace Cloudburst.Cores
         public OrbCore() => RegisterOrbs();
 
         protected internal void RegisterOrbs() {
-            RegisterNewOrb(typeof(DroneOrb));
+            RegisterNewOrb(typeof(DroneAttackOrb));
         }
 
         protected internal void RegisterNewOrb(Type t) {
@@ -22,7 +22,7 @@ namespace Cloudburst.Cores
         }
     }
 
-    public class DroneOrb : GenericDamageOrb
+    public class DroneAttackOrb : GenericDamageOrb
     {
         public override void Begin()
         {
@@ -42,6 +42,57 @@ namespace Cloudburst.Cores
         protected override GameObject GetOrbEffect()
         {
             return Resources.Load<GameObject>("Prefabs/Effects/OrbEffects/LoaderLightningOrbEffect");
+        }
+    }
+    public class DroneRetrivalOrb : Orb
+    {
+        private SkillLocator locator;
+        public override void Begin()
+        {
+            duration = distanceToTarget / 30f;
+
+            var hurtBox = target.GetComponent<HurtBox>();
+            var characterBody = (hurtBox != null) ? hurtBox.healthComponent.GetComponent<CharacterBody>() : null;
+
+            if (characterBody) {
+                locator = characterBody.skillLocator;
+            }
+
+            if (GetOrbEffect())
+            {
+                EffectData effectData = new EffectData
+                {
+                    scale = 2,
+                    origin = origin,
+                    genericFloat = duration
+                };
+                effectData.SetHurtBoxReference(target);
+                EffectManager.SpawnEffect(GetOrbEffect(), effectData, true);
+            }
+
+            base.Begin();
+        }
+        public override void OnArrival()
+        {
+            base.OnArrival();
+            //TODO:
+            //This code probably doesn't work in MP
+            if (target && locator) {
+                if (locator.special.stock < 10) {
+                    locator.special.AddOneStock();
+                }
+            }
+            
+            //if (attacker && target)
+            //{
+            //    DotController.InflictDot(target.healthComponent.gameObject, attacker, DoTCore.instance.clean, 8);
+            //    EffectManager.SimpleEffect(Resources.Load<GameObject>("prefabs/effects/HANDHeal"), attacker.transform.position, attacker.transform.rotation, true);
+            //}
+        }
+
+        protected virtual GameObject GetOrbEffect()
+        {
+            return EffectCore.HANDRetrivalOrb;
         }
     }
 }
