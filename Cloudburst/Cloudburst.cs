@@ -34,6 +34,8 @@ namespace Cloudburst
         const string modName = "Cloudburst";
         const string version = "1.0.0";
 
+        public static Cloudburst instance;
+
         /// <summary>
         /// Called BEFORE the first frame of the game.
         /// </summary>
@@ -89,9 +91,10 @@ namespace Cloudburst
             sipsipCore = new SipSipCore();
             archwispCore = new ArchaicWispCore();
             effectCore = new EffectCore();
-            artifactCore = new ArtifactsCore();
+            //artifactCore = new ArtifactsCore();
 
-            #if DEBUG
+
+#if DEBUG
             //unlock!
             debugCore = new DebugCore();
             #endif
@@ -124,8 +127,8 @@ namespace Cloudburst
             awake();
         }
 
-        public void OnEnable()
-        {
+        public void OnEnable() {
+            SingletonHelper.Assign<Cloudburst>(Cloudburst.instance, this);
             Action awake = Cloudburst.onEnable;
             if (awake == null)
             {
@@ -136,6 +139,7 @@ namespace Cloudburst
 
         public void OnDisable()
         {
+            SingletonHelper.Unassign<Cloudburst>(Cloudburst.instance, this);
             Action awake = Cloudburst.onDisable;
             if (awake == null)
             {
