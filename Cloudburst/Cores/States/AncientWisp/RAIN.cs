@@ -32,7 +32,7 @@ namespace Cloudburst.Cores.States.AncientWisp
             duration = baseDuration / attackSpeedStat;
             sunTime = duration / (float)explosionCount / attackSpeedStat;
 
-            LogCore.LogI(delayPrefab.name);
+            //LogCore.LogI(delayPrefab.name);
 
             PlayCrossfade("Body", "ChannelRain", 0.3f);
         }

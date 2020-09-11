@@ -119,6 +119,8 @@ namespace Cloudburst.Cores
         public ItemCore() => RegisterItems();
 
         protected internal void RegisterItems() {
+            LogCore.LogI("Initializing Core: " + base.ToString());
+
             RegisterTokens();
             ItemTag[] itemChampionOnKillTags = new ItemTag[2]
             {

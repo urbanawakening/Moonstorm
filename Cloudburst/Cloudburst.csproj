@@ -38,6 +38,9 @@
     <Compile Include="Cores\AssetsCore.cs" />
     <Compile Include="Cores\BuffCore.cs" />
     <Compile Include="Cores\AncientWispCore.cs" />
+    <Compile Include="Cores\ArtifactsCore.cs" />
+    <Compile Include="Cores\DebugCore.cs" />
+    <Compile Include="Cores\Components\OverclockCombo.cs" />
     <Compile Include="Cores\EffectCore.cs" />
     <Compile Include="Cores\GlobalHooks.cs" />
     <Compile Include="Cores\ClayMenCore.cs" />
@@ -87,6 +90,8 @@
     <Compile Include="Cores\HANDCore.cs" />
     <Compile Include="Cores\ItemCore.cs" />
     <Compile Include="Cloudburst.cs" />
+    <Compile Include="Cores\States\REX\Spawn.cs" />
+    <Compile Include="Cores\States\REX\Harvest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

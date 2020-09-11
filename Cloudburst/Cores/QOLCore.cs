@@ -1,4 +1,5 @@
 ﻿using RoR2;
+using RoR2.UI;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -13,7 +14,8 @@ namespace Cloudburst.Cores
         //TODO:
         //Add more qol.
         public QOLCore() => Hook();
-        protected void Hook() {
+        protected void Hook()
+        {
             On.RoR2.GlobalEventManager.OnTeamLevelUp += GlobalEventManager_OnTeamLevelUp;
         }
 

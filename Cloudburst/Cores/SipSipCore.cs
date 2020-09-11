@@ -12,9 +12,10 @@ namespace Cloudburst.Cores
         private GameObject sipSipMaster;
         public static int sipSipIndex;
         public SipSipCore() => BuildSipsip();
+   
+        private void BuildSipsip() {
+            LogCore.LogI("Initializing Core: " + base.ToString());
 
-        private void BuildSipsip()
-        {
             sipSipBody = Resources.Load<GameObject>("prefabs/characterbodies/ScavLunar1Body").InstantiateClone("ScavLunar5Body", true);
             sipSipMaster = Resources.Load<GameObject>("prefabs/charactermasters/ScavLunar1Master").InstantiateClone("ScavLunar5Master", true);
 
@@ -28,7 +29,7 @@ namespace Cloudburst.Cores
             CreateSpawnCard();
 
             //DOSTUFF();
-            LogCore.LogM("SipSip is greedy!");
+            //LogCore.LogM("SipSip is greedy!");
         }
         private void AddGreedyItems() {
 

@@ -67,6 +67,8 @@ namespace Cloudburst
         private SipSipCore sipsipCore;
         private ArchaicWispCore archwispCore;
         private EffectCore effectCore;
+        private DebugCore debugCore;
+        private ArtifactsCore artifactCore;
         public Cloudburst()
         {
             LogCore.logger = Logger;
@@ -87,6 +89,12 @@ namespace Cloudburst
             sipsipCore = new SipSipCore();
             archwispCore = new ArchaicWispCore();
             effectCore = new EffectCore();
+            artifactCore = new ArtifactsCore();
+
+            #if DEBUG
+            //unlock!
+            debugCore = new DebugCore();
+            #endif
 
             LogCore.LogM("Cloudburst loaded!");
         }

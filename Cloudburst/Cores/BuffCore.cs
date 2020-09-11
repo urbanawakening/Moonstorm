@@ -22,6 +22,8 @@ namespace Cloudburst.Cores
         public BuffCore() => RegisterBuffs(); 
 
         protected void RegisterBuffs() {
+            LogCore.LogI("Initializing Core: " + base.ToString());
+
             instance = this;
 
             RegisterBuff(lightBringerIndex, new BuffDef
@@ -155,7 +157,6 @@ namespace Cloudburst.Cores
                     surgeIndex = BuffAPI.Add(customBuff);
                     break;
                 case "Sparkle":
-                    LogCore.LogI("Hi!");
                     cleanIndex = BuffAPI.Add(customBuff);
                     break;
                 case "Scrap":

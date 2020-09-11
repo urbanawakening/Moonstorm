@@ -1,11 +1,6 @@
 ﻿using R2API;
 using R2API.Utils;
 using RoR2;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -13,6 +8,9 @@ namespace Cloudburst.Cores
 {
     class EliteCore
     {
+        //TODO:
+        //Implement Lunar elites.
+        //Figure out the color issue.
         protected BuffIndex voidIndex;
         protected EquipmentIndex voidEquip;
         protected EliteIndex voidElite;
@@ -35,6 +33,8 @@ namespace Cloudburst.Cores
         public EliteCore() => RegisterElites();
 
         protected internal void RegisterElites() {
+            LogCore.LogI("Initializing Core: " + base.ToString());
+
             Void();
             War();
             Tar();
@@ -43,7 +43,7 @@ namespace Cloudburst.Cores
             On.RoR2.GlobalEventManager.OnHitEnemy += GlobalEventManager_OnHitEnemy;
             On.RoR2.CharacterBody.RecalculateStats += CharacterBody_RecalculateStats;
 
-            LogCore.LogM("The storm changes the landscape...");
+            //LogCore.LogM("The storm changes the landscape...");
         }
 
         private void CharacterBody_RecalculateStats(On.RoR2.CharacterBody.orig_RecalculateStats orig, CharacterBody self)
@@ -54,15 +54,16 @@ namespace Cloudburst.Cores
                 float attackSpeed = self.attackSpeed;
                 float armor = self.armor;
                 float moveSpeed = self.moveSpeed;
-                if (self.HasBuff(tarIndex))
-                {
+                if (self.HasBuff(tarIndex)) {
+                    //"hey what if i made an enemy that had 1000% move speed?"
+                    //"wait. oh, no"
+                    self.SetPropertyValue("moveSpeed", moveSpeed += 5);
                 };
-                if (self.HasBuff(warIndex))
-                {
+                if (self.HasBuff(warIndex)) {
                     self.SetPropertyValue("attackSpeed", attackSpeed += 1);
                     self.SetPropertyValue("moveSpeed", moveSpeed += 3);
                     self.SetPropertyValue("armor", armor += 1f);
-                };
+                }
                 if (self.HasBuff(warFriendlyBuffIndex) && !self.HasBuff(warIndex))
                 {
                     self.SetPropertyValue("attackSpeed", attackSpeed += .5f);
@@ -85,7 +86,7 @@ namespace Cloudburst.Cores
                 Inventory attackerInv = attackerBody.inventory;
                 if (attackerBody.HasBuff(tarIndex))
                 {
-                    victimBody.AddTimedBuff(BuffIndex.ClayGoo, 10);
+                    victimBody.AddTimedBuff(BuffIndex.ClayGoo, 2);
                     attackerBody.healthComponent.HealFraction(0.25f, damageInfo.procChainMask);
                 }
                 if (attackerBody.HasBuff(voidIndex))
@@ -157,21 +158,23 @@ namespace Cloudburst.Cores
                 name = "Void",
                 modifierToken = "ELITE_MODIFIER_VOID",
                 color = buffDef.buffColor,
-                //eliteEquipmentIndex = voidEquip
             };
 
-            CustomEquipment customEquipment = new CustomEquipment(equipmentDef, new ItemDisplayRule[0]);
-            CustomBuff customBuff = new CustomBuff(buffDef);
-            CustomElite customElite = new CustomElite(eliteDef, 2);
+            var customEquipment = new CustomEquipment(equipmentDef, new ItemDisplayRule[0]);
+            var customBuff = new CustomBuff(buffDef);
+            var customElite = new CustomElite(eliteDef, 2);
 
+            //set our indexes
             voidElite = EliteAPI.Add(customElite);
             voidIndex = BuffAPI.Add(customBuff);
             voidEquip = ItemAPI.Add(customEquipment);
 
+            //set the definitions' indexes
             eliteDef.eliteEquipmentIndex = voidEquip;
             equipmentDef.passiveBuff = voidIndex;
             buffDef.eliteIndex = voidElite;
 
+            //and finally, add a prefix
             LanguageAPI.Add(eliteDef.modifierToken, "Void {0}");
             LanguageAPI.Add(equipmentDef.pickupToken, "Void's Embrace");
             LanguageAPI.Add(equipmentDef.descriptionToken, "Become an aspect of Void");

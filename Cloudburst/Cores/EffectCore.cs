@@ -9,6 +9,7 @@ namespace Cloudburst.Cores
         public EffectCore() => Effects();
 
         protected void Effects() {
+            LogCore.LogI("Initializing Core: " + base.ToString());
             CreateNewEffects();
             Repair();
         }

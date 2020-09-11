@@ -49,6 +49,8 @@ namespace Cloudburst.Cores
         //private static GameObject molotovCocktailZone;
         #endregion
         public EquipmentCore() {
+            LogCore.LogI("Initializing Core: " + base.ToString());
+
             RegisterTokens();
             
             #region Basic

@@ -13,6 +13,8 @@ namespace Cloudburst.Cores
         public OrbCore() => RegisterOrbs();
 
         protected internal void RegisterOrbs() {
+            LogCore.LogI("Initializing Core: " + base.ToString());
+
             RegisterNewOrb(typeof(DroneAttackOrb));
         }
 

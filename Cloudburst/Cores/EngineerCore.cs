@@ -29,6 +29,8 @@ namespace Cloudburst.Cores
 
 
         protected void EngineerEdits() {
+            LogCore.LogI("Initializing Core: " + base.ToString());
+
             engineerObject = Resources.Load<GameObject>("prefabs/characterbodies/EngiBody");
             RegisterNewTurret();
             AddNewSpecial();

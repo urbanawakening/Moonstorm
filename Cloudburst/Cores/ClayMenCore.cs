@@ -27,6 +27,8 @@ namespace Cloudburst.Cores
 
         public void BuildClayMen()
         {
+            LogCore.LogI("Initializing Core: " + base.ToString());
+
             clayMan = Resources.Load<GameObject>("prefabs/characterbodies/ClayBody");
             clayManMaster = Resources.Load<GameObject>("prefabs/charactermasters/ClaymanMaster");
             skillLocator = clayMan.GetComponent<SkillLocator>();
@@ -38,7 +40,7 @@ namespace Cloudburst.Cores
             FixHurtBox();
             FixInteractorandEquipment();
 
-            LogCore.LogM("Built Clay Men!");
+            //LogCore.LogM("Built Clay Men!");
         }
 
         private void BuildDirectorCard()

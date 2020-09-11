@@ -19,6 +19,7 @@ namespace Cloudburst.Cores
         public AncientWispCore() => CreateAncientWisp();
 
         protected void CreateAncientWisp() {
+            LogCore.LogI("Initializing Core: " + base.ToString());
             master = Resources.Load<GameObject>("prefabs/charactermasters/AncientWispMaster");
             body = Resources.Load<GameObject>("prefabs/characterbodies/AncientWispBody");
             skillLocator = body.GetComponent<SkillLocator>();
@@ -29,7 +30,7 @@ namespace Cloudburst.Cores
             BuildBody();
             Cloudburst.start += FixAncientWispPillarEffect;
         }
-
+    
         private void FixAncientWispPillarEffect()
         {
             //this is insanity

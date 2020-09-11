@@ -33,8 +33,9 @@ namespace Cloudburst.Cores.HAND
 
         public HAN_DCore() => Load();
 
-        public void Load()
-        {
+        public void Load() {
+            LogCore.LogI("Initializing Core: " + base.ToString());
+
             if (instance == null)
             {
                 instance = this;
@@ -205,6 +206,7 @@ namespace Cloudburst.Cores.HAND
             SfxLocator sfxLocator = HANDBody.GetComponent<SfxLocator>();
             CharacterDeathBehavior characterDeathBehavior = HANDBody.GetComponent<CharacterDeathBehavior>();
             HANDDroneTracker tracker = HANDBody.AddComponent<HANDDroneTracker>();
+            OverclockComboActivation combo = HANDBody.AddComponent<OverclockComboActivation>();
             passiveContoller = HANDBody.AddComponent<HANDPassiveController>();
 
             //kil
@@ -246,10 +248,8 @@ namespace Cloudburst.Cores.HAND
                         if (i < 2)
                         {
                             esmr[i] = esm;
-                            Debug.Log(esm.customName);
                         }
                         i++;
-                        Debug.Log(i);
                         break;
                 }
             }

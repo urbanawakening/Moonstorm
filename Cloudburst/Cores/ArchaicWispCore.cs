@@ -19,13 +19,13 @@ namespace Cloudburst.Cores
         public ArchaicWispCore() => CreateArchaicWisps();
 
         private void CreateArchaicWisps() {
+            LogCore.LogI("Initializing Core: " + base.ToString());
+
             archWisp = Resources.Load<GameObject>("prefabs/characterbodies/archwispbody");
 
             BuildBody();
             BuildDirectorCard();
             ModifyPrimary();
-
-            LogCore.LogM("Built Archaic Wisps!");
         }
 
         private void BuildDirectorCard()

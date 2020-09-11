@@ -32,6 +32,8 @@ namespace Cloudburst.Cores
 
         public AssetsCore()
         {
+            LogCore.LogI("Initializing Core: " + base.ToString());
+
             // populate ASSETS
             if (mainAssetBundle == null)
             {

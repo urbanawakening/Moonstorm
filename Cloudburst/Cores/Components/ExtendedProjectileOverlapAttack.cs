@@ -74,7 +74,6 @@ namespace Cloudburst.Cores.HAND.Components {
                     this.fTimer = 1f / this.fireFrequency;
                     bool hit = this.attack.Fire(null);
                     if (hit) {
-                        LogCore.LogI("hi");
                         OnHit(attack, transform);
                     }
                 }
