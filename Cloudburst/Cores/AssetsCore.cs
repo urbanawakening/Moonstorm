@@ -30,6 +30,7 @@ namespace Cloudburst.Cores
         public static Sprite passive = null;
         #endregion
 
+        public static Sprite rexHarvester;
         public AssetsCore()
         {
             LogCore.LogI("Initializing Core: " + base.ToString());
@@ -55,6 +56,8 @@ namespace Cloudburst.Cores
             }
             // gather assets
             grinderModel = mainAssetBundle.LoadAsset<GameObject>("Assets/Items/Grinder/MDLGrinder.prefab");
+            rexHarvester = mainAssetBundle.LoadAsset<Sprite>("Assets/MiscIcons/texTreebotHarvester.png");
+            
             //HAN-D
             winchIcon = HANDAssetBundle.LoadAsset<Sprite>("Assets/Import/HAND_ICONS/Winch.png");
             portraitIcon = HANDAssetBundle.LoadAsset<Texture2D>("Assets/Import/HAND_ICONS/Portrait.png");

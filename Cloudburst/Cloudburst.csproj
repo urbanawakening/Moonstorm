@@ -39,7 +39,9 @@
     <Compile Include="Cores\BuffCore.cs" />
     <Compile Include="Cores\AncientWispCore.cs" />
     <Compile Include="Cores\ArtifactsCore.cs" />
-    <Compile Include="Cores\DebugCore.cs" />
+    <Compile Include="Cores\WIPCore.cs" />
+    <Compile Include="Cores\RexCore.cs" />
+    <Compile Include="Cores\DebuggingCore.cs" />
     <Compile Include="Cores\Components\OverclockCombo.cs" />
     <Compile Include="Cores\EffectCore.cs" />
     <Compile Include="Cores\GlobalHooks.cs" />

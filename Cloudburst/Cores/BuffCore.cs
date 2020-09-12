@@ -17,6 +17,7 @@ namespace Cloudburst.Cores
         protected internal BuffIndex surgeIndex;
         protected internal BuffIndex cleanIndex;
         protected internal BuffIndex huntersMarkIndex;
+        protected internal BuffIndex greaterBannerIndex;
 
         internal bool Loaded { get; private set; } = false;
         public BuffCore() => RegisterBuffs(); 
@@ -90,6 +91,15 @@ namespace Cloudburst.Cores
                 isDebuff = false,
                 name = "Marked"
             });
+            RegisterBuff(greaterBannerIndex, new BuffDef()
+            {
+                buffIndex = BuffIndex.Count,
+                canStack = false,
+                eliteIndex = EliteIndex.None,
+                iconPath = "Textures/BuffIcons/texBuffWarbannerIcon",
+                name = "GreaterWarbanner",
+                buffColor = new Color(0.8392157f, 0.7882353f, 0.22745098f)
+            });
 
             On.RoR2.CharacterBody.RecalculateStats += CharacterBody_RecalculateStats;
         }
@@ -97,12 +107,13 @@ namespace Cloudburst.Cores
         private void CharacterBody_RecalculateStats(On.RoR2.CharacterBody.orig_RecalculateStats orig, CharacterBody self)
         {
             orig(self);
-            float attackSpeed = self.attackSpeed;
-            float armor = self.armor;
-            float moveSpeed = self.moveSpeed;
-            float regen = self.regen;
+            var attackSpeed = self.attackSpeed;
+            var armor = self.armor;
+            var moveSpeed = self.moveSpeed;
+            var regen = self.regen;
+            var crit = self.crit;
 
-            HANDPassiveController controller = self.gameObject.GetComponent<HANDPassiveController>();
+            var controller = self.gameObject.GetComponent<HANDPassiveController>();
 
             if (self.HasBuff(overclockIndex))
             {
@@ -131,13 +142,37 @@ namespace Cloudburst.Cores
                     }
                 }
             }
-            if (self.HasBuff(lightBringerIndex))
-            {
-
-
+            if (self.HasBuff(lightBringerIndex)) {
                 self.SetPropertyValue("attackSpeed", attackSpeed += 2);
                 self.SetPropertyValue("moveSpeed", moveSpeed += 2f);
                 self.SetPropertyValue("armor", armor += 20);
+            }
+            if (self.HasBuff(greaterBannerIndex)) {
+                self.SetPropertyValue("crit", crit += .2f);
+                self.SetPropertyValue("regen", regen += .2f);
+                if (self.skillLocator) {
+                    var skillLocator = self.skillLocator;
+                    //pssst kid, wanna buff greater warbanner?
+                    //just turn to the zero into a 0!
+                    var reduction = .5f;
+                    if (skillLocator.primary)
+                    {
+                        skillLocator.primary.cooldownScale = reduction;
+                    }
+                    if (skillLocator.secondary)
+                    {
+                        skillLocator.secondary.cooldownScale = reduction;
+                    }
+                    if (skillLocator.utility)
+                    {
+                        skillLocator.utility.cooldownScale = reduction;
+                    }
+                    if (skillLocator.special)
+                    {
+                        skillLocator.special.cooldownScale = reduction;
+                    }
+
+                }
             }
         }
 
@@ -164,7 +199,11 @@ namespace Cloudburst.Cores
                     break;
                 case "Marked":
                     break;
-                    //throw new System.NotImplementedException("not implemented yet!");
+                case "GreaterWarbanner":
+                    greaterBannerIndex = BuffAPI.Add(customBuff);
+                    break;
+
+                //throw new System.NotImplementedException("not implemented yet!");
                 default:
                     LogCore.LogF(string.Format("{0} doesn't have a switch case!", buffDef));
                     break;

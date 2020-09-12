@@ -1,8 +1,8 @@
 ﻿namespace Cloudburst.Cores
 {
-    class DebugCore
+    class DebuggingCore
     {
-        public DebugCore() => Debug();
+        public DebuggingCore() => Debug();
 
         protected void Debug() {
             LogCore.LogI("Initializing Core: " + base.ToString());

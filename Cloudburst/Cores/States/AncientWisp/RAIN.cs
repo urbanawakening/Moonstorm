@@ -17,13 +17,13 @@ namespace Cloudburst.Cores.States.AncientWisp
 
         public static float explosionDelay = 2f;
 
-        public static int explosionCount = 30;
+        public static int explosionCount = 60;
 
         public static GameObject delayPrefab = AncientWispCore.pillar;
 
         public static float damageCoefficient = 5;
         public static float randomRadius = 16;
-        public static float radius = 16;
+        public static float radius = 4;
 
         public override void OnEnter()
         {

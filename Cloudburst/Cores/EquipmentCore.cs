@@ -3,6 +3,7 @@ using RoR2;
 using RoR2.Projectile;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 
 namespace Cloudburst.Cores
 {
@@ -17,6 +18,7 @@ namespace Cloudburst.Cores
         protected EquipmentIndex lumpkinIndex;
         protected EquipmentIndex unstableQuantumReactorIndex;
         protected EquipmentIndex brokenPrinterIndex;
+        protected EquipmentIndex midasIndex;
         //public static EquipmentIndex cocktailIndex { get; }
         #endregion
         #region Lists
@@ -45,13 +47,13 @@ namespace Cloudburst.Cores
         };
         #endregion
         #region GameObjects
-        //private static GameObject molotovCocktail;
-        //private static GameObject molotovCocktailZone;
+        private GameObject greaterWarbanner;
+        //private GameObject molotovCocktailZone;
         #endregion
         public EquipmentCore() {
             LogCore.LogI("Initializing Core: " + base.ToString());
 
-            RegisterTokens();
+            CreateGreaterWarbanner();  RegisterTokens();
             
             #region Basic
             var prefab = Resources.Load<GameObject>("Prefabs/PickupModels/PickupMystery");
@@ -133,10 +135,30 @@ namespace Cloudburst.Cores
 
         }
 
+        protected void CreateGreaterWarbanner() {
+            greaterWarbanner = Resources.Load<GameObject>("Prefabs/NetworkedObjects/WarbannerWard").InstantiateClone("GreaterWarbannerWard", true);
+            greaterWarbanner.GetComponent<BuffWard>().buffType = BuffCore.instance.greaterBannerIndex;
+
+            var sphereIndicator = greaterWarbanner.transform.Find("Indicator/IndicatorSphere");
+            var banner = greaterWarbanner.transform.Find("mdlWarbanner/Plane");
+            //var holder = greaterWarbanner.transform.Find("mdlWarbanner/Cylinder");
+
+            var sphereRenderer = sphereIndicator.GetComponent<Renderer>();
+            var bannerRenderer = banner.GetComponent<Renderer>();
+            //var holderRenderer = holder.GetComponent<Renderer>();
+
+            sphereRenderer.material = Resources.Load<Material>("materials/matWolfhatOverlay");
+            bannerRenderer.material = Resources.Load<Material>("materials/matWolfhatOverlay");
+            //holderRenderer.material = Resources.Load<Material>("materials/matWolfhatOverlay");
+        }
+
         private bool EquipmentSlot_PerformEquipmentAction(On.RoR2.EquipmentSlot.orig_PerformEquipmentAction orig, EquipmentSlot self, EquipmentIndex equipmentIndex)
         {
             if (equipmentIndex == brokenPrinterIndex) {
-                SummonAlly(self.characterBody);
+                GameObject gameObject = Object.Instantiate<GameObject>(greaterWarbanner, self.characterBody.transform.position, Quaternion.identity);
+                gameObject.GetComponent<TeamFilter>().teamIndex = self.characterBody.teamComponent.teamIndex;
+                gameObject.GetComponent<BuffWard>().radius = 25;
+                NetworkServer.Spawn(gameObject);
                 return true;
             }
             if (equipmentIndex == unstableQuantumReactorIndex) {
@@ -160,10 +182,10 @@ namespace Cloudburst.Cores
             LanguageAPI.Add("EQUIPMENT_REACTOR_PICKUP", "Fire a random projectile on use.");
             LanguageAPI.Add("EQUIPMENT_REACTOR_DESC", "Fire a random projectile.");
 
-            LanguageAPI.Add("EQUIPMENT_BROKENPRINTER_NAME", "Broken Printer");
-            LanguageAPI.Add("EQUIPMENT_BROKENPRINTER_PICKUP", "Summon a powerful but fragile ally that aids you in combat.");
-            LanguageAPI.Add("EQUIPMENT_BROKENPRINTER_DESC", "Summon a powerful ally that inherits your items but has half health.");
-            LanguageAPI.Add("EQUIPMENT_BROKENPRINTER_LORE", "Order: \u201CBroken Printer\u201D\r\nTracking Number: 72******\r\nEstimated Delivery: 08\\25\\2057\\\r\nShipping Method: High Priority\r\nShipping Address: 836 Lane, Lab [42], Mars\r\nShipping Details:\r\n\r\nI can\u2019t speak for the rest of the researchers here, but I have no clue why you decided to send this here. We don\u2019t know what\u2019s wrong with this thing, and we don\u2019t know if there is anything wrong with it. I very much doubt that a person actually made this thing; there are materials in it that we\u2019ve never seen before.\r\n\r\nI\u2019m sending this back to you because it\u2019s more trouble than it\u2019s worth to it keep here and research, and frankly those things it prints are horrifyingly hollow.\r\n");
+            LanguageAPI.Add("EQUIPMENT_BROKENPRINTER_NAME", "Greater Warbanner");
+            LanguageAPI.Add("EQUIPMENT_BROKENPRINTER_PICKUP", "Place a greater warbanner which boosts regen, critical hit chance, and lowers cooldowns.");
+            LanguageAPI.Add("EQUIPMENT_BROKENPRINTER_DESC", "Place a greater warbanner which grants 20% health regeneration, 10% critical hit chance, and 50% cooldown reduction.");
+            LanguageAPI.Add("EQUIPMENT_BROKENPRINTER_LORE", "Order: \u201CGreater Warbanner\u201D\r\nTracking Number: 72******\r\nEstimated Delivery: 08\\25\\2057\\\r\nShipping Method: High Priority\r\nShipping Address: 836 Lane, Lab [42], Mars\r\nShipping Details:\r\n\r\nI got this thing off of my dead grandmother, it's a relic from the great war of 2019. It  gives this aura of energy and motivation to do whatever someone desires! Anyways -- I'm passing it onto you, since I am dying to this cancer and I'd like you to have it before I go six feet under. Much love, Uncle Abe.\n");
         }
 
         protected internal void RegisterNewEquip(EquipmentDef equipmentDef) {

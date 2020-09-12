@@ -33,8 +33,8 @@ namespace Cloudburst.Cores.States.REX
                 {
                     attacker = projectileController.owner,
                     attackerFiltering = AttackerFiltering.NeverHit,
-                    baseDamage = 1 * projectileController.owner.GetComponent<CharacterBody>().damage,
-                    baseForce = -2500,
+                    baseDamage = 2.5f * projectileController.owner.GetComponent<CharacterBody>().damage,
+                    baseForce = -3000,
                     crit = damage.crit,
                     damageColorIndex = DamageColorIndex.Default,
                     damageType = damage.damageType,
@@ -47,7 +47,7 @@ namespace Cloudburst.Cores.States.REX
                     radius = 20,
                     teamIndex = projectileController.teamFilter.teamIndex,
                 }.Fire();
-                EffectManager.SpawnEffect(Pound.blastEffectPrefab, new EffectData
+                EffectManager.SpawnEffect(Resources.Load<GameObject>("prefabs/effects/impacteffects/BeetleGuardDeathImpact"), new EffectData
                 {
                     origin = base.transform.position,
                     scale = 20

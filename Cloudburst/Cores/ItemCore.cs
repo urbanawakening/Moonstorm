@@ -383,10 +383,10 @@ namespace Cloudburst.Cores
                 unlockableName = ""
             });
             ItemTag[] extendEnemyBuffDurationTags = new ItemTag[2]
-{
-                    ItemTag.Damage,
+            {
+                    ItemTag.Utility,
                     ItemTag.AIBlacklist
-};
+            };
             RegisterItem(extendEnemyBuffDurationIndex, new ItemDef
             {
                 canRemove = true,
@@ -437,7 +437,7 @@ namespace Cloudburst.Cores
             LanguageAPI.Add("ITEM_MONEYONINTERACTION_PICKUP", "Activating an interactable gives you money");
 
             LanguageAPI.Add("ITEM_BARRIERONCRIT_NAME", "Topaz Lense");
-            LanguageAPI.Add("ITEM_BARRIERONCRIT_DESC", "Gain a <style=cIsHealing>temporary barrier</style> on critical hits for <style=cIsHealing>5 health</style> <style=cStack>(+2.5 per stack)</style>.");
+            LanguageAPI.Add("ITEM_BARRIERONCRIT_DESC", "Gain a <style=cIsHealing>temporary barrier</style> on critical hits for <style=cIsHealing>10 health</style> <style=cStack>(+2.5 per stack)</style>.");
             LanguageAPI.Add("ITEM_BARRIERONCRIT_PICKUP", "Gain barrier on critical hits");
 
             LanguageAPI.Add("ITEM_BARRIERONLEVEL_NAME", "Topaz Crown");
@@ -544,6 +544,15 @@ namespace Cloudburst.Cores
             On.RoR2.CharacterBody.AddBuff += CharacterBody_AddBuff;
             On.RoR2.HealthComponent.Heal += HealthComponent_Heal;
             On.RoR2.CharacterBody.AddTimedBuff += CharacterBody_AddTimedBuff;
+            On.RoR2.CharacterBody.OnInventoryChanged += CharacterBody_OnInventoryChanged;
+        }
+
+        private void CharacterBody_OnInventoryChanged(On.RoR2.CharacterBody.orig_OnInventoryChanged orig, CharacterBody self)
+        {
+            orig(self);
+            //lol
+            if (false == true) {
+            }
         }
 
         private void CharacterBody_AddTimedBuff(On.RoR2.CharacterBody.orig_AddTimedBuff orig, CharacterBody self, BuffIndex buffType, float duration)
@@ -665,7 +674,7 @@ namespace Cloudburst.Cores
                 if (topazLense > 0 && healthComponent)
                 {
                     //oddly, this doesn't null reference
-                    healthComponent.AddBarrier(5f + (topazLense * 2.5f));
+                    healthComponent.AddBarrier(7.5f + (topazLense * 2.5f));
                 }
                 if (lightningEye > 0 && body && body.gameObject && body.teamComponent)// && Util.CheckRoll(20, master))
                 {
@@ -677,7 +686,7 @@ namespace Cloudburst.Cores
                         if (com != null) {
                             Vector3 pos = com.transform.position;
                             //add another fucking check
-                            if (pos != null && body.teamComponent && body.gameObject)
+                            if (pos != null && body && body.teamComponent && body.gameObject)
                             {
                                 BlastAttack attack = new BlastAttack
                                 {

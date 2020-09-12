@@ -25,7 +25,7 @@ using UnityEngine;
                 ProjectileCatalog.getAdditionalEntries += list => list.Add(projectileObject);
                 return true;
             }
-            return false;
+            return false;   
         }
         /// <summary>
         /// Adds a GameObject to the body catalog and returns true
