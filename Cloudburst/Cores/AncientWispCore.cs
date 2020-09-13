@@ -12,6 +12,7 @@ namespace Cloudburst.Cores
 {
     class AncientWispCore
     {
+        public static AncientWispCore instance;
         protected GameObject master;
         protected GameObject body;
         protected SkillLocator skillLocator;
@@ -20,6 +21,8 @@ namespace Cloudburst.Cores
 
         protected void CreateAncientWisp() {
             LogCore.LogI("Initializing Core: " + base.ToString());
+            instance = this;
+
             master = Resources.Load<GameObject>("prefabs/charactermasters/AncientWispMaster");
             body = Resources.Load<GameObject>("prefabs/characterbodies/AncientWispBody");
             skillLocator = body.GetComponent<SkillLocator>();
@@ -57,7 +60,7 @@ namespace Cloudburst.Cores
             //centralRing.gameObject.SetActive(false);
 
 
-            //mone of this worked
+            //none of this worked
             //i have one last idea  
             //this somewhat works
             //ok so it stopped working.

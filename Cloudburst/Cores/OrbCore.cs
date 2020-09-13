@@ -8,13 +8,15 @@ using UnityEngine;
 
 namespace Cloudburst.Cores
 {
-    class OrbCore
-    {
+    class OrbCore {
+        public static OrbCore instance;
+
         public OrbCore() => RegisterOrbs();
 
         protected internal void RegisterOrbs() {
-            LogCore.LogI("Initializing Core: " + base.ToString());
+            instance = this;
 
+            LogCore.LogI("Initializing Core: " + base.ToString());
             RegisterNewOrb(typeof(DroneAttackOrb));
         }
 

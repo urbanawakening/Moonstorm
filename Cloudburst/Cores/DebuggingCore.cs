@@ -2,10 +2,14 @@
 {
     class DebuggingCore
     {
+        public static DebuggingCore instance;
+
         public DebuggingCore() => Debug();
 
         protected void Debug() {
             LogCore.LogI("Initializing Core: " + base.ToString());
+            instance = this;
+
             Unlockall();
         }
 

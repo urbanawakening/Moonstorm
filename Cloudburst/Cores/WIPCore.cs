@@ -8,9 +8,11 @@ namespace Cloudburst.Cores
 {
     class WIPCore
     {
+        public static WIPCore instance;
         public WIPCore() => WIP();
 
         protected void WIP() {
+            instance = this;
             Huntress();
         }
 

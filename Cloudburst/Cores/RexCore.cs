@@ -12,10 +12,13 @@ namespace Cloudburst.Cores
 {
     class RexCore
     {
+        public static RexCore instance;
+
         public RexCore() => REX();
         protected GameObject collectorObject;
             protected void REX()
             {
+                instance = this;
                 var healingProjectile = Resources.Load<GameObject>("prefabs/projectiles/SyringeProjectileHealing");
                 var healingComponent = healingProjectile.GetComponent<ProjectileHealOwnerOnDamageInflicted>();
                 var rexBody = Resources.Load<GameObject>("prefabs/characterbodies/TreebotBody");

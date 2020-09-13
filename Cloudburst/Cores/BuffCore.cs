@@ -153,7 +153,7 @@ namespace Cloudburst.Cores
                 if (self.skillLocator) {
                     var skillLocator = self.skillLocator;
                     //pssst kid, wanna buff greater warbanner?
-                    //just turn to the zero into a 0!
+                    //just turn to the 0.5f into a 0!
                     var reduction = .5f;
                     if (skillLocator.primary)
                     {
@@ -198,6 +198,7 @@ namespace Cloudburst.Cores
                     scrapIndex = BuffAPI.Add(customBuff);
                     break;
                 case "Marked":
+                    huntersMarkIndex = BuffAPI.Add(customBuff);
                     break;
                 case "GreaterWarbanner":
                     greaterBannerIndex = BuffAPI.Add(customBuff);
@@ -205,6 +206,7 @@ namespace Cloudburst.Cores
 
                 //throw new System.NotImplementedException("not implemented yet!");
                 default:
+                    //feel my haunted lust
                     LogCore.LogF(string.Format("{0} doesn't have a switch case!", buffDef));
                     break;
             }

@@ -4,8 +4,9 @@ using UnityEngine;
 
 namespace Cloudburst.Cores
 {
-     class AssetsCore
+    class AssetsCore
     {
+        //yeah no instance 
         public static AssetBundle mainAssetBundle = null;
         public static AssetBundleResourcesProvider provider;
 

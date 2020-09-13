@@ -12,6 +12,8 @@ namespace Cloudburst.Cores
     //Make an icon.
     internal sealed class ArchaicWispCore
     {
+        public static ArchaicWispCore instance;
+
         public GameObject archWisp;
         private CharacterSpawnCard archWispCharacterSpawnCard;
         private DirectorCard archWispDirectorCard;
@@ -20,6 +22,7 @@ namespace Cloudburst.Cores
 
         private void CreateArchaicWisps() {
             LogCore.LogI("Initializing Core: " + base.ToString());
+            instance = this;
 
             archWisp = Resources.Load<GameObject>("prefabs/characterbodies/archwispbody");
 

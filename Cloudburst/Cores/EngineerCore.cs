@@ -18,6 +18,12 @@ namespace Cloudburst.Cores
 {
     class EngineerCore
     {
+        //she stares you down
+        //she cares your top
+        //you know she'll never love you
+
+        public static EngineerCore instance;
+
         //TODO
         //Fix skins
         //Tweak primary
@@ -30,6 +36,7 @@ namespace Cloudburst.Cores
 
         protected void EngineerEdits() {
             LogCore.LogI("Initializing Core: " + base.ToString());
+            instance = this;
 
             engineerObject = Resources.Load<GameObject>("prefabs/characterbodies/EngiBody");
             RegisterNewTurret();

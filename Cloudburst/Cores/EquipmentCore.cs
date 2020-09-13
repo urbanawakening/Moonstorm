@@ -9,16 +9,18 @@ namespace Cloudburst.Cores
 {
     class EquipmentCore
     {
+        public static EquipmentCore instance;
+
         //TODO:
         //Figure out why equipments aren't spawning properly
         //Give equipments models
         //Give equipment icons
-        //(Post 1.0)Give them display rules.
+        //(Post 1.0): Give them display rules.
         #region Indexes
         protected EquipmentIndex lumpkinIndex;
         protected EquipmentIndex unstableQuantumReactorIndex;
         protected EquipmentIndex brokenPrinterIndex;
-        protected EquipmentIndex midasIndex;
+        //protected EquipmentIndex midasIndex;
         //public static EquipmentIndex cocktailIndex { get; }
         #endregion
         #region Lists

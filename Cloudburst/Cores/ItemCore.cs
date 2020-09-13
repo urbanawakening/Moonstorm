@@ -6,8 +6,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -15,6 +13,8 @@ namespace Cloudburst.Cores
 {
     class ItemCore
     {
+        public ItemCore instance;
+
         //TODO:
         //Fix OnCrit
         //Give Items Models
@@ -34,6 +34,7 @@ namespace Cloudburst.Cores
         protected internal ItemIndex lemdogIndex;
         protected internal ItemIndex moneyOnHealIndex;
         protected internal ItemIndex extendEnemyBuffDurationIndex;
+        protected internal ItemIndex skateboardIndex;
 
         public List<ItemIndex> bossitemList = new List<ItemIndex>{
             ItemIndex.NovaOnLowHealth,
@@ -121,13 +122,15 @@ namespace Cloudburst.Cores
         protected internal void RegisterItems() {
             LogCore.LogI("Initializing Core: " + base.ToString());
 
+            instance = this;
+
             RegisterTokens();
             ItemTag[] itemChampionOnKillTags = new ItemTag[2]
             {
                 ItemTag.OnKillEffect,
                 ItemTag.AIBlacklist
             };
-            RegisterItem(itemChampionOnKillIndex, new ItemDef
+            RegisterItem(new ItemDef
             {
                 canRemove = true,
                 descriptionToken = "ITEM_ITEMONCHAMPIONKILL_DESC",
@@ -147,7 +150,7 @@ namespace Cloudburst.Cores
                 ItemTag.AIBlacklist,
                 ItemTag.Utility
             };
-            RegisterItem(largerTeleporterRadiusIndex, new ItemDef
+            RegisterItem(new ItemDef
             {
                 canRemove = true,
                 descriptionToken = "ITEM_LARGERTELEPORTERRADIUS_DESC",
@@ -166,7 +169,7 @@ namespace Cloudburst.Cores
             {
                 ItemTag.Damage
             };
-            RegisterItem(crippleOnHitIndex, new ItemDef
+            RegisterItem(new ItemDef
             {
                 canRemove = true,
                 descriptionToken = "ITEM_CRIPPLEONHIT_DESC",
@@ -187,7 +190,7 @@ namespace Cloudburst.Cores
                 ItemTag.Utility
             };
             //string unlockAble = Main.unlockAll.Value ? "CLOUDBURST_GRABORDIE_REWARD_ID" : "";
-            RegisterItem(cloakOnInteractionIndex, new ItemDef
+            RegisterItem(new ItemDef
             {
                 canRemove = true,
                 descriptionToken = "ITEM_CLOAKBUFFONINTERACTION_DESC",
@@ -207,7 +210,7 @@ namespace Cloudburst.Cores
                 ItemTag.AIBlacklist,
                 ItemTag.Utility
             };
-            RegisterItem(itemOnLevelUpIndex, new ItemDef
+            RegisterItem(new ItemDef
             {
                 canRemove = true,
                 descriptionToken = "ITEM_ITEMONLEVELUP_DESC",
@@ -227,7 +230,7 @@ namespace Cloudburst.Cores
                 ItemTag.Utility,
                 ItemTag.Damage
             };
-            RegisterItem(randomDebuffOnHitIndex, new ItemDef
+            RegisterItem(new ItemDef
             {
                 canRemove = true,
                 descriptionToken = "ITEM_RANDOMDEBUFFONHIT_DESC",
@@ -247,7 +250,7 @@ namespace Cloudburst.Cores
                 ItemTag.Utility,
                 ItemTag.AIBlacklist
             };
-            RegisterItem(moneyOnInteractionIndex, new ItemDef
+            RegisterItem(new ItemDef
             {
                 canRemove = true,
                 descriptionToken = "ITEM_MONEYONINTERACTION_DESC",
@@ -267,7 +270,7 @@ namespace Cloudburst.Cores
                     ItemTag.Utility,
                     ItemTag.Healing
             };
-            RegisterItem(barrierOnCritIndex, new ItemDef
+            RegisterItem(new ItemDef
             {
                 canRemove = true,
                 descriptionToken = "ITEM_BARRIERONCRIT_DESC",
@@ -287,7 +290,7 @@ namespace Cloudburst.Cores
                     ItemTag.Utility,
                     ItemTag.Damage
             };
-            RegisterItem(lightningOnCritIndex, new ItemDef
+            RegisterItem(new ItemDef
             {
                 canRemove = true,
                 descriptionToken = "ITEM_LIGHTNINGONCRIT_DESC",
@@ -307,7 +310,7 @@ namespace Cloudburst.Cores
                     ItemTag.Utility,
                     ItemTag.Healing
             };
-            RegisterItem(barrierOnLevelIndex, new ItemDef
+            RegisterItem(new ItemDef
             {
                 canRemove = true,
                 descriptionToken = "ITEM_BARRIERONLEVEL_DESC",
@@ -327,7 +330,7 @@ namespace Cloudburst.Cores
                     ItemTag.Utility,
                     ItemTag.AIBlacklist
             };
-            RegisterItem(experienceOnHitIndex, new ItemDef
+            RegisterItem(new ItemDef
             {
                 canRemove = true,
                 descriptionToken = "ITEM_EXPERIENCEONHIT_DESC",
@@ -347,7 +350,7 @@ namespace Cloudburst.Cores
                     ItemTag.Damage,
                     ItemTag.AIBlacklist
             };
-            RegisterItem(lemdogIndex, new ItemDef
+            RegisterItem(new ItemDef
             {
                 canRemove = true,
                 descriptionToken = "ITEM_LEMDOG_DESC",
@@ -367,7 +370,7 @@ namespace Cloudburst.Cores
                     ItemTag.Utility,
                     ItemTag.AIBlacklist
             };
-            RegisterItem(moneyOnHealIndex, new ItemDef
+            RegisterItem(new ItemDef
             {
                 canRemove = true,
                 descriptionToken = "ITEM_BLOODTESTER_DESC",
@@ -387,7 +390,7 @@ namespace Cloudburst.Cores
                     ItemTag.Utility,
                     ItemTag.AIBlacklist
             };
-            RegisterItem(extendEnemyBuffDurationIndex, new ItemDef
+            RegisterItem(new ItemDef
             {
                 canRemove = true,
                 descriptionToken = "ITEM_EXTENDEDENEMYBUFFDURATIOM_DESC",
@@ -400,6 +403,26 @@ namespace Cloudburst.Cores
                 pickupToken = "ITEM_EXTENDEDENEMYBUFFDURATIOM_PICKUP",
                 tags = extendEnemyBuffDurationTags,
                 tier = ItemTier.Tier2,
+                unlockableName = ""
+            });
+            ItemTag[] redSkateboardTags = new ItemTag[2]
+{
+                    ItemTag.Utility,
+                    ItemTag.AIBlacklist
+};
+            RegisterItem(new ItemDef
+            {
+                canRemove = true,
+                //descriptionToken = "ITEM_EXTENDEDENEMYBUFFDURATIOM_DESC",
+                hidden = false,
+                loreToken = "",
+                name = "RedSkateboard",
+                //nameToken = "ITEM_EXTENDEDENEMYBUFFDURATIOM_NAME",
+                //pickupIconPath = "@Cloudburst:Assets/Items/Lemdog/LemDog_TexIcon.png",
+                //pickupModelPath = "@Cloudburst:Assets/Items/Lemdog/MDLLemDog.prefab",
+                //pickupToken = "ITEM_EXTENDEDENEMYBUFFDURATIOM_PICKUP",
+                tags = redSkateboardTags,
+                tier = ItemTier.Tier3,
                 unlockableName = ""
             });
             Hook();
@@ -463,9 +486,13 @@ namespace Cloudburst.Cores
             LanguageAPI.Add("ITEM_EXTENDEDENEMYBUFFDURATIOM_NAME", "Magican's Earrings");
             LanguageAPI.Add("ITEM_EXTENDEDENEMYBUFFDURATIOM_DESC", "Extend <style=cIsUtility>positive buffs applied to you</style> by 2<style=cStack>(+1 per stack)</style> seconds.");
             LanguageAPI.Add("ITEM_EXTENDEDENEMYBUFFDURATIOM_PICKUP", "Extend positive buff duration.");
+
+            LanguageAPI.Add("ITEM_REDSKATEBOARD_NAME", "Red Skateboard");
+            LanguageAPI.Add("ITEM_REDSKATEBOARD_DESC", "<style=cIsUtility>Sprint</style> during attacks where you wouldn't be able to."); //by 2<style=cStack>(+1 per stack)</style> seconds.");
+            LanguageAPI.Add("ITEM_REDSKATEBOARD_PICKUP", "Sprint while attacking.");
         }
 
-        protected internal void RegisterItem(ItemIndex itemIndex, ItemDef itemDef)
+        protected internal void RegisterItem(ItemDef itemDef)
         {
             var internalName = itemDef.name;
             var upperName = internalName.ToUpper(CultureInfo.InvariantCulture);
@@ -473,7 +500,7 @@ namespace Cloudburst.Cores
             {
                 itemDef.nameToken = string.Format(CultureInfo.InvariantCulture, "ITEM_{0}_NAME", upperName);
             }
-            if (itemDef.descriptionToken == null)
+            if (itemDef.descriptionToken == null)   
             {
                 itemDef.descriptionToken = string.Format(CultureInfo.InvariantCulture, "ITEM_{0}_DESC", upperName);
             }
@@ -530,6 +557,12 @@ namespace Cloudburst.Cores
                 case "ExtendedEnemyBuffDuration":
                     extendEnemyBuffDurationIndex = ItemAPI.Add(customItem);
                     break;
+                case "RedSkateboard":
+                    skateboardIndex = ItemAPI.Add(customItem);
+                    break;
+                    default:
+                    LogCore.LogF("Unregistered item!");
+                    break;
             }
         }
 
@@ -549,10 +582,21 @@ namespace Cloudburst.Cores
 
         private void CharacterBody_OnInventoryChanged(On.RoR2.CharacterBody.orig_OnInventoryChanged orig, CharacterBody self)
         {
-            orig(self);
             //lol
-            if (false == true) {
-            }
+            if (self) {
+                if (self.inventory) {
+                    var inventory = self.inventory;
+                    var skateboardCount = inventory.GetItemCount(skateboardIndex);
+                    if (skateboardCount > 0) {
+                        var skillLocator = self.skillLocator;
+                        if (skillLocator) {
+                            skillLocator.primary.skillDef.noSprint = false;
+                            LogCore.LogI("applied!");
+                        }
+                    }
+                }
+            } 
+            orig(self);
         }
 
         private void CharacterBody_AddTimedBuff(On.RoR2.CharacterBody.orig_AddTimedBuff orig, CharacterBody self, BuffIndex buffType, float duration)

@@ -67,7 +67,7 @@
     <Compile Include="Cores\States\HAND\Home.cs" />
     <Compile Include="Cores\States\HAND\HomeRun.cs" />
     <Compile Include="Cores\QOLCore.cs" />
-    <Compile Include="Cores\ModificationCore.cs" />
+    <Compile Include="Cores\CommandoCore.cs" />
     <Compile Include="Cores\Components\ShockwaveComponent.cs" />
     <Compile Include="Cores\Components\ExtendedProjectileOverlapAttack.cs" />
     <Compile Include="Cores\Components\DroneSkillDef.cs" />

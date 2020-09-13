@@ -8,12 +8,15 @@ namespace Cloudburst.Cores
 {
     public sealed class SipSipCore
     {
+        public static SipSipCore instance;
+
         private GameObject sipSipBody;
         private GameObject sipSipMaster;
         public static int sipSipIndex;
         public SipSipCore() => BuildSipsip();
    
         private void BuildSipsip() {
+            instance = this;
             LogCore.LogI("Initializing Core: " + base.ToString());
 
             sipSipBody = Resources.Load<GameObject>("prefabs/characterbodies/ScavLunar1Body").InstantiateClone("ScavLunar5Body", true);

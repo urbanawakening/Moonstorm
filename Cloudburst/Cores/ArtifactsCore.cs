@@ -10,8 +10,11 @@ using UnityEngine;
 
 namespace Cloudburst.Cores
 {
+    //TODO:
+    //never release
     class ArtifactsCore
     {
+        public static ArtifactsCore instance;
         protected ArtifactDef smallDef;
         protected ArtifactDef massDef;
         public ArtifactsCore() => RegisterArtifacts();
@@ -19,6 +22,8 @@ namespace Cloudburst.Cores
 
         protected void RegisterArtifacts() {
             LogCore.LogI("Initializing Core: " + base.ToString());
+            instance = this;
+
             ArtifactCatalog.getAdditionalEntries += delegate (List<ArtifactDef> artifactDefs) {
                 artifactDefs.Add(ArtifactofDiminutive());
                 artifactDefs.Add(ArtifactofMass());

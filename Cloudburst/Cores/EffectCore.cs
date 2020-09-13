@@ -5,11 +5,15 @@ namespace Cloudburst.Cores
 {
     class EffectCore
     {
+        public static EffectCore instance;
+
         public static GameObject HANDRetrivalOrb;
         public EffectCore() => Effects();
 
         protected void Effects() {
             LogCore.LogI("Initializing Core: " + base.ToString());
+            instance = this;
+
             CreateNewEffects();
             Repair();
         }

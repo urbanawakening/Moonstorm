@@ -13,11 +13,15 @@ namespace Cloudburst.Cores
 {
     public class CommandoCore
     {
+        public static CommandoCore instance;
+
         public static GameObject collectorObject;
 
         public CommandoCore() => Commando();
 
         protected void Commando() {
+            instance = this;
+
             LogCore.LogI("Initializing Core: " + base.ToString());
 
             var commandoBody = Resources.Load<GameObject>("prefabs/characterbodies/CommandoBody");

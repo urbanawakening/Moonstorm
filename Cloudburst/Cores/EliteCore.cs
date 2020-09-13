@@ -8,6 +8,8 @@ namespace Cloudburst.Cores
 {
     class EliteCore
     {
+        public static EliteCore instance;
+
         //TODO:
         //Implement Lunar elites.
         //Figure out the color issue.
@@ -34,6 +36,7 @@ namespace Cloudburst.Cores
 
         protected internal void RegisterElites() {
             LogCore.LogI("Initializing Core: " + base.ToString());
+            instance = this;
 
             Void();
             War();
