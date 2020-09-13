@@ -1,4 +1,5 @@
-﻿using Cloudburst.Cores.States.REX;
+﻿using Cloudburst.Cores.Components;
+using Cloudburst.Cores.States.REX;
 using EntityStates;
 using EntityStates.Treebot.Weapon;
 using R2API;
@@ -19,10 +20,16 @@ namespace Cloudburst.Cores
             protected void REX()
             {
                 instance = this;
+
+                
                 var healingProjectile = Resources.Load<GameObject>("prefabs/projectiles/SyringeProjectileHealing");
                 var healingComponent = healingProjectile.GetComponent<ProjectileHealOwnerOnDamageInflicted>();
                 var rexBody = Resources.Load<GameObject>("prefabs/characterbodies/TreebotBody");
                 var skillLocator = rexBody.GetComponent<SkillLocator>();
+
+                //uhhh no
+                //rexBody.AddComponent<EnableGoldAffixEffect>().EnableGoldAffix();
+                   
 
                 var skillFamily = skillLocator.special.skillFamily;
 

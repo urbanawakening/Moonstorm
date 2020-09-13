@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using R2API;
+using RoR2;
 
 namespace Cloudburst.Cores
 {
@@ -27,11 +28,19 @@ namespace Cloudburst.Cores
         protected void CreateNewEffects() {
             //all that glitters dies here
 
-            HANDRetrivalOrb = Resources.Load<GameObject>("Prefabs/Effects/OrbEffects/InfusionOrbEffect").InstantiateClone("HANDDroneOrbEffect", false);
-            var core = HANDRetrivalOrb.transform.Find("VFX/Core");
-            var coreRenderer = core.GetComponent<Renderer>();
+            HANDRetrivalOrb = Resources.Load<GameObject>("Prefabs/Effects/OrbEffects/TreePoisonDartOrbEffect").InstantiateClone("HANDDroneOrbEffect", false);
 
-            coreRenderer.material = Resources.Load<Material>("materials/matGrandparentMeleeSwipe");
+            var trail = HANDRetrivalOrb.transform.Find("TrailParent/Trail");
+            if (trail) {
+                trail.GetComponent<Renderer>().material = Resources.Load<Material>("Materials/matLunarGolemShield");
+            }
+
+            EffectAPI.AddEffect(HANDRetrivalOrb);
+
+            //var core = HANDRetrivalOrb.transform.Find("VFX/Core");
+            //var coreRenderer = core.GetComponent<Renderer>();
+
+            //coreRenderer.material = Resources.Load<Material>("materials/matGrandparentMeleeSwipe");
 
 
             //var trail = orbEffect.transform.Find("TrailParent/Trail");

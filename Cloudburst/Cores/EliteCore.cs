@@ -1,8 +1,11 @@
-﻿using R2API;
+﻿using Cloudburst.Cores.Components;
+using R2API;
 using R2API.Utils;
 using RoR2;
+using System;
 using UnityEngine;
 using UnityEngine.Networking;
+using static RoR2.CombatDirector;
 
 namespace Cloudburst.Cores
 {
@@ -34,7 +37,8 @@ namespace Cloudburst.Cores
 
         public EliteCore() => RegisterElites();
 
-        protected internal void RegisterElites() {
+        protected internal void RegisterElites()
+        {
             LogCore.LogI("Initializing Core: " + base.ToString());
             instance = this;
 
@@ -45,8 +49,6 @@ namespace Cloudburst.Cores
             On.RoR2.CharacterBody.OnInventoryChanged += CharacterBody_OnInventoryChanged;
             On.RoR2.GlobalEventManager.OnHitEnemy += GlobalEventManager_OnHitEnemy;
             On.RoR2.CharacterBody.RecalculateStats += CharacterBody_RecalculateStats;
-
-            //LogCore.LogM("The storm changes the landscape...");
         }
 
         private void CharacterBody_RecalculateStats(On.RoR2.CharacterBody.orig_RecalculateStats orig, CharacterBody self)
@@ -112,20 +114,25 @@ namespace Cloudburst.Cores
 
                 if (self.HasBuff(tarIndex))
                 {
-                    if (self.gameObject.GetComponent<CharacterModel>())
+                    Transform modelBaseTransform = self.modelLocator.modelBaseTransform;
+                    if (modelBaseTransform)
                     {
-                        ModelLocator locator = self.gameObject.GetComponent<ModelLocator>();
-                        if (locator && locator.modelTransform)
-                        {
-                            Transform modelTransform = locator.modelTransform;
-                            TemporaryOverlay temporaryOverlay = modelTransform.gameObject.AddComponent<TemporaryOverlay>();
-                            temporaryOverlay.duration = 999999;
-                            temporaryOverlay.animateShaderAlpha = true;
-                            temporaryOverlay.alphaCurve = AnimationCurve.EaseInOut(0f, 1f, 1f, 0f);
-                            temporaryOverlay.destroyComponentOnEnd = true;
-                            temporaryOverlay.originalMaterial = CharacterModel.clayGooMaterial;
-                            temporaryOverlay.AddToCharacerModel(modelTransform.GetComponent<CharacterModel>());
-                        };
+                        LogCore.LogD("hello");
+                        EnableGoldAffixEffect gold = self.gameObject.AddComponent<EnableGoldAffixEffect>();
+                        if (!gold.isGoldEffectEnabled) {
+                            gold.EnableGoldAffix();
+                        }
+                        //Legacy
+                        /*var characterModel = modelBaseTransform.GetComponent<CharacterModel>();
+
+                        TemporaryOverlay temporaryOverlay = modelBaseTransform.gameObject.AddComponent<TemporaryOverlay>();
+                        temporaryOverlay.duration = 9000000f;
+                        temporaryOverlay.animateShaderAlpha = true;
+                        temporaryOverlay.alphaCurve = AnimationCurve.EaseInOut(0f, 1f, 9000000f, 1f);
+                        temporaryOverlay.destroyComponentOnEnd = false;
+                        temporaryOverlay.originalMaterial = CharacterModel.clayGooMaterial;
+
+                        temporaryOverlay.AddToCharacerModel(characterModel);*/
                     }
                 }
             }
@@ -163,6 +170,16 @@ namespace Cloudburst.Cores
                 color = buffDef.buffColor,
             };
 
+            /*EliteTierDef def = new EliteTierDef() {
+                costMultiplier = 6,
+                damageBoostCoefficient = 4,
+                healthBoostCoefficient = 2,
+                isAvailable = new Func<bool>(KinIsntActive)
+
+            };
+
+            EliteAPI.AddCustomEliteTier(def);*/
+
             var customEquipment = new CustomEquipment(equipmentDef, new ItemDisplayRule[0]);
             var customBuff = new CustomBuff(buffDef);
             var customElite = new CustomElite(eliteDef, 2);
@@ -179,8 +196,9 @@ namespace Cloudburst.Cores
 
             //and finally, add a prefix
             LanguageAPI.Add(eliteDef.modifierToken, "Void {0}");
-            LanguageAPI.Add(equipmentDef.pickupToken, "Void's Embrace");
-            LanguageAPI.Add(equipmentDef.descriptionToken, "Become an aspect of Void");
+            LanguageAPI.Add(equipmentDef.nameToken, "Void's Embrace");
+            LanguageAPI.Add(equipmentDef.pickupToken, "Become an aspect of Void");
+            LanguageAPI.Add(equipmentDef.descriptionToken, "");
         }
 
         protected internal void Lunar()
@@ -224,10 +242,15 @@ namespace Cloudburst.Cores
             equipmentDef.passiveBuff = lunarIndex;
             buffDef.eliteIndex = lunarElite;
 
-            LanguageAPI.Add(eliteDef.modifierToken, "Moon {0}");
-            LanguageAPI.Add(equipmentDef.pickupToken, "Moon's Embrace");
-            LanguageAPI.Add(equipmentDef.descriptionToken, "Become an aspect of the Moon");
+            LanguageAPI.Add(eliteDef.modifierToken, "Lunar {0}");
+            LanguageAPI.Add(equipmentDef.nameToken, "Lunar Embrace");
+            LanguageAPI.Add(equipmentDef.pickupToken, "Become an aspect of the Moon");
+            LanguageAPI.Add(equipmentDef.descriptionToken, "");
 
+        }
+
+        protected internal bool KinIsntActive() {
+            return !RunArtifactManager.instance.IsArtifactEnabled(RoR2Content.Artifacts.eliteOnlyArtifactDef);
         }
 
         protected internal void War()
@@ -286,8 +309,9 @@ namespace Cloudburst.Cores
             buffDef.eliteIndex = warElite;
 
             LanguageAPI.Add(eliteDef.modifierToken, "War {0}");
-            LanguageAPI.Add(equipmentDef.pickupToken, "War's Embrace");
-            LanguageAPI.Add(equipmentDef.descriptionToken, "Become an aspect of War");
+            LanguageAPI.Add(equipmentDef.nameToken, "War's Embrace");
+            LanguageAPI.Add(equipmentDef.pickupToken, "Become an aspect of War");
+            LanguageAPI.Add(equipmentDef.descriptionToken, "");
             warBubble = Resources.Load<GameObject>("Prefabs/NetworkedObjects/WarBannerWard").InstantiateClone("AffixWarWard", true);
             BuffWard ward = warBubble.GetComponent<BuffWard>();
             ward.buffType = warFriendlyBuffIndex;
@@ -343,8 +367,9 @@ namespace Cloudburst.Cores
             buffDef.eliteIndex = tarElite;
 
             LanguageAPI.Add(eliteDef.modifierToken, "Tarborne {0}");
-            LanguageAPI.Add(equipmentDef.pickupToken, "Their Embrace");
-            LanguageAPI.Add(equipmentDef.descriptionToken, "Become an aspect of Tar");
+            LanguageAPI.Add(equipmentDef.nameToken, "Their Embrace");
+            LanguageAPI.Add(equipmentDef.pickupToken, "Become an aspect of Tar");
+            LanguageAPI.Add(equipmentDef.descriptionToken, "");
         }
     }
     public class AffixWarBehavior : CharacterBody.ItemBehavior

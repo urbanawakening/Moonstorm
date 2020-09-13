@@ -62,7 +62,8 @@ namespace Cloudburst.Cores
                 locator = characterBody.skillLocator;
             }
 
-            if (GetOrbEffect())
+            var effect = GetOrbEffect();
+            if (effect)
             {
                 EffectData effectData = new EffectData
                 {
@@ -71,7 +72,7 @@ namespace Cloudburst.Cores
                     genericFloat = duration
                 };
                 effectData.SetHurtBoxReference(target);
-                EffectManager.SpawnEffect(GetOrbEffect(), effectData, true);
+                EffectManager.SpawnEffect(effect, effectData, true);
             }
 
             base.Begin();
