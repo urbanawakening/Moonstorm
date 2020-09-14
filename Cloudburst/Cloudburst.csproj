@@ -39,9 +39,10 @@
     <Compile Include="Cores\BuffCore.cs" />
     <Compile Include="Cores\AncientWispCore.cs" />
     <Compile Include="Cores\ArtifactsCore.cs" />
-    <Compile Include="Cores\Components\Class1.cs" />
+    <Compile Include="Cores\Components\EnableGoldAffix.cs" />
     <Compile Include="Cores\Components\ProgressTracker.cs" />
-    <Compile Include="Cores\WIPCore.cs" />
+    <Compile Include="Cores\States\Huntress\FireArrow.cs" />
+    <Compile Include="Cores\HuntressCore.cs" />
     <Compile Include="Cores\RexCore.cs" />
     <Compile Include="Cores\DebuggingCore.cs" />
     <Compile Include="Cores\Components\OverclockCombo.cs" />

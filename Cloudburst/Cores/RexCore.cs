@@ -64,18 +64,18 @@ namespace Cloudburst.Cores
                 LanguageAPI.Add(harvest.skillNameToken, "DIRECTIVE: HARVEST");
                 LanguageAPI.Add(harvest.skillDescriptionToken, "Place a <style=cIsUtility>harvester</style> that deals <style=cIsDamage>250%</style> and <style=cIsDamage>Weakens</style> per attempted harvest.");
 
-                var variant = new SkillFamily.Variant()
-                {
-                    skillDef = harvest,
-                    unlockableName = "",
-                };
+            var variant = new SkillFamily.Variant()
+            {
+                skillDef = harvest,
+                unlockableName = "",
+            };
 
-                var length = skillFamily.variants.Length;
+            var length = skillFamily.variants.Length;
 
-                Array.Resize(ref skillFamily.variants, length + 1);
-                skillFamily.variants[length] = variant;
+            Array.Resize(ref skillFamily.variants, length + 1);
+            skillFamily.variants[length] = variant;
 
-                healingComponent.fractionOfDamage = 0.3f;
+            healingComponent.fractionOfDamage = 0.3f;
 
                 CreateCollector();
             }

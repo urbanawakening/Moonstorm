@@ -77,6 +77,7 @@ namespace Cloudburst
         private SipSipCore sipsipCore;
         private ArchaicWispCore archwispCore;
         private RexCore rexCore;
+        private HuntressCore wipCore;
         //shut up vs
         //private ArtifactsCore artifactCore;
         #endregion
@@ -175,6 +176,9 @@ namespace Cloudburst
                 if (EnableRex.Value)
                 {
                     rexCore = new RexCore();
+                }
+                if (EnableWIP.Value) {
+                    wipCore = new HuntressCore();
                 }
 
                 //and thus
