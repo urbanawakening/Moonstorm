@@ -302,7 +302,7 @@ namespace Cloudburst.Cores
                 pickupModelPath = "@Cloudburst:Assets/Items/LightningEye/MDLLightningEye.prefab", //
                 pickupToken = "ITEM_LIGHTNINGONCRIT_PICKUP",
                 tags = lightningOnCritTags,
-                tier = ItemTier.Tier2,
+                tier = ItemTier.Tier1,
                 unlockableName = ""
             });
             ItemTag[] barrierOnLevelTags = new ItemTag[2]
@@ -578,6 +578,7 @@ namespace Cloudburst.Cores
             On.RoR2.HealthComponent.Heal += HealthComponent_Heal;
             On.RoR2.CharacterBody.AddTimedBuff += CharacterBody_AddTimedBuff;
             On.RoR2.CharacterBody.OnInventoryChanged += CharacterBody_OnInventoryChanged;
+            On.RoR2.HealthComponent.TakeDamage += HealthComponent_TakeDamage;
         }
 
         private void CharacterBody_OnInventoryChanged(On.RoR2.CharacterBody.orig_OnInventoryChanged orig, CharacterBody self)
@@ -682,8 +683,8 @@ namespace Cloudburst.Cores
                             float exp = 0.1f + (experienceOnHitCount * 0.4f);
                             TeamManager.instance.GiveTeamExperience(attackerBody.teamComponent.teamIndex, (ulong)(uint)exp);
                         }
-                        if (self.combinedHealthFraction < 5.0f && lightningOnCritCOunt > 0) {
-                            DotController.InflictDot(self.gameObject, attacker, DoTCore.instance.detritive, 5, lightningOnCritCOunt);
+                        if (self.combinedHealthFraction < .6f && lightningOnCritCOunt > 0) {
+                            DotController.InflictDot(self.gameObject, attacker, DoTCore.instance.detritive, 5, 1);
                         }
                     }
                 }
