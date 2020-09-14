@@ -27,8 +27,8 @@ namespace Cloudburst
         "UnlockablesAPI",
         "DotAPI",
         "EliteAPI",
+        //gotta stop using this one, orbCore should be able to support itself.
         "OrbAPI"
-
     })]
 
     public class Cloudburst : BaseUnityPlugin
@@ -79,6 +79,7 @@ namespace Cloudburst
         private ArchaicWispCore archwispCore;
         private RexCore rexCore;
         private HuntressCore wipCore;
+        private AchievementCore achiveCore;
         //shut up vs
         //private ArtifactsCore artifactCore;
         #endregion
@@ -95,6 +96,7 @@ namespace Cloudburst
         public static ConfigEntry<bool> EnableItems;
         public static ConfigEntry<bool> EnableEquipment;
         public static ConfigEntry<bool> EnableWIP;
+        public static ConfigEntry<bool> EnableUnlockAll;
         public static ConfigEntry<bool> Enabled;
         #endregion
         public Cloudburst()
@@ -123,7 +125,8 @@ namespace Cloudburst
             EnableEngineer = Config.Bind("Cloudburst :: Engineer", "Enabled", true, "Enables Cloudburst's modifications to Engineer. Set to false to disable Cloudburst's modifications to Engineer.");
             EnableItems = Config.Bind("Cloudburst :: Items", "Enabled", true, "Enables Cloudburst's items. Set to false to disable Cloudburst's items.");
             EnableEquipment = Config.Bind("Cloudburst :: Equipment", "Enabled", true, "Enables Cloudburst's equipment. Set to false to disable Cloudburst's equipment.");
-            EnableWIP = Config.Bind("Cloudburst :: WIP", "Enabled", true, "WARNING: CONTENT ADDED BY THIS MODULE MAY NOT BE STABLE. ENABLE AT YOUR OWN RISK! Enables Cloudburst's WIP (work in progress) content. Set to false to disable Cloudburst's WIP content.");
+            EnableWIP = Config.Bind("Cloudburst :: WIP", "Enabled", false, "WARNING: CONTENT ADDED BY THIS MODULE MAY NOT BE STABLE. ENABLE AT YOUR OWN RISK! Enables Cloudburst's WIP (work in progress) content. Set to false to disable Cloudburst's WIP content.");
+            EnableUnlockAll = Config.Bind("Cloudburst :: Achivements", "Enabled", true, "Enables Cloudburst's unlocks for unlockable content. Set to false to unlock all of Cloudburst's unlockable content.");
             Enabled = Config.Bind("Cloudburst", "Enabled", true, "Enables the mod. Set to false to disable the mod entirely.");
         }
 
@@ -139,6 +142,7 @@ namespace Cloudburst
                 effectCore = new EffectCore();
                 dotCore = new DoTCore();
 
+                achiveCore = new AchievementCore();
                 //got this feeling
                 //i'm losing you
                 //it's got me reeling

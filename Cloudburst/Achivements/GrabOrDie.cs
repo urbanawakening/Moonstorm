@@ -2,8 +2,9 @@
 using RoR2;
 using System;
 
-namespace Cloudburst.Achievements {
-    public class GrabOrDie : ModdedUnlockableAndAchievement<VanillaSpriteProvider>
+namespace Cloudburst.Achievements
+{
+    public class GrabOrDie : ModdedUnlockableAndAchievement<CustomSpriteProvider>
     {
         // All of the strings defined here must be unique in order to interop with both the base game and other mods.
         // For that reason, you should always use something of the format "Author_Mod_Achievement_..."
@@ -31,7 +32,11 @@ namespace Cloudburst.Achievements {
         public override String UnlockableNameToken { get; } = "CLOUDBURST_GRABORDIE_UNLOCKABLE_NAME";
 
         // The sprite provider.
-        protected override VanillaSpriteProvider SpriteProvider { get; } = new VanillaSpriteProvider("VANILLA PATH");
+        protected override CustomSpriteProvider SpriteProvider { get; } = new CustomSpriteProvider("@Cloudburst:Assets/MiscIcons/texTreebotHarvester.png");
+
+        private PlayerCharacterMasterController currentMasterController;
+
+        private Inventory inv;
 
         public override void OnInstall()
         {
@@ -46,6 +51,8 @@ namespace Cloudburst.Achievements {
             base.localUser.onMasterChanged -= this.OnMasterChanged;
             base.OnUninstall();
         }
+
+
 
         private void SetupMasterController(PlayerCharacterMasterController anotherMasterController)
         {
@@ -84,9 +91,5 @@ namespace Cloudburst.Achievements {
         {
             this.SetupMasterController(base.localUser.cachedMasterController);
         }
-
-        private PlayerCharacterMasterController currentMasterController;
-
-        private Inventory inv;
     }
 }

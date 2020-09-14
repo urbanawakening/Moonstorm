@@ -16,7 +16,7 @@ namespace Cloudburst.Cores
         protected internal BuffIndex droneIndex;
         protected internal BuffIndex surgeIndex;
         protected internal BuffIndex cleanIndex;
-        protected internal BuffIndex huntersMarkIndex;
+        protected internal BuffIndex detritiveIndex;
         protected internal BuffIndex greaterBannerIndex;
 
         internal bool Loaded { get; private set; } = false;
@@ -81,7 +81,7 @@ namespace Cloudburst.Cores
                 name = "Sparkle"
             });
 
-            RegisterBuff(huntersMarkIndex, new BuffDef
+            RegisterBuff(detritiveIndex, new BuffDef
             {
                 buffColor = new Color(0.3764706f, 0.84313726f, 0.8980392f),
                 buffIndex = BuffIndex.Count,
@@ -89,7 +89,7 @@ namespace Cloudburst.Cores
                 eliteIndex = EliteIndex.None,
                 iconPath = "Textures/BuffIcons/texBuffFullCritIcon",
                 isDebuff = false,
-                name = "Marked"
+                name = "Infested"
             });
             RegisterBuff(greaterBannerIndex, new BuffDef()
             {
@@ -197,8 +197,8 @@ namespace Cloudburst.Cores
                 case "Scrap":
                     scrapIndex = BuffAPI.Add(customBuff);
                     break;
-                case "Marked":
-                    huntersMarkIndex = BuffAPI.Add(customBuff);
+                case "Infested":
+                    detritiveIndex = BuffAPI.Add(customBuff);
                     break;
                 case "GreaterWarbanner":
                     greaterBannerIndex = BuffAPI.Add(customBuff);
@@ -207,7 +207,7 @@ namespace Cloudburst.Cores
                 //throw new System.NotImplementedException("not implemented yet!");
                 default:
                     //feel my haunted lust
-                    LogCore.LogF(string.Format("{0} doesn't have a switch case!", buffDef));
+                    LogCore.LogF(string.Format("{0} doesn't have a case!", buffDef));
                     break;
             }
         }

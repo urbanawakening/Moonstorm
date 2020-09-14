@@ -138,7 +138,7 @@ namespace Cloudburst.Cores
                 loreToken = "ITEM_ITEMONCHAMPIONKILL_LORE",
                 name = "ItemChampionOnKill",
                 nameToken = "ITEM_ITEMONCHAMPIONKILL_NAME",
-                //pickupIconPath = pickUpIconPath,
+                //pickupIconPath = pickUpIconPath, 
                 pickupModelPath = "@Cloudburst:Assets/Items/Grinder/MDLGrinder.prefab",
                 pickupToken = "ITEM_ITEMONCHAMPIONKILL_PICKUP",
                 tags = itemChampionOnKillTags,
@@ -203,7 +203,7 @@ namespace Cloudburst.Cores
                 pickupToken = "ITEM_CLOAKBUFFONINTERACTION_PICKUP",
                 tags = cloakOnInteractionTags,
                 tier = ItemTier.Tier2,
-                unlockableName = ""//"CLOUDBURST_GRABORDIE_REWARD_ID"
+                unlockableName = AchievementCore.GetUnlockableString("GrabOrDie")
             });
             ItemTag[] itemOnLevelUpTags = new ItemTag[2]
             {
@@ -343,7 +343,7 @@ namespace Cloudburst.Cores
                 pickupToken = "ITEM_EXPERIENCEONHIT_PICKUP",
                 tags = experienceOnHitTags,
                 tier = ItemTier.Tier1,
-                unlockableName = ""
+                unlockableName = AchievementCore.GetUnlockableString("HitLevelCap")
             });
             ItemTag[] betterCritsOnLowHealthTags = new ItemTag[2]
             {
@@ -382,7 +382,7 @@ namespace Cloudburst.Cores
                 ////pickupModelPath = "@Cloudburst:Assets/Items/Lemdog/MDLLemDog.prefab",
                 pickupToken = "ITEM_BLOODTESTER_PICKUP",
                 tags = moneyOnHealTags,
-                tier = ItemTier.Tier1,
+                tier = ItemTier.Tier2,
                 unlockableName = ""
             });
             ItemTag[] extendEnemyBuffDurationTags = new ItemTag[2]
@@ -467,9 +467,9 @@ namespace Cloudburst.Cores
             LanguageAPI.Add("ITEM_BARRIERONLEVEL_DESC", "Gain a <style=cIsHealing>temporary barrier</style> on level up for <style=cIsHealing>30 health</style> <style=cStack>(+5 per stack)</style>.");
             LanguageAPI.Add("ITEM_BARRIERONLEVEL_PICKUP", "Gain barrier on level up");
 
-            LanguageAPI.Add("ITEM_LIGHTNINGONCRIT_NAME", "Broken Orbital Probe"); //model(??)
-            LanguageAPI.Add("ITEM_LIGHTNINGONCRIT_DESC", "20% chance to <style=cIsDamage>strike lightning</style> on critical hits that does 350% <style=cStack>(+25% per stack)</style> damage.");
-            LanguageAPI.Add("ITEM_LIGHTNINGONCRIT_PICKUP", "Chance to strike lightning on critical hits.");
+            LanguageAPI.Add("ITEM_LIGHTNINGONCRIT_NAME", "Detritive Trematode"); //model(??)
+            LanguageAPI.Add("ITEM_LIGHTNINGONCRIT_DESC", "Enemies with low health recieve a <style=cIsDamage>damage over time</style> that deals 100%<style=cStack>(+100% per stack)</style> damage.");
+            LanguageAPI.Add("ITEM_LIGHTNINGONCRIT_PICKUP", "Low health enemies recieve damage over time.");
 
             LanguageAPI.Add("ITEM_EXPERIENCEONHIT_NAME", "Glass Harvester");
             LanguageAPI.Add("ITEM_EXPERIENCEONHIT_DESC", "Gain 0.5 <style=cStack>(+0.4 per stack)</style> <style=cIsUtility>experience</style> on hit.");
@@ -676,10 +676,14 @@ namespace Cloudburst.Cores
                     {
                         Inventory inv = attackerBody.inventory;
                         int experienceOnHitCount = inv.GetItemCount(experienceOnHitIndex);
+                        int lightningOnCritCOunt = inv.GetItemCount(lightningOnCritIndex);
                         if (experienceOnHitCount > 0 && attackerBody.teamComponent)
                         {
                             float exp = 0.1f + (experienceOnHitCount * 0.4f);
                             TeamManager.instance.GiveTeamExperience(attackerBody.teamComponent.teamIndex, (ulong)(uint)exp);
+                        }
+                        if (self.combinedHealthFraction < 5.0f && lightningOnCritCOunt > 0) {
+                            DotController.InflictDot(self.gameObject, attacker, DoTCore.instance.detritive, 5, lightningOnCritCOunt);
                         }
                     }
                 }
@@ -714,66 +718,11 @@ namespace Cloudburst.Cores
                 var masterInventory = master.inventory;
                 var healthComponent = body.healthComponent;
                 int topazLense = masterInventory.GetItemCount(barrierOnCritIndex);
-                int lightningEye = masterInventory.GetItemCount(lightningOnCritIndex);
+                //int lightningEye = masterInventory.GetItemCount(lightningOnCritIndex);
                 if (topazLense > 0 && healthComponent)
                 {
                     //oddly, this doesn't null reference
                     healthComponent.AddBarrier(7.5f + (topazLense * 2.5f));
-                }
-                if (lightningEye > 0 && body && body.gameObject && body.teamComponent)// && Util.CheckRoll(20, master))
-                {
-                    //SOMEWHERE IN HERE
-                    //IS AN EXCLUSIVE NULL REFERENCE EXCECPTION
-                    //THAT I CAN'T FIND
-                    try {
-                        HealthComponent com = PickRandomTarget(body.transform.position, body.teamComponent.teamIndex, 25, body.gameObject).healthComponent;
-                        if (com != null) {
-                            Vector3 pos = com.transform.position;
-                            //add another fucking check
-                            if (pos != null && body && body.teamComponent && body.gameObject)
-                            {
-                                BlastAttack attack = new BlastAttack
-                                {
-                                    attacker = body.gameObject,
-                                    attackerFiltering = AttackerFiltering.Default,
-                                    baseDamage = 1 + (2f * lightningEye) * body.damage,
-                                    baseForce = 500,
-                                    bonusForce = new Vector3(0, 0, 0),
-                                    crit = false,
-                                    damageColorIndex = DamageColorIndex.Default,
-                                    damageType = DamageType.Stun1s,
-                                    falloffModel = BlastAttack.FalloffModel.Linear,
-                                    //impactEffect = EffectIndex.Invalid,
-                                    inflictor = body.gameObject,
-                                    losType = BlastAttack.LoSType.NearestHit,
-                                    position = pos,
-                                    //COULD IT POSSIBLY
-                                    //BE THE FUCKING PROC CHAIN?
-                                    //???
-                                    //NOPE.
-                                    procChainMask = default,
-                                    procCoefficient = 0,
-                                    radius = 15,
-                                    teamIndex = body.teamComponent.teamIndex
-                                };
-                                EffectManager.SpawnEffect(ChargeMeteor.meteorEffect, new EffectData {
-                                    origin = pos,
-                                    scale = 15
-                                }, true);
-                                if (com && pos != null)
-                                {
-                                    //THIS STILL FUCKING THROWS A NULL REFERENCE EXCEPTION
-                                    //AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-                                    attack.Fire();
-                                }
-                            }
-                        }
-                    }
-                    catch (Exception e) {
-                        LogCore.LogE(e);
-                        //...this doesn't help
-                        //at all
-                    }
                 }
             }
             orig(self, body, master, procCoefficient, procChainMask);

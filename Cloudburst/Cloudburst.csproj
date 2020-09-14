@@ -31,6 +31,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Achivements\HitLevelCap.cs" />
+    <Compile Include="Achivements\Paradox.cs" />
     <Compile Include="API\API.cs" />
     <Compile Include="API\ComponentHelpers.cs" />
     <Compile Include="API\LogCore.cs" />
@@ -40,6 +42,7 @@
     <Compile Include="Cores\BuffCore.cs" />
     <Compile Include="Cores\AncientWispCore.cs" />
     <Compile Include="Cores\ArtifactsCore.cs" />
+    <Compile Include="Cores\AchievementCore.cs" />
     <Compile Include="Cores\Components\EnableGoldAffix.cs" />
     <Compile Include="Cores\Components\ProgressTracker.cs" />
     <Compile Include="Cores\States\Huntress\FireArrow.cs" />

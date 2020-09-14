@@ -67,7 +67,7 @@ namespace Cloudburst.Cores
             var variant = new SkillFamily.Variant()
             {
                 skillDef = harvest,
-                unlockableName = "",
+                unlockableName = AchievementCore.GetUnlockableString("Paradox"),
             };
 
             var length = skillFamily.variants.Length;

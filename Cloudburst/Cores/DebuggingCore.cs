@@ -19,8 +19,9 @@
             return;
         }
 
-            protected void Unlockall() {
-            On.RoR2.UserProfile.HasUnlockable_string += (o, s, i) => true;
+        protected void Unlockall()
+        {
+            /*On.RoR2.UserProfile.HasUnlockable_string += (o, s, i) => true;
             On.RoR2.UserProfile.HasUnlockable_UnlockableDef += (o, s, i) => true;
             On.RoR2.UserProfile.HasSurvivorUnlocked += (o, s, i) => true;
             On.RoR2.UserProfile.HasDiscoveredPickup += (o, s, i) => true;
@@ -30,7 +31,7 @@
             On.RoR2.PreGameController.AnyUserHasUnlockable += (o, s) => true;
 
             On.RoR2.Run.IsUnlockableUnlocked += (o, s, i) => true;
-            On.RoR2.Run.DoesEveryoneHaveThisUnlockableUnlocked += (o, s, i) => true;
+            On.RoR2.Run.DoesEveryoneHaveThisUnlockableUnlocked += (o, s, i) => true;*/
         }
     }
 }
