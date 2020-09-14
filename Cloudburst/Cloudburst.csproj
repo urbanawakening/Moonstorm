@@ -34,6 +34,7 @@
     <Compile Include="API\API.cs" />
     <Compile Include="API\ComponentHelpers.cs" />
     <Compile Include="API\LogCore.cs" />
+    <Compile Include="Achivements\GrabOrDie.cs" />
     <Compile Include="Cores\ArchaicWispCore.cs" />
     <Compile Include="Cores\AssetsCore.cs" />
     <Compile Include="Cores\BuffCore.cs" />

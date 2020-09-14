@@ -13,26 +13,7 @@ using UnityEngine;
 
 namespace Cloudburst.Cores
 {
-    //this shit is a fucking failure man
-    //my computer won't charge
-    //all my art is on said computer which won't fucking charge
-    //i might've just lost months of hard work
-    //and i have no fucking money to buy a replacement
-    //or do to literally anything else with it
-    //i own a literal fucking brick
 
-    //meanwhile i have to do code for this fucking starstorm 2 thing
-    //and then do code for fucking moonfall or whatever it is
-    //because i am the only person well versed enough and with bad enough decision making to code for it
-    //this shit is a fucking failure man
-    //a literal, fucking failure.
-
-    //i have literally no one to comfort me because everyone around has such fucking hostilty towards me
-    //i don't have my dogs
-    //i don't have my fucking cats
-    //i have literally fucking nothing right
-    //fucking. nothing.
-    //my life is fucking garbage and id kill myself if i had the balls 
 
     class HuntressCore
     {

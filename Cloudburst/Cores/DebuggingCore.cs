@@ -9,11 +9,17 @@
         protected void Debug() {
             LogCore.LogI("Initializing Core: " + base.ToString());
             instance = this;
-
+            On.EntityStates.Missions.Arena.NullWard.Active.FixedUpdate += Active_FixedUpdate;
             Unlockall();
         }
 
-        protected void Unlockall() {
+        private void Active_FixedUpdate(On.EntityStates.Missions.Arena.NullWard.Active.orig_FixedUpdate orig, EntityStates.Missions.Arena.NullWard.Active self)
+        {
+            self.outer.SetNextState(new EntityStates.Missions.Arena.NullWard.Complete());
+            return;
+        }
+
+            protected void Unlockall() {
             On.RoR2.UserProfile.HasUnlockable_string += (o, s, i) => true;
             On.RoR2.UserProfile.HasUnlockable_UnlockableDef += (o, s, i) => true;
             On.RoR2.UserProfile.HasSurvivorUnlocked += (o, s, i) => true;

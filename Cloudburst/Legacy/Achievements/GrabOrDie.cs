@@ -53,19 +53,22 @@ namespace Cloudburst.Achievements
         {
             if (this.currentMasterController == anotherMasterController) return;
             if (this.inv != null) this.inv.onInventoryChanged -= this.OnInventoryChanged;
-            
+
             this.currentMasterController = anotherMasterController;
             PlayerCharacterMasterController playerCharacterMasterController = this.currentMasterController;
             Inventory anotherFuckinInv;
-            if (playerCharacterMasterController == null) {
+            if (playerCharacterMasterController == null)
+            {
                 anotherFuckinInv = null;
             }
-            else {
+            else
+            {
                 CharacterMaster master = playerCharacterMasterController.master;
                 anotherFuckinInv = (master != null) ? master.inventory : null;
             }
             this.inv = anotherFuckinInv;
-            if (this.inv != null) {
+            if (this.inv != null)
+            {
                 this.inv.onInventoryChanged += this.OnInventoryChanged;
             }
         }

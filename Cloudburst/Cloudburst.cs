@@ -1,6 +1,7 @@
 ﻿using BepInEx;
 using BepInEx.Configuration;
 using Cloudburst.Cores;
+using Cloudburst.Cores.Components;
 using Cloudburst.Cores.HAND;
 using R2API.Utils;
 using System;
@@ -102,6 +103,11 @@ namespace Cloudburst
 
             DefineConfig();
             InitializeCores();
+
+            if (!gameObject.HasComponent<ProgressTracker>() || !ProgressTracker.instance) {
+                LogCore.LogI("Bepinex object does not have a progress tracker or there is no instance of the progress tracker. Attaching now.");
+                gameObject.AddComponent<ProgressTracker>();
+            }
 
             LogCore.LogM("Cloudburst loaded!");
         }
@@ -221,6 +227,7 @@ namespace Cloudburst
 
         public void OnEnable() {
             SingletonHelper.Assign<Cloudburst>(Cloudburst.instance, this);
+            LogCore.LogI("Cloudburst instance assigned.");
             Action awake = Cloudburst.onEnable;
             if (awake == null)
             {
@@ -232,6 +239,7 @@ namespace Cloudburst
         public void OnDisable()
         {
             SingletonHelper.Unassign<Cloudburst>(Cloudburst.instance, this);
+            LogCore.LogI("Cloudburst instance unassigned.");
             Action awake = Cloudburst.onDisable;
             if (awake == null)
             {

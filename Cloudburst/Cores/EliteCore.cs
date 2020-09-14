@@ -19,6 +19,7 @@ namespace Cloudburst.Cores
         protected BuffIndex voidIndex;
         protected EquipmentIndex voidEquip;
         protected EliteIndex voidElite;
+        protected int voidTier;
 
         protected BuffIndex tarIndex;
         protected EquipmentIndex tarEquip;
@@ -117,7 +118,6 @@ namespace Cloudburst.Cores
                     Transform modelBaseTransform = self.modelLocator.modelBaseTransform;
                     if (modelBaseTransform)
                     {
-                        LogCore.LogD("hello");
                         EnableGoldAffixEffect gold = self.gameObject.AddComponent<EnableGoldAffixEffect>();
                         if (!gold.isGoldEffectEnabled) {
                             gold.EnableGoldAffix();
@@ -170,19 +170,29 @@ namespace Cloudburst.Cores
                 color = buffDef.buffColor,
             };
 
+            //this is bad, but it will have to do
+            /*bool CanVoidSpawn() {
+                return KinIsntActive() && ProgressTracker.IsVoidComplete();
+            }*/
+
+            //R2API is garbage
+            //how the fuck do you make an api so shit
+            //that it doesn't even fucking work
+            //and you have to fucking do dirty hacks for it to work
+            //fuck R2API 
             /*EliteTierDef def = new EliteTierDef() {
                 costMultiplier = 6,
                 damageBoostCoefficient = 4,
                 healthBoostCoefficient = 2,
-                isAvailable = new Func<bool>(KinIsntActive)
+                isAvailable = new Func<bool>(CanVoidSpawn)
+            };*/
 
-            };
-
-            EliteAPI.AddCustomEliteTier(def);*/
+            //voidTier = EliteAPI.AddCustomEliteTier(def);
 
             var customEquipment = new CustomEquipment(equipmentDef, new ItemDisplayRule[0]);
             var customBuff = new CustomBuff(buffDef);
-            var customElite = new CustomElite(eliteDef, 2);
+            //LogCore.LogI(voidTier);
+            var customElite = new CustomElite(eliteDef, 2); //voidTier);
 
             //set our indexes
             voidElite = EliteAPI.Add(customElite);
