@@ -47,10 +47,10 @@ namespace Cloudburst.Cores.States.REX
                     radius = 20,
                     teamIndex = projectileController.teamFilter.teamIndex,
                 }.Fire();
-                EffectManager.SpawnEffect(Resources.Load<GameObject>("prefabs/effects/impacteffects/BeetleGuardDeathImpact"), new EffectData
+                EffectManager.SpawnEffect(Resources.Load<GameObject>("prefabs/effects/omnieffect/OmniExplosionVFXTreebot"), new EffectData
                 {
                     origin = base.transform.position,
-                    scale = 20
+                    scale = 5
                 }, true);
             }
 			if (NetworkServer.active && base.fixedAge > duration)

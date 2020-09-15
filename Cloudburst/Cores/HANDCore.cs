@@ -515,9 +515,10 @@ namespace Cloudburst.Cores.HAND
         {
             LoadoutAPI.AddSkill(typeof(ChargeHomeRun));
             LoadoutAPI.AddSkill(typeof(HomeRun));
+            LoadoutAPI.AddSkill(typeof(AnimationTest));
 
             SkillDef secondarySkillDef = ScriptableObject.CreateInstance<SkillDef>();
-            secondarySkillDef.activationState = new SerializableEntityStateType(typeof(ChargeHomeRun));
+            secondarySkillDef.activationState = new SerializableEntityStateType(typeof(AnimationTest));
             secondarySkillDef.activationStateMachineName = "Weapon";
             secondarySkillDef.baseMaxStock = 1;
             secondarySkillDef.baseRechargeInterval = 3f;

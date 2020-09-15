@@ -6,7 +6,8 @@ using UnityEngine;
 
 namespace Cloudburst.Cores.States.HAND
 {
-    public class Slam : BaseSkillState {
+    public class Slam : BaseSkillState
+    {
         private float duration;
         private Transform hammerChildTransform;
 
@@ -42,13 +43,15 @@ namespace Cloudburst.Cores.States.HAND
         private OverclockComponent overclock;
         private Animator modelAnimator;
         public float charge;
-        public override void OnEnter() {
+        public override void OnEnter()
+        {
             base.OnEnter();
             this.duration = baseDuration / base.attackSpeedStat;
             modelAnimator = GetModelAnimator();
             drone = base.GetComponent<DroneComponent>();
             overclock = base.GetComponent<OverclockComponent>();
-            this.attack = new OverlapAttack() {
+            this.attack = new OverlapAttack()
+            {
                 attacker = base.gameObject,
                 attackerFiltering = AttackerFiltering.Default,
                 damage = damageCoefficient * damageStat,
@@ -66,10 +69,12 @@ namespace Cloudburst.Cores.States.HAND
                 teamIndex = base.characterBody.teamComponent.teamIndex
             };
             Transform modelTransform = base.GetModelTransform();
-            if (modelTransform) {
+            if (modelTransform)
+            {
                 this.attack.hitBoxGroup = Array.Find<HitBoxGroup>(modelTransform.GetComponents<HitBoxGroup>(), (HitBoxGroup element) => element.groupName == "Hammer");
                 ChildLocator locator = modelTransform.GetComponent<ChildLocator>();
-                if (locator) {
+                if (locator)
+                {
                     this.hammerChildTransform = locator.FindChild("SwingCenter");
                 }
             }
@@ -82,10 +87,13 @@ namespace Cloudburst.Cores.States.HAND
                 characterBody.SetAimTimer(2);
             }
         }
-        public override void FixedUpdate() {
+        public override void FixedUpdate()
+        {
             base.FixedUpdate();
-            if (GetModelAnimator() && GetModelAnimator().GetFloat("Hammer.hitBoxActive") > 0.5f) {
-                if (!hasSwung) {
+            if (GetModelAnimator() && GetModelAnimator().GetFloat("Hammer.hitBoxActive") > 0.5f)
+            {
+                if (!hasSwung)
+                {
                     float radius = characterBody.HasBuff(BuffCore.instance.overclockIndex) ? blastRadius : blastRadius * 2;
                     float force = characterBody.HasBuff(BuffCore.instance.overclockIndex) ? blastForce : blastForce * 2;
                     float dmg = blastDamageCoefficient + charge;
@@ -94,7 +102,7 @@ namespace Cloudburst.Cores.States.HAND
                     /*if (drone && characterBody.HasBuff(BuffCore.instance.overclockIndex)) {
                         drone.ConsumeDroneStackAuthority(2);
                     }*/
-                    
+
                     GameObject effect = fullyCharged ? overclockRumbleEffectPrefab : rumbleEffectPrefab;
                     BlastAttack attack = new BlastAttack()
                     {
@@ -129,8 +137,9 @@ namespace Cloudburst.Cores.States.HAND
                     }
                 }
                 attack.forceVector = hammerChildTransform.right;
-                bool hit = attack.Fire(null);   
-                if (hit) {
+                bool hit = attack.Fire(null);
+                if (hit)
+                {
                     EnterHitPause();
                 }
             }
@@ -141,10 +150,12 @@ namespace Cloudburst.Cores.States.HAND
             }
             else
             {
-                if (isAuthority && enteredHitPause && hitPauseTimer > 0f) {
+                if (isAuthority && enteredHitPause && hitPauseTimer > 0f)
+                {
                     hitPauseTimer -= Time.fixedDeltaTime;
                     characterMotor.velocity = Vector3.zero;
-                    if (hitPauseTimer <= 0f) {
+                    if (hitPauseTimer <= 0f)
+                    {
                         ExitHitPause();
                     }
                 }
@@ -153,19 +164,22 @@ namespace Cloudburst.Cores.States.HAND
         public override void OnExit()
         {
             base.OnExit();
-            if (!hasSwung) {
-                if (enteredHitPause) {
+            if (!hasSwung)
+            {
+                if (enteredHitPause)
+                {
                     ExitHitPause();
                 }
             }
-            if (enteredHitPause && !exitedHitPause) {
+            if (enteredHitPause && !exitedHitPause)
+            {
                 ExitHitPause();
             }
 
             base.characterBody.bodyFlags &= ~CharacterBody.BodyFlags.IgnoreFallDamage;
         }
         private void ExitHitPause()
-        { 
+        {
             this.hitPauseTimer = 0f;
             if (!isGrounded)
             {

@@ -74,6 +74,8 @@ namespace Cloudburst.Cores.States.HAND
             if (this.modelAnimator)
             {
                 int layerIndex = this.modelAnimator.GetLayerIndex("Gesture");
+                var animatorStateInfo = this.modelAnimator.GetCurrentAnimatorStateInfo(layerIndex);
+
                 if (this.modelAnimator.GetCurrentAnimatorStateInfo(layerIndex).IsName("FullSwing3") || this.modelAnimator.GetCurrentAnimatorStateInfo(layerIndex).IsName("FullSwing1"))
                 {
                     base.PlayCrossfade("Gesture", "FullSwing2", "FullSwing.playbackRate", this.duration / (1f - returnToIdlePercentage), 0.2f);

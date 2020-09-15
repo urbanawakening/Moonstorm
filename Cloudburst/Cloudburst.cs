@@ -79,7 +79,9 @@ namespace Cloudburst
         private ArchaicWispCore archwispCore;
         private RexCore rexCore;
         private HuntressCore wipCore;
+        private BombardierCore bombManCore;
         private AchievementCore achiveCore;
+        private ProjectileCore projectileCore;
         //shut up vs
         //private ArtifactsCore artifactCore;
         #endregion
@@ -143,8 +145,9 @@ namespace Cloudburst
                 buffCore = new BuffCore();
                 effectCore = new EffectCore();
                 dotCore = new DoTCore();
-
+                projectileCore = new ProjectileCore();
                 achiveCore = new AchievementCore();
+                
                 //got this feeling
                 //i'm losing you
                 //it's got me reeling
@@ -196,8 +199,8 @@ namespace Cloudburst
                 //and thus
                 //we reach the end
                 qol = new QOLCore();
-                ancientWisp = new AncientWispCore(); ;
-
+                ancientWisp = new AncientWispCore();
+                bombManCore = new BombardierCore();
                 //artifactCore = new ArtifactsCore();
 
 

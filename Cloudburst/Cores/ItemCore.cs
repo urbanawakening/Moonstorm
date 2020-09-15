@@ -48,37 +48,6 @@ namespace Cloudburst.Cores
             //Excluding pearls because those aren't boss Item, they come from the Cleansing Pool 
         };
 
-        public HurtBox PickRandomTarget(Vector3 position, TeamIndex teamIndex, float range, GameObject filter)
-        {
-            //imagine stealing from game code
-            //couldn't be me :^)
-
-            BullseyeSearch search = new BullseyeSearch();
-            search.teamMaskFilter = TeamMask.GetUnprotectedTeams(teamIndex);
-            search.filterByLoS = true;
-            search.searchOrigin = position;
-            search.searchDirection = Vector3.zero;
-            search.sortMode = BullseyeSearch.SortMode.Angle;
-            search.maxDistanceFilter = range;
-
-            search.RefreshCandidates();
-            search.FilterOutGameObject(filter);
-
-            //wouldn't it be really fucking funny
-            //if this was the cause?
-            //return search.GetResults().FirstOrDefault<HurtBox>();
-
-            //it'd be really fucking funny if this caused a null reference 
-            //nope, i think this did something??
-            //i still got the error though
-            var result = search.GetResults().FirstOrDefault<HurtBox>();
-            if (result)
-            {
-                return result;
-            }
-            else return null;
-        }
-
         public List<BuffIndex> scpBuffList = new List<BuffIndex>{
             BuffIndex.NullifyStack,
             BuffIndex.ClayGoo,
@@ -471,8 +440,6 @@ namespace Cloudburst.Cores
         }
 
         protected internal void RegisterTokens() {
-            Run.baseGravity = -1f;
-
             LanguageAPI.Add("ITEM_ITEMONCHAMPIONKILL_NAME", "Extractor"); //model
             LanguageAPI.Add("ITEM_ITEMONCHAMPIONKILL_DESC", "<style=cIsUtility>25% chance <style=cStack>(+10% per stack)</style> for bosses to drop a random boss item when killed.</style>");
             LanguageAPI.Add("ITEM_ITEMONCHAMPIONKILL_PICKUP", "Chance for bosses to drop boss items when killed");
