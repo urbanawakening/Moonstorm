@@ -20,9 +20,11 @@ namespace Cloudburst.Cores.Components {
             mainSkinnedMeshRenderer = Reflection.GetFieldValue<SkinnedMeshRenderer>(characterModel, "mainSkinnedMeshRenderer");
             if (!this.goldAffixEffect)
             {
-                goldAffixEffect = Instantiate<GameObject>(Resources.Load<GameObject>("Prefabs/GoldAffixEffect"), base.transform);
+                goldAffixEffect = Instantiate<GameObject>(CommonAssets.goldAffix, base.transform);
                 ParticleSystem.ShapeModule shape = goldAffixEffect.GetComponent<ParticleSystem>().shape;
 
+                var aa = Instantiate<GameObject>(CommonAssets.goldChestStarburst, base.transform);
+                //NetworkServer.Spawn(aa);
 
                 if (mainSkinnedMeshRenderer)
                 {

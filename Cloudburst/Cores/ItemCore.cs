@@ -1,7 +1,5 @@
-﻿using EntityStates.Mage.Weapon;
-using R2API;
+﻿using R2API;
 using RoR2;
-using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
@@ -29,12 +27,14 @@ namespace Cloudburst.Cores
         protected internal ItemIndex moneyOnInteractionIndex;
         protected internal ItemIndex barrierOnCritIndex;
         protected internal ItemIndex barrierOnLevelIndex;
-        protected internal ItemIndex lightningOnCritIndex;
+        protected internal ItemIndex damageOverTimeToLowHealthIndex;
         protected internal ItemIndex experienceOnHitIndex;
         protected internal ItemIndex lemdogIndex;
         protected internal ItemIndex moneyOnHealIndex;
         protected internal ItemIndex extendEnemyBuffDurationIndex;
-        protected internal ItemIndex skateboardIndex;
+        protected internal ItemIndex dormantFungusIndex;
+        protected internal ItemIndex diaryIndex;
+        protected internal ItemIndex coinIndex;
 
         public List<ItemIndex> bossitemList = new List<ItemIndex>{
             ItemIndex.NovaOnLowHealth,
@@ -42,7 +42,9 @@ namespace Cloudburst.Cores
             ItemIndex.BeetleGland,
             ItemIndex.TitanGoldDuringTP,
             ItemIndex.SprintWisp,
-            ItemIndex.Incubator
+            ItemIndex.Incubator,
+            ItemIndex.BleedOnHitAndExplode,
+            ItemIndex.FireballsOnHit 
             //Excluding pearls because those aren't boss Item, they come from the Cleansing Pool 
         };
 
@@ -119,7 +121,8 @@ namespace Cloudburst.Cores
 
         public ItemCore() => RegisterItems();
 
-        protected internal void RegisterItems() {
+        protected internal void RegisterItems()
+        {
             LogCore.LogI("Initializing Core: " + base.ToString());
 
             instance = this;
@@ -405,7 +408,27 @@ namespace Cloudburst.Cores
                 tier = ItemTier.Tier2,
                 unlockableName = ""
             });
-            ItemTag[] redSkateboardTags = new ItemTag[2]
+            ItemTag[] dormantFungusTags = new ItemTag[2]
+{
+                    ItemTag.Healing,
+                    ItemTag.AIBlacklist
+};
+            RegisterItem(new ItemDef
+            {
+                canRemove = true,
+                //descriptionToken = "ITEM_EXTENDEDENEMYBUFFDURATIOM_DESC",
+                hidden = false,
+                loreToken = "",
+                name = "DormantFungus",
+                //nameToken = "ITEM_EXTENDEDENEMYBUFFDURATIOM_NAME",
+                //pickupIconPath = "@Cloudburst:Assets/Items/Lemdog/LemDog_TexIcon.png",
+                //pickupModelPath = "@Cloudburst:Assets/Items/Lemdog/MDLLemDog.prefab",
+                //pickupToken = "ITEM_EXTENDEDENEMYBUFFDURATIOM_PICKUP",
+                tags = dormantFungusTags,
+                tier = ItemTier.Tier1,
+                unlockableName = ""
+            });
+            ItemTag[] diaryTags = new ItemTag[2]
 {
                     ItemTag.Utility,
                     ItemTag.AIBlacklist
@@ -416,20 +439,40 @@ namespace Cloudburst.Cores
                 //descriptionToken = "ITEM_EXTENDEDENEMYBUFFDURATIOM_DESC",
                 hidden = false,
                 loreToken = "",
-                name = "RedSkateboard",
+                name = "Diary",
                 //nameToken = "ITEM_EXTENDEDENEMYBUFFDURATIOM_NAME",
                 //pickupIconPath = "@Cloudburst:Assets/Items/Lemdog/LemDog_TexIcon.png",
                 //pickupModelPath = "@Cloudburst:Assets/Items/Lemdog/MDLLemDog.prefab",
                 //pickupToken = "ITEM_EXTENDEDENEMYBUFFDURATIOM_PICKUP",
-                tags = redSkateboardTags,
-                tier = ItemTier.Tier3,
+                tags = diaryTags,
+                tier = ItemTier.Tier1,
+                unlockableName = ""
+            });
+            ItemTag[] coinTags = new ItemTag[1]
+            {
+                    ItemTag.Damage
+            };
+            RegisterItem(new ItemDef
+            {
+                canRemove = true,
+                //descriptionToken = "ITEM_EXTENDEDENEMYBUFFDURATIOM_DESC",
+                hidden = false,
+                loreToken = "",
+                name = "Coin",
+                //nameToken = "ITEM_EXTENDEDENEMYBUFFDURATIOM_NAME",
+                //pickupIconPath = "@Cloudburst:Assets/Items/Lemdog/LemDog_TexIcon.png",
+                //pickupModelPath = "@Cloudburst:Assets/Items/Lemdog/MDLLemDog.prefab",
+                //pickupToken = "ITEM_EXTENDEDENEMYBUFFDURATIOM_PICKUP",
+                tags = coinTags,
+                tier = ItemTier.Tier1,
                 unlockableName = ""
             });
             Hook();
         }
 
-        protected internal void RegisterTokens()
-        {
+        protected internal void RegisterTokens() {
+            Run.baseGravity = -1f;
+
             LanguageAPI.Add("ITEM_ITEMONCHAMPIONKILL_NAME", "Extractor"); //model
             LanguageAPI.Add("ITEM_ITEMONCHAMPIONKILL_DESC", "<style=cIsUtility>25% chance <style=cStack>(+10% per stack)</style> for bosses to drop a random boss item when killed.</style>");
             LanguageAPI.Add("ITEM_ITEMONCHAMPIONKILL_PICKUP", "Chance for bosses to drop boss items when killed");
@@ -487,9 +530,19 @@ namespace Cloudburst.Cores
             LanguageAPI.Add("ITEM_EXTENDEDENEMYBUFFDURATIOM_DESC", "Extend <style=cIsUtility>positive buffs applied to you</style> by 2<style=cStack>(+1 per stack)</style> seconds.");
             LanguageAPI.Add("ITEM_EXTENDEDENEMYBUFFDURATIOM_PICKUP", "Extend positive buff duration.");
 
-            LanguageAPI.Add("ITEM_REDSKATEBOARD_NAME", "Red Skateboard");
-            LanguageAPI.Add("ITEM_REDSKATEBOARD_DESC", "<style=cIsUtility>Sprint</style> during attacks where you wouldn't be able to."); //by 2<style=cStack>(+1 per stack)</style> seconds.");
-            LanguageAPI.Add("ITEM_REDSKATEBOARD_PICKUP", "Sprint while attacking.");
+            LanguageAPI.Add("ITEM_DORMANTFUNGUS_NAME", "Dormant Fungus");
+            LanguageAPI.Add("ITEM_DORMANTFUNGUS_DESC", "<style=cIsHealing>Heal</style> 1% <style=cStack>(+1% per stack)</style> every five seconds while sprinting."); //by 2<style=cStack>(+1 per stack)</style> seconds.");
+            LanguageAPI.Add("ITEM_DORMANTFUNGUS_PICKUP", "Heal every five seconds while sprinting.");
+
+            LanguageAPI.Add("ITEM_DIARY_NAME", "Diary");
+            LanguageAPI.Add("ITEM_DIARY_DESC", "Gain 5% <style=cIsUtility>experience</style> <style=cStack>(+5% per stack)</style> every two seconds."); //by 2<style=cStack>(+1 per stack)</style> seconds.");
+            LanguageAPI.Add("ITEM_DIARY_PICKUP", "Gain experience overtime.");
+
+            LanguageAPI.Add("ITEM_COIN_NAME", "Molten Coin");
+            LanguageAPI.Add("ITEM_COIN_DESC", "4% <style=cStack>(+3% per stack)</style> chance to <style=cIsDamage>ignite</style> enemies on hit for +5 money."); //by 2<style=cStack>(+1 per stack)</style> seconds.");
+            LanguageAPI.Add("ITEM_COIN_PICKUP", "Chance to ignite enemies on hit.");
+
+
         }
 
         protected internal void RegisterItem(ItemDef itemDef)
@@ -500,7 +553,7 @@ namespace Cloudburst.Cores
             {
                 itemDef.nameToken = string.Format(CultureInfo.InvariantCulture, "ITEM_{0}_NAME", upperName);
             }
-            if (itemDef.descriptionToken == null)   
+            if (itemDef.descriptionToken == null)
             {
                 itemDef.descriptionToken = string.Format(CultureInfo.InvariantCulture, "ITEM_{0}_DESC", upperName);
             }
@@ -540,7 +593,7 @@ namespace Cloudburst.Cores
                     barrierOnCritIndex = ItemAPI.Add(customItem);
                     break;
                 case "LightningOnCrit":
-                    lightningOnCritIndex = ItemAPI.Add(customItem);
+                    damageOverTimeToLowHealthIndex = ItemAPI.Add(customItem);
                     break;
                 case "BarrierOnLevel":
                     barrierOnLevelIndex = ItemAPI.Add(customItem);
@@ -557,16 +610,23 @@ namespace Cloudburst.Cores
                 case "ExtendedEnemyBuffDuration":
                     extendEnemyBuffDurationIndex = ItemAPI.Add(customItem);
                     break;
-                case "RedSkateboard":
-                    skateboardIndex = ItemAPI.Add(customItem);
+                case "DormantFungus":
+                    dormantFungusIndex = ItemAPI.Add(customItem);
                     break;
-                    default:
-                    LogCore.LogF("Unregistered item!");
+                case "Diary":
+                    diaryIndex = ItemAPI.Add(customItem);
+                    break;
+                case "Coin":
+                    coinIndex = ItemAPI.Add(customItem);
+                    break;
+                default:
+                    LogCore.LogF(itemDef.name + " is unregistered! Item will not spawn!");
                     break;
             }
         }
 
-        protected internal void Hook() {
+        protected internal void Hook()
+        {
             On.RoR2.GlobalEventManager.OnCrit += GlobalEventManager_OnCrit;
             On.RoR2.GlobalEventManager.OnInteractionBegin += GlobalEventManager_OnInteractionBegin;
             GlobalEventManager.onServerDamageDealt += GlobalEventManager_onServerDamageDealt;
@@ -584,29 +644,39 @@ namespace Cloudburst.Cores
         private void CharacterBody_OnInventoryChanged(On.RoR2.CharacterBody.orig_OnInventoryChanged orig, CharacterBody self)
         {
             //lol
-            if (self) {
-                if (self.inventory) {
+            if (self)
+            {
+                if (self.inventory)
+                {
                     var inventory = self.inventory;
-                    var skateboardCount = inventory.GetItemCount(skateboardIndex);
-                    if (skateboardCount > 0) {
-                        var skillLocator = self.skillLocator;
-                        if (skillLocator) {
-                            skillLocator.primary.skillDef.noSprint = false;
-                            LogCore.LogI("applied!");
-                        }
+
+                    var fungusCount = inventory.GetItemCount(dormantFungusIndex);
+                    var diaryCount = inventory.GetItemCount(diaryIndex);
+
+
+                    if (fungusCount > 0)
+                    {
+                        self.AddItemBehavior<DormantFungusBehavior>(fungusCount);
+                    }
+                    if (diaryCount > 0)
+                    {
+                        self.AddItemBehavior<DairyBehavior>(diaryCount);
                     }
                 }
-            } 
+            }
             orig(self);
         }
 
         private void CharacterBody_AddTimedBuff(On.RoR2.CharacterBody.orig_AddTimedBuff orig, CharacterBody self, BuffIndex buffType, float duration)
         {
-            if (self) {
+            if (self)
+            {
                 var inv = self.inventory;
-                if (inv) {
+                if (inv)
+                {
                     var earringsCount = inv.GetItemCount(extendEnemyBuffDurationIndex);
-                    if (earringsCount > 0 && buffType != BuffIndex.MedkitHeal) {
+                    if (earringsCount > 0 && buffType != BuffIndex.MedkitHeal & buffType != BuffIndex.ElementalRingsCooldown)
+                    {
                         //do thing???
                         duration += 1 + (1 * earringsCount);
                     }
@@ -627,7 +697,8 @@ namespace Cloudburst.Cores
                     {
                         var bloodTesters = inventory.GetItemCount(moneyOnHealIndex);
                         var amountToGift = bloodTesters * 5;
-                        if (bloodTesters > 0 && body.teamComponent && body.isPlayerControlled && nonRegen == true) {
+                        if (bloodTesters > 0 && body.teamComponent && body.isPlayerControlled && nonRegen == true)
+                        {
                             TeamManager.instance.GiveTeamMoney(body.teamComponent.teamIndex, (uint)amountToGift);
                         }
                     }
@@ -638,13 +709,16 @@ namespace Cloudburst.Cores
 
         private void CharacterBody_AddBuff(On.RoR2.CharacterBody.orig_AddBuff orig, CharacterBody self, BuffIndex buffType)
         {
-            if (self) {
+            if (self)
+            {
                 if (self.inventory)
                 {
-                    if (self.inventory.GetItemCount(lemdogIndex) > 0) {
+                    if (self.inventory.GetItemCount(lemdogIndex) > 0)
+                    {
                         var def = BuffCatalog.GetBuffDef(buffType);
-                        if (def.isDebuff && Util.CheckRoll(25 + (self.inventory.GetItemCount(lemdogIndex) * 2.5f), self.master)) {
-                            var random = UnityEngine.Random.Range(0, lemdogList.Count);
+                        if (def.isDebuff && Util.CheckRoll(25 + (self.inventory.GetItemCount(lemdogIndex) * 2.5f), self.master))
+                        {
+                            var random = Random.Range(0, lemdogList.Count);
                             var buff = lemdogList[random];
                             buffType = buff;
                         }
@@ -677,14 +751,23 @@ namespace Cloudburst.Cores
                     {
                         Inventory inv = attackerBody.inventory;
                         int experienceOnHitCount = inv.GetItemCount(experienceOnHitIndex);
-                        int lightningOnCritCOunt = inv.GetItemCount(lightningOnCritIndex);
+                        int lightningOnCritCOunt = inv.GetItemCount(damageOverTimeToLowHealthIndex);
                         if (experienceOnHitCount > 0 && attackerBody.teamComponent)
                         {
                             float exp = 0.1f + (experienceOnHitCount * 0.4f);
-                            TeamManager.instance.GiveTeamExperience(attackerBody.teamComponent.teamIndex, (ulong)(uint)exp);
+                            TeamManager.instance.GiveTeamExperience(attackerBody.teamComponent.teamIndex, (uint)exp);
                         }
-                        if (self.combinedHealthFraction < .6f && lightningOnCritCOunt > 0) {
-                            DotController.InflictDot(self.gameObject, attacker, DoTCore.instance.detritive, 5, 1);
+                        var dotController = DotController.FindDotController(self.gameObject);
+                        bool hasDot = false;
+                        if (dotController)
+                        {
+                            hasDot = dotController.HasDotActive(DoTCore.instance.detritive);
+                            //LogCore.LogI(hasDot);
+                        }
+                        if (self.combinedHealthFraction < .4f && lightningOnCritCOunt > 0 && !hasDot)
+                        {
+
+                            DotController.InflictDot(self.gameObject, attacker, DoTCore.instance.detritive, 3 * lightningOnCritCOunt, 1);
                         }
                     }
                 }
@@ -714,7 +797,7 @@ namespace Cloudburst.Cores
 
         public void GlobalEventManager_OnCrit(On.RoR2.GlobalEventManager.orig_OnCrit orig, GlobalEventManager self, CharacterBody body, CharacterMaster master, float procCoefficient, ProcChainMask procChainMask)
         {
-			if (body && procCoefficient > 0f && body && master && master.inventory)
+            if (body && procCoefficient > 0f && body && master && master.inventory)
             {
                 var masterInventory = master.inventory;
                 var healthComponent = body.healthComponent;
@@ -764,10 +847,43 @@ namespace Cloudburst.Cores
                 int scpRandom = UnityEngine.Random.Range(0, scpBuffList.Count);
                 int rootCount = attackerInventory.GetItemCount(crippleOnHitIndex);
                 int scpCount = attackerInventory.GetItemCount(randomDebuffOnHitIndex);
+                int coinCount = attackerInventory.GetItemCount(coinIndex);
+
                 if (rootCount > 0 && Util.CheckRoll(20, attackerMaster) && attackerMaster && damageReport.victimBody)
                 {
                     victimBody.AddTimedBuff(BuffIndex.Cripple, 3);
                 }
+
+                if (coinCount > 0 && victimBody.gameObject && attackerBody.gameObject && Util.CheckRoll(1 + (3 * coinCount), attackerMaster) && victimBody) {
+                    var isNotMoltenCoin = damageReport.dotType != DotController.DotIndex.PercentBurn;
+
+                    if (isNotMoltenCoin) {
+                        //EffectCore.coinImpactEffect, new EffectData()
+                        //prefabs/effects/omnieffect/OmniExplosionVFXQuick
+                        //prefabs/effects/impacteffects/ImpactWispEmber
+                        //ImpactWispEmber
+                        EffectManager.SpawnEffect(Resources.Load<GameObject>("prefabs/effects/impacteffects/ExplosionSolarFlare"), new EffectData() {
+                            scale = 5,
+                            origin = victimBody.transform.position,
+                            rotation = Quaternion.identity
+                        }, true);
+                        EffectManager.SpawnEffect(Resources.Load<GameObject>("prefabs/effects/impacteffects/CoinImpact"), new EffectData()
+                        {
+                            scale = 10,
+                            origin = victimBody.transform.position,
+                            rotation = Quaternion.identity
+                        }, true);
+                    }
+
+                    if (isNotMoltenCoin) {
+                        DotController.InflictDot(victimBody.gameObject, attackerBody.gameObject, DotController.DotIndex.PercentBurn, 5, 1);
+                    }
+
+                    if (attackerBody.teamComponent && isNotMoltenCoin) {
+                        TeamManager.instance.GiveTeamMoney(attackerBody.teamComponent.teamIndex, (uint)(5 * coinCount));
+                     }
+                }
+
                 if (scpCount > 0 && damageReport.victimBody && victimMaster)
                 {
                     victimBody.AddTimedBuff(scpBuffList[scpRandom], (scpCount * 2));
@@ -832,6 +948,55 @@ namespace Cloudburst.Cores
                 equipmentDef.enigmaCompatible = false;
             }
             orig(equipmentIndex, equipmentDef);
+        }
+    }
+    public class DormantFungusBehavior : CharacterBody.ItemBehavior
+    {
+        //VICE VS YOU
+        //YOUUUUU
+        private float timer;
+        public void FixedUpdate()
+        {
+            if (body.isSprinting)
+            {
+                timer += Time.deltaTime;
+                if (timer >= 5)
+                {
+                    body.healthComponent.HealFraction(.1f * stack, default);
+                    timer = 0;
+                }
+            }
+            else
+            {
+                timer = 0;
+            }
+        }
+    }
+    public class DairyBehavior : CharacterBody.ItemBehavior
+    {
+        //VICE VS YOU
+        //YOUUUUU
+        private float timer;
+        private bool fatalLogged;
+        public void FixedUpdate()
+        {
+            timer += Time.deltaTime;
+            if (timer >= 3)
+            {
+                if (body.teamComponent)
+                {
+                    TeamManager.instance.GiveTeamExperience(body.teamComponent.teamIndex, (ulong)(1 * stack));
+                }
+                else
+                {
+                    if (!fatalLogged)
+                    {
+                        fatalLogged = true;
+                        LogCore.LogF(Language.GetString(body.baseNameToken) + " doesn't have a team component!");
+                    }
+                }
+                timer = 0;
+            }
         }
     }
 }

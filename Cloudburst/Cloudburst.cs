@@ -137,6 +137,8 @@ namespace Cloudburst
                 //so i can't do that
                 //plus most cores rely on these
                 assetCore = new AssetsCore();
+                CommonAssets.Load();
+
                 orbCore = new OrbCore();
                 buffCore = new BuffCore();
                 effectCore = new EffectCore();
