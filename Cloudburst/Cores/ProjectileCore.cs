@@ -19,6 +19,7 @@ namespace Cloudburst.Cores
             LogCore.LogI("Initializing Core: " + base.ToString());
 
             CreateBombardierRocketProjectile();
+            CreateBombardierBetterRocketProjectile();
         }
 
         protected private void CreateBombardierRocketProjectile() {
@@ -33,14 +34,17 @@ namespace Cloudburst.Cores
             else LogCore.LogF("FATAL ERROR:" + bombardierBombProjectile.name + " failed to register to the projectile catalog!");
         }
 
-        protected private void CreateBombardierBetterRocketProjectile() {
+        protected private void CreateBombardierBetterRocketProjectile()
+        {
             bombardierFireBombProjectile = Resources.Load<GameObject>("prefabs/projectiles/PaladinRocket").InstantiateClone("BombardierFireRocketProjectile", true);
             var registered = API.RegisterNewProjectile(bombardierFireBombProjectile);
             if (registered)
             {
                 var impact = bombardierFireBombProjectile.GetComponent<ProjectileImpactExplosion>();
                 var controller = bombardierFireBombProjectile.GetComponent<ProjectileController>();
+                var damage = bombardierFireBombProjectile.GetComponent<ProjectileDamage>();
 
+                damage.damageType = DamageTypeCore.bombardierKnockback;
 
                 controller.ghostPrefab = Resources.Load<GameObject>("prefabs/projectileghosts/ArchWispCannonGhost");
                 controller.procCoefficient = 0.6f;

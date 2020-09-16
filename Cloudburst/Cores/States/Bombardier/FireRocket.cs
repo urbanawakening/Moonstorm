@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Cloudburst.Cores.States.Bombardier
 {
-    public class FireRocket : BaseState
+    public class FireRocket : BaseSkillState
     {
         public static GameObject projectilePrefab = ProjectileCore.bombardierBombProjectile;
         public static GameObject effectPrefab = EntityStates.Commando.CommandoWeapon.FireRocket.effectPrefab;
@@ -15,13 +15,11 @@ namespace Cloudburst.Cores.States.Bombardier
         public static float damageCoeff = 3;
         public static float procCoeff = 1;
         public static float force = 5000;
-        public static float baseDuration = .5f;
-        private float duration;
+        public static float baseDuration = .9f;
 
-        public FireRocket()
-        {
-            //Debug.Log("not even a faint memory!");
-        }
+        public static float timeBeforeKnockback;
+
+        private float duration;
 
         public override void OnEnter()
         {
@@ -34,9 +32,16 @@ namespace Cloudburst.Cores.States.Bombardier
             }
         }
 
-        public virtual void FireProjectile()
+        public void FireProjectile()
         {
             var aimRay = GetAimRay();
+
+            timeBeforeKnockback += Time.deltaTime;
+
+            if (ShouldHaveKnockback() && !isGrounded && characterMotor) {
+                characterMotor.ApplyForce(GetKnockback(aimRay), false, false);
+            }
+
             FireProjectileInfo info = new FireProjectileInfo()
             {
                 crit = RollCrit(),
@@ -47,13 +52,31 @@ namespace Cloudburst.Cores.States.Bombardier
                 owner = gameObject,
                 position = transform.position,
                 procChainMask = default,
-                projectilePrefab = projectilePrefab,
+                projectilePrefab = GrabProjectile(),
                 rotation = Util.QuaternionSafeLookRotation(aimRay.direction),
                 target = null,
                 useFuseOverride = false,
                 useSpeedOverride = false
             };
+            ModifyProjectileInfo(info);
             ProjectileManager.instance.FireProjectile(info);
+        }
+
+        public virtual bool ShouldHaveKnockback() {
+            return true;
+        }
+
+        public virtual GameObject GrabProjectile()
+        {
+            return ProjectileCore.bombardierBombProjectile;
+        }
+
+        public virtual void ModifyProjectileInfo(FireProjectileInfo info) {
+            //do nothing!
+        }
+
+        public virtual Vector3 GetKnockback(Ray aimRay) {
+            return aimRay.direction * (-1500);
         }
 
         public override void OnExit()

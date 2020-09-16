@@ -25,7 +25,6 @@ namespace Cloudburst.Cores
         {
             instance = this;
 
-
             LogCore.LogI("Initializing Core: " + base.ToString());
 
             clean = RegisterDoT(1, 0.5f, DamageColorIndex.WeakPoint, BuffCore.instance.cleanIndex);

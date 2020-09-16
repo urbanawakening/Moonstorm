@@ -18,6 +18,7 @@ namespace Cloudburst.Cores
         protected internal BuffIndex cleanIndex;
         protected internal BuffIndex detritiveIndex;
         protected internal BuffIndex greaterBannerIndex;
+        protected internal BuffIndex bombardierForceIndex;
 
         internal bool Loaded { get; private set; } = false;
         public BuffCore() => RegisterBuffs(); 
@@ -27,7 +28,7 @@ namespace Cloudburst.Cores
 
             instance = this;
 
-            RegisterBuff(lightBringerIndex, new BuffDef
+            RegisterBuff(new BuffDef
             {
                 buffIndex = BuffIndex.Count,
                 buffColor = Color.yellow,
@@ -38,7 +39,7 @@ namespace Cloudburst.Cores
                 name = "LightBringer"
             });
 
-            RegisterBuff(droneIndex, new BuffDef
+            RegisterBuff(new BuffDef
             {
                 buffIndex = BuffIndex.Count,
                 //buffColor = Color.yellow,
@@ -49,7 +50,7 @@ namespace Cloudburst.Cores
                 name = "Drone",
             });
 
-            RegisterBuff(overclockIndex, new BuffDef
+            RegisterBuff(new BuffDef
             {
                 buffIndex = BuffIndex.Count,
                 canStack = false,
@@ -59,7 +60,7 @@ namespace Cloudburst.Cores
                 name = "Overclock"
             });
 
-            RegisterBuff(surgeIndex, new BuffDef
+            RegisterBuff(new BuffDef
             {
                 buffColor = new Color(0.3764706f, 0.84313726f, 0.8980392f),
                 buffIndex = BuffIndex.Count,
@@ -70,7 +71,7 @@ namespace Cloudburst.Cores
                 name = "Surge"
             });
 
-            RegisterBuff(cleanIndex, new BuffDef
+            RegisterBuff(new BuffDef
             {
                 buffColor = new Color(0.3764706f, 0.84313726f, 0.8980392f),
                 buffIndex = BuffIndex.Count,
@@ -81,7 +82,7 @@ namespace Cloudburst.Cores
                 name = "Sparkle"
             });
 
-            RegisterBuff(detritiveIndex, new BuffDef
+            RegisterBuff(new BuffDef
             {
                 buffColor = new Color(0.3764706f, 0.84313726f, 0.8980392f),
                 buffIndex = BuffIndex.Count,
@@ -91,7 +92,7 @@ namespace Cloudburst.Cores
                 isDebuff = false,
                 name = "Infested"
             });
-            RegisterBuff(greaterBannerIndex, new BuffDef()
+            RegisterBuff(new BuffDef()
             {
                 buffIndex = BuffIndex.Count,
                 canStack = false,
@@ -100,6 +101,16 @@ namespace Cloudburst.Cores
                 name = "GreaterWarbanner",
                 buffColor = new Color(0.8392157f, 0.7882353f, 0.22745098f)
             });
+            RegisterBuff(new BuffDef()
+            {
+                buffIndex = BuffIndex.Count,
+                canStack = false,
+                eliteIndex = EliteIndex.None,
+                iconPath = "Textures/BuffIcons/texMovespeedBuffIcon",
+                name = "BombardierForce",
+                buffColor = new Color(0.8392157f, 0.7882353f, 0.22745098f)
+            });
+
 
             On.RoR2.CharacterBody.RecalculateStats += CharacterBody_RecalculateStats;
         }
@@ -176,7 +187,7 @@ namespace Cloudburst.Cores
             }
         }
 
-        protected internal void RegisterBuff(BuffIndex buffIndex    , BuffDef buffDef) {
+        protected internal void RegisterBuff(BuffDef buffDef) {
             var customBuff = new CustomBuff(buffDef);
             switch (buffDef.name) {
                 case "LightBringer":
@@ -202,6 +213,9 @@ namespace Cloudburst.Cores
                     break;
                 case "GreaterWarbanner":
                     greaterBannerIndex = BuffAPI.Add(customBuff);
+                    break;
+                case "BombardierForce":
+                    bombardierForceIndex = BuffAPI.Add(customBuff);
                     break;
 
                 //throw new System.NotImplementedException("not implemented yet!");

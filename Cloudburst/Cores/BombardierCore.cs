@@ -117,10 +117,10 @@ namespace Cloudburst.Cores
         }
 
         private void CreateSecondary() {
-            LoadoutAPI.AddSkill(typeof(FireBetterRocket));
+            LoadoutAPI.AddSkill(typeof(FireFlameRocket));
 
             SkillDef secondarySkillDef = ScriptableObject.CreateInstance<SkillDef>();
-            secondarySkillDef.activationState = new SerializableEntityStateType(typeof(FireBetterRocket));
+            secondarySkillDef.activationState = new SerializableEntityStateType(typeof(FireFlameRocket));
             secondarySkillDef.activationStateMachineName = "Weapon";
             secondarySkillDef.baseMaxStock = 1;
             secondarySkillDef.baseRechargeInterval = 4f;

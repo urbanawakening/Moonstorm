@@ -82,6 +82,7 @@ namespace Cloudburst
         private BombardierCore bombManCore;
         private AchievementCore achiveCore;
         private ProjectileCore projectileCore;
+        private DamageTypeCore damageTypeCore;
         //shut up vs
         //private ArtifactsCore artifactCore;
         #endregion
@@ -141,6 +142,7 @@ namespace Cloudburst
                 assetCore = new AssetsCore();
                 CommonAssets.Load();
 
+                damageTypeCore = new DamageTypeCore();
                 orbCore = new OrbCore();
                 buffCore = new BuffCore();
                 effectCore = new EffectCore();

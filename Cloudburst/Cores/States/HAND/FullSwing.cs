@@ -50,7 +50,7 @@ namespace Cloudburst.Cores.States.HAND
                 attackerFiltering = AttackerFiltering.Default,
                 damage = damageCoefficient * base.damageStat,
                 damageColorIndex = DamageColorIndex.Default,
-                damageType = overclock.GetDamageType(),
+                damageType = DamageTypeCore.bombardierKnockback, //overclock.GetDamageType(),
                 forceVector = new Vector3(0, 0, 0),
                 hitEffectPrefab = hitEffectPrefab,
                 impactSound = RoR2.Audio.NetworkSoundEventIndex.Invalid,

@@ -23,10 +23,7 @@ namespace Cloudburst.Cores.States.Bombardier
         {
             base.OnEnter();
             this.duration = baseDuration / base.attackSpeedStat;
-            if (characterBody)
-            {
-                characterBody.SetAimTimer(2);
-            }
+
         }
         public override void FixedUpdate()
         {
@@ -40,12 +37,12 @@ namespace Cloudburst.Cores.States.Bombardier
                 {
                     attacker = base.gameObject,
                     attackerFiltering = AttackerFiltering.Default,
-                    baseDamage = 6.3f * base.damageStat,
-                    baseForce = 10000,
+                    baseDamage = 3.6f * base.damageStat,
+                    baseForce = 0,
                     bonusForce = new Vector3(0, 0, 0),
                     crit = base.RollCrit(),
                     damageColorIndex = DamageColorIndex.Default,
-                    damageType = DamageType.Stun1s,
+                    damageType = DamageTypeCore.bombardierKnockback,
                     falloffModel = BlastAttack.FalloffModel.None,
                     impactEffect = EffectIndex.Invalid,
                     inflictor = base.gameObject,
