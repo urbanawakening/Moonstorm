@@ -21,7 +21,11 @@ namespace Cloudburst.Cores.HAND.Components
         private readonly BullseyeSearch search = new BullseyeSearch();
         private void Awake()
         {
-            this.indicator = new Indicator(base.gameObject, indicatorPrefab); //Resources.Load<GameObject>("Prefabs/EngiShieldRetractIndicator"));
+            this.indicator = new Indicator(base.gameObject, GetIndicator()); //Resources.Load<GameObject>("Prefabs/EngiShieldRetractIndicator"));
+        }
+
+        public virtual GameObject GetIndicator() {
+            return indicatorPrefab;
         }
 
         private void Start() {

@@ -9,9 +9,9 @@
         protected void Debug() {
             LogCore.LogI("Initializing Core: " + base.ToString());
             instance = this;
-            On.EntityStates.Missions.Arena.NullWard.Active.FixedUpdate += Active_FixedUpdate;
-            On.EntityStates.Commando.CommandoWeapon.FireRocket.OnEnter += FireRocket_OnEnter;
-            On.RoR2.GenericSkill.ExecuteIfReady += GenericSkill_ExecuteIfReady;
+            //On.EntityStates.Missions.Arena.NullWard.Active.FixedUpdate += Active_FixedUpdate;
+            //On.EntityStates.Commando.CommandoWeapon.FireRocket.OnEnter += FireRocket_OnEnter;
+            //On.RoR2.GenericSkill.ExecuteIfReady += GenericSkill_ExecuteIfReady;
             Unlockall();
         }
 

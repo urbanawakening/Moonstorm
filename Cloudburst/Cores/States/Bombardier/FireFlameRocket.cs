@@ -13,19 +13,19 @@ namespace Cloudburst.Cores.States.Bombardier
         {
             return ProjectileCore.bombardierFireBombProjectile;
         }
+
+        public override Vector3 GetKnockback(Ray aimRay)
+        {
+            return aimRay.direction * (-3000);
+        }
+
         public override void ModifyProjectileInfo(FireProjectileInfo info)
         {
             base.ModifyProjectileInfo(info);
 
-            var damageType = DamageTypeCore.bombardierKnockback;
-            //LogCore.LogI(damageType);
-            if (damageType > DamageType.Shock5s) {
-                LogCore.LogI(damageType);
-            }
-
             info.projectilePrefab = ProjectileCore.bombardierFireBombProjectile;
-            info.force = 0;
-            info.damageTypeOverride = damageType;
+            info.force = -6000;
+            info.damageTypeOverride = DamageType.Stun1s;
         }
     }
 }

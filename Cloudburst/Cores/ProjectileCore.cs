@@ -9,6 +9,7 @@ namespace Cloudburst.Cores
         public ProjectileCore instance;
         public static GameObject bombardierBombProjectile;
         public static GameObject bombardierFireBombProjectile;
+        public static GameObject bombardierSeekerBombProjectile;
         public ProjectileCore() => CreateProjectiles();
 
 
@@ -20,6 +21,7 @@ namespace Cloudburst.Cores
 
             CreateBombardierRocketProjectile();
             CreateBombardierBetterRocketProjectile();
+            CreateBombardierSeekerRocketProjectile();
         }
 
         protected private void CreateBombardierRocketProjectile() {
@@ -46,6 +48,10 @@ namespace Cloudburst.Cores
 
                 damage.damageType = DamageTypeCore.bombardierKnockback;
 
+                impact.blastDamageCoefficient = 1;
+                impact.blastRadius = 30;
+                damage.force = -6000;
+
                 controller.ghostPrefab = Resources.Load<GameObject>("prefabs/projectileghosts/ArchWispCannonGhost");
                 controller.procCoefficient = 0.6f;
 
@@ -53,7 +59,24 @@ namespace Cloudburst.Cores
                 impact.blastDamageCoefficient = 1f;
             }
             else LogCore.LogF("FATAL ERROR:" + bombardierFireBombProjectile.name + " failed to register to the projectile catalog!");
-
         }
+        protected private void CreateBombardierSeekerRocketProjectile()
+        {
+            bombardierSeekerBombProjectile = Resources.Load<GameObject>("prefabs/projectiles/MissileProjectile").InstantiateClone("BombardierSeekerRocketProjectile", true);
+            var registered = API.RegisterNewProjectile(bombardierFireBombProjectile);
+            if (registered)
+            {
+                var controller = bombardierSeekerBombProjectile.GetComponent<ProjectileController>();
+
+                controller.ghostPrefab = bombardierBombProjectile.GetComponent<ProjectileController>().ghostPrefab;
+
+                /*controller.procCoefficient = 0.6f;
+
+                impact.blastProcCoefficient = 5.5f;
+                impact.blastDamageCoefficient = 1f;*/
+            }
+            else LogCore.LogF("FATAL ERROR:" + bombardierSeekerBombProjectile.name + " failed to register to the projectile catalog!");
+        }
+
     }
 }

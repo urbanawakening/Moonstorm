@@ -31,7 +31,7 @@ namespace Cloudburst.Cores.HAND.Components
                     procChainMask = default,
                     projectilePrefab = Resources.Load<GameObject>("prefabs/projectiles/sunder"),
                     rotation = Quaternion.LookRotation(forward),
-                    target = null, 
+                    target = null,
                     useFuseOverride = false,
                     useSpeedOverride = false
                 };

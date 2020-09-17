@@ -12,7 +12,7 @@ namespace Cloudburst.Cores.States.Bombardier
         public static GameObject effectPrefab = EntityStates.Commando.CommandoWeapon.FireRocket.effectPrefab;
 
         public static DamageType damageType = DamageType.Generic;
-        public static float damageCoeff = 3;
+        public static float damageCoeff = 3.5f;
         public static float procCoeff = 1;
         public static float force = 5000;
         public static float baseDuration = .9f;
@@ -32,13 +32,14 @@ namespace Cloudburst.Cores.States.Bombardier
             }
         }
 
-        public void FireProjectile()
+        public virtual void FireProjectile()
         {
             var aimRay = GetAimRay();
 
             timeBeforeKnockback += Time.deltaTime;
 
-            if (ShouldHaveKnockback() && !isGrounded && characterMotor) {
+            if (ShouldHaveKnockback() && !isGrounded && characterMotor)
+            {
                 characterMotor.ApplyForce(GetKnockback(aimRay), false, false);
             }
 
@@ -48,7 +49,7 @@ namespace Cloudburst.Cores.States.Bombardier
                 damage = damageCoeff * damageStat,
                 damageColorIndex = RoR2.DamageColorIndex.Default,
                 damageTypeOverride = damageType,
-                force = 3000,
+                force = 1500,
                 owner = gameObject,
                 position = transform.position,
                 procChainMask = default,

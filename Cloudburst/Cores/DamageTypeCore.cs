@@ -40,21 +40,19 @@ namespace Cloudburst.Cores
             bool isOsp = (damageInfo.damageType & DamageTypeCore.bombardierKnockback) != DamageType.Generic;
             //bool isOsp2 = (damageInfo.damageType & DamageType.AOE) != DamageType.Generic;
 
-            
-            LogCore.LogI(damageInfo.damageType);
 
+            //LogCore.LogI(damageInfo.damageType);
+            if (self.body && self.body.HasBuff(BuffCore.instance.bombardierForceIndex))
+            {
+                damageInfo.force *= 2;
+            }
             if (isOsp )
             { 
-                LogCore.LogI("force applied 1");
                 if (self.body) {
-                    LogCore.LogI("force applied 2");
                     self.body.AddTimedBuff(BuffCore.instance.bombardierForceIndex, 3);
                 }
             }
-            if (self.body && self.body.HasBuff(BuffCore.instance.bombardierForceIndex)) {
-                LogCore.LogI("force applied 3");
-                damageInfo.force *= 2;
-            }
+
             orig(self, damageInfo);
         }
 

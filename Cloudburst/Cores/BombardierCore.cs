@@ -9,6 +9,8 @@ using RoR2.Skills;
 using EntityStates;
 using RoR2;
 using Cloudburst.Cores.States.Bombardier;
+using Cloudburst.Cores.Components;
+using Cloudburst.Cores.Skills;
 
 namespace Cloudburst.Cores
 {
@@ -25,6 +27,7 @@ namespace Cloudburst.Cores
             LogCore.LogI("Initializing Core: " + base.ToString());
 
             CreateBody();
+            SetComponents();
             CreateSkills();
             AddToSurvivorSelect();
         }
@@ -55,7 +58,7 @@ namespace Cloudburst.Cores
                 displayPrefab = display,
                 name = "Bombardier",
                 outroFlavorToken = "BOMBARDIER_FLAVORTOKEN",
-                //primaryColor = (Color)new Color32(),
+                primaryColor = new Color(253f / 255f, 118f / 255f, 26f / 255f), 
                 unlockableName = ""
             };
             SurvivorAPI.AddSurvivor(def);
@@ -66,10 +69,27 @@ namespace Cloudburst.Cores
             API.CreateEmptySkills(body);
             skillLocator = body.GetComponent<SkillLocator>();
 
+            skillLocator.passiveSkill.enabled = true;
+
+            var passive = skillLocator.passiveSkill;
+            passive.skillDescriptionToken = "BOMBARDIER_PASSIVE_DESC";
+            passive.skillNameToken = "BOMBARDIER_PASSIVE_NAME";
+            passive.icon = null;
+            skillLocator.passiveSkill = passive;
+
+            LanguageAPI.Add("BOMBARDIER_PASSIVE_DESC", "You are <style=cIsUtility>immune</style> to fall damage.");
+            LanguageAPI.Add("BOMBARDIER_PASSIVE_NAME", "Lessons Learned");
+
+
             CreatePrimary();
             CreateSecondary();
             CreateUtility();
             CreateSpecial();
+        }
+
+        private void SetComponents() {
+            var tracker = body.AddComponent<BombardierTracker>();
+            tracker.maxTrackingDistance = 150;
         }
 
         private void CreatePrimary()
@@ -94,15 +114,14 @@ namespace Cloudburst.Cores
             primarySkillDef.requiredStock = 1;
             primarySkillDef.shootDelay = 0.1f;
             primarySkillDef.stockToConsume = 0;
-            primarySkillDef.skillDescriptionToken = "";
-            primarySkillDef.skillName = "";
-            primarySkillDef.skillNameToken = "";
-            primarySkillDef.icon = AssetsCore.hurtIcon;
-            primarySkillDef.keywordTokens = new string[] {
-                 "KEYWORD_AGILE",
-                 "KEYWORD_STUNNING",
-                 "KEYWORD_CLOCKED"
-             };
+            primarySkillDef.skillDescriptionToken = "BOMBARDIER_PRIMARY_DESC";
+            primarySkillDef.skillName = "Rocket";
+            primarySkillDef.skillNameToken = "BOMBARDIER_PRIMARY_NAME";
+            primarySkillDef.icon = null;
+            primarySkillDef.keywordTokens = Array.Empty<String>();
+
+            LanguageAPI.Add(primarySkillDef.skillDescriptionToken, "Fire a rocket that does <style=cIsDamage>300%</style> damage and <style=cIsDamage>explodes on contact</style>.");
+            LanguageAPI.Add(primarySkillDef.skillNameToken, "Rocket Blast");
 
             LoadoutAPI.AddSkillDef(primarySkillDef);
             SkillFamily primarySkillFamily = skillLocator.primary.skillFamily;
@@ -134,15 +153,18 @@ namespace Cloudburst.Cores
             secondarySkillDef.noSprint = false;
             secondarySkillDef.rechargeStock = 1;
             secondarySkillDef.requiredStock = 1;
-            secondarySkillDef.shootDelay = 0.08f;
+            secondarySkillDef.shootDelay = 0.05f;
             secondarySkillDef.stockToConsume = 1;
-            secondarySkillDef.skillDescriptionToken = "";
-            secondarySkillDef.skillName = "aaa";
-            secondarySkillDef.skillNameToken = "";
-            secondarySkillDef.icon = AssetsCore.forcedReassemblyIcon;
+            secondarySkillDef.skillDescriptionToken = "BOMBARDIER_SECONDARY_DESC";
+            secondarySkillDef.skillName = "StunningRocket";
+            secondarySkillDef.skillNameToken = "BOMBARDIER_SECONDARY_NAME";
+            secondarySkillDef.icon = null;
             secondarySkillDef.keywordTokens = new string[] {
-                 "KEYWORD_AGILE",
+                 "KEYWORD_STUNNING",
              };
+
+            LanguageAPI.Add(secondarySkillDef.skillDescriptionToken, "<style=cIsDamage>Stunning</style>. Fire a stunning rocket that does <style=cIsDamage>150%</style> damage and <style=cIsDamage>explodes in a large radius on contact</style>.");
+            LanguageAPI.Add(secondarySkillDef.skillNameToken, "Concussive Payload");
 
             LoadoutAPI.AddSkillDef(secondarySkillDef);
             SkillFamily secondarySkillFamily = skillLocator.secondary.skillFamily;
@@ -177,13 +199,17 @@ namespace Cloudburst.Cores
             utilitySkillDef.requiredStock = 1;
             utilitySkillDef.shootDelay = 0.08f;
             utilitySkillDef.stockToConsume = 1;
-            utilitySkillDef.skillDescriptionToken = "";
+            utilitySkillDef.skillDescriptionToken = "BOMBARDIER_UTILITY_DESC";
             utilitySkillDef.skillName = "aaa";
-            utilitySkillDef.skillNameToken = "";
-            utilitySkillDef.icon = AssetsCore.forcedReassemblyIcon;
+            utilitySkillDef.skillNameToken = "BOMBARDIER_UTILITY_NAME";
+            utilitySkillDef.icon = null;
             utilitySkillDef.keywordTokens = new string[] {
-                 "KEYWORD_STUNNING",
-             };
+                 "KEYWORD_FORCEFUL",
+            };
+
+            LanguageAPI.Add("KEYWORD_FORCEFUL", "<style=cKeywordName>Forceful</style><style=cSub>This skill applies the Forceful debuff, which doubles force applied to enemies.</style>");
+            LanguageAPI.Add(utilitySkillDef.skillDescriptionToken, "<style=cIsDamage>Forceful</style>. Pull enemies towards you for <style=cIsDamage>400%</style> damage and <style=cIsUtility>boost yourself upwards</style>.");
+            LanguageAPI.Add(utilitySkillDef.skillNameToken, "Plan B");
 
             LoadoutAPI.AddSkillDef(utilitySkillDef);
             SkillFamily utilitySkillFamily = skillLocator.utility.skillFamily;
@@ -197,11 +223,11 @@ namespace Cloudburst.Cores
         }
 
         private void CreateSpecial() {
-            SkillDef specialSkillDef = ScriptableObject.CreateInstance<SkillDef>();
-            specialSkillDef.activationState = new SerializableEntityStateType(typeof(FireRocket));
+            SkillDef specialSkillDef = ScriptableObject.CreateInstance<BombardierTrackingSkillDef>();
+            specialSkillDef.activationState = new SerializableEntityStateType(typeof(Mortar));
             specialSkillDef.activationStateMachineName = "Weapon";
-            specialSkillDef.baseMaxStock = 10;
-            specialSkillDef.baseRechargeInterval = 0;
+            specialSkillDef.baseMaxStock = 1;
+            specialSkillDef.baseRechargeInterval = 12;
             specialSkillDef.beginSkillCooldownOnSkillEnd = true;
             specialSkillDef.canceledFromSprinting = false;
             specialSkillDef.fullRestockOnAssign = true;
@@ -210,14 +236,17 @@ namespace Cloudburst.Cores
             specialSkillDef.isCombatSkill = true;
             specialSkillDef.mustKeyPress = true;
             specialSkillDef.noSprint = false;
-            specialSkillDef.rechargeStock = 0;
+            specialSkillDef.rechargeStock = 1;
             specialSkillDef.requiredStock = 1;
             specialSkillDef.shootDelay = 0.5f;
             specialSkillDef.stockToConsume = 1;
-            specialSkillDef.skillDescriptionToken = "HAND_SPECIAL_DESCRIPTION";
-            specialSkillDef.skillName = "aaa";
-            specialSkillDef.skillNameToken = "HAND_SPECIAL_NAME";
-            specialSkillDef.icon = AssetsCore.droneIcon;
+            specialSkillDef.skillDescriptionToken = "BOMBARDIER_SPECIAL_DESC";
+            specialSkillDef.skillName = "Seekers";
+            specialSkillDef.skillNameToken = "BOMBARDIER_SPECIAL_NAME";
+            specialSkillDef.icon = null;
+
+            LanguageAPI.Add(specialSkillDef.skillDescriptionToken, "Fire nine seeking rockets that each deal <style=cIsDamage>600%</style> damage.");
+            LanguageAPI.Add(specialSkillDef.skillNameToken, "Seeker Barrage");
 
             LoadoutAPI.AddSkillDef(specialSkillDef);
             SkillFamily specialSkillFamily = skillLocator.special.skillFamily;

@@ -149,7 +149,7 @@ namespace Cloudburst
                 dotCore = new DoTCore();
                 projectileCore = new ProjectileCore();
                 achiveCore = new AchievementCore();
-                
+
                 //got this feeling
                 //i'm losing you
                 //it's got me reeling

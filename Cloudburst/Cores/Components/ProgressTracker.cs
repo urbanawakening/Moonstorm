@@ -9,7 +9,7 @@ namespace Cloudburst.Cores.Components
         public static ProgressTracker instance;
 
         public void OnEnable() {
-            SingletonHelper.Assign<ProgressTracker>(instance, this);
+            SingletonHelper.Assign<ProgressTracker>(this, instance);
             LogCore.LogI("ProgressTracker attached.");
             RoR2.ArenaMissionController.onBeatArena += ArenaMissionController_onBeatArena;
         }
