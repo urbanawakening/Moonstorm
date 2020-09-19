@@ -46,10 +46,13 @@ namespace Cloudburst.Cores
                 var controller = bombardierFireBombProjectile.GetComponent<ProjectileController>();
                 var damage = bombardierFireBombProjectile.GetComponent<ProjectileDamage>();
 
-                damage.damageType = DamageTypeCore.bombardierKnockback;
+                damage.damageType = RoR2.DamageType.Stun1s;
 
                 impact.blastDamageCoefficient = 1;
                 impact.blastRadius = 30;
+                //OmniExplosionVFXArchWispCannonImpact OmniExplosionVFX
+                impact.impactEffect = Resources.Load<GameObject>("prefabs/effects/omnieffect/OmniExplosionVFXArchWispCannonImpact");
+
                 damage.force = -6000;
 
                 controller.ghostPrefab = Resources.Load<GameObject>("prefabs/projectileghosts/ArchWispCannonGhost");
@@ -67,13 +70,32 @@ namespace Cloudburst.Cores
             if (registered)
             {
                 var controller = bombardierSeekerBombProjectile.GetComponent<ProjectileController>();
+                var impact = bombardierSeekerBombProjectile.AddOrGetComponent<ProjectileImpactExplosion>();
+                var missile = bombardierSeekerBombProjectile.GetComponent<MissileController>();
 
-                controller.ghostPrefab = bombardierBombProjectile.GetComponent<ProjectileController>().ghostPrefab;
+                missile.deathTimer = 10;
+                missile.giveupTimer = 5;
+                missile.turbulence = 0;
+                missile.maxSeekDistance = 200;
 
-                /*controller.procCoefficient = 0.6f;
+                controller.ghostPrefab = Resources.Load<GameObject>("prefabs/projectileghosts/ElectricOrbGhost");
+                controller.procCoefficient = 0.6f;
 
-                impact.blastProcCoefficient = 5.5f;
-                impact.blastDamageCoefficient = 1f;*/
+                impact.blastAttackerFiltering = RoR2.AttackerFiltering.Default;
+                impact.blastDamageCoefficient = 2.5f;
+                impact.blastProcCoefficient = 1;
+                impact.blastRadius = 10;
+                impact.childrenCount = 0;
+                impact.childrenDamageCoefficient = 0;
+                impact.childrenProjectilePrefab = null;
+                impact.destroyOnEnemy = true;
+                impact.destroyOnWorld = true;
+                impact.falloffModel = RoR2.BlastAttack.FalloffModel.None;
+                impact.fireChildren = false;
+                impact.impactEffect = Resources.Load<GameObject>("prefabs/effects/impacteffects/ExplosionVFX");
+                impact.lifetime = 10;
+                impact.lifetimeAfterImpact = 0;
+                impact.lifetimeRandomOffset = 0;
             }
             else LogCore.LogF("FATAL ERROR:" + bombardierSeekerBombProjectile.name + " failed to register to the projectile catalog!");
         }

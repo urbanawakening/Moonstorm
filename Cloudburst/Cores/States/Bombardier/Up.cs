@@ -37,7 +37,7 @@ namespace Cloudburst.Cores.States.Bombardier
                 {
                     attacker = base.gameObject,
                     attackerFiltering = AttackerFiltering.Default,
-                    baseDamage = 4f * base.damageStat,
+                    baseDamage = 5f * base.damageStat,
                     baseForce = -3000,
                     bonusForce = new Vector3(0, 0, 0),
                     crit = base.RollCrit(),

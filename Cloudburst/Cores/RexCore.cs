@@ -19,50 +19,50 @@ namespace Cloudburst.Cores
         protected GameObject collectorObject;
             protected void REX()
             {
-                instance = this;
+            instance = this;
 
-                
-                var healingProjectile = Resources.Load<GameObject>("prefabs/projectiles/SyringeProjectileHealing");
-                var healingComponent = healingProjectile.GetComponent<ProjectileHealOwnerOnDamageInflicted>();
-                var rexBody = Resources.Load<GameObject>("prefabs/characterbodies/TreebotBody");
-                var skillLocator = rexBody.GetComponent<SkillLocator>();
 
-                //uhhh no
-                //rexBody.AddComponent<EnableGoldAffixEffect>().EnableGoldAffix();
-                   
+            var healingProjectile = Resources.Load<GameObject>("prefabs/projectiles/SyringeProjectileHealing");
+            var healingComponent = healingProjectile.GetComponent<ProjectileHealOwnerOnDamageInflicted>();
+            var rexBody = Resources.Load<GameObject>("prefabs/characterbodies/TreebotBody");
+            var skillLocator = rexBody.GetComponent<SkillLocator>();
 
-                var skillFamily = skillLocator.special.skillFamily;
+            //uhhh no
+            //rexBody.AddComponent<EnableGoldAffixEffect>().EnableGoldAffix();
 
-                var harvest = ScriptableObject.CreateInstance<SkillDef>();
 
-                harvest.activationState = new SerializableEntityStateType(typeof(CreatePounder));
-                harvest.activationStateMachineName = "Weapon";
-                harvest.baseMaxStock = 1;
-                harvest.baseRechargeInterval = 22;
-                harvest.beginSkillCooldownOnSkillEnd = true;
-                harvest.canceledFromSprinting = false;
-                harvest.dontAllowPastMaxStocks = false;
-                harvest.forceSprintDuringState = false;
-                harvest.fullRestockOnAssign = true;
-                harvest.icon = AssetsCore.rexHarvester;
-                harvest.interruptPriority = InterruptPriority.PrioritySkill;
-                harvest.isBullets = false;
-                harvest.isCombatSkill = false;
-                harvest.keywordTokens = new string[1] {
+            var skillFamily = skillLocator.special.skillFamily;
+
+            var harvest = ScriptableObject.CreateInstance<SkillDef>();
+
+            harvest.activationState = new SerializableEntityStateType(typeof(CreatePounder));
+            harvest.activationStateMachineName = "Weapon";
+            harvest.baseMaxStock = 1;
+            harvest.baseRechargeInterval = 22;
+            harvest.beginSkillCooldownOnSkillEnd = true;
+            harvest.canceledFromSprinting = false;
+            harvest.dontAllowPastMaxStocks = false;
+            harvest.forceSprintDuringState = false;
+            harvest.fullRestockOnAssign = true;
+            harvest.icon = AssetsCore.rexHarvester;
+            harvest.interruptPriority = InterruptPriority.PrioritySkill;
+            harvest.isBullets = false;
+            harvest.isCombatSkill = false;
+            harvest.keywordTokens = new string[1] {
                     "KEYWORD_WEAK"
                 };
-                harvest.mustKeyPress = true;
-                harvest.noSprint = false;
-                harvest.rechargeStock = 1;
-                harvest.requiredStock = 1;
-                harvest.shootDelay = 0.1f;
-                harvest.skillDescriptionToken = "TREEBOT_SPECIAL_ALT1_DESCRIPTION";
-                harvest.skillName = "TREEBOT_SPECIAL_ALT1_NAME";
-                harvest.skillNameToken = "TREEBOT_SPECIAL_ALT1_NAME";
-                harvest.stockToConsume = 1;
+            harvest.mustKeyPress = true;
+            harvest.noSprint = false;
+            harvest.rechargeStock = 1;
+            harvest.requiredStock = 1;
+            harvest.shootDelay = 0.1f;
+            harvest.skillDescriptionToken = "TREEBOT_SPECIAL_ALT1_DESCRIPTION";
+            harvest.skillName = "TREEBOT_SPECIAL_ALT1_NAME";
+            harvest.skillNameToken = "TREEBOT_SPECIAL_ALT1_NAME";
+            harvest.stockToConsume = 1;
 
-                LanguageAPI.Add(harvest.skillNameToken, "DIRECTIVE: HARVEST");
-                LanguageAPI.Add(harvest.skillDescriptionToken, "Place a <style=cIsUtility>harvester</style> that deals <style=cIsDamage>250%</style> and <style=cIsDamage>Weakens</style> per attempted harvest.");
+            LanguageAPI.Add(harvest.skillNameToken, "DIRECTIVE: HARVEST");
+            LanguageAPI.Add(harvest.skillDescriptionToken, "Place a <style=cIsUtility>harvester</style> that deals <style=cIsDamage>250%</style> and <style=cIsDamage>Weakens</style> per attempted harvest.");
 
             var variant = new SkillFamily.Variant()
             {
@@ -77,8 +77,8 @@ namespace Cloudburst.Cores
 
             healingComponent.fractionOfDamage = 0.3f;
 
-                CreateCollector();
-            }
+            CreateCollector();
+        }
 
         protected void CreateCollector()
         {

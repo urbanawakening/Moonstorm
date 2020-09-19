@@ -25,7 +25,7 @@ namespace Cloudburst.Cores.Components
         }
 
         public void OnDisable() {
-            SingletonHelper.Unassign<ProgressTracker>(instance, this);
+            SingletonHelper.Unassign<ProgressTracker>(this, instance);
             LogCore.LogI("ProgressTracker destroyed.");
         }
     }

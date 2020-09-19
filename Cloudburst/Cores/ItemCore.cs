@@ -32,6 +32,9 @@ namespace Cloudburst.Cores
         protected internal ItemIndex lemdogIndex;
         protected internal ItemIndex moneyOnHealIndex;
         protected internal ItemIndex extendEnemyBuffDurationIndex;
+        protected internal ItemIndex damageOnDamageIndex;
+        
+        //STARSTORM 2
         protected internal ItemIndex dormantFungusIndex;
         protected internal ItemIndex diaryIndex;
         protected internal ItemIndex coinIndex;
@@ -436,6 +439,25 @@ namespace Cloudburst.Cores
                 tier = ItemTier.Tier1,
                 unlockableName = ""
             });
+            ItemTag[] damageOnDamageTags = new ItemTag[1]
+{
+                    ItemTag.Damage
+};
+            RegisterItem(new ItemDef
+            {
+                canRemove = true,
+                //descriptionToken = "ITEM_EXTENDEDENEMYBUFFDURATIOM_DESC",
+                hidden = false,
+                loreToken = "",
+                name = "DamageOnDamage",
+                //nameToken = "ITEM_EXTENDEDENEMYBUFFDURATIOM_NAME",
+                //pickupIconPath = "@Cloudburst:Assets/Items/Lemdog/LemDog_TexIcon.png",
+                //pickupModelPath = "@Cloudburst:Assets/Items/Lemdog/MDLLemDog.prefab",
+                //pickupToken = "ITEM_EXTENDEDENEMYBUFFDURATIOM_PICKUP",
+                tags = damageOnDamageTags,
+                tier = ItemTier.Tier1,
+                unlockableName = ""
+            });
             Hook();
         }
 
@@ -456,7 +478,7 @@ namespace Cloudburst.Cores
             LanguageAPI.Add("ITEM_CLOAKBUFFONINTERACTION_DESC", "Become <style=cIsUtility>cloaked for 2 seconds</style> <style=cStack>(+2 seconds per stack)</style> when picking up an item.");
             LanguageAPI.Add("ITEM_CLOAKBUFFONINTERACTION_PICKUP", "Become cloaked when picking up an item.");
 
-            LanguageAPI.Add("ITEM_ITEMONLEVELUP_NAME", "Dropship Caller");
+            LanguageAPI.Add("ITEM_ITEMONLEVELUP_NAME", "Care Package Requester");
             LanguageAPI.Add("ITEM_ITEMONLEVELUP_DESC", "<style=cIsUtility>75% Chance to gain an item on level up</style>. <style=cStack>+5% chance to gain a green item per stack</style>");
             LanguageAPI.Add("ITEM_ITEMONLEVELUP_PICKUP", "Chance to gain an item on level up");
 
@@ -477,10 +499,6 @@ namespace Cloudburst.Cores
             LanguageAPI.Add("ITEM_BARRIERONLEVEL_DESC", "Gain a <style=cIsHealing>temporary barrier</style> on level up for <style=cIsHealing>30 health</style> <style=cStack>(+5 per stack)</style>.");
             LanguageAPI.Add("ITEM_BARRIERONLEVEL_PICKUP", "Gain barrier on level up");
 
-            LanguageAPI.Add("ITEM_LIGHTNINGONCRIT_NAME", "Detritive Trematode"); //model(??)
-            LanguageAPI.Add("ITEM_LIGHTNINGONCRIT_DESC", "Enemies with low health recieve a <style=cIsDamage>damage over time</style> that deals 100%<style=cStack>(+100% per stack)</style> damage.");
-            LanguageAPI.Add("ITEM_LIGHTNINGONCRIT_PICKUP", "Low health enemies recieve damage over time.");
-
             LanguageAPI.Add("ITEM_EXPERIENCEONHIT_NAME", "Glass Harvester");
             LanguageAPI.Add("ITEM_EXPERIENCEONHIT_DESC", "Gain 0.5 <style=cStack>(+0.4 per stack)</style> <style=cIsUtility>experience</style> on hit.");
             LanguageAPI.Add("ITEM_EXPERIENCEONHIT_PICKUP", "Gain experience on hit");
@@ -493,7 +511,17 @@ namespace Cloudburst.Cores
             LanguageAPI.Add("ITEM_BLOODTESTER_DESC", "Gain 5 <style=cStack>(+5 per stack)</style> <style=cIsUtility>money</style> when healed .");
             LanguageAPI.Add("ITEM_BLOODTESTER_PICKUP", "Gain money when healed. ");
 
-            LanguageAPI.Add("ITEM_EXTENDEDENEMYBUFFDURATIOM_NAME", "Magican's Earrings");
+            LanguageAPI.Add("ITEM_DAMAGEONDAMAGE_NAME", "Martyr's Tiara");
+            LanguageAPI.Add("ITEM_DAMAGEONDAMAGE_DESC", "<style=cIsDamage>Damage nearby enemies</style> when hurt for 50% damage <style=cStack>(+50% per stack)</style>.");
+            LanguageAPI.Add("ITEM_DAMAGEONDAMAGE_PICKUP", "Damage nearby enemies when hurt. ");
+
+            //STARSTORM 2
+
+            LanguageAPI.Add("ITEM_LIGHTNINGONCRIT_NAME", "Detritive Trematode"); //model(??)
+            LanguageAPI.Add("ITEM_LIGHTNINGONCRIT_DESC", "Enemies with low health recieve a <style=cIsDamage>damage over time</style> that deals 100%<style=cStack>(+100% per stack)</style> damage.");
+            LanguageAPI.Add("ITEM_LIGHTNINGONCRIT_PICKUP", "Low health enemies recieve damage over time.");
+
+            LanguageAPI.Add("ITEM_EXTENDEDENEMYBUFFDURATIOM_NAME", "Magician's Earrings");
             LanguageAPI.Add("ITEM_EXTENDEDENEMYBUFFDURATIOM_DESC", "Extend <style=cIsUtility>positive buffs applied to you</style> by 2<style=cStack>(+1 per stack)</style> seconds.");
             LanguageAPI.Add("ITEM_EXTENDEDENEMYBUFFDURATIOM_PICKUP", "Extend positive buff duration.");
 
@@ -585,6 +613,9 @@ namespace Cloudburst.Cores
                     break;
                 case "Coin":
                     coinIndex = ItemAPI.Add(customItem);
+                    break;
+                case "DamageOnDamage":
+                    damageOnDamageIndex = ItemAPI.Add(customItem);
                     break;
                 default:
                     LogCore.LogF(itemDef.name + " is unregistered! Item will not spawn!");

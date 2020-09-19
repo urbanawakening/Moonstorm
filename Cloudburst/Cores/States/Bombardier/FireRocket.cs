@@ -12,7 +12,7 @@ namespace Cloudburst.Cores.States.Bombardier
         public static GameObject effectPrefab = EntityStates.Commando.CommandoWeapon.FireRocket.effectPrefab;
 
         public static DamageType damageType = DamageType.Generic;
-        public static float damageCoeff = 3.5f;
+        public static float damageCoeff = 3.2f;
         public static float procCoeff = 1;
         public static float force = 5000;
         public static float baseDuration = .9f;
@@ -41,6 +41,10 @@ namespace Cloudburst.Cores.States.Bombardier
             if (ShouldHaveKnockback() && !isGrounded && characterMotor)
             {
                 characterMotor.ApplyForce(GetKnockback(aimRay), false, false);
+            }
+
+            if (characterBody && ShouldApplyBloom()) {
+                characterBody.AddSpreadBloom(GetBloom());
             }
 
             FireProjectileInfo info = new FireProjectileInfo()
@@ -77,12 +81,15 @@ namespace Cloudburst.Cores.States.Bombardier
         }
 
         public virtual Vector3 GetKnockback(Ray aimRay) {
-            return aimRay.direction * (-1500);
+            return aimRay.direction * (-1000);
         }
 
-        public override void OnExit()
-        {
-            base.OnExit();
+        public virtual bool ShouldApplyBloom() {
+            return true;
+        }
+
+        public virtual float GetBloom() {
+            return 100;
         }
 
         public override void FixedUpdate()

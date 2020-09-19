@@ -69,6 +69,11 @@ namespace Cloudburst.Cores
             API.CreateEmptySkills(body);
             skillLocator = body.GetComponent<SkillLocator>();
 
+            var cbody = body.GetComponent<CharacterBody>();
+
+            cbody.crosshairPrefab = Resources.Load<GameObject>("prefabs/crosshair/StraightBracketCrosshair");
+            cbody.bodyFlags |= CharacterBody.BodyFlags.IgnoreFallDamage;
+
             skillLocator.passiveSkill.enabled = true;
 
             var passive = skillLocator.passiveSkill;
@@ -79,7 +84,6 @@ namespace Cloudburst.Cores
 
             LanguageAPI.Add("BOMBARDIER_PASSIVE_DESC", "You are <style=cIsUtility>immune</style> to fall damage.");
             LanguageAPI.Add("BOMBARDIER_PASSIVE_NAME", "Lessons Learned");
-
 
             CreatePrimary();
             CreateSecondary();
@@ -120,7 +124,7 @@ namespace Cloudburst.Cores
             primarySkillDef.icon = null;
             primarySkillDef.keywordTokens = Array.Empty<String>();
 
-            LanguageAPI.Add(primarySkillDef.skillDescriptionToken, "Fire a rocket that does <style=cIsDamage>300%</style> damage and <style=cIsDamage>explodes on contact</style>.");
+            LanguageAPI.Add(primarySkillDef.skillDescriptionToken, "Fire a rocket that does <style=cIsDamage>320%</style> damage and <style=cIsDamage>explodes on contact</style>.");
             LanguageAPI.Add(primarySkillDef.skillNameToken, "Rocket Blast");
 
             LoadoutAPI.AddSkillDef(primarySkillDef);
@@ -163,7 +167,7 @@ namespace Cloudburst.Cores
                  "KEYWORD_STUNNING",
              };
 
-            LanguageAPI.Add(secondarySkillDef.skillDescriptionToken, "<style=cIsDamage>Stunning</style>. Fire a stunning rocket that does <style=cIsDamage>150%</style> damage and <style=cIsDamage>explodes in a large radius on contact</style>.");
+            LanguageAPI.Add(secondarySkillDef.skillDescriptionToken, "<style=cIsDamage>Stunning</style>. Fire a stunning rocket that does <style=cIsDamage>200%</style> damage and <style=cIsDamage>explodes in a large radius on contact</style>.");
             LanguageAPI.Add(secondarySkillDef.skillNameToken, "Concussive Payload");
 
             LoadoutAPI.AddSkillDef(secondarySkillDef);
@@ -208,7 +212,7 @@ namespace Cloudburst.Cores
             };
 
             LanguageAPI.Add("KEYWORD_FORCEFUL", "<style=cKeywordName>Forceful</style><style=cSub>This skill applies the Forceful debuff, which doubles force applied to enemies.</style>");
-            LanguageAPI.Add(utilitySkillDef.skillDescriptionToken, "<style=cIsDamage>Forceful</style>. Pull enemies towards you for <style=cIsDamage>400%</style> damage and <style=cIsUtility>boost yourself upwards</style>.");
+            LanguageAPI.Add(utilitySkillDef.skillDescriptionToken, "<style=cIsDamage>Forceful</style>. Pull enemies towards you for <style=cIsDamage>500%</style> damage and <style=cIsUtility>boost yourself upwards</style>.");
             LanguageAPI.Add(utilitySkillDef.skillNameToken, "Plan B");
 
             LoadoutAPI.AddSkillDef(utilitySkillDef);
@@ -245,7 +249,7 @@ namespace Cloudburst.Cores
             specialSkillDef.skillNameToken = "BOMBARDIER_SPECIAL_NAME";
             specialSkillDef.icon = null;
 
-            LanguageAPI.Add(specialSkillDef.skillDescriptionToken, "Fire nine seeking rockets that each deal <style=cIsDamage>600%</style> damage.");
+            LanguageAPI.Add(specialSkillDef.skillDescriptionToken, "Fire nine seeking rockets that each deal <style=cIsDamage>250%</style> damage.");
             LanguageAPI.Add(specialSkillDef.skillNameToken, "Seeker Barrage");
 
             LoadoutAPI.AddSkillDef(specialSkillDef);

@@ -34,7 +34,7 @@ namespace Cloudburst.Cores.States.Bombardier
                 FireProjectileInfo info = new FireProjectileInfo()
                 {
                     crit = RollCrit(),
-                    damage = (damageCoeff * 2) * damageStat,
+                    damage = 2.5f * damageStat,
                     damageColorIndex = RoR2.DamageColorIndex.Default,
                     damageTypeOverride = damageType,
                     force = 3000,

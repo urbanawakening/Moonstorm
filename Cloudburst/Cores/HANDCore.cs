@@ -467,7 +467,7 @@ namespace Cloudburst.Cores.HAND
             //they cause the primary to not fire off after the secondary is fired.
             //Obvious problem is obvious, but setting the primary's interrupt priority to PrioritySkill 
             //makes it so you can't hold it down. Extremely obvious problem is obvious, but I have no idea how's to fix this.
-            //FIX: Apparently I forgot to call base.FixedUpdate(); in its FixedUpdate void, whoops!
+            //FIX: Apparently I forgot to call base.FixedUpdate(n.k); in its FixedUpdate void, whoops!
 
             LoadoutAPI.AddSkill(typeof(FullSwing));
             LoadoutAPI.AddSkill(typeof(FullSwing2));

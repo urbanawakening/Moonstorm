@@ -51,7 +51,7 @@
     <Compile Include="Cores\CommonAssets.cs" />
     <Compile Include="Cores\Components\EnableGoldAffix.cs" />
     <Compile Include="Cores\Components\ProgressTracker.cs" />
-    <Compile Include="Cores\States\Bombardier\Mortor.cs" />
+    <Compile Include="Cores\States\Bombardier\Seekers.cs" />
     <Compile Include="Cores\States\Bombardier\FireFlameRocket.cs" />
     <Compile Include="Cores\States\Bombardier\Up.cs" />
     <Compile Include="Cores\States\Bombardier\FireRocket.cs" />

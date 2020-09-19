@@ -98,6 +98,7 @@ namespace Cloudburst
         public static ConfigEntry<bool> EnableRex;
         public static ConfigEntry<bool> EnableItems;
         public static ConfigEntry<bool> EnableEquipment;
+
         public static ConfigEntry<bool> EnableWIP;
         public static ConfigEntry<bool> EnableUnlockAll;
         public static ConfigEntry<bool> Enabled;

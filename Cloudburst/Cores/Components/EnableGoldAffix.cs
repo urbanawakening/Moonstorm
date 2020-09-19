@@ -23,8 +23,7 @@ namespace Cloudburst.Cores.Components {
                 goldAffixEffect = Instantiate<GameObject>(CommonAssets.goldAffix, base.transform);
                 ParticleSystem.ShapeModule shape = goldAffixEffect.GetComponent<ParticleSystem>().shape;
 
-                var aa = Instantiate<GameObject>(CommonAssets.goldChestStarburst, base.transform);
-                //NetworkServer.Spawn(aa);
+
 
                 if (mainSkinnedMeshRenderer)
                 {
@@ -35,6 +34,12 @@ namespace Cloudburst.Cores.Components {
                 }
             }
             else {
+                Destroy(this.goldAffixEffect);
+                this.goldAffixEffect = null;
+            }
+        }
+        public void OnDisable() {
+            if (this.goldAffixEffect) {
                 Destroy(this.goldAffixEffect);
                 this.goldAffixEffect = null;
             }
