@@ -4,6 +4,7 @@ using Cloudburst.Cores;
 using Cloudburst.Cores.Components;
 using Cloudburst.Cores.HAND;
 using R2API.Utils;
+using RoR2;
 using System;
 using System.Reflection;
 
@@ -55,7 +56,12 @@ namespace Cloudburst
         /// Called when the mod is disabled
         /// </summary>
         public static event Action onDisable;
-        
+        /// <summary>
+        /// Called on the mod's FixedUpdate
+        /// </summary>
+        public static event Action onFixedUpdate;
+
+
         #region Cores
         //Cupport cores; Cannot be disabled.
         private AssetsCore assetCore;
@@ -114,6 +120,7 @@ namespace Cloudburst
                 LogCore.LogI("Bepinex object does not have a progress tracker or there is no instance of the progress tracker. Attaching now.");
                 gameObject.AddComponent<ProgressTracker>();
             }
+            
 
             LogCore.LogM("Cloudburst loaded!");
         }
@@ -225,6 +232,16 @@ namespace Cloudburst
                 return;
             }
             awake();
+        }
+
+        public void FixedUpdate()
+        {
+            Action fixedUpdate = Cloudburst.onFixedUpdate;
+            if (fixedUpdate == null)
+            {
+                return;
+            }
+            fixedUpdate();
         }
 
         public void Start()

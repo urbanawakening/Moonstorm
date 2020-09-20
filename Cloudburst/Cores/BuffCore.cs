@@ -19,6 +19,7 @@ namespace Cloudburst.Cores
         protected internal BuffIndex detritiveIndex;
         protected internal BuffIndex greaterBannerIndex;
         protected internal BuffIndex bombardierForceIndex;
+        protected internal BuffIndex baboomChargeIndex;
 
         internal bool Loaded { get; private set; } = false;
         public BuffCore() => RegisterBuffs(); 
@@ -108,6 +109,16 @@ namespace Cloudburst.Cores
                 eliteIndex = EliteIndex.None,
                 iconPath = "Textures/BuffIcons/texMovespeedBuffIcon",
                 name = "BombardierForce",
+                buffColor = new Color(0.8392157f, 0.7882353f, 0.22745098f)
+            });
+            RegisterBuff(new BuffDef()
+            {
+                buffIndex = BuffIndex.Count,
+                canStack = true,
+                isDebuff = false,
+                eliteIndex = EliteIndex.None,
+                iconPath = "Textures/BuffIcons/texMovespeedBuffIcon",
+                name = "BaboonCharge",
                 buffColor = new Color(0.8392157f, 0.7882353f, 0.22745098f)
             });
 
@@ -216,6 +227,9 @@ namespace Cloudburst.Cores
                     break;
                 case "BombardierForce":
                     bombardierForceIndex = BuffAPI.Add(customBuff);
+                    break;
+                case "BaboonCharge":
+                    baboomChargeIndex = BuffAPI.Add(customBuff);
                     break;
 
                 //throw new System.NotImplementedException("not implemented yet!");

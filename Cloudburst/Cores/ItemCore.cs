@@ -32,8 +32,13 @@ namespace Cloudburst.Cores
         protected internal ItemIndex lemdogIndex;
         protected internal ItemIndex moneyOnHealIndex;
         protected internal ItemIndex extendEnemyBuffDurationIndex;
-        protected internal ItemIndex damageOnDamageIndex;
-        
+        protected internal ItemIndex damageOnDamagedIndex;
+        protected internal ItemIndex freezeEnemiesOnHitIndex;
+        protected internal ItemIndex geigerCounterIndex;
+        protected internal ItemIndex heartIndex;
+
+        //geigerCounterIndex
+
         //STARSTORM 2
         protected internal ItemIndex dormantFungusIndex;
         protected internal ItemIndex diaryIndex;
@@ -455,13 +460,75 @@ namespace Cloudburst.Cores
                 //pickupModelPath = "@Cloudburst:Assets/Items/Lemdog/MDLLemDog.prefab",
                 //pickupToken = "ITEM_EXTENDEDENEMYBUFFDURATIOM_PICKUP",
                 tags = damageOnDamageTags,
-                tier = ItemTier.Tier1,
+                tier = ItemTier.Tier2,
                 unlockableName = ""
             });
+            ItemTag[] freezeEnemiesOnHitTags = new ItemTag[2]
+{
+                    ItemTag.Damage,
+                    ItemTag.Utility,
+};
+            RegisterItem(new ItemDef
+            {
+                canRemove = true,
+                //descriptionToken = "ITEM_EXTENDEDENEMYBUFFDURATIOM_DESC",
+                hidden = false,
+                loreToken = "",
+                name = "FreezeEnemiesOnHit",
+                //nameToken = "ITEM_EXTENDEDENEMYBUFFDURATIOM_NAME",
+                //pickupIconPath = "@Cloudburst:Assets/Items/Lemdog/LemDog_TexIcon.png",
+                //pickupModelPath = "@Cloudburst:Assets/Items/Lemdog/MDLLemDog.prefab",
+                //pickupToken = "ITEM_EXTENDEDENEMYBUFFDURATIOM_PICKUP",
+                tags = freezeEnemiesOnHitTags,
+                tier = ItemTier.Tier3,
+                unlockableName = ""
+            });
+            ItemTag[] geigerCounterTags = new ItemTag[2]
+{
+                    ItemTag.Damage,
+                    ItemTag.Utility,
+};
+            RegisterItem(new ItemDef
+            {
+                canRemove = true,
+                //descriptionToken = "ITEM_EXTENDEDENEMYBUFFDURATIOM_DESC",
+                hidden = false,
+                loreToken = "",
+                name = "GeigerCounter",
+                //nameToken = "ITEM_EXTENDEDENEMYBUFFDURATIOM_NAME",
+                //pickupIconPath = "@Cloudburst:Assets/Items/Lemdog/LemDog_TexIcon.png",
+                //pickupModelPath = "@Cloudburst:Assets/Items/Lemdog/MDLLemDog.prefab",
+                //pickupToken = "ITEM_EXTENDEDENEMYBUFFDURATIOM_PICKUP",
+                tags = geigerCounterTags,
+                tier = ItemTier.Tier3,
+                unlockableName = ""
+            });
+            ItemTag[] heartTags = new ItemTag[2]
+{
+                    ItemTag.AIBlacklist,
+                    ItemTag.Utility
+};
+            RegisterItem(new ItemDef
+            {
+                canRemove = true,
+                //descriptionToken = "ITEM_EXTENDEDENEMYBUFFDURATIOM_DESC",
+                hidden = false,
+                loreToken = "",
+                name = "Heart",
+                //nameToken = "ITEM_EXTENDEDENEMYBUFFDURATIOM_NAME",
+                //pickupIconPath = "@Cloudburst:Assets/Items/Lemdog/LemDog_TexIcon.png",
+                //pickupModelPath = "@Cloudburst:Assets/Items/Lemdog/MDLLemDog.prefab",
+                //pickupToken = "ITEM_EXTENDEDENEMYBUFFDURATIOM_PICKUP",
+                tags = heartTags,
+                tier = ItemTier.Tier3,
+                unlockableName = ""
+            });
+
             Hook();
         }
 
-        protected internal void RegisterTokens() {
+        protected internal void RegisterTokens()
+        {
             LanguageAPI.Add("ITEM_ITEMONCHAMPIONKILL_NAME", "Extractor"); //model
             LanguageAPI.Add("ITEM_ITEMONCHAMPIONKILL_DESC", "<style=cIsUtility>25% chance <style=cStack>(+10% per stack)</style> for bosses to drop a random boss item when killed.</style>");
             LanguageAPI.Add("ITEM_ITEMONCHAMPIONKILL_PICKUP", "Chance for bosses to drop boss items when killed");
@@ -511,19 +578,31 @@ namespace Cloudburst.Cores
             LanguageAPI.Add("ITEM_BLOODTESTER_DESC", "Gain 5 <style=cStack>(+5 per stack)</style> <style=cIsUtility>money</style> when healed .");
             LanguageAPI.Add("ITEM_BLOODTESTER_PICKUP", "Gain money when healed. ");
 
-            LanguageAPI.Add("ITEM_DAMAGEONDAMAGE_NAME", "Martyr's Tiara");
-            LanguageAPI.Add("ITEM_DAMAGEONDAMAGE_DESC", "<style=cIsDamage>Damage nearby enemies</style> when hurt for 50% damage <style=cStack>(+50% per stack)</style>.");
+            LanguageAPI.Add("ITEM_DAMAGEONDAMAGE_NAME", "Red Skull");
+            LanguageAPI.Add("ITEM_DAMAGEONDAMAGE_DESC", "<style=cIsDamage>Deal more 40% <style=cStack>(+5% per stack)</style> more damage</style> when under 50% health.");
             LanguageAPI.Add("ITEM_DAMAGEONDAMAGE_PICKUP", "Damage nearby enemies when hurt. ");
+
+            LanguageAPI.Add("ITEM_EXTENDEDENEMYBUFFDURATIOM_NAME", "Magician's Earrings");
+            LanguageAPI.Add("ITEM_EXTENDEDENEMYBUFFDURATIOM_DESC", "Extend <style=cIsUtility>positive buffs applied to you</style> by 2<style=cStack>(+1 per stack)</style> seconds.");
+            LanguageAPI.Add("ITEM_EXTENDEDENEMYBUFFDURATIOM_PICKUP", "Extend positive buff duration.");
+
+            LanguageAPI.Add("ITEM_FREEZEENEMIESONHIT_NAME", "Relegdon's Veil");
+            LanguageAPI.Add("ITEM_FREEZEENEMIESONHIT_DESC", "10% chance to <style=cIsUtility>freeze</style> enemies for 3 seconds <style=cStack>(+1 per stack)</style> seconds.");
+            LanguageAPI.Add("ITEM_FREEZEENEMIESONHIT_PICKUP", "Chance to freeze enemies on hit.");
+
+            LanguageAPI.Add("ITEM_GEIGERCOUNTER_NAME", "Geiger Counter");
+            LanguageAPI.Add("ITEM_GEIGERCOUNTER_DESC", "Every 10 skill uses <style=cIsDamage>explode for 500% <style=cStack>(+250% damage per stack)</style> damage</style> blighting enemies.");
+            LanguageAPI.Add("ITEM_GEIGERCOUNTER_PICKUP", "Using skills charges a large blast.");
+
+            LanguageAPI.Add("ITEM_HEART_NAME", "Baboon Heart");
+            LanguageAPI.Add("ITEM_HEART_DESC", "Getting hit below 50% health <style=cIsUtility>grants temporary invincibility for 2 seconds <style=cStack>(+1 second per stack)</style></style>. Recharge by killing enemies.");
+            LanguageAPI.Add("ITEM_HEART_PICKUP", "Gain invincibility when hit at low health. Recharge by killing enemies.");
 
             //STARSTORM 2
 
             LanguageAPI.Add("ITEM_LIGHTNINGONCRIT_NAME", "Detritive Trematode"); //model(??)
             LanguageAPI.Add("ITEM_LIGHTNINGONCRIT_DESC", "Enemies with low health recieve a <style=cIsDamage>damage over time</style> that deals 100%<style=cStack>(+100% per stack)</style> damage.");
             LanguageAPI.Add("ITEM_LIGHTNINGONCRIT_PICKUP", "Low health enemies recieve damage over time.");
-
-            LanguageAPI.Add("ITEM_EXTENDEDENEMYBUFFDURATIOM_NAME", "Magician's Earrings");
-            LanguageAPI.Add("ITEM_EXTENDEDENEMYBUFFDURATIOM_DESC", "Extend <style=cIsUtility>positive buffs applied to you</style> by 2<style=cStack>(+1 per stack)</style> seconds.");
-            LanguageAPI.Add("ITEM_EXTENDEDENEMYBUFFDURATIOM_PICKUP", "Extend positive buff duration.");
 
             LanguageAPI.Add("ITEM_DORMANTFUNGUS_NAME", "Dormant Fungus");
             LanguageAPI.Add("ITEM_DORMANTFUNGUS_DESC", "<style=cIsHealing>Heal</style> 1% <style=cStack>(+1% per stack)</style> every five seconds while sprinting."); //by 2<style=cStack>(+1 per stack)</style> seconds.");
@@ -615,7 +694,16 @@ namespace Cloudburst.Cores
                     coinIndex = ItemAPI.Add(customItem);
                     break;
                 case "DamageOnDamage":
-                    damageOnDamageIndex = ItemAPI.Add(customItem);
+                    damageOnDamagedIndex = ItemAPI.Add(customItem);
+                    break;
+                case "FreezeEnemiesOnHit":
+                    freezeEnemiesOnHitIndex = ItemAPI.Add(customItem);
+                    break;
+                case "GeigerCounter":
+                    geigerCounterIndex = ItemAPI.Add(customItem);
+                    break;
+                case "Heart":
+                    heartIndex = ItemAPI.Add(customItem);
                     break;
                 default:
                     LogCore.LogF(itemDef.name + " is unregistered! Item will not spawn!");
@@ -650,6 +738,7 @@ namespace Cloudburst.Cores
 
                     var fungusCount = inventory.GetItemCount(dormantFungusIndex);
                     var diaryCount = inventory.GetItemCount(diaryIndex);
+                    var counterCount = inventory.GetItemCount(geigerCounterIndex);
 
 
                     if (fungusCount > 0)
@@ -659,6 +748,10 @@ namespace Cloudburst.Cores
                     if (diaryCount > 0)
                     {
                         self.AddItemBehavior<DairyBehavior>(diaryCount);
+                    }
+                    if (counterCount > 0)
+                    {
+                        self.AddItemBehavior<GeigerCounterBehavior>(counterCount);
                     }
                 }
             }
@@ -747,9 +840,45 @@ namespace Cloudburst.Cores
                     CharacterBody attackerBody = attacker.GetComponent<CharacterBody>();
                     if (attackerBody.inventory)
                     {
+                        var victimBody = self.body;
+
                         Inventory inv = attackerBody.inventory;
+                        Inventory inv2 = null;
+
+                        if (self.body && self.body.inventory) {
+                            inv2 = self.body.inventory;
+                        }
+
                         int experienceOnHitCount = inv.GetItemCount(experienceOnHitIndex);
                         int lightningOnCritCOunt = inv.GetItemCount(damageOverTimeToLowHealthIndex);
+                        int heartCount = 0;
+                        if (inv2)
+                        {
+                            heartCount = inv2.GetItemCount(heartIndex);
+                        }
+                        int damageOnDamagedCOunt = inv.GetItemCount(damageOnDamagedIndex);
+
+                        if (damageOnDamagedCOunt > 0 && attackerBody.healthComponent && attackerBody.healthComponent.combinedHealthFraction < .5f)
+                        {
+                            float extra = damageInfo.damage * (.2f + (damageOnDamagedCOunt * .2f));
+
+                            LogCore.LogD(damageInfo.damage);
+                            LogCore.LogD(extra);
+
+                            damageInfo.damage += extra;
+
+                            LogCore.LogD(damageInfo.damage);
+                        }
+
+                        if (self.combinedHealthFraction < .4f && heartCount > 0) {
+                            if (victimBody && !victimBody.HasBuff(BuffCore.instance.baboomChargeIndex)) {
+                                victimBody.AddTimedBuff(BuffIndex.HiddenInvincibility, 1 + (heartCount));
+                                for (int i = 0; i < 15; i++) {
+                                    victimBody.AddBuff(BuffCore.instance.baboomChargeIndex);
+                                }
+                            }
+                        }
+
                         if (experienceOnHitCount > 0 && attackerBody.teamComponent)
                         {
                             float exp = 0.1f + (experienceOnHitCount * 0.4f);
@@ -770,8 +899,10 @@ namespace Cloudburst.Cores
                     }
                 }
             }
+            var combinedHealthb4Damage = self.combinedHealth;
             orig(self, damageInfo);
-        }
+
+        }              
         #region GlobalEventManager
         public void GlobalEventManager_OnInteractionBegin(On.RoR2.GlobalEventManager.orig_OnInteractionBegin orig, GlobalEventManager self, Interactor interactor, IInteractable interactable, UnityEngine.GameObject interactableObject)
         {
@@ -781,7 +912,7 @@ namespace Cloudburst.Cores
             {
                 Inventory inventory = characterBody.inventory;
                 if (inventory && !interactableObject.HasComponent<GenericPickupController>())
-                {
+                {   
                     int moneyOnInteractionCount = inventory.GetItemCount(moneyOnInteractionIndex);
 
                     if (moneyOnInteractionCount > 0)
@@ -822,6 +953,12 @@ namespace Cloudburst.Cores
             //Inventory victimInventory = victimMaster ? victimMaster.inventory : null;
 
             int itemChampionOnKillCount = attackerInventory.GetItemCount(itemChampionOnKillIndex);
+            int heartCount = attackerInventory.GetItemCount(heartIndex);
+
+            if (heartIndex > 0 && attackerBody.HasBuff(BuffCore.instance.baboomChargeIndex)) {
+                attackerBody.RemoveBuff(BuffCore.instance.baboomChargeIndex);
+            }
+
             if (itemChampionOnKillCount > 0 && attackerMaster && Util.CheckRoll(15 + (itemChampionOnKillCount * 10)) && damageReport.victim.body.isBoss == true)
             {
                 Util.PlaySound("ui_obj_casinoChest_open", attackerBody.gameObject);
@@ -846,21 +983,25 @@ namespace Cloudburst.Cores
                 int rootCount = attackerInventory.GetItemCount(crippleOnHitIndex);
                 int scpCount = attackerInventory.GetItemCount(randomDebuffOnHitIndex);
                 int coinCount = attackerInventory.GetItemCount(coinIndex);
+                int freezeCount = attackerInventory.GetItemCount(freezeEnemiesOnHitIndex);
 
                 if (rootCount > 0 && Util.CheckRoll(20, attackerMaster) && attackerMaster && damageReport.victimBody)
                 {
                     victimBody.AddTimedBuff(BuffIndex.Cripple, 3);
                 }
 
-                if (coinCount > 0 && victimBody.gameObject && attackerBody.gameObject && Util.CheckRoll(1 + (3 * coinCount), attackerMaster) && victimBody) {
+                if (coinCount > 0 && victimBody.gameObject && attackerBody.gameObject && Util.CheckRoll(1 + (3 * coinCount), attackerMaster) && victimBody)
+                {
                     var isNotMoltenCoin = damageReport.dotType != DotController.DotIndex.PercentBurn;
 
-                    if (isNotMoltenCoin) {
+                    if (isNotMoltenCoin)
+                    {
                         //EffectCore.coinImpactEffect, new EffectData()
                         //prefabs/effects/omnieffect/OmniExplosionVFXQuick
                         //prefabs/effects/impacteffects/ImpactWispEmber
                         //ImpactWispEmber
-                        EffectManager.SpawnEffect(Resources.Load<GameObject>("prefabs/effects/impacteffects/ExplosionSolarFlare"), new EffectData() {
+                        EffectManager.SpawnEffect(Resources.Load<GameObject>("prefabs/effects/impacteffects/ExplosionSolarFlare"), new EffectData()
+                        {
                             scale = 5,
                             origin = victimBody.transform.position,
                             rotation = Quaternion.identity
@@ -873,13 +1014,24 @@ namespace Cloudburst.Cores
                         }, true);
                     }
 
-                    if (isNotMoltenCoin) {
+                    if (isNotMoltenCoin)
+                    {
                         DotController.InflictDot(victimBody.gameObject, attackerBody.gameObject, DotController.DotIndex.PercentBurn, 5, 1);
                     }
 
-                    if (attackerBody.teamComponent && isNotMoltenCoin) {
+                    if (attackerBody.teamComponent && isNotMoltenCoin)
+                    {
                         TeamManager.instance.GiveTeamMoney(attackerBody.teamComponent.teamIndex, (uint)(5 * coinCount));
-                     }
+                    }
+                }
+
+                if (freezeCount > 0 && Util.CheckRoll(10, attackerMaster) && victimBody)
+                {
+                    var setStateOnHurt = victimBody.GetComponent<SetStateOnHurt>();
+                    if (setStateOnHurt)
+                    {
+                        setStateOnHurt.SetFrozen(2 + freezeCount);
+                    }
                 }
 
                 if (scpCount > 0 && damageReport.victimBody && victimMaster)
@@ -994,6 +1146,64 @@ namespace Cloudburst.Cores
                     }
                 }
                 timer = 0;
+            }
+        }
+    }
+    public class GeigerCounterBehavior : CharacterBody.ItemBehavior
+    {
+        private float counter;
+        public void Start()
+        {
+            On.RoR2.GenericSkill.OnExecute += GenericSkill_OnExecute;
+        }
+
+        private void GenericSkill_OnExecute(On.RoR2.GenericSkill.orig_OnExecute orig, GenericSkill self)
+        {
+            if (self.characterBody.Equals(body))
+            {
+                if (!self.characterBody.skillLocator.primary.Equals(self))
+                {
+                    counter += 1;
+                }
+            }
+            orig(self);
+        }
+
+        public void FixedUpdate()
+        {
+            if (counter == 10)
+            {
+                LogCore.LogD("Fired!");
+
+                EffectManager.SpawnEffect(Resources.Load<GameObject>("prefabs/effects/LightningStakeNova"), new EffectData()
+                {
+                    scale = 25,
+                    origin = transform.position,
+                    rotation = Quaternion.identity
+                }, true);
+
+                BlastAttack attack = new BlastAttack()
+                {
+                    attacker = base.gameObject,
+                    attackerFiltering = AttackerFiltering.Default,
+                    baseDamage = (2.5f + (2.5f * stack)) * body.damage,
+                    baseForce = 2500,
+                    bonusForce = new Vector3(0, 0, 0),
+                    crit = body.RollCrit(),
+                    damageColorIndex = DamageColorIndex.Default,
+                    damageType = DamageType.BlightOnHit,
+                    falloffModel = BlastAttack.FalloffModel.None,
+                    impactEffect = EffectIndex.Invalid,
+                    inflictor = base.gameObject,
+                    losType = BlastAttack.LoSType.NearestHit,
+                    position = base.transform.position,
+                    procChainMask = default,
+                    procCoefficient = 0.5f,
+                    radius = 25,
+                    teamIndex = body.teamComponent.teamIndex,
+                };
+                attack.Fire();
+                counter = 0;
             }
         }
     }

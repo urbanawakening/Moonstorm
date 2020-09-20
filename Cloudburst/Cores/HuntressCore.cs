@@ -1,6 +1,7 @@
 ﻿using Cloudburst.Cores.States.Huntress;
 using EntityStates;
 using R2API;
+using R2API.Utils;
 using RoR2;
 using RoR2.Projectile;
 using RoR2.Skills;
@@ -21,10 +22,42 @@ namespace Cloudburst.Cores
         public static GameObject arrowObject;
         public HuntressCore() => WIP();
 
-        protected void WIP() {
+        protected void WIP()
+        {
             instance = this;
+
+            LanguageAPI.Add("OBJECTIVE_INFINITE_ARENA", "Survive until the very end.");
+
+            //Cloudburst.onFixedUpdate += ArenaMissionControllerTweaks;
+            //On.RoR2.UI.ObjectivePanelController.ClearArena.GenerateString += ClearArena_GenerateString;
+            //On.RoR2.ArenaMissionController.BeginRound += ArenaMissionController_BeginRound;
+            //On.RoR2.ArenaMissionController.OnStartServer += ArenaMissionController_OnStartServer;
             //AddPrimarySkill();
             //CreateSeekingArrow();
+        }
+
+        private void ArenaMissionController_OnStartServer(On.RoR2.ArenaMissionController.orig_OnStartServer orig, ArenaMissionController self)
+        {
+            orig(self);
+            self.SetFieldValue<WeightedSelection<DirectorCard>>("availableMonsterCards", Util.CreateReasonableDirectorCardSpawnList(self.baseMonsterCredit * Run.instance.difficultyCoefficient, 4, 12  ));
+        }
+
+        private void ArenaMissionController_BeginRound(On.RoR2.ArenaMissionController.orig_BeginRound orig, ArenaMissionController self)
+        {   
+            orig(self);
+
+
+        }
+
+        private string ClearArena_GenerateString(On.RoR2.UI.ObjectivePanelController.ClearArena.orig_GenerateString orig, RoR2.UI.ObjectivePanelController.ObjectiveTracker self)
+        {
+            return Language.GetString("OBJECTIVE_INFINITE_ARENA");
+        }
+
+        protected void ArenaMissionControllerTweaks() {
+            if (ArenaMissionController.instance) {
+                ArenaMissionController.instance.totalRoundsMax = int.MaxValue;
+            }
         }
 
         protected void CreateSeekingArrow() {

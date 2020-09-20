@@ -19,7 +19,7 @@ namespace Cloudburst.Cores
         protected BuffIndex voidIndex;
         protected EquipmentIndex voidEquip;
         protected EliteIndex voidElite;
-        protected int voidTier;
+        //protected int voidTier;
 
         protected BuffIndex tarIndex;
         protected EquipmentIndex tarEquip;
