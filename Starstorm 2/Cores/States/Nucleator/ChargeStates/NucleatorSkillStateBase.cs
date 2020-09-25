@@ -49,9 +49,7 @@ namespace Starstorm2.Cores.States.Nucleator
         {
             if(damageDealt > 0 && this.playerHealth - this.playerHealthFinal > damageDealt)
             {
-                Chat.AddMessage((this.playerHealth - this.playerHealthFinal).ToString());
-                Chat.AddMessage(damageDealt.ToString());
-                TakeDamage(this.playerHealth - this.playerHealthFinal - damageDealt);
+                TakeDamage();
             }
 
             if (this.chargeupVfxGameObject)
@@ -67,35 +65,39 @@ namespace Starstorm2.Cores.States.Nucleator
             base.characterBody.SetAimTimer(1f);
             this.lastCharge = this.charge;
             this.charge = base.fixedAge / this.maxChargeTime;
-
             if (this.charge <= 1.0f
-                && this.charge > overchargeThreshold 
-                && charge - overchargeThreshold > this.nextDamageInstance)
-            {
-                var chargeCoef = (this.charge - overchargeThreshold) / (1 - overchargeThreshold);
-                var damageCoef = chargeCoef * maxOverchargePlayerDamageDealt;
-                var damage = Mathf.Abs(chargeCoef * (playerHealthFinal - playerHealth)) - damageDealt;
-
-                if (!this.characterBody.HasBuff(NucleatorCore.radionuclideSurgeBuffIndex))
-                {
-                    TakeDamage(damage);
-                }
-
-                damageDealt += damage;
-                this.nextDamageInstance += 0.05f;
+                   && this.charge > overchargeThreshold
+                   && charge - overchargeThreshold > this.nextDamageInstance)
+            {                
+                damageDealt += TakeDamage();
+                this.nextDamageInstance += (1 - overchargeThreshold) / 5;
             }
+
         }
 
-        private void TakeDamage(float damage)
+        private float CalculateDamageInstance()
         {
-            this.characterBody.healthComponent.TakeDamage(
-                new DamageInfo()
-                {
-                    damageType = DamageType.BypassOneShotProtection | DamageType.BypassArmor | DamageType.NonLethal,
-                    crit = false,
-                    damage = damage,
-                    position = this.characterBody.transform.position
-                });
+            var chargeCoef = (this.charge - overchargeThreshold) / (1 - overchargeThreshold);
+            var damageCoef = chargeCoef * maxOverchargePlayerDamageDealt;
+            var damage = Mathf.Abs(chargeCoef * (playerHealthFinal - playerHealth)) - damageDealt;
+            return damage;
+        }
+
+        private float TakeDamage()
+        {
+            var damage = CalculateDamageInstance();
+            if (!this.characterBody.HasBuff(NucleatorCore.radionuclideSurgeBuffIndex))
+            {
+                this.characterBody.healthComponent.TakeDamage(
+                    new DamageInfo()
+                    {
+                        damageType = DamageType.BypassOneShotProtection | DamageType.BypassArmor | DamageType.NonLethal,
+                        crit = false,
+                        damage = damage,
+                        position = this.characterBody.transform.position
+                    });
+            }
+            return damage;
         }
 
         public override InterruptPriority GetMinimumInterruptPriority()
