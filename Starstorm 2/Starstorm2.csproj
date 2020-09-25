@@ -21,6 +21,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -350,6 +351,14 @@
     <Compile Include="Cores\DotCore.cs" />
     <Compile Include="Cores\EquipmentCore.cs" />
     <Compile Include="Cores\BuffCore.cs" />
+    <Compile Include="Cores\States\Nucleator\ApplyRadionuclideSurge.cs" />
+    <Compile Include="Cores\States\Nucleator\ChargeStates\ChargeFissionImpulse.cs" />
+    <Compile Include="Cores\States\Nucleator\ChargeStates\ChargeIrradiate.cs" />
+    <Compile Include="Cores\States\Nucleator\ChargeStates\ChargeQuarantine.cs" />
+    <Compile Include="Cores\States\Nucleator\ChargeStates\NucleatorSkillStateBase.cs" />
+    <Compile Include="Cores\States\Nucleator\FireStates\FireFissionImpulse.cs" />
+    <Compile Include="Cores\States\Nucleator\FireStates\FireIrradiate.cs" />
+    <Compile Include="Cores\States\Nucleator\FireStates\FireQuarantine.cs" />
     <Compile Include="Starstorm.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -358,6 +367,8 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>copy /Y "$(TargetPath)" "E:\Steam\steamapps\common\Risk of Rain 2\BepInEx\plugins\"</PostBuildEvent>
+    <PostBuildEvent>if "$(Username)" == "Flan" copy /Y "$(TargetPath)" "F:\SteamLibrary\steamapps\common\Risk of Rain 2\BepInEx\plugins"
+if "$(Username)" == "User1" copy /Y "$(TargetPath)" "{RoR2Path}"
+if "$(Username)" == "User2" copy /Y "$(TargetPath)" "{RoR2Path}"</PostBuildEvent>
   </PropertyGroup>
 </Project>
