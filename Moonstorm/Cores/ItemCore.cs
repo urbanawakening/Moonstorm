@@ -26,25 +26,15 @@ namespace Moonstorm.Cores
         protected internal ItemIndex moneyOnInteractionIndex;
         protected internal ItemIndex barrierOnCritIndex;
         protected internal ItemIndex barrierOnLevelIndex;
-        protected internal ItemIndex damageOverTimeToLowHealthIndex;
         protected internal ItemIndex experienceOnHitIndex;
         protected internal ItemIndex lemdogIndex;
-        protected internal ItemIndex moneyOnHealIndex;
         protected internal ItemIndex extendEnemyBuffDurationIndex;
-
         protected internal ItemIndex damageOnDamagedIndex;
         protected internal ItemIndex skinIndex;
         protected internal ItemIndex freezeEnemiesOnHitIndex;
         protected internal ItemIndex geigerCounterIndex;
         protected internal ItemIndex heartIndex;
         protected internal ItemIndex chipIndex;
-
-        //geigerCounterIndex
-
-        //STARSTORM 2
-        protected internal ItemIndex dormantFungusIndex;
-        protected internal ItemIndex diaryIndex;
-        protected internal ItemIndex coinIndex;
 
         public List<ItemIndex> bossitemList = new List<ItemIndex>{
             ItemIndex.NovaOnLowHealth,
@@ -347,26 +337,6 @@ namespace Moonstorm.Cores
                 tier = ItemTier.Tier3,
                 unlockableName = ""
             });
-            ItemTag[] moneyOnHealTags = new ItemTag[2]
-            {
-                    ItemTag.Utility,
-                    ItemTag.AIBlacklist
-            };
-            RegisterItem(new ItemDef
-            {
-                canRemove = true,
-                descriptionToken = "ITEM_BLOODTESTER_DESC",
-                hidden = false,
-                loreToken = "",
-                name = "BloodTester",
-                nameToken = "ITEM_BLOODTESTER_NAME",
-                //pickupIconPath = "@Cloudburst:Assets/Items/Lemdog/LemDog_TexIcon.png",
-                ////pickupModelPath = "@Cloudburst:Assets/Items/Lemdog/MDLLemDog.prefab",
-                pickupToken = "ITEM_BLOODTESTER_PICKUP",
-                tags = moneyOnHealTags,
-                tier = ItemTier.Tier2,
-                unlockableName = ""
-            });
             ItemTag[] extendEnemyBuffDurationTags = new ItemTag[2]
             {
                     ItemTag.Utility,
@@ -385,65 +355,6 @@ namespace Moonstorm.Cores
                 pickupToken = "ITEM_EXTENDEDENEMYBUFFDURATIOM_PICKUP",
                 tags = extendEnemyBuffDurationTags,
                 tier = ItemTier.Tier2,
-                unlockableName = ""
-            });
-            ItemTag[] dormantFungusTags = new ItemTag[2]
-{
-                    ItemTag.Healing,
-                    ItemTag.AIBlacklist
-};
-            RegisterItem(new ItemDef
-            {
-                canRemove = true,
-                //descriptionToken = "ITEM_EXTENDEDENEMYBUFFDURATIOM_DESC",
-                hidden = false,
-                loreToken = "",
-                name = "DormantFungus",
-                //nameToken = "ITEM_EXTENDEDENEMYBUFFDURATIOM_NAME",
-                //pickupIconPath = "@Cloudburst:Assets/Items/Lemdog/LemDog_TexIcon.png",
-                //pickupModelPath = "@Cloudburst:Assets/Items/Lemdog/MDLLemDog.prefab",
-                //pickupToken = "ITEM_EXTENDEDENEMYBUFFDURATIOM_PICKUP",
-                tags = dormantFungusTags,
-                tier = ItemTier.Tier1,
-                unlockableName = ""
-            });
-            ItemTag[] diaryTags = new ItemTag[2]
-{
-                    ItemTag.Utility,
-                    ItemTag.AIBlacklist
-};
-            RegisterItem(new ItemDef
-            {
-                canRemove = true,
-                //descriptionToken = "ITEM_EXTENDEDENEMYBUFFDURATIOM_DESC",
-                hidden = false,
-                loreToken = "",
-                name = "Diary",
-                //nameToken = "ITEM_EXTENDEDENEMYBUFFDURATIOM_NAME",
-                //pickupIconPath = "@Cloudburst:Assets/Items/Lemdog/LemDog_TexIcon.png",
-                //pickupModelPath = "@Cloudburst:Assets/Items/Lemdog/MDLLemDog.prefab",
-                //pickupToken = "ITEM_EXTENDEDENEMYBUFFDURATIOM_PICKUP",
-                tags = diaryTags,
-                tier = ItemTier.Tier1,
-                unlockableName = ""
-            });
-            ItemTag[] coinTags = new ItemTag[1]
-            {
-                    ItemTag.Damage
-            };
-            RegisterItem(new ItemDef
-            {
-                canRemove = true,
-                //descriptionToken = "ITEM_EXTENDEDENEMYBUFFDURATIOM_DESC",
-                hidden = false,
-                loreToken = "",
-                name = "Coin",
-                //nameToken = "ITEM_EXTENDEDENEMYBUFFDURATIOM_NAME",
-                //pickupIconPath = "@Cloudburst:Assets/Items/Lemdog/LemDog_TexIcon.png",
-                //pickupModelPath = "@Cloudburst:Assets/Items/Lemdog/MDLLemDog.prefab",
-                //pickupToken = "ITEM_EXTENDEDENEMYBUFFDURATIOM_PICKUP",
-                tags = coinTags,
-                tier = ItemTier.Tier1,
                 unlockableName = ""
             });
             ItemTag[] damageOnDamageTags = new ItemTag[1]
@@ -715,9 +626,6 @@ namespace Moonstorm.Cores
                 case "BarrierOnCrit":
                     barrierOnCritIndex = ItemAPI.Add(customItem);
                     break;
-                case "LightningOnCrit":
-                    damageOverTimeToLowHealthIndex = ItemAPI.Add(customItem);
-                    break;
                 case "BarrierOnLevel":
                     barrierOnLevelIndex = ItemAPI.Add(customItem);
                     break;
@@ -727,20 +635,8 @@ namespace Moonstorm.Cores
                 case "Lemdog":
                     lemdogIndex = ItemAPI.Add(customItem);
                     break;
-                case "BloodTester":
-                    moneyOnHealIndex = ItemAPI.Add(customItem);
-                    break;
                 case "ExtendedEnemyBuffDuration":
                     extendEnemyBuffDurationIndex = ItemAPI.Add(customItem);
-                    break;
-                case "DormantFungus":
-                    dormantFungusIndex = ItemAPI.Add(customItem);
-                    break;
-                case "Diary":
-                    diaryIndex = ItemAPI.Add(customItem);
-                    break;
-                case "Coin":
-                    coinIndex = ItemAPI.Add(customItem);
                     break;
                 case "DamageOnDamage":
                     damageOnDamagedIndex = ItemAPI.Add(customItem);
@@ -776,7 +672,6 @@ namespace Moonstorm.Cores
             TeleporterInteraction.onTeleporterBeginChargingGlobal += TeleporterInteractionOnTeleporterBeginChargingGlobal;
             On.RoR2.GenericPickupController.GrantItem += GrantItem;
             On.RoR2.CharacterBody.AddBuff += CharacterBody_AddBuff;
-            On.RoR2.HealthComponent.Heal += HealthComponent_Heal;
             On.RoR2.CharacterBody.AddTimedBuff += CharacterBody_AddTimedBuff;
             On.RoR2.CharacterBody.OnInventoryChanged += CharacterBody_OnInventoryChanged;
             On.RoR2.HealthComponent.TakeDamage += HealthComponent_TakeDamage;
@@ -792,20 +687,9 @@ namespace Moonstorm.Cores
                 {
                     var inventory = self.inventory;
 
-                    var fungusCount = inventory.GetItemCount(dormantFungusIndex);
-                    var diaryCount = inventory.GetItemCount(diaryIndex);
                     var counterCount = inventory.GetItemCount(geigerCounterIndex);
                     var skinCount = inventory.GetItemCount(skinIndex);
 
-
-                    if (fungusCount > 0)
-                    {
-                        self.AddItemBehavior<DormantFungusBehavior>(fungusCount);
-                    }
-                    if (diaryCount > 0)
-                    {
-                        self.AddItemBehavior<DairyBehavior>(diaryCount);
-                    }
                     if (counterCount > 0)
                     {
                         self.AddItemBehavior<GeigerCounterBehavior>(counterCount);
@@ -837,27 +721,6 @@ namespace Moonstorm.Cores
             orig(self, buffType, duration);
         }
 
-        private float HealthComponent_Heal(On.RoR2.HealthComponent.orig_Heal orig, HealthComponent self, float amount, ProcChainMask procChainMask, bool nonRegen)
-        {
-            if (self)
-            {
-                var body = self.body;
-                if (body)
-                {
-                    var inventory = body.inventory;
-                    if (inventory)
-                    {
-                        var bloodTesters = inventory.GetItemCount(moneyOnHealIndex);
-                        var amountToGift = bloodTesters * 5;
-                        if (bloodTesters > 0 && body.teamComponent && body.isPlayerControlled && nonRegen == true)
-                        {
-                            TeamManager.instance.GiveTeamMoney(body.teamComponent.teamIndex, (uint)amountToGift);
-                        }
-                    }
-                }
-            }
-            return orig(self, amount, procChainMask, nonRegen);
-        }
 
         private void CharacterBody_AddBuff(On.RoR2.CharacterBody.orig_AddBuff orig, CharacterBody self, BuffIndex buffType)
         {
@@ -912,8 +775,8 @@ namespace Moonstorm.Cores
                         }
 
                         int experienceOnHitCount = inv.GetItemCount(experienceOnHitIndex);
-                        int lightningOnCritCOunt = inv.GetItemCount(damageOverTimeToLowHealthIndex);
                         int heartCount = 0;
+
                         if (inv2)
                         {
                             heartCount = inv2.GetItemCount(heartIndex);
@@ -948,18 +811,6 @@ namespace Moonstorm.Cores
                         {
                             float exp = 0.1f + (experienceOnHitCount * 0.4f);
                             TeamManager.instance.GiveTeamExperience(attackerBody.teamComponent.teamIndex, (uint)exp);
-                        }
-                        var dotController = DotController.FindDotController(self.gameObject);
-                        bool hasDot = false;
-                        if (dotController)
-                        {
-                            hasDot = dotController.HasDotActive(DoTCore.instance.detritive);
-                            //LogCore.LogI(hasDot);
-                        }
-                        if (self.combinedHealthFraction < .4f && lightningOnCritCOunt > 0 && !hasDot)
-                        {
-
-                            DotController.InflictDot(self.gameObject, attacker, DoTCore.instance.detritive, 3 * lightningOnCritCOunt, 1);
                         }
                     }
                 }
@@ -1117,48 +968,12 @@ namespace Moonstorm.Cores
                 int scpRandom = UnityEngine.Random.Range(0, scpBuffList.Count);
                 int rootCount = attackerInventory.GetItemCount(crippleOnHitIndex);
                 int scpCount = attackerInventory.GetItemCount(randomDebuffOnHitIndex);
-                int coinCount = attackerInventory.GetItemCount(coinIndex);
                 int freezeCount = attackerInventory.GetItemCount(freezeEnemiesOnHitIndex);
 
 
                 if (rootCount > 0 && Util.CheckRoll(20, attackerMaster) && attackerMaster && damageReport.victimBody)
                 {
                     victimBody.AddTimedBuff(BuffIndex.Cripple, 3);
-                }
-
-                if (coinCount > 0 && victimBody.gameObject && attackerBody.gameObject && Util.CheckRoll(1 + (3 * coinCount), attackerMaster) && victimBody)
-                {
-                    var isNotMoltenCoin = damageReport.dotType != DotController.DotIndex.PercentBurn;
-
-                    if (isNotMoltenCoin)
-                    {
-                        //EffectCore.coinImpactEffect, new EffectData()
-                        //prefabs/effects/omnieffect/OmniExplosionVFXQuick
-                        //prefabs/effects/impacteffects/ImpactWispEmber
-                        //ImpactWispEmber
-                        EffectManager.SpawnEffect(Resources.Load<GameObject>("prefabs/effects/impacteffects/ExplosionSolarFlare"), new EffectData()
-                        {
-                            scale = 5,
-                            origin = victimBody.transform.position,
-                            rotation = Quaternion.identity
-                        }, true);
-                        EffectManager.SpawnEffect(Resources.Load<GameObject>("prefabs/effects/impacteffects/CoinImpact"), new EffectData()
-                        {
-                            scale = 10,
-                            origin = victimBody.transform.position,
-                            rotation = Quaternion.identity
-                        }, true);
-                    }
-
-                    if (isNotMoltenCoin)
-                    {
-                        DotController.InflictDot(victimBody.gameObject, attackerBody.gameObject, DotController.DotIndex.PercentBurn, 5, 1);
-                    }
-
-                    if (attackerBody.teamComponent && isNotMoltenCoin)
-                    {
-                        TeamManager.instance.GiveTeamMoney(attackerBody.teamComponent.teamIndex, (uint)(5 * coinCount));
-                    }
                 }
 
                 if (freezeCount > 0 && Util.CheckRoll(10, attackerMaster) && victimBody)

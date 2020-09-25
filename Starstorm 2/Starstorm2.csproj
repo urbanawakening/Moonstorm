@@ -339,7 +339,7 @@
     <Compile Include="API\API.cs" />
     <Compile Include="API\ComponentHelpers.cs" />
     <Compile Include="API\LogCore.cs" />
-    <Compile Include="Cores\Class1.cs" />
+    <Compile Include="Cores\ItemCore.cs" />
     <Compile Include="Cores\DotCore.cs" />
     <Compile Include="Cores\EquipmentCore.cs" />
     <Compile Include="Cores\BuffCore.cs" />
