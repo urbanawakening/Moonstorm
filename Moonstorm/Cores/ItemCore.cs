@@ -643,8 +643,8 @@ namespace Moonstorm.Cores
             LanguageAPI.Add("ITEM_CHIP_DESC", "Allies <style=cIsUtility>explode for 500%<style=cStack>(+100% per stack)</style></style>.");
             LanguageAPI.Add("ITEM_CHIP_PICKUP", "Allies explode on death!");
 
-            LanguageAPI.Add("ITEM_SKIN_NAME", "Vigilante's Cloak");
-            LanguageAPI.Add("ITEM_SKIN_DESC", "For each enemy within an 10m radius gain <style=cIsUtility>+5 <style=cStack>(+3 per stack)</style> armor</style>.");
+            LanguageAPI.Add("ITEM_SKIN_NAME", "Vigilante's Skin");
+            LanguageAPI.Add("ITEM_SKIN_DESC", "For each enemy within an 10m radius gain <style=cIsUtility>+5 armor</style>. Maximum 25 <style=cStack>(+5 per stack)</style>");
             LanguageAPI.Add("ITEM_SKIN_PICKUP", "More enemies, more armor.");
 
             //STARSTORM 2
@@ -1352,15 +1352,15 @@ namespace Moonstorm.Cores
                     body.RemoveBuff(BuffCore.instance.skinIndex);
                 }
 
-
+                var cap = 20 + stack;
 
                 foreach (var collision in Physics.OverlapSphere(transform.position, 25))
                 {
                     var cb = collision.GetComponentInParent<CharacterBody>();
-                    if (cb && !cb.Equals(body))
+                    if (cb && !cb.Equals(body) && body.GetBuffCount(BuffCore.instance.skinIndex) < cap)
                     {
                         body.AddBuff(BuffCore.instance.skinIndex);
-                        LogCore.LogI(Language.GetString(cb.baseNameToken));
+                        //LogCore.LogI(Language.GetString(cb.baseNameToken));
                     }
                 }
                 timer = 0;
