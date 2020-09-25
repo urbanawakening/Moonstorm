@@ -58,7 +58,7 @@ namespace Moonstorm.Cores
             // gather assets
             grinderModel = mainAssetBundle.LoadAsset<GameObject>("Assets/Items/Grinder/MDLGrinder.prefab");
             rexHarvester = mainAssetBundle.LoadAsset<Sprite>("Assets/MiscIcons/texTreebotHarvester.png");
-            
+
             //HAN-D
             winchIcon = HANDAssetBundle.LoadAsset<Sprite>("Assets/Import/HAND_ICONS/Winch.png");
             portraitIcon = HANDAssetBundle.LoadAsset<Texture2D>("Assets/Import/HAND_ICONS/Portrait.png");

@@ -34,7 +34,6 @@ namespace Moonstorm.Cores
         #region Indexes
         protected EquipmentIndex lumpkinIndex;
         protected EquipmentIndex unstableQuantumReactorIndex;
-        protected EquipmentIndex brokenPrinterIndex;
         protected EquipmentIndex rockFruitIndex;
         protected EquipmentIndex MIRVIndex;
         //protected EquipmentIndex midasIndex;
@@ -73,7 +72,7 @@ namespace Moonstorm.Cores
         {
             LogCore.LogI("Initializing Core: " + base.ToString());
 
-            CreateGreaterWarbanner(); RegisterTokens();
+            RegisterTokens();
 
             #region Basic
             var prefab = Resources.Load<GameObject>("Prefabs/PickupModels/PickupMystery");
@@ -137,26 +136,6 @@ namespace Moonstorm.Cores
                 appearsInSinglePlayer = true,
                 canDrop = true,
                 colorIndex = ColorCatalog.ColorIndex.Equipment,
-                cooldown = 55,
-                descriptionToken = "EQUIPMENT_BROKENPRINTER_DESC",
-                enigmaCompatible = true,
-                isBoss = false,
-                isLunar = false,
-                loreToken = "EQUIPMENT_BROKENPRINTER_LORE",
-                name = "Printer",
-                nameToken = "EQUIPMENT_BROKENPRINTER_NAME",
-                pickupIconPath = pickUpIconPath,
-                pickupModelPath = pickUpModelPath,
-                pickupToken = "EQUIPMENT_BROKENPRINTER_PICKUP",
-                unlockableName = "",
-            });
-            RegisterNewEquip(new EquipmentDef()
-            {
-                addressToken = "",
-                appearsInMultiPlayer = true,
-                appearsInSinglePlayer = true,
-                canDrop = true,
-                colorIndex = ColorCatalog.ColorIndex.Equipment,
                 cooldown = 25,
                 descriptionToken = "EQUIPMENT_ROCKFRUIT_DESC",
                 enigmaCompatible = true,
@@ -195,34 +174,8 @@ namespace Moonstorm.Cores
 
         }
 
-        protected void CreateGreaterWarbanner()
-        {
-            greaterWarbanner = Resources.Load<GameObject>("Prefabs/NetworkedObjects/WarbannerWard").InstantiateClone("GreaterWarbannerWard", true);
-            greaterWarbanner.GetComponent<BuffWard>().buffType = BuffCore.instance.greaterBannerIndex;
-
-            var sphereIndicator = greaterWarbanner.transform.Find("Indicator/IndicatorSphere");
-            var banner = greaterWarbanner.transform.Find("mdlWarbanner/Plane");
-            //var holder = greaterWarbanner.transform.Find("mdlWarbanner/Cylinder");
-
-            var sphereRenderer = sphereIndicator.GetComponent<Renderer>();
-            var bannerRenderer = banner.GetComponent<Renderer>();
-            //var holderRenderer = holder.GetComponent<Renderer>();
-
-            sphereRenderer.material = Resources.Load<Material>("materials/matWolfhatOverlay");
-            bannerRenderer.material = Resources.Load<Material>("materials/matWolfhatOverlay");
-            //holderRenderer.material = Resources.Load<Material>("materials/matWolfhatOverlay");
-        }
-
         private bool EquipmentSlot_PerformEquipmentAction(On.RoR2.EquipmentSlot.orig_PerformEquipmentAction orig, EquipmentSlot self, EquipmentIndex equipmentIndex)
         {
-            if (equipmentIndex == brokenPrinterIndex)
-            {
-                GameObject gameObject = Object.Instantiate<GameObject>(greaterWarbanner, self.characterBody.transform.position, Quaternion.identity);
-                gameObject.GetComponent<TeamFilter>().teamIndex = self.characterBody.teamComponent.teamIndex;
-                gameObject.GetComponent<BuffWard>().radius = 25;
-                NetworkServer.Spawn(gameObject);
-                return true;
-            }
             if (equipmentIndex == unstableQuantumReactorIndex)
             {
                 FireProjectile(self.characterBody);
@@ -255,11 +208,6 @@ namespace Moonstorm.Cores
             LanguageAPI.Add("EQUIPMENT_REACTOR_NAME", "Unstable Quantum Reactor");
             LanguageAPI.Add("EQUIPMENT_REACTOR_PICKUP", "Fire a random projectile on use.");
             LanguageAPI.Add("EQUIPMENT_REACTOR_DESC", "Fire a random projectile.");
-
-            LanguageAPI.Add("EQUIPMENT_PRINTER_NAME", "Greater Warbanner");
-            LanguageAPI.Add("EQUIPMENT_PRINTER_PICKUP", "Place a greater warbanner which boosts regen, critical hit chance, and lowers cooldowns.");
-            LanguageAPI.Add("EQUIPMENT_PRINTER_DESC", "Place a greater warbanner which grants 20% health regeneration, 10% critical hit chance, and 50% cooldown reduction.");
-            LanguageAPI.Add("EQUIPMENT_PRINTER_LORE", "Order: \u201CGreater Warbanner\u201D\r\nTracking Number: 72******\r\nEstimated Delivery: 08\\25\\2057\\\r\nShipping Method: High Priority\r\nShipping Address: 836 Lane, Lab [42], Mars\r\nShipping Details:\r\n\r\nI got this thing off of my dead grandmother, it's a relic from the great war of 2019. It  gives this aura of energy and motivation to do whatever someone desires! Anyways -- I'm passing it onto you, since I am dying to this cancer and I'd like you to have it before I go six feet under. Much love, Uncle Abe.\n");
 
             LanguageAPI.Add("EQUIPMENT_ROCKFRUIT_NAME", "Rock Fruit");
             LanguageAPI.Add("EQUIPMENT_ROCKFRUIT_PICKUP", "Swap a random item for another random item.");
@@ -295,9 +243,6 @@ namespace Moonstorm.Cores
                     break;
                 case "Reactor":
                     unstableQuantumReactorIndex = ItemAPI.Add(customEquip);
-                    break;
-                case "Printer":
-                    brokenPrinterIndex = ItemAPI.Add(customEquip);
                     break;
                 case "RockFruit":
                     rockFruitIndex = ItemAPI.Add(customEquip);

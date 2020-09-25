@@ -1,10 +1,10 @@
 ﻿using BepInEx;
 using BepInEx.Configuration;
-
 using R2API.Utils;
+using Starstorm2.Cores;
 using System;
 
-namespace Starstorm
+namespace Starstorm2
 {
     [BepInDependency("com.bepis.r2api", BepInDependency.DependencyFlags.HardDependency)]
     [NetworkCompatibility(CompatibilityLevel.EveryoneMustHaveMod, VersionStrictness.EveryoneNeedSameModVersion)]
@@ -59,11 +59,24 @@ namespace Starstorm
         public static ConfigEntry<bool> EnableExecutioner;
         public static ConfigEntry<bool> EnableCyborg;
         public static ConfigEntry<bool> EnableNucleator;
+
         public static ConfigEntry<bool> EnableItems;
+        public static ConfigEntry<bool> EnableEquipment;
 
         public static ConfigEntry<bool> EnableUnlockAll;
         public static ConfigEntry<bool> Enabled;
         #endregion
+
+        AssetsCore assetsCore;
+        BuffCore buffCore;
+        ItemCore itemCore;
+        EquipmentCore equipmentCore;
+        DoTCore dotCore;
+
+        NucleatorCore nucleatorCore;
+        CyborgCore cyborgCore;
+        ExecutionerCore executionerCore;
+
         public Starstorm()
         {
             LogCore.logger = Logger;
@@ -77,9 +90,14 @@ namespace Starstorm
         private void DefineConfig()
         {
             //learn a smile
-            //as every good day goes on by
 
-            EnableItems = Config.Bind("Starstorm 2 :: Items", "Enabled", true, "Enables Starstorm 2's items. Set to false to disable Starstorm's items.");
+            Enabled = Config.Bind("Starstorm 2", "Enabled", true, "Enables Starstorm 2. Set to false to disable Starstorm 2.");
+
+            //as every good day goes on by
+            EnableItems = Config.Bind("Starstorm 2 :: Items", "Enabled", true, "Enables Starstorm 2's items. Set to false to disable Starstorm 2's items.");
+            EnableEquipment = Config.Bind("Starstorm 2 :: Equipment", "Enabled", true, "Enables Starstorm 2's equipment. Set to false to disable Starstorm 2's equipment.");
+
+            //survivors
             EnableExecutioner = Config.Bind("Starstorm 2 :: Executioner", "Enabled", true, "Enables Starstorm 2's Executioner survivor. Set to false to disable Starstorm 2's Executioner survivor.");
             EnableNucleator = Config.Bind("Starstorm 2 :: Nucleator", "Enabled", true, "Enables Starstorm 2's Nucleator survivor. Set to false to disable Starstorm 2's Nucleator survivor.");
             EnableCyborg = Config.Bind("Starstorm 2 :: Cyborg", "Enabled", true, "Enables Starstorm 2's Cyborg survivor. Set to false to disable Starstorm 2's Cyborg survivor.");
@@ -89,7 +107,28 @@ namespace Starstorm
         {
             if (Enabled.Value)
             {
+                assetsCore = new AssetsCore();
+                buffCore = new BuffCore();
+                dotCore = new DoTCore();
 
+                if (EnableExecutioner.Value) {
+                    executionerCore = new ExecutionerCore();
+                }
+                if (EnableCyborg.Value) {
+                    cyborgCore = new CyborgCore();
+                }
+                if (EnableNucleator.Value) {
+                    nucleatorCore = new NucleatorCore();
+                }
+
+                if (EnableItems.Value)
+                {
+                    itemCore = new ItemCore();
+                }
+                if (EnableEquipment.Value)
+                {
+                    equipmentCore = new EquipmentCore();
+                }
             }
             else
             {

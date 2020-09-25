@@ -24,7 +24,6 @@ namespace Starstorm2.Cores
         protected internal ItemIndex itemOnLevelUpIndex;
         protected internal ItemIndex damageOverTimeToLowHealthIndex;
         protected internal ItemIndex moneyOnHealIndex;
-        protected internal ItemIndex extendEnemyBuffDurationIndex;
 
         public void DropShipCall(Transform transform, int itemCount)
         {
@@ -233,6 +232,9 @@ namespace Starstorm2.Cores
                     break;
                 case "Coin":
                     coinIndex = ItemAPI.Add(customItem);
+                    break;
+                case "ItemOnLevelUp":
+                    itemOnLevelUpIndex = ItemAPI.Add(customItem);
                     break;
                 default:
                     LogCore.LogF(itemDef.name + " is unregistered! Item will not spawn!");

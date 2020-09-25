@@ -188,7 +188,7 @@ namespace Moonstorm.Cores
                 descriptionToken = "ITEM_ITEMONLEVELUP_DESC",
                 hidden = false,
                 loreToken = "",
-                name = "ItemOnLevelUp",
+                name = "ItemOnLevelUp2",
                 nameToken = "ITEM_ITEMONLEVELUP_NAME",
                 //pickupIconPath = pickUpIconPath,
                 //pickupModelPath = pickUpModelPath,
@@ -255,26 +255,6 @@ namespace Moonstorm.Cores
                 pickupToken = "ITEM_BARRIERONCRIT_PICKUP",
                 tags = barrierOnCritTags,
                 tier = ItemTier.Tier2,
-                unlockableName = ""
-            });
-            ItemTag[] lightningOnCritTags = new ItemTag[2]
-            {
-                    ItemTag.Utility,
-                    ItemTag.Damage
-            };
-            RegisterItem(new ItemDef
-            {
-                canRemove = true,
-                descriptionToken = "ITEM_LIGHTNINGONCRIT_DESC",
-                hidden = false,
-                loreToken = "",
-                name = "LightningOnCrit",
-                nameToken = "ITEM_LIGHTNINGONCRIT_NAME",
-                //pickupIconPath = pickUpIconPath,
-                pickupModelPath = "@Moonstorm:Assets/Items/LightningEye/MDLLightningEye.prefab", //
-                pickupToken = "ITEM_LIGHTNINGONCRIT_PICKUP",
-                tags = lightningOnCritTags,
-                tier = ItemTier.Tier1,
                 unlockableName = ""
             });
             ItemTag[] barrierOnLevelTags = new ItemTag[2]
@@ -557,26 +537,6 @@ namespace Moonstorm.Cores
             LanguageAPI.Add("ITEM_SKIN_NAME", "Vigilante's Skin");
             LanguageAPI.Add("ITEM_SKIN_DESC", "For each enemy within an 10m radius gain <style=cIsUtility>+5 armor</style>. Maximum 25 <style=cStack>(+5 per stack)</style>");
             LanguageAPI.Add("ITEM_SKIN_PICKUP", "More enemies, more armor.");
-
-            //STARSTORM 2
-
-            LanguageAPI.Add("ITEM_LIGHTNINGONCRIT_NAME", "Detritive Trematode"); //model(??)
-            LanguageAPI.Add("ITEM_LIGHTNINGONCRIT_DESC", "Enemies with low health recieve a <style=cIsDamage>damage over time</style> that deals 100%<style=cStack>(+100% per stack)</style> damage.");
-            LanguageAPI.Add("ITEM_LIGHTNINGONCRIT_PICKUP", "Low health enemies recieve damage over time.");
-
-            LanguageAPI.Add("ITEM_DORMANTFUNGUS_NAME", "Dormant Fungus");
-            LanguageAPI.Add("ITEM_DORMANTFUNGUS_DESC", "<style=cIsHealing>Heal</style> 1% <style=cStack>(+1% per stack)</style> every five seconds while sprinting."); //by 2<style=cStack>(+1 per stack)</style> seconds.");
-            LanguageAPI.Add("ITEM_DORMANTFUNGUS_PICKUP", "Heal every five seconds while sprinting.");
-
-            LanguageAPI.Add("ITEM_DIARY_NAME", "Diary");
-            LanguageAPI.Add("ITEM_DIARY_DESC", "Gain 5% <style=cIsUtility>experience</style> <style=cStack>(+5% per stack)</style> every two seconds."); //by 2<style=cStack>(+1 per stack)</style> seconds.");
-            LanguageAPI.Add("ITEM_DIARY_PICKUP", "Gain experience overtime.");
-
-            LanguageAPI.Add("ITEM_COIN_NAME", "Molten Coin");
-            LanguageAPI.Add("ITEM_COIN_DESC", "4% <style=cStack>(+3% per stack)</style> chance to <style=cIsDamage>ignite</style> enemies on hit for +5 money."); //by 2<style=cStack>(+1 per stack)</style> seconds.");
-            LanguageAPI.Add("ITEM_COIN_PICKUP", "Chance to ignite enemies on hit.");
-
-
         }
 
         protected internal void RegisterItem(ItemDef itemDef)
@@ -614,7 +574,7 @@ namespace Moonstorm.Cores
                 case "CloakOnInteraction":
                     cloakOnInteractionIndex = ItemAPI.Add(customItem);
                     break;
-                case "ItemOnLevelUp":
+                case "ItemOnLevelUp2":
                     itemOnLevelUpIndex = ItemAPI.Add(customItem);
                     break;
                 case "RandomDebuffOnHit":
