@@ -34,8 +34,10 @@ namespace Cloudburst
 
     public class Cloudburst : BaseUnityPlugin
     {
-        const string guid = "com.AwokeinanEngima.Cloudburst";
-        const string modName = "Cloudburst";
+        //be unique, though you're the same here.
+
+        const string guid = "com.TeamMoonstorm.Moonstorm";
+        const string modName = "Moonstorm";
         const string version = "1.0.0";
 
         public static Cloudburst instance;

@@ -7,8 +7,8 @@
     <ProjectGuid>{5759A0A4-83F4-4B1E-B9A8-228EEFBC5D65}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Cloudburst</RootNamespace>
-    <AssemblyName>Cloudburst</AssemblyName>
+    <RootNamespace>Moonstorm</RootNamespace>
+    <AssemblyName>Moonstorm</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
