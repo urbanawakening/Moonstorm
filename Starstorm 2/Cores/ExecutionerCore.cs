@@ -802,7 +802,7 @@ The two privates sat in complete silence.
         {
             if (assets == null)
             {
-                using (var strm = Assembly.GetExecutingAssembly().GetManifestResourceStream("Starstorm2.Cores.Executioner.executionerassets"))
+                using (var strm = Assembly.GetExecutingAssembly().GetManifestResourceStream("Starstorm2.executionerassets"))
                 {
                     assets = AssetBundle.LoadFromStream(strm);
                     //TODO: change me

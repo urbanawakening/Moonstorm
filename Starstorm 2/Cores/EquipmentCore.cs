@@ -125,7 +125,7 @@ namespace Starstorm2.Cores
                 equipmentDef.pickupToken = string.Format(CultureInfo.InvariantCulture, "ITEM_{0}_PICKUP", upperName);
             }
             if (equipmentDef.loreToken == null)
-            {
+            {                         
                 equipmentDef.loreToken = string.Format(CultureInfo.InvariantCulture, "ITEM_{0}_LORE", upperName);
             }
             var customEquip = new CustomEquipment(equipmentDef, new ItemDisplayRule[0]);

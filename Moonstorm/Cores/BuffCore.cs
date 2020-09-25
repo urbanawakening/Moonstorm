@@ -107,50 +107,53 @@ namespace Moonstorm.Cores
         private void CharacterBody_RecalculateStats(On.RoR2.CharacterBody.orig_RecalculateStats orig, CharacterBody self)
         {
             orig(self);
-            var attackSpeed = self.attackSpeed;
-            var armor = self.armor;
-            var moveSpeed = self.moveSpeed;
-            var regen = self.regen;
-            var crit = self.crit;
-
-            var controller = self.gameObject.GetComponent<HANDPassiveController>();
-
-            if (self.HasBuff(overclockIndex))
+            if (self)
             {
-                //BaseLogger.Log(attackSpeed.ToString());   
-                self.SetPropertyValue("attackSpeed", attackSpeed += .5f);
-                self.SetPropertyValue("moveSpeed", moveSpeed += .4f);
+                var attackSpeed = self.attackSpeed;
+                var armor = self.armor;
+                var moveSpeed = self.moveSpeed;
+                var regen = self.regen;
+                var crit = self.crit;
 
-            }
-            if (self.HasBuff(overclockIndex))
-            {
-                //BaseLogger.Log(attackSpeed.ToString());   
-                self.SetPropertyValue("attackSpeed", attackSpeed += .5f);
-                self.SetPropertyValue("moveSpeed", moveSpeed += .4f);
+                var controller = self.gameObject.GetComponent<HANDPassiveController>();
 
-            }
-            if (self.HasBuff(skinIndex)) // && controller)
-            {
-                self.SetPropertyValue("armor", armor += 5f);
-            }
-            if (self.HasBuff(droneIndex)) // && controller)
-            {
-
-                var currentPassive = controller.GetBonus();
-                //Debug.Log(currentPassive);
-                for (int i = 0; i < self.GetBuffCount(droneIndex); i++)
+                if (self.HasBuff(overclockIndex))
                 {
-                    switch (currentPassive)
+                    //BaseLogger.Log(attackSpeed.ToString());   
+                    self.SetPropertyValue("attackSpeed", attackSpeed += .5f);
+                    self.SetPropertyValue("moveSpeed", moveSpeed += .4f);
+
+                }
+                if (self.HasBuff(overclockIndex))
+                {
+                    //BaseLogger.Log(attackSpeed.ToString());   
+                    self.SetPropertyValue("attackSpeed", attackSpeed += .5f);
+                    self.SetPropertyValue("moveSpeed", moveSpeed += .4f);
+
+                }
+                if (self.HasBuff(skinIndex)) // && controller)
+                {
+                    self.SetPropertyValue("armor", armor += 5f);
+                }
+                if (self.HasBuff(droneIndex)) // && controller)
+                {
+
+                    var currentPassive = controller.GetBonus();
+                    //Debug.Log(currentPassive);
+                    for (int i = 0; i < self.GetBuffCount(droneIndex); i++)
                     {
-                        case HANDPassiveController.Passive.Armor:
-                            self.SetPropertyValue("armor", armor += 10f);
-                            break;
-                        case HANDPassiveController.Passive.Regen:
-                            self.SetPropertyValue("regen", regen += .2f);
-                            break;
-                        case HANDPassiveController.Passive.SPEED:
-                            self.SetPropertyValue("moveSpeed", moveSpeed += 1f);
-                            break;
+                        switch (currentPassive)
+                        {
+                            case HANDPassiveController.Passive.Armor:
+                                self.SetPropertyValue("armor", armor += 10f);
+                                break;
+                            case HANDPassiveController.Passive.Regen:
+                                self.SetPropertyValue("regen", regen += .2f);
+                                break;
+                            case HANDPassiveController.Passive.SPEED:
+                                self.SetPropertyValue("moveSpeed", moveSpeed += 1f);
+                                break;
+                        }
                     }
                 }
             }
