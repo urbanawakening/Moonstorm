@@ -15,15 +15,15 @@ namespace Starstorm2.Cores
             LogCore.LogI("Initializing Core: " + base.ToString());
 
             // populate ASSETS
-            /*if (mainAssetBundle == null)
+            if (mainAssetBundle == null)
             {
-                using (var assetStream = Assembly.GetExecutingAssembly().GetManifestResourceStream("Moonstorm.assetburst"))
+                using (var assetStream = Assembly.GetExecutingAssembly().GetManifestResourceStream("Starstorm2.assetstorm"))
                 {
                     mainAssetBundle = AssetBundle.LoadFromStream(assetStream);
                     provider = new AssetBundleResourcesProvider("@Starstorm2", mainAssetBundle);
                     ResourcesAPI.AddProvider(provider);
                 }
-            }*/
+            }
         }
     }
 }

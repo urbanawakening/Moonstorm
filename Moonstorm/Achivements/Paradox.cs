@@ -33,10 +33,10 @@ namespace Moonstorm.Achievements
         public override String UnlockableNameToken { get; } = "CLOUDBURST_PARADOX_UNLOCKABLE_NAME";
 
         // The sprite provider.
-        protected override CustomSpriteProvider SpriteProvider { get; } = new CustomSpriteProvider("@Moonstorm:Assets/MiscIcons/texTreebotHarvester.png");
+        protected override CustomSpriteProvider SpriteProvider { get; } = new CustomSpriteProvider("@Moonstorm:Assets/Moonstorm/MiscIcons/texTreebotHarvester.png");
         public override void OnInstall()
         {
-            base.OnInstall();
+            base.OnInstall();   
             Unlock.onActivated += this.OnActivated;
         }
 

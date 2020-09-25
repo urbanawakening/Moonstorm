@@ -21,7 +21,6 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <LangVersion>7.1</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -31,19 +30,21 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="0Harmony">
       <HintPath>E:\libs\0Harmony.dll</HintPath>
     </Reference>
     <Reference Include="Assembly-CSharp">
-      <HintPath>..\Libs\Assembly-CSharp.dll</HintPath>
+      <HintPath>E:\libs\Assembly-CSharp.dll</HintPath>
     </Reference>
     <Reference Include="Assembly-CSharp.R2API.mm">
       <HintPath>E:\libs\Assembly-CSharp.R2API.mm.dll</HintPath>
     </Reference>
     <Reference Include="BepInEx">
-      <HintPath>..\Libs\BepInEx.dll</HintPath>
-      <Private>False</Private>
+      <HintPath>E:\libs\BepInEx.dll</HintPath>
     </Reference>
     <Reference Include="BepInEx.Harmony">
       <HintPath>E:\libs\BepInEx.Harmony.dll</HintPath>
@@ -67,12 +68,10 @@
       <HintPath>E:\libs\KdTreeLib.dll</HintPath>
     </Reference>
     <Reference Include="MMHOOK_Assembly-CSharp">
-      <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Risk of Rain 2\BepInEx\plugins\R2API\MMHOOK_Assembly-CSharp.dll</HintPath>
-      <Private>False</Private>
+      <HintPath>E:\libs\MMHOOK_Assembly-CSharp.dll</HintPath>
     </Reference>
     <Reference Include="Mono.Cecil">
-      <HintPath>..\Libs\Mono.Cecil.dll</HintPath>
-      <Private>False</Private>
+      <HintPath>E:\libs\Mono.Cecil.dll</HintPath>
     </Reference>
     <Reference Include="Mono.Cecil.Mdb">
       <HintPath>E:\libs\Mono.Cecil.Mdb.dll</HintPath>
@@ -93,8 +92,7 @@
       <HintPath>E:\libs\MonoMod.RuntimeDetour.dll</HintPath>
     </Reference>
     <Reference Include="MonoMod.Utils">
-      <HintPath>..\Libs\MonoMod.Utils.dll</HintPath>
-      <Private>False</Private>
+      <HintPath>E:\libs\MonoMod.Utils.dll</HintPath>
     </Reference>
     <Reference Include="netstandard" />
     <Reference Include="pb_Stl">
@@ -110,8 +108,7 @@
       <HintPath>E:\libs\ProBuilderMeshOps.dll</HintPath>
     </Reference>
     <Reference Include="R2API">
-      <HintPath>..\Libs\R2API.dll</HintPath>
-      <Private>False</Private>
+      <HintPath>E:\libs\R2API.dll</HintPath>
     </Reference>
     <Reference Include="Rewired_Core">
       <HintPath>E:\libs\Rewired_Core.dll</HintPath>
@@ -143,8 +140,7 @@
       <HintPath>E:\libs\Unity.TextMeshPro.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine">
-      <HintPath>..\Libs\UnityEngine.dll</HintPath>
-      <Private>False</Private>
+      <HintPath>E:\libs\UnityEngine.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.AccessibilityModule">
       <HintPath>E:\libs\UnityEngine.AccessibilityModule.dll</HintPath>
@@ -153,15 +149,13 @@
       <HintPath>E:\libs\UnityEngine.AIModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.AnimationModule">
-      <HintPath>..\Libs\UnityEngine.AnimationModule.dll</HintPath>
-      <Private>False</Private>
+      <HintPath>E:\libs\UnityEngine.AnimationModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.ARModule">
       <HintPath>E:\libs\UnityEngine.ARModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.AssetBundleModule">
-      <HintPath>..\Libs\UnityEngine.AssetBundleModule.dll</HintPath>
-      <Private>False</Private>
+      <HintPath>E:\libs\UnityEngine.AssetBundleModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.AudioModule">
       <HintPath>E:\libs\UnityEngine.AudioModule.dll</HintPath>
@@ -179,8 +173,7 @@
       <HintPath>E:\libs\UnityEngine.ClusterRendererModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.CoreModule">
-      <HintPath>..\Libs\UnityEngine.CoreModule.dll</HintPath>
-      <Private>False</Private>
+      <HintPath>E:\libs\UnityEngine.CoreModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.CrashReportingModule">
       <HintPath>E:\libs\UnityEngine.CrashReportingModule.dll</HintPath>
@@ -216,8 +209,7 @@
       <HintPath>E:\libs\UnityEngine.LocalizationModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.Networking">
-      <HintPath>..\Libs\UnityEngine.Networking.dll</HintPath>
-      <Private>False</Private>
+      <HintPath>E:\libs\UnityEngine.Networking.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.ParticleSystemModule">
       <HintPath>E:\libs\UnityEngine.ParticleSystemModule.dll</HintPath>
@@ -229,7 +221,7 @@
       <HintPath>E:\libs\UnityEngine.Physics2DModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.PhysicsModule">
-      <HintPath>..\Libs\UnityEngine.PhysicsModule.dll</HintPath>
+      <HintPath>E:\libs\UnityEngine.PhysicsModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.ProfilerModule">
       <HintPath>E:\libs\UnityEngine.ProfilerModule.dll</HintPath>
@@ -351,11 +343,6 @@
     <Compile Include="API\ComponentHelpers.cs" />
     <Compile Include="API\LogCore.cs" />
     <Compile Include="Cores\AssetsCore.cs" />
-    <Compile Include="Cores\Executioner\MainState.cs" />
-    <Compile Include="Cores\Executioner\Primary.cs" />
-    <Compile Include="Cores\Executioner\Secondary.cs" />
-    <Compile Include="Cores\Executioner\Special.cs" />
-    <Compile Include="Cores\Executioner\Utility.cs" />
     <Compile Include="Cores\NucleatorCore.cs" />
     <Compile Include="Cores\CyborgCore.cs" />
     <Compile Include="Cores\ExecutionerCore.cs" />
@@ -366,12 +353,11 @@
     <Compile Include="Starstorm.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
-    <EmbeddedResource Include="Cores\Executioner\executionerassets" />
+    <EmbeddedResource Include="assetstorm" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>copy /Y "$(TargetPath)" "C:\Program Files (x86)\Steam\steamapps\common\Risk of Rain 2\BepInEx\plugins"</PostBuildEvent>
+    <PostBuildEvent>copy /Y "$(TargetPath)" "E:\Steam\steamapps\common\Risk of Rain 2\BepInEx\plugins\"</PostBuildEvent>
   </PropertyGroup>
 </Project>

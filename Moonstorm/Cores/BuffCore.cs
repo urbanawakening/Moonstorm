@@ -10,14 +10,11 @@ namespace Moonstorm.Cores
     {
         public static BuffCore instance;
 
-        protected internal BuffIndex lightBringerIndex;
         protected internal BuffIndex scrapIndex;
         protected internal BuffIndex overclockIndex;
         protected internal BuffIndex droneIndex;
         protected internal BuffIndex surgeIndex;
         protected internal BuffIndex cleanIndex;
-        protected internal BuffIndex detritiveIndex;
-        protected internal BuffIndex greaterBannerIndex;
         protected internal BuffIndex bombardierForceIndex;
         protected internal BuffIndex baboomChargeIndex;
         protected internal BuffIndex skinIndex;
@@ -30,17 +27,6 @@ namespace Moonstorm.Cores
             LogCore.LogI("Initializing Core: " + base.ToString());
 
             instance = this;
-
-            RegisterBuff(new BuffDef
-            {
-                buffIndex = BuffIndex.Count,
-                buffColor = Color.yellow,
-                canStack = true,
-                eliteIndex = EliteIndex.None,
-                iconPath = "Textures/BuffIcons/TexMovespeedBuffIcon",
-                isDebuff = false,
-                name = "LightBringer"
-            });
 
             RegisterBuff(new BuffDef
             {
@@ -83,26 +69,6 @@ namespace Moonstorm.Cores
                 iconPath = "Textures/BuffIcons/texbuffonfireicon",
                 isDebuff = false,
                 name = "Sparkle"
-            });
-
-            RegisterBuff(new BuffDef
-            {
-                buffColor = new Color(0.3764706f, 0.84313726f, 0.8980392f),
-                buffIndex = BuffIndex.Count,
-                canStack = false,
-                eliteIndex = EliteIndex.None,
-                iconPath = "Textures/BuffIcons/texBuffFullCritIcon",
-                isDebuff = false,
-                name = "Infested"
-            });
-            RegisterBuff(new BuffDef()
-            {
-                buffIndex = BuffIndex.Count,
-                canStack = false,
-                eliteIndex = EliteIndex.None,
-                iconPath = "Textures/BuffIcons/texBuffWarbannerIcon",
-                name = "GreaterWarbanner",
-                buffColor = new Color(0.8392157f, 0.7882353f, 0.22745098f)
             });
             RegisterBuff(new BuffDef()
             {
@@ -188,41 +154,6 @@ namespace Moonstorm.Cores
                     }
                 }
             }
-            if (self.HasBuff(lightBringerIndex))
-            {
-                self.SetPropertyValue("attackSpeed", attackSpeed += 2);
-                self.SetPropertyValue("moveSpeed", moveSpeed += 2f);
-                self.SetPropertyValue("armor", armor += 20);
-            }
-            if (self.HasBuff(greaterBannerIndex))
-            {
-                self.SetPropertyValue("crit", crit += .2f);
-                self.SetPropertyValue("regen", regen += .2f);
-                if (self.skillLocator)
-                {
-                    var skillLocator = self.skillLocator;
-                    //pssst kid, wanna buff greater warbanner?
-                    //just turn to the 0.5f into a 0!
-                    var reduction = .5f;
-                    if (skillLocator.primary)
-                    {
-                        skillLocator.primary.cooldownScale = reduction;
-                    }
-                    if (skillLocator.secondary)
-                    {
-                        skillLocator.secondary.cooldownScale = reduction;
-                    }
-                    if (skillLocator.utility)
-                    {
-                        skillLocator.utility.cooldownScale = reduction;
-                    }
-                    if (skillLocator.special)
-                    {
-                        skillLocator.special.cooldownScale = reduction;
-                    }
-
-                }
-            }
         }
 
         protected internal void RegisterBuff(BuffDef buffDef)
@@ -230,9 +161,6 @@ namespace Moonstorm.Cores
             var customBuff = new CustomBuff(buffDef);
             switch (buffDef.name)
             {
-                case "LightBringer":
-                    lightBringerIndex = BuffAPI.Add(customBuff);
-                    break;
                 case "Drone":
                     droneIndex = BuffAPI.Add(customBuff);
                     break;
@@ -248,12 +176,7 @@ namespace Moonstorm.Cores
                 case "Scrap":
                     scrapIndex = BuffAPI.Add(customBuff);
                     break;
-                case "Infested":
-                    detritiveIndex = BuffAPI.Add(customBuff);
-                    break;
-                case "GreaterWarbanner":
-                    greaterBannerIndex = BuffAPI.Add(customBuff);
-                    break;
+
                 case "BombardierForce":
                     bombardierForceIndex = BuffAPI.Add(customBuff);
                     break;
