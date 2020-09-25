@@ -528,7 +528,7 @@ The two privates sat in complete silence.
 
         private void RegisterHooks()
         {
-            //On.RoR2.CharacterBody.RecalculateStats += HandleFearDebuff;
+            //On.RoR2.CharacterBody. += HandleFearDebuff;
 
             IL.EntityStates.AI.Walker.Combat.UpdateAI += (il) =>
             {
