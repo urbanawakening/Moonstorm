@@ -351,6 +351,7 @@
     <Compile Include="Cores\DotCore.cs" />
     <Compile Include="Cores\EquipmentCore.cs" />
     <Compile Include="Cores\BuffCore.cs" />
+    <Compile Include="Cores\States\MainState.cs" />
     <Compile Include="Cores\States\Nucleator\ApplyRadionuclideSurge.cs" />
     <Compile Include="Cores\States\Nucleator\ChargeStates\ChargeFissionImpulse.cs" />
     <Compile Include="Cores\States\Nucleator\ChargeStates\ChargeIrradiate.cs" />
@@ -359,6 +360,10 @@
     <Compile Include="Cores\States\Nucleator\FireStates\FireFissionImpulse.cs" />
     <Compile Include="Cores\States\Nucleator\FireStates\FireIrradiate.cs" />
     <Compile Include="Cores\States\Nucleator\FireStates\FireQuarantine.cs" />
+    <Compile Include="Cores\States\Primary.cs" />
+    <Compile Include="Cores\States\Secondary.cs" />
+    <Compile Include="Cores\States\Special.cs" />
+    <Compile Include="Cores\States\Utility.cs" />
     <Compile Include="Starstorm.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
