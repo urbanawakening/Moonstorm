@@ -31,17 +31,6 @@ namespace Moonstorm.Cores
             RegisterBuff(new BuffDef
             {
                 buffIndex = BuffIndex.Count,
-                buffColor = Color.yellow,
-                canStack = true,
-                eliteIndex = EliteIndex.None,
-                iconPath = "Textures/BuffIcons/TexMovespeedBuffIcon",
-                isDebuff = false,
-                name = "LightBringer"
-            });
-
-            RegisterBuff(new BuffDef
-            {
-                buffIndex = BuffIndex.Count,
                 //buffColor = Color.yellow,
                 canStack = true,
                 eliteIndex = EliteIndex.None,
@@ -80,26 +69,6 @@ namespace Moonstorm.Cores
                 iconPath = "Textures/BuffIcons/texbuffonfireicon",
                 isDebuff = false,
                 name = "Sparkle"
-            });
-
-            RegisterBuff(new BuffDef
-            {
-                buffColor = new Color(0.3764706f, 0.84313726f, 0.8980392f),
-                buffIndex = BuffIndex.Count,
-                canStack = false,
-                eliteIndex = EliteIndex.None,
-                iconPath = "Textures/BuffIcons/texBuffFullCritIcon",
-                isDebuff = false,
-                name = "Infested"
-            });
-            RegisterBuff(new BuffDef()
-            {
-                buffIndex = BuffIndex.Count,
-                canStack = false,
-                eliteIndex = EliteIndex.None,
-                iconPath = "Textures/BuffIcons/texBuffWarbannerIcon",
-                name = "GreaterWarbanner",
-                buffColor = new Color(0.8392157f, 0.7882353f, 0.22745098f)
             });
             RegisterBuff(new BuffDef()
             {

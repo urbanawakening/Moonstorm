@@ -111,7 +111,7 @@ namespace Moonstorm.Cores
                 name = "ItemChampionOnKill",
                 nameToken = "ITEM_ITEMONCHAMPIONKILL_NAME",
                 //pickupIconPath = pickUpIconPath, 
-                pickupModelPath = "@Moonstorm:Assets/Items/Grinder/MDLGrinder.prefab",
+                pickupModelPath = "@Moonstorm:Assets/Moonstorm/Items/Grinder/MDLGrinder.prefab",
                 pickupToken = "ITEM_ITEMONCHAMPIONKILL_PICKUP",
                 tags = itemChampionOnKillTags,
                 tier = ItemTier.Tier3,
@@ -130,8 +130,8 @@ namespace Moonstorm.Cores
                 loreToken = "",
                 name = "LargerTeleporterRadius",
                 nameToken = "ITEM_LARGERTELEPORTERRADIUS_NAME",
-                pickupIconPath = "@Moonstorm:Assets/Items/MechanicalTrinket/Icon.png",
-                pickupModelPath = "@Moonstorm:Assets/Items/MechanicalTrinket/MDLMechanicalTrinket.prefab",
+                pickupIconPath = "@Moonstorm:Assets/Moonstorm/Items/MechanicalTrinket/Icon.png",
+                pickupModelPath = "@Moonstorm:Assets/Moonstorm/Items/MechanicalTrinket/MDLMechanicalTrinket.prefab",
                 pickupToken = "ITEM_LARGERTELEPORTERRADIUS_PICKUP",
                 tags = largerTeleporterRadiusTags,
                 tier = ItemTier.Tier2,
@@ -150,7 +150,7 @@ namespace Moonstorm.Cores
                 name = "CrippleOnHit",
                 nameToken = "ITEM_CRIPPLEONHIT_NAME",
                 //pickupIconPath = pickUpIconPath,
-                pickupModelPath = "@Moonstorm:Assets/Items/FabinhoruDagger/MDLDagger.prefab",
+                pickupModelPath = "@Moonstorm:Assets/Moonstorm/Items/FabinhoruDagger/MDLDagger.prefab",
                 pickupToken = "ITEM_CRIPPLEONHIT_PICKUP",
                 tags = crippleOnHitTags,
                 tier = ItemTier.Tier1,
@@ -231,7 +231,7 @@ namespace Moonstorm.Cores
                 name = "MoneyOnInteraction",
                 nameToken = "ITEM_MONEYONINTERACTION_NAME",
                 //pickupIconPath = pickUpIconPath,
-                pickupModelPath = "@Moonstorm:Assets/Items/UESKeycard/MDLKeycard.prefab",
+                pickupModelPath = "@Moonstorm:Assets/Moonstorm/Items/UESKeycard/MDLKeycard.prefab",
                 pickupToken = "ITEM_MONEYONINTERACTION_PICKUP",
                 tags = moneyOnInteractionTags,
                 tier = ItemTier.Tier1,
@@ -310,8 +310,8 @@ namespace Moonstorm.Cores
                 loreToken = "",
                 name = "Lemdog",
                 nameToken = "ITEM_LEMDOG_NAME",
-                pickupIconPath = "@Moonstorm:Assets/Items/Lemdog/LemDog_TexIcon.png",
-                pickupModelPath = "@Moonstorm:Assets/Items/Lemdog/MDLLemDog.prefab",
+                pickupIconPath = "@Moonstorm:Assets/Moonstorm/Items/Lemdog/LemDog_TexIcon.png",
+                pickupModelPath = "@Moonstorm:Assets/Moonstorm/Items/Lemdog/MDLLemDog.prefab",
                 pickupToken = "ITEM_LEMDOG_PICKUP",
                 tags = betterCritsOnLowHealthTags,
                 tier = ItemTier.Tier3,
@@ -350,7 +350,7 @@ namespace Moonstorm.Cores
                 name = "DamageOnDamage",
                 //nameToken = "ITEM_EXTENDEDENEMYBUFFDURATIOM_NAME",
                 //pickupIconPath = "@Cloudburst:Assets/Items/Lemdog/LemDog_TexIcon.png",
-                //pickupModelPath = "@Cloudburst:Assets/Items/Lemdog/MDLLemDog.prefab",
+                pickupModelPath = "@Moonstorm:Assets/Moonstorm/Items/RedSkull/MDLRedskull.prefab",
                 //pickupToken = "ITEM_EXTENDEDENEMYBUFFDURATIOM_PICKUP",
                 tags = damageOnDamageTags,
                 tier = ItemTier.Tier2,
@@ -511,7 +511,7 @@ namespace Moonstorm.Cores
             LanguageAPI.Add("ITEM_BLOODTESTER_PICKUP", "Gain money when healed. ");
 
             LanguageAPI.Add("ITEM_DAMAGEONDAMAGE_NAME", "Red Skull");
-            LanguageAPI.Add("ITEM_DAMAGEONDAMAGE_DESC", "<style=cIsDamage>Deal more 40% <style=cStack>(+5% per stack)</style> more damage</style> when under 50% health.");
+            LanguageAPI.Add("ITEM_DAMAGEONDAMAGE_DESC", "<style=cIsDamage>Deal more 25% <style=cStack>(+10% per stack)</style> more damage</style> when under 50% health.");
             LanguageAPI.Add("ITEM_DAMAGEONDAMAGE_PICKUP", "Damage nearby enemies when hurt. ");
 
             LanguageAPI.Add("ITEM_EXTENDEDENEMYBUFFDURATIOM_NAME", "Magician's Earrings");
@@ -745,7 +745,7 @@ namespace Moonstorm.Cores
 
                         if (damageOnDamagedCOunt > 0 && attackerBody.healthComponent && attackerBody.healthComponent.combinedHealthFraction < .5f)
                         {
-                            float extra = damageInfo.damage * (.2f + (damageOnDamagedCOunt * .2f));
+                            float extra = damageInfo.damage * (.25f + (damageOnDamagedCOunt * .1f));
 
                             LogCore.LogD(damageInfo.damage);
                             LogCore.LogD(extra);

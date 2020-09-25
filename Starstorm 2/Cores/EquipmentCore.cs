@@ -18,13 +18,9 @@ namespace Starstorm2.Cores
         //(Post 1.0): Give them display rules.
 
 
-        #region Indexes
-        protected EquipmentIndex brokenPrinterIndex;
-        #endregion
+        protected EquipmentIndex greaterWarbannerIndex;
 
-        #region GameObjects
         private GameObject greaterWarbanner;
-        #endregion
 
         public EquipmentCore()
         {
@@ -55,16 +51,16 @@ namespace Starstorm2.Cores
                 canDrop = true,
                 colorIndex = ColorCatalog.ColorIndex.Equipment,
                 cooldown = 55,
-                descriptionToken = "EQUIPMENT_BROKENPRINTER_DESC",
+                descriptionToken = "EQUIPMENT_GREATERWARBANNER_DESC",
                 enigmaCompatible = true,
                 isBoss = false,
                 isLunar = false,
-                loreToken = "EQUIPMENT_BROKENPRINTER_LORE",
-                name = "Printer",
-                nameToken = "EQUIPMENT_BROKENPRINTER_NAME",
+                loreToken = "EQUIPMENT_GREATERWARBANNER_LORE",
+                name = "GreaterWarbanner",
+                nameToken = "EQUIPMENT_GREATERWARBANNER_NAME",
                 pickupIconPath = pickUpIconPath,
                 pickupModelPath = pickUpModelPath,
-                pickupToken = "EQUIPMENT_BROKENPRINTER_PICKUP",
+                pickupToken = "EQUIPMENT_GREATERWARBANNER_PICKUP",
                 unlockableName = "",
             });
 
@@ -92,7 +88,7 @@ namespace Starstorm2.Cores
 
         private bool EquipmentSlot_PerformEquipmentAction(On.RoR2.EquipmentSlot.orig_PerformEquipmentAction orig, EquipmentSlot self, EquipmentIndex equipmentIndex)
         {
-            if (equipmentIndex == brokenPrinterIndex)
+            if (equipmentIndex == greaterWarbannerIndex)
             {
                 GameObject gameObject = Object.Instantiate<GameObject>(greaterWarbanner, self.characterBody.transform.position, Quaternion.identity);
                 gameObject.GetComponent<TeamFilter>().teamIndex = self.characterBody.teamComponent.teamIndex;
@@ -105,10 +101,10 @@ namespace Starstorm2.Cores
 
         protected internal void RegisterTokens()
         {
-            LanguageAPI.Add("EQUIPMENT_PRINTER_NAME", "Greater Warbanner");
-            LanguageAPI.Add("EQUIPMENT_PRINTER_PICKUP", "Place a greater warbanner which boosts regen, critical hit chance, and lowers cooldowns.");
-            LanguageAPI.Add("EQUIPMENT_PRINTER_DESC", "Place a greater warbanner which grants 20% health regeneration, 10% critical hit chance, and 50% cooldown reduction.");
-            LanguageAPI.Add("EQUIPMENT_PRINTER_LORE", "Order: \u201CGreater Warbanner\u201D\r\nTracking Number: 72******\r\nEstimated Delivery: 08\\25\\2057\\\r\nShipping Method: High Priority\r\nShipping Address: 836 Lane, Lab [42], Mars\r\nShipping Details:\r\n\r\nI got this thing off of my dead grandmother, it's a relic from the great war of 2019. It  gives this aura of energy and motivation to do whatever someone desires! Anyways -- I'm passing it onto you, since I am dying to this cancer and I'd like you to have it before I go six feet under. Much love, Uncle Abe.\n");
+            LanguageAPI.Add("EQUIPMENT_GREATERWARBANNER_NAME", "Greater Warbanner");
+            LanguageAPI.Add("EQUIPMENT_GREATERWARBANNER_PICKUP", "Place a greater warbanner which boosts regen, critical hit chance, and lowers cooldowns.");
+            LanguageAPI.Add("EQUIPMENT_GREATERWARBANNER_DESC", "Place a greater warbanner which grants 20% health regeneration, 10% critical hit chance, and 50% cooldown reduction.");
+            LanguageAPI.Add("EQUIPMENT_GREATERWARBANNER_LORE", "Order: \u201CGreater Warbanner\u201D\r\nTracking Number: 72******\r\nEstimated Delivery: 08\\25\\2057\\\r\nShipping Method: High Priority\r\nShipping Address: 836 Lane, Lab [42], Mars\r\nShipping Details:\r\n\r\nI got this thing off of my dead grandmother, it's a relic from the great war of 2019. It  gives this aura of energy and motivation to do whatever someone desires! Anyways -- I'm passing it onto you, since I am dying to this cancer and I'd like you to have it before I go six feet under. Much love, Uncle Abe.\n");
             //LanguageAPI.Add("EQUIPMENT_PRINTER_LORE", "Order: \u201CGreater Warbanner\u201D\r\nTracking Number: 72******\r\nEstimated Delivery: 08\\25\\2057\\\r\nShipping Method: High Priority\r\nShipping Address: 836 Lane, Lab [42], Mars\r\nShipping Details:\r\n\r\nI got this thing off of my dead grandmother, it's a relic from the great war of 2019. It  gives this aura of energy and motivation to do whatever someone desires! Anyways -- I'm passing it onto you, since I am dying to this cancer and I'd like you to have it before I go six feet under. Much love, Uncle Abe.\n");
         }
 
@@ -135,8 +131,8 @@ namespace Starstorm2.Cores
             var customEquip = new CustomEquipment(equipmentDef, new ItemDisplayRule[0]);
             switch (equipmentDef.name)
             {
-                case "Printer":
-                    brokenPrinterIndex = ItemAPI.Add(customEquip);
+                case "GreaterWarbanner":
+                    greaterWarbannerIndex = ItemAPI.Add(customEquip);
                     break;
                 default:
 
