@@ -10,9 +10,16 @@
             LogCore.LogI("Initializing Core: " + base.ToString());
             instance = this;
             On.EntityStates.Missions.Arena.NullWard.Active.FixedUpdate += Active_FixedUpdate;
+            //On.EntityStates.Toolbot.AimGrenade.OnEnter += AimGrenade_OnEnter;
             //On.EntityStates.Commando.CommandoWeapon.FireRocket.OnEnter += FireRocket_OnEnter;
             //On.RoR2.GenericSkill.ExecuteIfReady += GenericSkill_ExecuteIfReady;
             Unlockall();
+        }
+
+        private void AimGrenade_OnEnter(On.EntityStates.Toolbot.AimGrenade.orig_OnEnter orig, EntityStates.Toolbot.AimGrenade self)
+        {
+            LogCore.LogI(self.projectilePrefab);
+            orig(self);
         }
 
         private bool GenericSkill_ExecuteIfReady(On.RoR2.GenericSkill.orig_ExecuteIfReady orig, RoR2.GenericSkill self)

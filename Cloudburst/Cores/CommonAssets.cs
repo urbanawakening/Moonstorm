@@ -28,7 +28,6 @@ class CommonAssets
 
         goldAffix = Resources.Load<GameObject>("Prefabs/GoldAffixEffect");
 
-
         lemurianSwingEffectMaterial = Resources.Load<GameObject>("prefabs/effects/LemurianBiteTrail").transform.Find("SwingTrail").GetComponent<Renderer>().material;
         ancientWispPillarEffect = Resources.Load<GameObject>("prefabs/effects/impacteffects/AncientWispPillar").transform.Find("Particles/Flames, Tube, CenterHuge").GetComponent<Renderer>().material;
 

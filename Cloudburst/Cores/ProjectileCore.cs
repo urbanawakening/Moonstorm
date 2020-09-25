@@ -7,9 +7,13 @@ namespace Cloudburst.Cores
     class ProjectileCore
     {
         public ProjectileCore instance;
+
         public static GameObject bombardierBombProjectile;
         public static GameObject bombardierFireBombProjectile;
         public static GameObject bombardierSeekerBombProjectile;
+
+        public static GameObject MIRVProjectile;
+        public static GameObject MIRVClusterProjectile;
         public ProjectileCore() => CreateProjectiles();
 
 
@@ -19,9 +23,30 @@ namespace Cloudburst.Cores
 
             LogCore.LogI("Initializing Core: " + base.ToString());
 
+            CreateBombardierProjectiles();
+            CreateMiscProjectiles();
+        }
+
+        #region Misc   
+        protected private void CreateMiscProjectiles() {
+            CreateMIRVProjectile();
+        }
+
+        protected private void CreateMIRVProjectile() {
+            MIRVProjectile = Resources.Load<GameObject>("prefabs/projectiles/CryoCanisterBombletsProjectile").InstantiateClone("MIRVEquipmentProjectile", true);
+            MIRVClusterProjectile = Resources.Load<GameObject>("prefabs/projectiles/CryoCanisterBombletsProjectile").InstantiateClone("MIRVClusterEquipmentProjectile", true);
+            if (API.RegisterNewProjectile(MIRVProjectile) && API.RegisterNewProjectile(MIRVClusterProjectile))
+            {
+            }
+            else LogCore.LogF("FATAL ERROR:" + MIRVProjectile.name + " failed to register!");
+        }
+
+        #endregion
+        #region Bombardier
+        protected private void CreateBombardierProjectiles() {
             CreateBombardierRocketProjectile();
             CreateBombardierBetterRocketProjectile();
-            CreateBombardierSeekerRocketProjectile();
+            CreateBombardierPayloadProjectile();
         }
 
         protected private void CreateBombardierRocketProjectile() {
@@ -48,22 +73,19 @@ namespace Cloudburst.Cores
 
                 damage.damageType = RoR2.DamageType.Stun1s;
 
-                impact.blastDamageCoefficient = 1;
-                impact.blastRadius = 30;
-                //OmniExplosionVFXArchWispCannonImpact OmniExplosionVFX
-                impact.impactEffect = Resources.Load<GameObject>("prefabs/effects/omnieffect/OmniExplosionVFXArchWispCannonImpact");
-
-                damage.force = -6000;
+                impact.blastProcCoefficient = 0.3f;
+                impact.blastDamageCoefficient = 1.1f;
 
                 controller.ghostPrefab = Resources.Load<GameObject>("prefabs/projectileghosts/ArchWispCannonGhost");
                 controller.procCoefficient = 0.6f;
-
-                impact.blastProcCoefficient = 5.5f;
+                
+                impact.impactEffect = Resources.Load<GameObject>("prefabs/effects/omnieffect/OmniExplosionVFXArchWispCannonImpact");
+                impact.blastProcCoefficient = 1f;
                 impact.blastDamageCoefficient = 1f;
             }
             else LogCore.LogF("FATAL ERROR:" + bombardierFireBombProjectile.name + " failed to register to the projectile catalog!");
         }
-        protected private void CreateBombardierSeekerRocketProjectile()
+        private protected void CreateBombardierPayloadProjectile()
         {
             bombardierSeekerBombProjectile = Resources.Load<GameObject>("prefabs/projectiles/MissileProjectile").InstantiateClone("BombardierSeekerRocketProjectile", true);
             var registered = API.RegisterNewProjectile(bombardierFireBombProjectile);
@@ -73,8 +95,8 @@ namespace Cloudburst.Cores
                 var impact = bombardierSeekerBombProjectile.AddOrGetComponent<ProjectileImpactExplosion>();
                 var missile = bombardierSeekerBombProjectile.GetComponent<MissileController>();
 
-                missile.deathTimer = 10;
-                missile.giveupTimer = 5;
+                missile.deathTimer = 15;
+                missile.giveupTimer = 10;
                 missile.turbulence = 0;
                 missile.maxSeekDistance = 200;
 
@@ -92,13 +114,13 @@ namespace Cloudburst.Cores
                 impact.destroyOnWorld = true;
                 impact.falloffModel = RoR2.BlastAttack.FalloffModel.None;
                 impact.fireChildren = false;
-                impact.impactEffect = Resources.Load<GameObject>("prefabs/effects/impacteffects/ExplosionVFX");
+                impact.impactEffect = Resources.Load<GameObject>("prefabs/effects/LightningStakeNova");
                 impact.lifetime = 10;
                 impact.lifetimeAfterImpact = 0;
                 impact.lifetimeRandomOffset = 0;
             }
             else LogCore.LogF("FATAL ERROR:" + bombardierSeekerBombProjectile.name + " failed to register to the projectile catalog!");
         }
-
+        #endregion
     }
 }

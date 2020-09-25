@@ -38,14 +38,7 @@ namespace Cloudburst.Cores.States.Bombardier
 
             timeBeforeKnockback += Time.deltaTime;
 
-            if (ShouldHaveKnockback() && !isGrounded && characterMotor)
-            {
-                characterMotor.ApplyForce(GetKnockback(aimRay), false, false);
-            }
 
-            if (characterBody && ShouldApplyBloom()) {
-                characterBody.AddSpreadBloom(GetBloom());
-            }
 
             FireProjectileInfo info = new FireProjectileInfo()
             {
@@ -65,6 +58,16 @@ namespace Cloudburst.Cores.States.Bombardier
             };
             ModifyProjectileInfo(info);
             ProjectileManager.instance.FireProjectile(info);
+
+            if (ShouldHaveKnockback() && !isGrounded && characterMotor)
+            {
+                characterMotor.ApplyForce(GetKnockback(aimRay), false, false);
+            }
+
+            if (characterBody && ShouldApplyBloom())
+            {
+                characterBody.AddSpreadBloom(GetBloom());
+            }
         }
 
         public virtual bool ShouldHaveKnockback() {

@@ -37,7 +37,7 @@ namespace Cloudburst.Cores.States.Bombardier
                     damage = 2.5f * damageStat,
                     damageColorIndex = RoR2.DamageColorIndex.Default,
                     damageTypeOverride = damageType,
-                    force = 3000,
+                    force = 100,
                     owner = gameObject,
                     position = transform.position,
                     procChainMask = default,

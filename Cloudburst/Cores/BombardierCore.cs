@@ -74,6 +74,8 @@ namespace Cloudburst.Cores
             cbody.crosshairPrefab = Resources.Load<GameObject>("prefabs/crosshair/StraightBracketCrosshair");
             cbody.bodyFlags |= CharacterBody.BodyFlags.IgnoreFallDamage;
 
+
+
             skillLocator.passiveSkill.enabled = true;
 
             var passive = skillLocator.passiveSkill;
@@ -85,10 +87,18 @@ namespace Cloudburst.Cores
             LanguageAPI.Add("BOMBARDIER_PASSIVE_DESC", "You are <style=cIsUtility>immune</style> to fall damage.");
             LanguageAPI.Add("BOMBARDIER_PASSIVE_NAME", "Lessons Learned");
 
+            CreatePassive();
             CreatePrimary();
             CreateSecondary();
             CreateUtility();
             CreateSpecial();
+        }
+
+        private void CreatePassive() {
+            LoadoutAPI.AddSkill(typeof(BombardierMain));
+
+            var stateMachine = body.GetComponent<EntityStateMachine>();
+            stateMachine.mainStateType = new SerializableEntityStateType(typeof(BombardierMain));
         }
 
         private void SetComponents() {
@@ -146,7 +156,7 @@ namespace Cloudburst.Cores
             secondarySkillDef.activationState = new SerializableEntityStateType(typeof(FireFlameRocket));
             secondarySkillDef.activationStateMachineName = "Weapon";
             secondarySkillDef.baseMaxStock = 1;
-            secondarySkillDef.baseRechargeInterval = 4f;
+            secondarySkillDef.baseRechargeInterval = 2f;
             secondarySkillDef.beginSkillCooldownOnSkillEnd = true;
             secondarySkillDef.canceledFromSprinting = false;
             secondarySkillDef.fullRestockOnAssign = false;
@@ -167,8 +177,8 @@ namespace Cloudburst.Cores
                  "KEYWORD_STUNNING",
              };
 
-            LanguageAPI.Add(secondarySkillDef.skillDescriptionToken, "<style=cIsDamage>Stunning</style>. Fire a stunning rocket that does <style=cIsDamage>200%</style> damage and <style=cIsDamage>explodes in a large radius on contact</style>.");
-            LanguageAPI.Add(secondarySkillDef.skillNameToken, "Concussive Payload");
+            LanguageAPI.Add(secondarySkillDef.skillDescriptionToken, "");
+            LanguageAPI.Add(secondarySkillDef.skillNameToken, "");
 
             LoadoutAPI.AddSkillDef(secondarySkillDef);
             SkillFamily secondarySkillFamily = skillLocator.secondary.skillFamily;
@@ -185,12 +195,13 @@ namespace Cloudburst.Cores
         private void CreateUtility()
         {
             LoadoutAPI.AddSkill(typeof(UpwardsBlast));
+            LoadoutAPI.AddSkill(typeof(RocketJump));
 
             SkillDef utilitySkillDef = ScriptableObject.CreateInstance<SkillDef>();
-            utilitySkillDef.activationState = new SerializableEntityStateType(typeof(UpwardsBlast));
+            utilitySkillDef.activationState = new SerializableEntityStateType(typeof(RocketJump));
             utilitySkillDef.activationStateMachineName = "Weapon";
             utilitySkillDef.baseMaxStock = 1;
-            utilitySkillDef.baseRechargeInterval = 6f;
+            utilitySkillDef.baseRechargeInterval = 5f;
             utilitySkillDef.beginSkillCooldownOnSkillEnd = true;
             utilitySkillDef.canceledFromSprinting = false;
             utilitySkillDef.fullRestockOnAssign = false;
@@ -208,12 +219,15 @@ namespace Cloudburst.Cores
             utilitySkillDef.skillNameToken = "BOMBARDIER_UTILITY_NAME";
             utilitySkillDef.icon = null;
             utilitySkillDef.keywordTokens = new string[] {
-                 "KEYWORD_FORCEFUL",
+                 //"KEYWORD_FORCEFUL",
             };
 
             LanguageAPI.Add("KEYWORD_FORCEFUL", "<style=cKeywordName>Forceful</style><style=cSub>This skill applies the Forceful debuff, which doubles force applied to enemies.</style>");
-            LanguageAPI.Add(utilitySkillDef.skillDescriptionToken, "<style=cIsDamage>Forceful</style>. Pull enemies towards you for <style=cIsDamage>500%</style> damage and <style=cIsUtility>boost yourself upwards</style>.");
-            LanguageAPI.Add(utilitySkillDef.skillNameToken, "Plan B");
+            //LanguageAPI.Add(utilitySkillDef.skillDescriptionToken, "<style=cIsDamage>Forceful</style>. Pull enemies towards you for <style=cIsDamage>500%</style> damage and <style=cIsUtility>boost yourself upwards</style>.");
+            //LanguageAPI.Add(utilitySkillDef.skillNameToken, "Plan B");
+
+            LanguageAPI.Add(utilitySkillDef.skillDescriptionToken, "<style=cIsDamage>Stunning</style>. Fire a stunning rocket that does <style=cIsDamage>500%</style> damage and <style=cIsDamage>explodes in a large radius on contact</style>.");
+            LanguageAPI.Add(utilitySkillDef.skillNameToken, "Concussive Payload");
 
             LoadoutAPI.AddSkillDef(utilitySkillDef);
             SkillFamily utilitySkillFamily = skillLocator.utility.skillFamily;
@@ -231,7 +245,7 @@ namespace Cloudburst.Cores
             specialSkillDef.activationState = new SerializableEntityStateType(typeof(Mortar));
             specialSkillDef.activationStateMachineName = "Weapon";
             specialSkillDef.baseMaxStock = 1;
-            specialSkillDef.baseRechargeInterval = 12;
+            specialSkillDef.baseRechargeInterval = 8;
             specialSkillDef.beginSkillCooldownOnSkillEnd = true;
             specialSkillDef.canceledFromSprinting = false;
             specialSkillDef.fullRestockOnAssign = true;

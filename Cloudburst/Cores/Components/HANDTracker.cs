@@ -68,7 +68,7 @@ namespace Cloudburst.Cores.HAND.Components
             this.search.filterByLoS = true;
             this.search.searchOrigin = aimRay.origin;
             this.search.searchDirection = aimRay.direction;
-            this.search.sortMode = BullseyeSearch.SortMode.DistanceAndAngle;
+            this.search.sortMode = BullseyeSearch.SortMode.Angle;
             this.search.maxDistanceFilter = this.maxTrackingDistance;
             this.search.maxAngleFilter = this.maxTrackingAngle;
             this.search.RefreshCandidates();

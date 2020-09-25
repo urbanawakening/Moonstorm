@@ -2,6 +2,7 @@
 using RoR2;
 using RoR2.Projectile;
 using System.Collections.Generic;
+using System.Globalization;
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -16,10 +17,26 @@ namespace Cloudburst.Cores
         //Give equipments models
         //Give equipment icons
         //(Post 1.0): Give them display rules.
+
+        private ItemIndex GetRandomItem(List<ItemIndex> items)
+        {
+            bool isEmpty = items.Count <= 0;
+            if (!isEmpty)
+            {
+                int itemID = UnityEngine.Random.Range(0, items.Count);
+                    
+                return items[itemID];
+            }
+            else LogCore.LogE("SSSHIT!"); return ItemIndex.ShieldOnly;
+
+        }
+
         #region Indexes
         protected EquipmentIndex lumpkinIndex;
         protected EquipmentIndex unstableQuantumReactorIndex;
         protected EquipmentIndex brokenPrinterIndex;
+        protected EquipmentIndex rockFruitIndex;
+        protected EquipmentIndex MIRVIndex;
         //protected EquipmentIndex midasIndex;
         //public static EquipmentIndex cocktailIndex { get; }
         #endregion
@@ -132,6 +149,46 @@ namespace Cloudburst.Cores
                 pickupToken = "EQUIPMENT_BROKENPRINTER_PICKUP",
                 unlockableName = "",
             });
+            RegisterNewEquip(new EquipmentDef()
+            {
+                addressToken = "",
+                appearsInMultiPlayer = true,
+                appearsInSinglePlayer = true,
+                canDrop = true,
+                colorIndex = ColorCatalog.ColorIndex.Equipment,
+                cooldown = 25,
+                descriptionToken = "EQUIPMENT_ROCKFRUIT_DESC",
+                enigmaCompatible = true,
+                isBoss = false,
+                isLunar = true,
+                loreToken = "EQUIPMENT_ROCKFRUIT_LORE",
+                name = "RockFruit",
+                nameToken = "EQUIPMENT_ROCKFRUIT_NAME",
+                pickupIconPath = pickUpIconPath,
+                pickupModelPath = pickUpModelPath,
+                pickupToken = "EQUIPMENT_ROCKFRUIT_PICKUP",
+                unlockableName = "",
+            });
+            RegisterNewEquip(new EquipmentDef()
+            {
+                addressToken = "",
+                appearsInMultiPlayer = true,
+                appearsInSinglePlayer = true,
+                canDrop = true,
+                colorIndex = ColorCatalog.ColorIndex.Equipment,
+                cooldown = 15,
+                descriptionToken = "EQUIPMENT_MIRV_DESC",
+                enigmaCompatible = true,
+                isBoss = false,
+                isLunar = true,
+                loreToken = "EQUIPMENT_MIRV_LORE",
+                name = "MIRV",
+                nameToken = "EQUIPMENT_MIRV_NAME",
+                pickupIconPath = pickUpIconPath,
+                pickupModelPath = pickUpModelPath,
+                pickupToken = "EQUIPMENT_MIRV_PICKUP",
+                unlockableName = "",
+            });
 
             On.RoR2.EquipmentSlot.PerformEquipmentAction += EquipmentSlot_PerformEquipmentAction;
 
@@ -171,6 +228,13 @@ namespace Cloudburst.Cores
                 Scream(self.characterBody);
                 return true;
             }
+            if (equipmentIndex == rockFruitIndex) {
+                ConsumeRock(self.characterBody.inventory);
+                return true;
+            }
+            if (equipmentIndex == MIRVIndex) {
+                ThrowMIRV(self.characterBody);
+            }
             return orig(self, equipmentIndex);
         }
 
@@ -184,13 +248,36 @@ namespace Cloudburst.Cores
             LanguageAPI.Add("EQUIPMENT_REACTOR_PICKUP", "Fire a random projectile on use.");
             LanguageAPI.Add("EQUIPMENT_REACTOR_DESC", "Fire a random projectile.");
 
-            LanguageAPI.Add("EQUIPMENT_BROKENPRINTER_NAME", "Greater Warbanner");
-            LanguageAPI.Add("EQUIPMENT_BROKENPRINTER_PICKUP", "Place a greater warbanner which boosts regen, critical hit chance, and lowers cooldowns.");
-            LanguageAPI.Add("EQUIPMENT_BROKENPRINTER_DESC", "Place a greater warbanner which grants 20% health regeneration, 10% critical hit chance, and 50% cooldown reduction.");
-            LanguageAPI.Add("EQUIPMENT_BROKENPRINTER_LORE", "Order: \u201CGreater Warbanner\u201D\r\nTracking Number: 72******\r\nEstimated Delivery: 08\\25\\2057\\\r\nShipping Method: High Priority\r\nShipping Address: 836 Lane, Lab [42], Mars\r\nShipping Details:\r\n\r\nI got this thing off of my dead grandmother, it's a relic from the great war of 2019. It  gives this aura of energy and motivation to do whatever someone desires! Anyways -- I'm passing it onto you, since I am dying to this cancer and I'd like you to have it before I go six feet under. Much love, Uncle Abe.\n");
+            LanguageAPI.Add("EQUIPMENT_PRINTER_NAME", "Greater Warbanner");
+            LanguageAPI.Add("EQUIPMENT_PRINTER_PICKUP", "Place a greater warbanner which boosts regen, critical hit chance, and lowers cooldowns.");
+            LanguageAPI.Add("EQUIPMENT_PRINTER_DESC", "Place a greater warbanner which grants 20% health regeneration, 10% critical hit chance, and 50% cooldown reduction.");
+            LanguageAPI.Add("EQUIPMENT_PRINTER_LORE", "Order: \u201CGreater Warbanner\u201D\r\nTracking Number: 72******\r\nEstimated Delivery: 08\\25\\2057\\\r\nShipping Method: High Priority\r\nShipping Address: 836 Lane, Lab [42], Mars\r\nShipping Details:\r\n\r\nI got this thing off of my dead grandmother, it's a relic from the great war of 2019. It  gives this aura of energy and motivation to do whatever someone desires! Anyways -- I'm passing it onto you, since I am dying to this cancer and I'd like you to have it before I go six feet under. Much love, Uncle Abe.\n");
+
+            LanguageAPI.Add("EQUIPMENT_ROCKFRUIT_NAME", "Rock Fruit");
+            LanguageAPI.Add("EQUIPMENT_ROCKFRUIT_PICKUP", "Swap a random item for another random item.");
+            LanguageAPI.Add("EQUIPMENT_ROCKFRUIT_DESC", "Swap a random item in your inventory for another random item of the same tier.");
+            //LanguageAPI.Add("EQUIPMENT_PRINTER_LORE", "Order: \u201CGreater Warbanner\u201D\r\nTracking Number: 72******\r\nEstimated Delivery: 08\\25\\2057\\\r\nShipping Method: High Priority\r\nShipping Address: 836 Lane, Lab [42], Mars\r\nShipping Details:\r\n\r\nI got this thing off of my dead grandmother, it's a relic from the great war of 2019. It  gives this aura of energy and motivation to do whatever someone desires! Anyways -- I'm passing it onto you, since I am dying to this cancer and I'd like you to have it before I go six feet under. Much love, Uncle Abe.\n");
         }
 
         protected internal void RegisterNewEquip(EquipmentDef equipmentDef) {
+            var internalName = equipmentDef.name;
+            var upperName = internalName.ToUpper(CultureInfo.InvariantCulture);
+            if (equipmentDef.nameToken == null)
+            {
+                equipmentDef.nameToken = string.Format(CultureInfo.InvariantCulture, "ITEM_{0}_NAME", upperName);
+            }
+            if (equipmentDef.descriptionToken == null)
+            {
+                equipmentDef.descriptionToken = string.Format(CultureInfo.InvariantCulture, "ITEM_{0}_DESC", upperName);
+            }
+            if (equipmentDef.pickupToken == null)
+            {
+                equipmentDef.pickupToken = string.Format(CultureInfo.InvariantCulture, "ITEM_{0}_PICKUP", upperName);
+            }
+            if (equipmentDef.loreToken == null)
+            {
+                equipmentDef.loreToken = string.Format(CultureInfo.InvariantCulture, "ITEM_{0}_LORE", upperName);
+            }
             var customEquip = new CustomEquipment(equipmentDef, new ItemDisplayRule[0]);
             switch (equipmentDef.name)
             {
@@ -202,6 +289,12 @@ namespace Cloudburst.Cores
                     break;
                 case "Printer":
                     brokenPrinterIndex = ItemAPI.Add(customEquip);
+                    break;
+                case "RockFruit":
+                    rockFruitIndex = ItemAPI.Add(customEquip);
+                    break;
+                case "MIRV":
+                    MIRVIndex = ItemAPI.Add(customEquip);
                     break;
                 default:
 
@@ -239,6 +332,104 @@ namespace Cloudburst.Cores
             };
             EffectManager.SpawnEffect(Resources.Load<GameObject>("prefabs/effects/impacteffects/BeetleQueenDeathImpact"), effect, true);
         }
+
+        protected internal void ThrowMIRV(CharacterBody user)
+        {
+            InputBankTest aimRay = user.inputBank;
+            var projInfo = new FireProjectileInfo
+            {
+                crit = false,
+                damage = 5 * user.damage,
+                owner = user.gameObject,
+                position = user.transform.position,
+                projectilePrefab = ProjectileCore.MIRVProjectile,
+                rotation = Util.QuaternionSafeLookRotation(aimRay.aimDirection),
+            };
+            ProjectileManager.instance.FireProjectile(projInfo);
+        }
+
+        protected internal void ConsumeRock(Inventory user) {
+            //TODO:
+            //This is horrible.
+
+            var allItems = new List<ItemIndex>();
+            for (var item = ItemIndex.Syringe; item < (ItemIndex)ItemCatalog.itemCount; item++) {
+                var def = ItemCatalog.GetItemDef(item);
+                if (def.tier != ItemTier.NoTier) {
+                    if (user.GetItemCount(item) > 0) {
+                        allItems.Add(item);
+                    }
+                }
+            }
+
+            var randoItem = GetRandomItem(allItems);
+            user.RemoveItem(randoItem);
+
+            var itemIndex = ItemCatalog.GetItemDef(randoItem).tier;
+
+            List<ItemIndex> list = new List<ItemIndex>();
+
+            var dropList = GetDropListListFromItemTier(itemIndex);
+
+            if (dropList != null) {
+                foreach (var item in dropList) {
+                    //var AAAAAAAA = new Xoroshiro128Plus(2023402033023);
+                    var pickupDef = PickupCatalog.GetPickupDef(item);
+                    if (pickupDef != null) {
+                        list.Add(pickupDef.itemIndex);
+                        //YOOOOOOOOOOOOOOOOO    
+                    }
+                }
+            }
+            else LogCore.LogF("FUCK FUCK FUCK FUCK FUCK");
+
+            bool isEmpty = list.Count <= 0;
+
+            if (!isEmpty)
+            {
+                var randomItem = GetRandomItem(list);
+
+                if (user && randomItem != ItemIndex.None && !isEmpty)
+                {
+                   LogCore.LogI(randomItem);
+                    user.GiveItem(randomItem);
+                }
+            }
+
+            /*var itemDef = ItemCatalog.GetItemDef(randoItem);
+            var itemTier = itemDef.tier;
+
+            List<ItemIndex> list = new List<ItemIndex>();
+
+            foreach (var item in GetDropListListFromItemTier(itemTier)) {
+                var newItemDef = ItemCatalog.GetItemDef(PickupCatalog.GetPickupDef(item).itemIndex);
+                list.Add(newItemDef.itemIndex);
+            }
+
+            var FINALLY = GetRandomItem(list);
+            user.GiveItem(FINALLY);*/
+        }
+
+        public List<PickupIndex> GetDropListListFromItemTier(ItemTier itemTier)
+        {
+            switch (itemTier)
+            {
+                case ItemTier.Tier1:
+                    return Run.instance.availableTier1DropList;
+                case ItemTier.Tier2:
+                    return Run.instance.availableTier2DropList;
+                case ItemTier.Tier3:
+                    return Run.instance.availableTier3DropList;
+                case ItemTier.Lunar:
+                    return Run.instance.availableLunarDropList;
+                case ItemTier.Boss:
+                    return Run.instance.availableBossDropList;
+                default:
+                    LogCore.LogE("Cannot find droplist for " + itemTier);
+                    return null; 
+            }
+        }
+
 
         protected internal void SummonAlly(CharacterBody user)
         {

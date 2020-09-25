@@ -14,7 +14,6 @@ namespace Cloudburst.Cores
         public ItemCore instance;
 
         //TODO:
-        //Fix OnCrit
         //Give Items Models
         //Give items icons
         //These values are set by RegisterItem(ItemIndex, ItemDef).
@@ -32,10 +31,13 @@ namespace Cloudburst.Cores
         protected internal ItemIndex lemdogIndex;
         protected internal ItemIndex moneyOnHealIndex;
         protected internal ItemIndex extendEnemyBuffDurationIndex;
+
         protected internal ItemIndex damageOnDamagedIndex;
+        protected internal ItemIndex skinIndex;
         protected internal ItemIndex freezeEnemiesOnHitIndex;
         protected internal ItemIndex geigerCounterIndex;
         protected internal ItemIndex heartIndex;
+        protected internal ItemIndex chipIndex;
 
         //geigerCounterIndex
 
@@ -523,7 +525,46 @@ namespace Cloudburst.Cores
                 tier = ItemTier.Tier3,
                 unlockableName = ""
             });
-
+            ItemTag[] chipTags = new ItemTag[2]
+{
+                    ItemTag.AIBlacklist,
+                    ItemTag.Damage
+};
+            RegisterItem(new ItemDef
+            {
+                canRemove = true,
+                //descriptionToken = "ITEM_EXTENDEDENEMYBUFFDURATIOM_DESC",
+                hidden = false,
+                loreToken = "",
+                name = "Chip",
+                //nameToken = "ITEM_EXTENDEDENEMYBUFFDURATIOM_NAME",
+                //pickupIconPath = "@Cloudburst:Assets/Items/Lemdog/LemDog_TexIcon.png",
+                //pickupModelPath = "@Cloudburst:Assets/Items/Lemdog/MDLLemDog.prefab",
+                //pickupToken = "ITEM_EXTENDEDENEMYBUFFDURATIOM_PICKUP",
+                tags = chipTags,
+                tier = ItemTier.Tier3,
+                unlockableName = ""
+            });
+            ItemTag[] skinTags = new ItemTag[1]
+            {
+                    ItemTag.Utility,
+            };
+            RegisterItem(new ItemDef
+            {
+                canRemove = true,
+                //descriptionToken = "ITEM_EXTENDEDENEMYBUFFDURATIOM_DESC",
+                hidden = false,
+                loreToken = "",
+                name = "Skin",
+                //nameToken = "ITEM_EXTENDEDENEMYBUFFDURATIOM_NAME",
+                //pickupIconPath = "@Cloudburst:Assets/Items/Lemdog/LemDog_TexIcon.png",
+                //pickupModelPath = "@Cloudburst:Assets/Items/Lemdog/MDLLemDog.prefab",
+                //pickupToken = "ITEM_EXTENDEDENEMYBUFFDURATIOM_PICKUP",
+                tags = skinTags,
+                tier = ItemTier.Tier3,
+                unlockableName = ""
+            });
+            //chipIndex
             Hook();
         }
 
@@ -597,6 +638,14 @@ namespace Cloudburst.Cores
             LanguageAPI.Add("ITEM_HEART_NAME", "Baboon Heart");
             LanguageAPI.Add("ITEM_HEART_DESC", "Getting hit below 50% health <style=cIsUtility>grants temporary invincibility for 2 seconds <style=cStack>(+1 second per stack)</style></style>. Recharge by killing enemies.");
             LanguageAPI.Add("ITEM_HEART_PICKUP", "Gain invincibility when hit at low health. Recharge by killing enemies.");
+
+            LanguageAPI.Add("ITEM_CHIP_NAME", "Mortar Chip");
+            LanguageAPI.Add("ITEM_CHIP_DESC", "Allies <style=cIsUtility>explode for 500%<style=cStack>(+100% per stack)</style></style>.");
+            LanguageAPI.Add("ITEM_CHIP_PICKUP", "Allies explode on death!");
+
+            LanguageAPI.Add("ITEM_SKIN_NAME", "Vigilante's Cloak");
+            LanguageAPI.Add("ITEM_SKIN_DESC", "For each enemy within an 10m radius gain <style=cIsUtility>+5 <style=cStack>(+3 per stack)</style> armor</style>.");
+            LanguageAPI.Add("ITEM_SKIN_PICKUP", "More enemies, more armor.");
 
             //STARSTORM 2
 
@@ -705,6 +754,12 @@ namespace Cloudburst.Cores
                 case "Heart":
                     heartIndex = ItemAPI.Add(customItem);
                     break;
+                case "Chip":
+                    chipIndex = ItemAPI.Add(customItem);
+                    break;
+                case "Skin":
+                    skinIndex = ItemAPI.Add(customItem);
+                    break;
                 default:
                     LogCore.LogF(itemDef.name + " is unregistered! Item will not spawn!");
                     break;
@@ -727,6 +782,7 @@ namespace Cloudburst.Cores
             On.RoR2.HealthComponent.TakeDamage += HealthComponent_TakeDamage;
         }
 
+
         private void CharacterBody_OnInventoryChanged(On.RoR2.CharacterBody.orig_OnInventoryChanged orig, CharacterBody self)
         {
             //lol
@@ -739,6 +795,7 @@ namespace Cloudburst.Cores
                     var fungusCount = inventory.GetItemCount(dormantFungusIndex);
                     var diaryCount = inventory.GetItemCount(diaryIndex);
                     var counterCount = inventory.GetItemCount(geigerCounterIndex);
+                    var skinCount = inventory.GetItemCount(skinIndex);
 
 
                     if (fungusCount > 0)
@@ -752,6 +809,9 @@ namespace Cloudburst.Cores
                     if (counterCount > 0)
                     {
                         self.AddItemBehavior<GeigerCounterBehavior>(counterCount);
+                    }
+                    if (skinIndex > 0) {
+                        self.AddItemBehavior<SkinBehavior>(skinCount);
                     }
                 }
             }
@@ -947,15 +1007,82 @@ namespace Cloudburst.Cores
                 return;
             CharacterBody attackerBody = damageReport.attackerBody;
             //CharacterBody victimBody = damageReport.victimBody;
+            var victimBody = damageReport.victimBody;
             CharacterMaster attackerMaster = damageReport.attackerMaster;
             //CharacterMaster victimMaster = damageReport.victimMaster;
             Inventory attackerInventory = attackerMaster ? attackerMaster.inventory : null;
             //Inventory victimInventory = victimMaster ? victimMaster.inventory : null;
 
+
             int itemChampionOnKillCount = attackerInventory.GetItemCount(itemChampionOnKillIndex);
             int heartCount = attackerInventory.GetItemCount(heartIndex);
+            int chipCount = Util.GetItemCountForTeam(TeamIndex.Player, chipIndex, false, true);
 
-            if (heartIndex > 0 && attackerBody.HasBuff(BuffCore.instance.baboomChargeIndex)) {
+            if (chipCount > 0 && victimBody && victimBody.teamComponent && victimBody.teamComponent.teamIndex == TeamIndex.Player) {
+                LogCore.LogI("fired");
+                EffectManager.SpawnEffect(Resources.Load<GameObject>("prefabs/effects/LightningStakeNova"), new EffectData()
+                {
+                    scale = 25,
+                    origin = victimBody.transform.position,
+                    rotation = Quaternion.identity
+                }, true);
+                BlastAttack attack = new BlastAttack()
+                {
+                    attacker = victimBody.gameObject,
+                    attackerFiltering = AttackerFiltering.Default,
+                    baseDamage = (5 + chipCount) * victimBody.damage,
+                    baseForce = 2500,
+                    bonusForce = new Vector3(0, 0, 0),
+                    crit = victimBody.RollCrit(),
+                    damageColorIndex = DamageColorIndex.Default,
+                    damageType = DamageType.BlightOnHit,
+                    falloffModel = BlastAttack.FalloffModel.None,
+                    impactEffect = EffectIndex.Invalid,
+                    inflictor = victimBody.gameObject,
+                    losType = BlastAttack.LoSType.NearestHit,
+                    position = victimBody.transform.position,
+                    procChainMask = default,
+                    procCoefficient = 0.5f,
+                    radius = 30,
+                    teamIndex = victimBody.teamComponent.teamIndex,
+                };
+                attack.Fire(); 
+            }
+
+            /*if (chipCount > 0 && victimBody && victimBody.teamComponent && victimBody.teamComponent.teamIndex == TeamIndex.Player)
+            {
+                EffectManager.SpawnEffect(Resources.Load<GameObject>("prefabs/effects/impacteffects/ExplosionVFX"), new EffectData()
+                {
+                    scale = 25,
+                    origin = victimBody.transform.position,
+                    rotation = Quaternion.identity
+                }, true);
+
+                BlastAttack attack = new BlastAttack()
+                {
+                    attacker = victimBody.gameObject,
+                    attackerFiltering = AttackerFiltering.Default,
+                    baseDamage = (5 + chipCount) * victimBody.damage,
+                    baseForce = 2500,
+                    bonusForce = new Vector3(0, 0, 0),
+                    crit = victimBody.RollCrit(),
+                    damageColorIndex = DamageColorIndex.Default,
+                    damageType = DamageType.BlightOnHit,
+                    falloffModel = BlastAttack.FalloffModel.None,
+                    impactEffect = EffectIndex.Invalid,
+                    inflictor = victimBody.gameObject,
+                    losType = BlastAttack.LoSType.NearestHit,
+                    position = victimBody.transform.position,
+                    procChainMask = default,
+                    procCoefficient = 0.5f,
+                    radius = 30,
+                    teamIndex = victimBody.teamComponent.teamIndex,
+                };
+                attack.Fire();*/
+            //}
+
+
+            if (heartCount > 0 && attackerBody.HasBuff(BuffCore.instance.baboomChargeIndex)) {
                 attackerBody.RemoveBuff(BuffCore.instance.baboomChargeIndex);
             }
 
@@ -979,11 +1106,13 @@ namespace Cloudburst.Cores
                 CharacterMaster victimMaster = damageReport.victimMaster;
                 Inventory attackerInventory = attackerMaster ? attackerMaster.inventory : null;
                 //Inventory victimInventory = victimMaster ? victimMaster.inventory : null;
+
                 int scpRandom = UnityEngine.Random.Range(0, scpBuffList.Count);
                 int rootCount = attackerInventory.GetItemCount(crippleOnHitIndex);
                 int scpCount = attackerInventory.GetItemCount(randomDebuffOnHitIndex);
                 int coinCount = attackerInventory.GetItemCount(coinIndex);
                 int freezeCount = attackerInventory.GetItemCount(freezeEnemiesOnHitIndex);
+
 
                 if (rootCount > 0 && Util.CheckRoll(20, attackerMaster) && attackerMaster && damageReport.victimBody)
                 {
@@ -1084,7 +1213,7 @@ namespace Cloudburst.Cores
 
         public void TeleporterInteractionOnTeleporterBeginChargingGlobal(TeleporterInteraction obj)
         {
-            int count = Util.GetItemCountForTeam(TeamIndex.Player, largerTeleporterRadiusIndex, true, true);
+            int count = Util.GetItemCountForTeam(TeamIndex.Player, largerTeleporterRadiusIndex, false, true);
             if (count > 0)
             {
                 obj.holdoutZoneController.baseRadius = obj.holdoutZoneController.baseRadius + (count * 3);
@@ -1207,4 +1336,36 @@ namespace Cloudburst.Cores
             }
         }
     }
+    public class SkinBehavior : CharacterBody.ItemBehavior
+    {
+        private float timer;
+
+        public void FixedUpdate()
+        {
+            timer += Time.deltaTime;
+            //LogCore.LogI(timer);
+
+            if (timer >= 1)
+            {
+                var count = body.GetBuffCount(BuffCore.instance.skinIndex);
+                for (int i = 0; i < count; i++) {
+                    body.RemoveBuff(BuffCore.instance.skinIndex);
+                }
+
+
+
+                foreach (var collision in Physics.OverlapSphere(transform.position, 25))
+                {
+                    var cb = collision.GetComponentInParent<CharacterBody>();
+                    if (cb && !cb.Equals(body))
+                    {
+                        body.AddBuff(BuffCore.instance.skinIndex);
+                        LogCore.LogI(Language.GetString(cb.baseNameToken));
+                    }
+                }
+                timer = 0;
+            }
+        }
+    }
+
 }

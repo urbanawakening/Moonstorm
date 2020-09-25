@@ -20,6 +20,7 @@ namespace Cloudburst.Cores
         protected internal BuffIndex greaterBannerIndex;
         protected internal BuffIndex bombardierForceIndex;
         protected internal BuffIndex baboomChargeIndex;
+        protected internal BuffIndex skinIndex;
 
         internal bool Loaded { get; private set; } = false;
         public BuffCore() => RegisterBuffs(); 
@@ -121,6 +122,16 @@ namespace Cloudburst.Cores
                 name = "BaboonCharge",
                 buffColor = new Color(0.8392157f, 0.7882353f, 0.22745098f)
             });
+            RegisterBuff(new BuffDef()
+            {
+                buffIndex = BuffIndex.Count,
+                canStack = true,
+                isDebuff = false,
+                eliteIndex = EliteIndex.None,
+                iconPath = "Textures/BuffIcons/texBuffBodyArmorIcon",
+                name = "SkinStack",
+                buffColor = new Color32(219, 224, 198, byte.MaxValue)
+            });
 
 
             On.RoR2.CharacterBody.RecalculateStats += CharacterBody_RecalculateStats;
@@ -144,8 +155,20 @@ namespace Cloudburst.Cores
                 self.SetPropertyValue("moveSpeed", moveSpeed += .4f);
 
             }
+            if (self.HasBuff(overclockIndex))
+            {
+                //BaseLogger.Log(attackSpeed.ToString());   
+                self.SetPropertyValue("attackSpeed", attackSpeed += .5f);
+                self.SetPropertyValue("moveSpeed", moveSpeed += .4f);
+
+            }
+            if (self.HasBuff(skinIndex)) // && controller)
+            {
+                self.SetPropertyValue("armor", armor += 5f);
+            }
             if (self.HasBuff(droneIndex)) // && controller)
             {
+
                 var currentPassive = controller.GetBonus();
                 //Debug.Log(currentPassive);
                 for (int i = 0; i < self.GetBuffCount(droneIndex); i++)
@@ -230,6 +253,9 @@ namespace Cloudburst.Cores
                     break;
                 case "BaboonCharge":
                     baboomChargeIndex = BuffAPI.Add(customBuff);
+                    break;
+                case "SkinStack":
+                    skinIndex = BuffAPI.Add(customBuff);
                     break;
 
                 //throw new System.NotImplementedException("not implemented yet!");
