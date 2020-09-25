@@ -32,7 +32,7 @@ namespace Moonstorm.Achievements
         public override String UnlockableNameToken { get; } = "CLOUDBURST_HITLEVELCAP_UNLOCKABLE_NAME";
 
         // The sprite provider.
-        protected override CustomSpriteProvider SpriteProvider { get; } = new CustomSpriteProvider("@Cloudburst:Assets/MiscIcons/texTreebotHarvester.png");
+        protected override CustomSpriteProvider SpriteProvider { get; } = new CustomSpriteProvider("NotAPath");
 
         private CharacterBody body;
 

@@ -39,16 +39,16 @@ namespace Moonstorm.Cores
             // populate ASSETS
             if (mainAssetBundle == null)
             {
-                using (var assetStream = Assembly.GetExecutingAssembly().GetManifestResourceStream("Cloudburst.assetburst"))
+                using (var assetStream = Assembly.GetExecutingAssembly().GetManifestResourceStream("Moonstorm.assetburst"))
                 {
                     mainAssetBundle = AssetBundle.LoadFromStream(assetStream);
-                    provider = new AssetBundleResourcesProvider("@Cloudburst", mainAssetBundle);
+                    provider = new AssetBundleResourcesProvider("@Moonstorm", mainAssetBundle);
                     ResourcesAPI.AddProvider(provider);
                 }
             }
             if (HANDAssetBundle == null)
             {
-                using (var assetStream = Assembly.GetExecutingAssembly().GetManifestResourceStream("Cloudburst.hand_assets"))
+                using (var assetStream = Assembly.GetExecutingAssembly().GetManifestResourceStream("Moonstorm.hand_assets"))
                 {
                     HANDAssetBundle = AssetBundle.LoadFromStream(assetStream);
                     HANDProvider = new AssetBundleResourcesProvider("@EngimaHANDREBOOTED", HANDAssetBundle);

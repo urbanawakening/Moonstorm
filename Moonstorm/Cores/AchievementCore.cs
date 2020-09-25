@@ -11,7 +11,7 @@ namespace Moonstorm.Cores
     class AchievementCore
     {
         //is there nothing to feel
-        //cause shit's getting
+        //cause shit's getting weird
         //so to god who made this man
         //you better have one hell of a plan
         public static AchievementCore instance;
