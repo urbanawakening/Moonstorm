@@ -364,9 +364,10 @@ The two privates sat in complete silence.
         //IS THERE A BETTER WAY???
         internal static void CreateDisplayPrefab()
         {
-            execDisplay = PrefabAPI.InstantiateClone(Resources.Load<GameObject>("Prefabs/CharacterBodies/CommandoBody"), "ExecutionerDisplay");
+            execDisplay = PrefabAPI.InstantiateClone(execPrefab.GetComponent<ModelLocator>().modelBaseTransform.gameObject, "ExecutionerDisplay");
             execDisplay.AddComponent<NetworkIdentity>();
 
+            /*
             UnityEngine.Object.Destroy(execPrefab.transform.Find("ModelBase").gameObject);
             UnityEngine.Object.Destroy(execPrefab.transform.Find("CameraPivot").gameObject);
             UnityEngine.Object.Destroy(execPrefab.transform.Find("AimOrigin").gameObject);
@@ -416,6 +417,7 @@ The two privates sat in complete silence.
             charModel.autoPopulateLightInfos = true;
             charModel.invisibilityCount = 0;
             charModel.temporaryOverlays = new List<TemporaryOverlay>();
+            */
         }
 
         private void RegisterBuffs()
@@ -802,7 +804,7 @@ The two privates sat in complete silence.
         {
             if (assets == null)
             {
-                using (var strm = Assembly.GetExecutingAssembly().GetManifestResourceStream("Starstorm2.Cores.Executioner.executionerassets"))
+                using (var strm = Assembly.GetExecutingAssembly().GetManifestResourceStream("Starstorm2.Assets.executionerassets"))
                 {
                     assets = AssetBundle.LoadFromStream(strm);
                     //TODO: change me
