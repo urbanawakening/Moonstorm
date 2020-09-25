@@ -18,7 +18,6 @@ namespace Starstorm2.Cores
         public static NucleatorCore instance;
         public static GameObject characterPrefab;
         public static BuffIndex radionuclideSurgeBuffIndex;
-        public GameObject myCharacterDisplay;
 
         public NucleatorCore() => Load();
 
@@ -48,8 +47,8 @@ namespace Starstorm2.Cores
 
         void RegisterCharacter()
         {
-            myCharacterDisplay = PrefabAPI.InstantiateClone(characterPrefab.GetComponent<ModelLocator>().modelBaseTransform.gameObject, "NucleatorDisplay", true);
-            myCharacterDisplay.AddComponent<NetworkIdentity>();
+            GameObject nucleatorDisplay = PrefabAPI.InstantiateClone(characterPrefab.GetComponent<ModelLocator>().modelBaseTransform.gameObject, "NucleatorDisplay", true);
+            nucleatorDisplay.AddComponent<NetworkIdentity>();
 
             BodyCatalog.getAdditionalEntries += delegate (List<GameObject> list)
             {
@@ -85,7 +84,7 @@ namespace Starstorm2.Cores
             {
                 bodyPrefab = characterPrefab,
                 descriptionToken = "NUCLEATOR_DESCRIPTION",
-                displayPrefab = myCharacterDisplay,
+                displayPrefab = nucleatorDisplay,
                 primaryColor = new Color(0.8039216f, 0.482352942f, 0.843137264f),
                 name = "Nucleator",
                 outroFlavorToken = "NUCLEATOR_OUTRO_FLAVOR",
@@ -109,7 +108,11 @@ namespace Starstorm2.Cores
         void SkillSetup()
         {
             // get rid of the original skills first, otherwise we'll have commando's loadout and we don't want that
-            API.CreateEmptySkills(characterPrefab);
+            //API.CreateEmptySkills(characterPrefab);
+            foreach (GenericSkill obj in characterPrefab.GetComponentsInChildren<GenericSkill>())
+            {
+                UnityEngine.Object.DestroyImmediate(obj);
+            }
 
             SkillLocator skillLocator = characterPrefab.GetComponent<SkillLocator>();
             skillLocator.passiveSkill.enabled = false;
