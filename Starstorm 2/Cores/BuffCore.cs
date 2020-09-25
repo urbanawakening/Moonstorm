@@ -99,7 +99,6 @@ namespace Starstorm2.Cores
                     {
                         skillLocator.special.cooldownScale = reduction;
                     }
-
                 }
             }
         }
