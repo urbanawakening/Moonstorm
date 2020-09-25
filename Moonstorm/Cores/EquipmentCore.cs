@@ -24,7 +24,7 @@ namespace Moonstorm.Cores
             if (!isEmpty)
             {
                 int itemID = UnityEngine.Random.Range(0, items.Count);
-                    
+
                 return items[itemID];
             }
             else LogCore.LogE("SSSHIT!"); return ItemIndex.ShieldOnly;
@@ -69,11 +69,12 @@ namespace Moonstorm.Cores
         private GameObject greaterWarbanner;
         //private GameObject molotovCocktailZone;
         #endregion
-        public EquipmentCore() {
+        public EquipmentCore()
+        {
             LogCore.LogI("Initializing Core: " + base.ToString());
 
-            CreateGreaterWarbanner();  RegisterTokens();
-            
+            CreateGreaterWarbanner(); RegisterTokens();
+
             #region Basic
             var prefab = Resources.Load<GameObject>("Prefabs/PickupModels/PickupMystery");
             var rule = new ItemDisplayRule
@@ -194,7 +195,8 @@ namespace Moonstorm.Cores
 
         }
 
-        protected void CreateGreaterWarbanner() {
+        protected void CreateGreaterWarbanner()
+        {
             greaterWarbanner = Resources.Load<GameObject>("Prefabs/NetworkedObjects/WarbannerWard").InstantiateClone("GreaterWarbannerWard", true);
             greaterWarbanner.GetComponent<BuffWard>().buffType = BuffCore.instance.greaterBannerIndex;
 
@@ -213,32 +215,38 @@ namespace Moonstorm.Cores
 
         private bool EquipmentSlot_PerformEquipmentAction(On.RoR2.EquipmentSlot.orig_PerformEquipmentAction orig, EquipmentSlot self, EquipmentIndex equipmentIndex)
         {
-            if (equipmentIndex == brokenPrinterIndex) {
+            if (equipmentIndex == brokenPrinterIndex)
+            {
                 GameObject gameObject = Object.Instantiate<GameObject>(greaterWarbanner, self.characterBody.transform.position, Quaternion.identity);
                 gameObject.GetComponent<TeamFilter>().teamIndex = self.characterBody.teamComponent.teamIndex;
                 gameObject.GetComponent<BuffWard>().radius = 25;
                 NetworkServer.Spawn(gameObject);
                 return true;
             }
-            if (equipmentIndex == unstableQuantumReactorIndex) {
+            if (equipmentIndex == unstableQuantumReactorIndex)
+            {
                 FireProjectile(self.characterBody);
                 return true;
             }
-            if (equipmentIndex == lumpkinIndex) {
+            if (equipmentIndex == lumpkinIndex)
+            {
                 Scream(self.characterBody);
                 return true;
             }
-            if (equipmentIndex == rockFruitIndex) {
+            if (equipmentIndex == rockFruitIndex)
+            {
                 ConsumeRock(self.characterBody.inventory);
                 return true;
             }
-            if (equipmentIndex == MIRVIndex) {
+            if (equipmentIndex == MIRVIndex)
+            {
                 ThrowMIRV(self.characterBody);
             }
             return orig(self, equipmentIndex);
         }
 
-        protected internal void RegisterTokens() {
+        protected internal void RegisterTokens()
+        {
             LanguageAPI.Add("EQUIPMENT_LUMPKIN_NAME", "The Lumpkin");
             LanguageAPI.Add("EQUIPMENT_LUMPKIN_PICKUP", "And his screams were Brazilian...");
             LanguageAPI.Add("EQUIPMENT_LUMPKIN_DESC", "Release a Brazilian scream that does your maximum health for damage and stuns enemies within 35m.");
@@ -259,7 +267,8 @@ namespace Moonstorm.Cores
             //LanguageAPI.Add("EQUIPMENT_PRINTER_LORE", "Order: \u201CGreater Warbanner\u201D\r\nTracking Number: 72******\r\nEstimated Delivery: 08\\25\\2057\\\r\nShipping Method: High Priority\r\nShipping Address: 836 Lane, Lab [42], Mars\r\nShipping Details:\r\n\r\nI got this thing off of my dead grandmother, it's a relic from the great war of 2019. It  gives this aura of energy and motivation to do whatever someone desires! Anyways -- I'm passing it onto you, since I am dying to this cancer and I'd like you to have it before I go six feet under. Much love, Uncle Abe.\n");
         }
 
-        protected internal void RegisterNewEquip(EquipmentDef equipmentDef) {
+        protected internal void RegisterNewEquip(EquipmentDef equipmentDef)
+        {
             var internalName = equipmentDef.name;
             var upperName = internalName.ToUpper(CultureInfo.InvariantCulture);
             if (equipmentDef.nameToken == null)
@@ -348,15 +357,19 @@ namespace Moonstorm.Cores
             ProjectileManager.instance.FireProjectile(projInfo);
         }
 
-        protected internal void ConsumeRock(Inventory user) {
+        protected internal void ConsumeRock(Inventory user)
+        {
             //TODO:
             //This is horrible.
 
             var allItems = new List<ItemIndex>();
-            for (var item = ItemIndex.Syringe; item < (ItemIndex)ItemCatalog.itemCount; item++) {
+            for (var item = ItemIndex.Syringe; item < (ItemIndex)ItemCatalog.itemCount; item++)
+            {
                 var def = ItemCatalog.GetItemDef(item);
-                if (def.tier != ItemTier.NoTier) {
-                    if (user.GetItemCount(item) > 0) {
+                if (def.tier != ItemTier.NoTier)
+                {
+                    if (user.GetItemCount(item) > 0)
+                    {
                         allItems.Add(item);
                     }
                 }
@@ -371,11 +384,14 @@ namespace Moonstorm.Cores
 
             var dropList = GetDropListListFromItemTier(itemIndex);
 
-            if (dropList != null) {
-                foreach (var item in dropList) {
+            if (dropList != null)
+            {
+                foreach (var item in dropList)
+                {
                     //var AAAAAAAA = new Xoroshiro128Plus(2023402033023);
                     var pickupDef = PickupCatalog.GetPickupDef(item);
-                    if (pickupDef != null) {
+                    if (pickupDef != null)
+                    {
                         list.Add(pickupDef.itemIndex);
                         //YOOOOOOOOOOOOOOOOO    
                     }
@@ -391,7 +407,7 @@ namespace Moonstorm.Cores
 
                 if (user && randomItem != ItemIndex.None && !isEmpty)
                 {
-                   LogCore.LogI(randomItem);
+                    LogCore.LogI(randomItem);
                     user.GiveItem(randomItem);
                 }
             }
@@ -426,7 +442,7 @@ namespace Moonstorm.Cores
                     return Run.instance.availableBossDropList;
                 default:
                     LogCore.LogE("Cannot find droplist for " + itemTier);
-                    return null; 
+                    return null;
             }
         }
 

@@ -810,7 +810,8 @@ namespace Moonstorm.Cores
                     {
                         self.AddItemBehavior<GeigerCounterBehavior>(counterCount);
                     }
-                    if (skinIndex > 0) {
+                    if (skinIndex > 0)
+                    {
                         self.AddItemBehavior<SkinBehavior>(skinCount);
                     }
                 }
@@ -905,7 +906,8 @@ namespace Moonstorm.Cores
                         Inventory inv = attackerBody.inventory;
                         Inventory inv2 = null;
 
-                        if (self.body && self.body.inventory) {
+                        if (self.body && self.body.inventory)
+                        {
                             inv2 = self.body.inventory;
                         }
 
@@ -930,10 +932,13 @@ namespace Moonstorm.Cores
                             LogCore.LogD(damageInfo.damage);
                         }
 
-                        if (self.combinedHealthFraction < .4f && heartCount > 0) {
-                            if (victimBody && !victimBody.HasBuff(BuffCore.instance.baboomChargeIndex)) {
+                        if (self.combinedHealthFraction < .4f && heartCount > 0)
+                        {
+                            if (victimBody && !victimBody.HasBuff(BuffCore.instance.baboomChargeIndex))
+                            {
                                 victimBody.AddTimedBuff(BuffIndex.HiddenInvincibility, 1 + (heartCount));
-                                for (int i = 0; i < 15; i++) {
+                                for (int i = 0; i < 15; i++)
+                                {
                                     victimBody.AddBuff(BuffCore.instance.baboomChargeIndex);
                                 }
                             }
@@ -962,7 +967,7 @@ namespace Moonstorm.Cores
             var combinedHealthb4Damage = self.combinedHealth;
             orig(self, damageInfo);
 
-        }              
+        }
         #region GlobalEventManager
         public void GlobalEventManager_OnInteractionBegin(On.RoR2.GlobalEventManager.orig_OnInteractionBegin orig, GlobalEventManager self, Interactor interactor, IInteractable interactable, UnityEngine.GameObject interactableObject)
         {
@@ -972,7 +977,7 @@ namespace Moonstorm.Cores
             {
                 Inventory inventory = characterBody.inventory;
                 if (inventory && !interactableObject.HasComponent<GenericPickupController>())
-                {   
+                {
                     int moneyOnInteractionCount = inventory.GetItemCount(moneyOnInteractionIndex);
 
                     if (moneyOnInteractionCount > 0)
@@ -1018,7 +1023,8 @@ namespace Moonstorm.Cores
             int heartCount = attackerInventory.GetItemCount(heartIndex);
             int chipCount = Util.GetItemCountForTeam(TeamIndex.Player, chipIndex, false, true);
 
-            if (chipCount > 0 && victimBody && victimBody.teamComponent && victimBody.teamComponent.teamIndex == TeamIndex.Player) {
+            if (chipCount > 0 && victimBody && victimBody.teamComponent && victimBody.teamComponent.teamIndex == TeamIndex.Player)
+            {
                 LogCore.LogI("fired");
                 EffectManager.SpawnEffect(Resources.Load<GameObject>("prefabs/effects/LightningStakeNova"), new EffectData()
                 {
@@ -1046,7 +1052,7 @@ namespace Moonstorm.Cores
                     radius = 30,
                     teamIndex = victimBody.teamComponent.teamIndex,
                 };
-                attack.Fire(); 
+                attack.Fire();
             }
 
             /*if (chipCount > 0 && victimBody && victimBody.teamComponent && victimBody.teamComponent.teamIndex == TeamIndex.Player)
@@ -1082,7 +1088,8 @@ namespace Moonstorm.Cores
             //}
 
 
-            if (heartCount > 0 && attackerBody.HasBuff(BuffCore.instance.baboomChargeIndex)) {
+            if (heartCount > 0 && attackerBody.HasBuff(BuffCore.instance.baboomChargeIndex))
+            {
                 attackerBody.RemoveBuff(BuffCore.instance.baboomChargeIndex);
             }
 
@@ -1348,7 +1355,8 @@ namespace Moonstorm.Cores
             if (timer >= 1)
             {
                 var count = body.GetBuffCount(BuffCore.instance.skinIndex);
-                for (int i = 0; i < count; i++) {
+                for (int i = 0; i < count; i++)
+                {
                     body.RemoveBuff(BuffCore.instance.skinIndex);
                 }
 

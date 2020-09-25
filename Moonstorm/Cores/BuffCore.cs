@@ -23,9 +23,10 @@ namespace Moonstorm.Cores
         protected internal BuffIndex skinIndex;
 
         internal bool Loaded { get; private set; } = false;
-        public BuffCore() => RegisterBuffs(); 
+        public BuffCore() => RegisterBuffs();
 
-        protected void RegisterBuffs() {
+        protected void RegisterBuffs()
+        {
             LogCore.LogI("Initializing Core: " + base.ToString());
 
             instance = this;
@@ -187,15 +188,18 @@ namespace Moonstorm.Cores
                     }
                 }
             }
-            if (self.HasBuff(lightBringerIndex)) {
+            if (self.HasBuff(lightBringerIndex))
+            {
                 self.SetPropertyValue("attackSpeed", attackSpeed += 2);
                 self.SetPropertyValue("moveSpeed", moveSpeed += 2f);
                 self.SetPropertyValue("armor", armor += 20);
             }
-            if (self.HasBuff(greaterBannerIndex)) {
+            if (self.HasBuff(greaterBannerIndex))
+            {
                 self.SetPropertyValue("crit", crit += .2f);
                 self.SetPropertyValue("regen", regen += .2f);
-                if (self.skillLocator) {
+                if (self.skillLocator)
+                {
                     var skillLocator = self.skillLocator;
                     //pssst kid, wanna buff greater warbanner?
                     //just turn to the 0.5f into a 0!
@@ -221,9 +225,11 @@ namespace Moonstorm.Cores
             }
         }
 
-        protected internal void RegisterBuff(BuffDef buffDef) {
+        protected internal void RegisterBuff(BuffDef buffDef)
+        {
             var customBuff = new CustomBuff(buffDef);
-            switch (buffDef.name) {
+            switch (buffDef.name)
+            {
                 case "LightBringer":
                     lightBringerIndex = BuffAPI.Add(customBuff);
                     break;

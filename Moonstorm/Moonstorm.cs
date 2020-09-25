@@ -116,16 +116,18 @@ namespace Moonstorm
             DefineConfig();
             InitializeCores();
 
-            if (!gameObject.HasComponent<ProgressTracker>() || !ProgressTracker.instance) {
+            if (!gameObject.HasComponent<ProgressTracker>() || !ProgressTracker.instance)
+            {
                 LogCore.LogI("Bepinex object does not have a progress tracker or there is no instance of the progress tracker. Attaching now.");
                 gameObject.AddComponent<ProgressTracker>();
             }
-            
+
 
             LogCore.LogM("Moonstorm loaded!");
         }
 
-        private void DefineConfig() {        
+        private void DefineConfig()
+        {
             //learn a smile
             //as every good day goes on by
             EnableHAND = Config.Bind("Moonstorm :: HAN-D", "Enabled", true, "Enables HAN-D as a survivor. Set to false to disable HAN-D.");
@@ -143,7 +145,8 @@ namespace Moonstorm
             Enabled = Config.Bind("Moonstorm", "Enabled", true, "Enables the mod. Set to false to disable the mod entirely.");
         }
 
-        private void InitializeCores() {
+        private void InitializeCores()
+        {
             if (Enabled.Value)
             {
                 //if i allow users to disable these cores they're gonna be stupid
@@ -204,7 +207,8 @@ namespace Moonstorm
                 {
                     rexCore = new RexCore();
                 }
-                if (EnableWIP.Value) {
+                if (EnableWIP.Value)
+                {
                     wipCore = new HuntressCore();
                 }
 
@@ -221,7 +225,8 @@ namespace Moonstorm
                 debugCore = new DebuggingCore();
 #endif
             }
-            else {
+            else
+            {
                 LogCore.LogW("You have disabled ALL of Moonstorm. If this was not desired, you can re-enable it in Moonstorm's config file.");
             }
         }
@@ -256,7 +261,8 @@ namespace Moonstorm
             awake();
         }
 
-        public void OnEnable() {
+        public void OnEnable()
+        {
             SingletonHelper.Assign<Moonstorm>(Moonstorm.instance, this);
             LogCore.LogI("Moonstorm instance assigned.");
             Action awake = Moonstorm.onEnable;
