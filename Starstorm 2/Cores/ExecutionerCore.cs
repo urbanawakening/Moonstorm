@@ -111,33 +111,11 @@ The two privates sat in complete silence.
 #endif
             ExecutionerAssets.PopulateAssets();
             CreatePrefab();
-            CreateDisplayPrefab();
             RegisterBuffs();
             RegisterProjectiles();
             RegisterStates();
             RegisterCharacter();
             RegisterHooks();
-        }
-
-        private static GameObject CreateModel(GameObject obj, int index)
-        {
-            UnityEngine.Object.Destroy(obj.transform.Find("ModelBase").gameObject);
-            UnityEngine.Object.Destroy(obj.transform.Find("CameraPivot").gameObject);
-            UnityEngine.Object.Destroy(obj.transform.Find("AimOrigin").gameObject);
-
-            GameObject model;
-            switch (index)
-            {
-                case 0:
-                    model = ExecutionerAssets.assets.LoadAsset<GameObject>("ExecutionerMesh");
-                    break;
-                default:
-                    model = ExecutionerAssets.assets.LoadAsset<GameObject>("ExecutionerMeshMenu");
-                    if (!model) Debug.Log("WHAT THE FUCK SHIT");
-                    break;
-            }
-
-            return model;
         }
 
         internal static void CreatePrefab()
@@ -149,7 +127,7 @@ The two privates sat in complete silence.
             UnityEngine.Object.Destroy(execPrefab.transform.Find("CameraPivot").gameObject);
             UnityEngine.Object.Destroy(execPrefab.transform.Find("AimOrigin").gameObject);
 
-            GameObject model = ExecutionerAssets.assets.LoadAsset<GameObject>("ExecutionerMesh");
+            GameObject model = ExecutionerAssets.assets.LoadAsset<GameObject>("ExecutionerModel");
 
             GameObject modelBase = new GameObject("ModelBase");
             modelBase.transform.parent = execPrefab.transform;
@@ -360,66 +338,6 @@ The two privates sat in complete silence.
             IonGunChargeComponent charges = execPrefab.AddComponent<IonGunChargeComponent>();
         }
 
-        //at this point i'm just blatantly copy/pasting enforcer code and wishing i had the energy to figure out how this can be done better
-        //IS THERE A BETTER WAY???
-        internal static void CreateDisplayPrefab()
-        {
-            execDisplay = PrefabAPI.InstantiateClone(execPrefab.GetComponent<ModelLocator>().modelBaseTransform.gameObject, "ExecutionerDisplay");
-            execDisplay.AddComponent<NetworkIdentity>();
-
-            /*
-            UnityEngine.Object.Destroy(execPrefab.transform.Find("ModelBase").gameObject);
-            UnityEngine.Object.Destroy(execPrefab.transform.Find("CameraPivot").gameObject);
-            UnityEngine.Object.Destroy(execPrefab.transform.Find("AimOrigin").gameObject);
-
-            GameObject model = ExecutionerAssets.assets.LoadAsset<GameObject>("ExecutionerMeshMenu");
-
-            GameObject modelBase = new GameObject("ModelBase");
-            modelBase.transform.parent = execDisplay.transform;
-            modelBase.transform.localPosition = new Vector3(0f, -0.81f, 0f);
-            modelBase.transform.localRotation = Quaternion.identity;
-            modelBase.transform.localScale = Vector3.one;
-
-            GameObject camPivot = new GameObject("CameraPivot");
-            camPivot.transform.parent = execDisplay.transform;
-            camPivot.transform.localPosition = new Vector3(0f, -0.81f, 0f);
-            camPivot.transform.rotation = Quaternion.identity;
-            camPivot.transform.localScale = Vector3.one;
-
-            GameObject aimOrigin = new GameObject("AimOrigin");
-            aimOrigin.transform.parent = execDisplay.transform;
-            aimOrigin.transform.localPosition = new Vector3(0f, 1.4f, 0f);
-            aimOrigin.transform.rotation = Quaternion.identity;
-            aimOrigin.transform.localScale = Vector3.one;
-
-            Transform transform = model.transform;
-            transform.parent = modelBase.transform;
-            transform.localPosition = Vector3.zero;
-            transform.localRotation = Quaternion.identity;
-
-            ModelLocator locator = execDisplay.GetComponent<ModelLocator>();
-            locator.modelTransform = transform;
-            locator.modelBaseTransform = modelBase.transform;
-
-            ChildLocator childLoc = model.GetComponent<ChildLocator>();
-
-            CharacterModel charModel = model.AddComponent<CharacterModel>();
-            charModel.body = null;
-            charModel.baseRendererInfos = new CharacterModel.RendererInfo[] {
-                new CharacterModel.RendererInfo
-                {
-                    defaultMaterial = model.GetComponentInChildren<SkinnedMeshRenderer>().material,
-                    renderer = model.GetComponentInChildren<SkinnedMeshRenderer>(),
-                    defaultShadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On,
-                    ignoreOverlays = false
-                }
-            };
-            charModel.autoPopulateLightInfos = true;
-            charModel.invisibilityCount = 0;
-            charModel.temporaryOverlays = new List<TemporaryOverlay>();
-            */
-        }
-
         private void RegisterBuffs()
         {
             BuffDef fearDef = new BuffDef()
@@ -500,6 +418,7 @@ The two privates sat in complete silence.
 
         private void RegisterCharacter()
         {
+            execDisplay = ExecutionerAssets.assets.LoadAsset<GameObject>("ExecutionerModelMenu");
 
             LanguageAPI.Add("EXECUTIONER_NAME", charName);
             LanguageAPI.Add("EXECUTIONER_SUBTITLE", charSubt);

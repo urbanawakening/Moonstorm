@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 3268984988
+CRC: 3017466432
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 97190ac87cd599e93f71a67a6c7f40da
+    Hash: caf30c36aad13911d6924cfa2c622614
   TypeTreeHash:
     serializedVersion: 2
     Hash: f5b00c6616d47093309b517b40306553
@@ -41,14 +41,14 @@ ClassTypes:
   Script: {instanceID: 0}
 Assets:
 - Assets/Executioner/ExecAnimator.controller
-- Assets/Executioner/ExecutionerMeshMenu.prefab
+- Assets/Executioner/ExecutionerModelMenu.prefab
 - Assets/Executioner/exeportrait.png
 - Assets/Executioner/ExecAnimatorMenu.controller
 - Assets/Executioner/skill2icon.png
 - Assets/Executioner/skill3icon.png
+- Assets/Executioner/ExecutionerModel.prefab
 - Assets/Executioner/Gun.mesh
 - Assets/Executioner/skill4icon.png
 - Assets/Executioner/skill1icon.png
-- Assets/Executioner/ExecutionerMesh.prefab
 - Assets/Executioner/Axe.mesh
 Dependencies: []
