@@ -10,6 +10,8 @@ namespace Starstorm2.Cores.States.Nucleator
         public GameObject hitEffectPrefab = Resources.Load<GameObject>("prefabs/effects/impacteffects/critspark");
         public GameObject tracerEffectPrefab = Resources.Load<GameObject>("prefabs/effects/tracers/tracerbanditshotgun");
 
+        public int i = 3;
+
         public static float minChargeDamageCoef = 1F;
         public static float maxChargeDamageCoef = 5F;
         public static float maxOverchargeDamageCoef = 9F;
