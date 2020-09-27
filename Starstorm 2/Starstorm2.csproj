@@ -344,7 +344,7 @@
     <Compile Include="API\ComponentHelpers.cs" />
     <Compile Include="API\LogCore.cs" />
     <Compile Include="Cores\AssetsCore.cs" />
-	<Compile Include="Cores\States\Executioner\MainState.cs" />
+    <Compile Include="Cores\States\Executioner\MainState.cs" />
     <Compile Include="Cores\States\Executioner\Primary.cs" />
     <Compile Include="Cores\States\Executioner\Secondary.cs" />
     <Compile Include="Cores\States\Executioner\Special.cs" />
@@ -368,10 +368,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="assetstorm" />
+    <EmbeddedResource Include="Assets\assetstorm" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Cores\Executioner\executionerassets" />
+    <EmbeddedResource Include="Assets\executionerassets" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
