@@ -344,6 +344,11 @@
     <Compile Include="API\ComponentHelpers.cs" />
     <Compile Include="API\LogCore.cs" />
     <Compile Include="Cores\AssetsCore.cs" />
+	<Compile Include="Cores\States\Executioner\MainState.cs" />
+    <Compile Include="Cores\States\Executioner\Primary.cs" />
+    <Compile Include="Cores\States\Executioner\Secondary.cs" />
+    <Compile Include="Cores\States\Executioner\Special.cs" />
+    <Compile Include="Cores\States\Executioner\Utility.cs" />
     <Compile Include="Cores\NucleatorCore.cs" />
     <Compile Include="Cores\CyborgCore.cs" />
     <Compile Include="Cores\ExecutionerCore.cs" />
@@ -364,6 +369,9 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="assetstorm" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Cores\Executioner\executionerassets" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
