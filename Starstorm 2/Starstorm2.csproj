@@ -223,6 +223,40 @@
       <HintPath>libs\Zio.dll</HintPath>
     </Reference>
   </ItemGroup>
+  <ItemGroup>
+    <Compile Include="API\API.cs" />
+    <Compile Include="API\ComponentHelpers.cs" />
+    <Compile Include="API\LogCore.cs" />
+    <Compile Include="Cores\AssetsCore.cs" />
+    <Compile Include="Cores\States\Executioner\MainState.cs" />
+    <Compile Include="Cores\States\Executioner\Primary.cs" />
+    <Compile Include="Cores\States\Executioner\Secondary.cs" />
+    <Compile Include="Cores\States\Executioner\Special.cs" />
+    <Compile Include="Cores\States\Executioner\Utility.cs" />
+    <Compile Include="Cores\NucleatorCore.cs" />
+    <Compile Include="Cores\CyborgCore.cs" />
+    <Compile Include="Cores\ExecutionerCore.cs" />
+    <Compile Include="Cores\ItemCore.cs" />
+    <Compile Include="Cores\DotCore.cs" />
+    <Compile Include="Cores\EquipmentCore.cs" />
+    <Compile Include="Cores\BuffCore.cs" />
+    <Compile Include="Cores\States\Nucleator\ApplyRadionuclideSurge.cs" />
+    <Compile Include="Cores\States\Nucleator\ChargeStates\ChargeFissionImpulse.cs" />
+    <Compile Include="Cores\States\Nucleator\ChargeStates\ChargeIrradiate.cs" />
+    <Compile Include="Cores\States\Nucleator\ChargeStates\ChargeQuarantine.cs" />
+    <Compile Include="Cores\States\Nucleator\ChargeStates\NucleatorSkillStateBase.cs" />
+    <Compile Include="Cores\States\Nucleator\FireStates\FireFissionImpulse.cs" />
+    <Compile Include="Cores\States\Nucleator\FireStates\FireIrradiate.cs" />
+    <Compile Include="Cores\States\Nucleator\FireStates\FireQuarantine.cs" />
+    <Compile Include="Starstorm.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Assets\assetstorm" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Assets\executionerassets" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>if "$(Username)" == "Flan" copy /Y "$(TargetPath)" "F:\SteamLibrary\steamapps\common\Risk of Rain 2\BepInEx\plugins"
