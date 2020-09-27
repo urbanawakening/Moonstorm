@@ -33,7 +33,7 @@ namespace Moonstorm.Cores.States.Commando {
             //rayRadius = _goodState.rayRadius;
             //rayRadius = _goodState.rayRadius;
         }
-        protected override void ModifyProjectile(ref FireProjectileInfo fireProjectileInfo)
+        public override void ModifyProjectile(ref FireProjectileInfo fireProjectileInfo)
         {
             string muzzleName = "MuzzleCenter";
 
