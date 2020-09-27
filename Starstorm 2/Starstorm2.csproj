@@ -224,6 +224,7 @@
     <Compile Include="Cores\States\Nucleator\FireStates\FireFissionImpulse.cs" />
     <Compile Include="Cores\States\Nucleator\FireStates\FireIrradiate.cs" />
     <Compile Include="Cores\States\Nucleator\FireStates\FireQuarantine.cs" />
+    <Compile Include="FUCKACCESSMODIFIERS.cs" />
     <Compile Include="Starstorm.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
