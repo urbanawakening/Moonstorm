@@ -31,5 +31,10 @@ namespace Moonstorm.Cores.States.Bombardier
         {
             return aimRay.direction * (-characterMotor.mass * 35);
         }
+
+        public override bool ShouldHaveKnockback()
+        {
+            return true;
+        }
     }
 }

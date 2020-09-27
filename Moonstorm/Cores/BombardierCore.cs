@@ -74,7 +74,7 @@ namespace Moonstorm.Cores
             cbody.crosshairPrefab = Resources.Load<GameObject>("prefabs/crosshair/StraightBracketCrosshair");
             cbody.bodyFlags |= CharacterBody.BodyFlags.IgnoreFallDamage;
 
-
+            body.AddComponent<BombardierStickyBombManager>();
 
             skillLocator.passiveSkill.enabled = true;
 
@@ -151,12 +151,13 @@ namespace Moonstorm.Cores
 
         private void CreateSecondary() {
             LoadoutAPI.AddSkill(typeof(FireFlameRocket));
+            LoadoutAPI.AddSkill(typeof(ThrowStickies));
 
             SkillDef secondarySkillDef = ScriptableObject.CreateInstance<SkillDef>();
-            secondarySkillDef.activationState = new SerializableEntityStateType(typeof(FireFlameRocket));
+            secondarySkillDef.activationState = new SerializableEntityStateType(typeof(ThrowStickies));
             secondarySkillDef.activationStateMachineName = "Weapon";
             secondarySkillDef.baseMaxStock = 1;
-            secondarySkillDef.baseRechargeInterval = 2f;
+            secondarySkillDef.baseRechargeInterval = 3f;
             secondarySkillDef.beginSkillCooldownOnSkillEnd = true;
             secondarySkillDef.canceledFromSprinting = false;
             secondarySkillDef.fullRestockOnAssign = false;

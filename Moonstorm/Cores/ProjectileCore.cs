@@ -1,4 +1,6 @@
-﻿using R2API;
+﻿using Moonstorm.Cores.Components;
+using R2API;
+using RoR2;
 using RoR2.Projectile;
 using UnityEngine;
 
@@ -14,6 +16,9 @@ namespace Moonstorm.Cores
 
         public static GameObject MIRVProjectile;
         public static GameObject MIRVClusterProjectile;
+
+        public static GameObject stickyProjectile;
+
         public ProjectileCore() => CreateProjectiles();
 
 
@@ -32,7 +37,8 @@ namespace Moonstorm.Cores
             CreateMIRVProjectile();
         }
 
-        protected private void CreateMIRVProjectile() {
+        protected private void CreateMIRVProjectile()
+        {
             MIRVProjectile = Resources.Load<GameObject>("prefabs/projectiles/CryoCanisterBombletsProjectile").InstantiateClone("MIRVEquipmentProjectile", true);
             MIRVClusterProjectile = Resources.Load<GameObject>("prefabs/projectiles/CryoCanisterBombletsProjectile").InstantiateClone("MIRVClusterEquipmentProjectile", true);
             if (API.RegisterNewProjectile(MIRVProjectile) && API.RegisterNewProjectile(MIRVClusterProjectile))
@@ -41,12 +47,27 @@ namespace Moonstorm.Cores
             else LogCore.LogF("FATAL ERROR:" + MIRVProjectile.name + " failed to register!");
         }
 
+        protected private void CreateStickyProjectile()
+        {
+            stickyProjectile = Resources.Load<GameObject>("prefabs/projectiles/CryoCanisterBombletsProjectile").InstantiateClone("MIRVEquipmentProjectile", true);
+            if (API.RegisterNewProjectile(stickyProjectile))
+            {
+                stickyProjectile.AddComponent<BombardierStickyBombProjectile>();
+
+
+                GameObject.Destroy(stickyProjectile.GetComponent<ProjectileImpactExplosion>());
+                GameObject.Destroy(stickyProjectile.GetComponent<ApplyTorqueOnStart>());
+            }
+            else LogCore.LogF("FATAL ERROR:" + stickyProjectile.name + " failed to register!");
+        }
+
         #endregion
         #region Bombardier
         protected private void CreateBombardierProjectiles() {
             CreateBombardierRocketProjectile();
             CreateBombardierBetterRocketProjectile();
             CreateBombardierPayloadProjectile();
+            CreateStickyProjectile();
         }
 
         protected private void CreateBombardierRocketProjectile() {
@@ -60,6 +81,7 @@ namespace Moonstorm.Cores
             }
             else LogCore.LogF("FATAL ERROR:" + bombardierBombProjectile.name + " failed to register to the projectile catalog!");
         }
+
 
         protected private void CreateBombardierBetterRocketProjectile()
         {

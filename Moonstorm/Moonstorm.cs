@@ -5,6 +5,9 @@ using Moonstorm.Cores.Components;
 using Moonstorm.Cores.HAND;
 using R2API.Utils;
 using System;
+using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 namespace Moonstorm
 {
@@ -155,6 +158,8 @@ namespace Moonstorm
                 assetCore = new AssetsCore();
                 CommonAssets.Load();
 
+                SceneManager.activeSceneChanged += SceneManager_activeSceneChanged;
+
                 damageTypeCore = new DamageTypeCore();
                 orbCore = new OrbCore();
                 buffCore = new BuffCore();
@@ -181,7 +186,7 @@ namespace Moonstorm
                 }
                 if (EnableHAND.Value)
                 {
-                    han_dCore = new HAN_DCore();
+                    // han_dCore = new HAN_DCore();
                 }
                 if (EnableEngineer.Value)
                 {
@@ -197,11 +202,11 @@ namespace Moonstorm
                 }
                 if (EnableClaymen.Value)
                 {
-                    clayCore = new ClayMenCore();
+                    // clayCore = new ClayMenCore();
                 }
                 if (EnableArchaicWisps.Value)
                 {
-                    archwispCore = new ArchaicWispCore();
+                   // archwispCore = new ArchaicWispCore();
                 }
                 if (EnableRex.Value)
                 {
@@ -215,9 +220,9 @@ namespace Moonstorm
                 //and thus
                 //we reach the end
                 qol = new QOLCore();
-                ancientWisp = new AncientWispCore();
+                // ancientWisp = new AncientWispCore();
                 bombManCore = new BombardierCore();
-                //artifactCore = new ArtifactsCore();
+                // artifactCore = new ArtifactsCore();
 
 
 #if DEBUG
@@ -228,6 +233,22 @@ namespace Moonstorm
             else
             {
                 LogCore.LogW("You have disabled ALL of Moonstorm. If this was not desired, you can re-enable it in Moonstorm's config file.");
+            }
+        }
+
+        private void SceneManager_activeSceneChanged(Scene arg0, Scene arg1)
+        {
+            LogCore.LogI(arg1.name);
+            if (arg1.name == "title") {
+                var menu = GameObject.Find("MainMenu");
+                LogCore.LogI(menu.name);
+
+
+                var title = menu.transform.Find("MENU: Title/TitleMenu/SafeZone/ImagePanel (JUICED)/LogoImage");
+
+                title.GetComponent<Image>().sprite = AssetsCore.mainAssetBundle.LoadAsset<Sprite>("Assets/Moonstorm/logo.png");
+
+                LogCore.LogI(title.name);
             }
         }
 

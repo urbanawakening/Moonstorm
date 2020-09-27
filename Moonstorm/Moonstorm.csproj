@@ -51,13 +51,15 @@
     <Compile Include="Cores\BombardierCore.cs" />
     <Compile Include="Cores\Components\BombardierTracker.cs" />
     <Compile Include="Cores\Components\Class1.cs" />
-    <Compile Include="Cores\Components\Class2.cs" />
+    <Compile Include="Cores\Components\BombardierStickyBombManager.cs" />
+    <Compile Include="Cores\Components\StickyComponent.cs" />
     <Compile Include="Cores\DamageTypeCore.cs" />
     <Compile Include="Cores\ProjectileCore.cs" />
     <Compile Include="Cores\CommonAssets.cs" />
     <Compile Include="Cores\Components\EnableGoldAffix.cs" />
     <Compile Include="Cores\Components\ProgressTracker.cs" />
     <Compile Include="Cores\States\Bombardier\BombardierMain.cs" />
+    <Compile Include="Cores\States\Bombardier\Class1.cs" />
     <Compile Include="Cores\States\Bombardier\RocketJump.cs" />
     <Compile Include="Cores\States\Bombardier\Seekers.cs" />
     <Compile Include="Cores\States\Bombardier\FireFlameRocket.cs" />

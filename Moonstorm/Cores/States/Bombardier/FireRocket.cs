@@ -1,5 +1,6 @@
 ﻿using System;
 using EntityStates;
+using Moonstorm.Cores.Components;
 using RoR2;
 using RoR2.Projectile;
 using UnityEngine;
@@ -68,9 +69,12 @@ namespace Moonstorm.Cores.States.Bombardier
             {
                 characterBody.AddSpreadBloom(GetBloom());
             }
+
+            gameObject.GetComponent<BombardierStickyBombManager>().PopStickiesAuthority();
         }
 
-        public virtual bool ShouldHaveKnockback() {
+        public virtual bool ShouldHaveKnockback()
+        {
             return true;
         }
 
@@ -79,19 +83,23 @@ namespace Moonstorm.Cores.States.Bombardier
             return ProjectileCore.bombardierBombProjectile;
         }
 
-        public virtual void ModifyProjectileInfo(FireProjectileInfo info) {
+        public virtual void ModifyProjectileInfo(FireProjectileInfo info)
+        {
             //do nothing!
         }
 
-        public virtual Vector3 GetKnockback(Ray aimRay) {
+        public virtual Vector3 GetKnockback(Ray aimRay)
+        {
             return aimRay.direction * (-1000);
         }
 
-        public virtual bool ShouldApplyBloom() {
+        public virtual bool ShouldApplyBloom()
+        {
             return true;
         }
 
-        public virtual float GetBloom() {
+        public virtual float GetBloom()
+        {
             return 100;
         }
 
