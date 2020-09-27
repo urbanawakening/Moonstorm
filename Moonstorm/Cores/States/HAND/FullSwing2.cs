@@ -31,7 +31,7 @@ namespace Moonstorm.Cores.States.HAND
             shorthopVelocityFromHit = 8;
             swingEffectPrefab = Resources.Load<GameObject>("prefabs/effects/handslamtrail");
         }
-        protected override void PlayAnimation()
+        public override void PlayAnimation()
         {
             base.PlayAnimation();
             var modelAnimator = base.GetModelAnimator();
