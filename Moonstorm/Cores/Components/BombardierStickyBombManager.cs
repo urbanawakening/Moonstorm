@@ -10,6 +10,7 @@ namespace Moonstorm.Cores.Components
         public void Awake()
         {
             //click and she's gone!
+            
             bombs = new List<GameObject>();
         }
 

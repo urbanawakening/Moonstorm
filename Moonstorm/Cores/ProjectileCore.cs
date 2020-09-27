@@ -54,12 +54,13 @@ namespace Moonstorm.Cores
             {
                 stickyProjectile.AddComponent<BombardierStickyBombProjectile>();
 
-
                 GameObject.Destroy(stickyProjectile.GetComponent<ProjectileImpactExplosion>());
                 GameObject.Destroy(stickyProjectile.GetComponent<ApplyTorqueOnStart>());
             }
             else LogCore.LogF("FATAL ERROR:" + stickyProjectile.name + " failed to register!");
         }
+
+
 
         #endregion
         #region Bombardier
