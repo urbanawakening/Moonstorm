@@ -35,9 +35,6 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
-    <EmbeddedResource Include="assetstorm" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="libs\0Harmony.dll" />
     <Content Include="libs\0Harmony.xml" />
     <Content Include="libs\Assembly-CSharp.dll" />
@@ -230,9 +227,6 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Assets\assetstorm" />
-    <EmbeddedResource Include="Assets\assetstorm" />
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="Assets\executionerassets" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
