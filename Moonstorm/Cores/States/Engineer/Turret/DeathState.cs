@@ -10,7 +10,7 @@ namespace Moonstorm.Cores.Engineer.ETStates {
         public GameObject initialExplosion = Resources.Load<GameObject>("prefabs/effects/ExplosionEngiTurret");
         public GameObject deathExplosion = Resources.Load<GameObject>("prefabs/effects/VolatileBatteryExplosion");
         private float deathDuration;
-        protected override void PlayDeathAnimation(float crossfadeDuration = 0.1f)
+        public override void PlayDeathAnimation(float crossfadeDuration = 0.1f)
         {
             Animator modelAnimator = base.GetModelAnimator();
             if (modelAnimator)
@@ -25,7 +25,7 @@ namespace Moonstorm.Cores.Engineer.ETStates {
                 }
             }
         }
-        protected override bool shouldAutoDestroy
+        public override bool shouldAutoDestroy
         {
             get
             {

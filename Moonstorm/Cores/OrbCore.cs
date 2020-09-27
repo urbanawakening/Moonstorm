@@ -43,7 +43,7 @@ namespace Moonstorm.Cores
             }
         }
 
-        protected override GameObject GetOrbEffect()
+        public override GameObject GetOrbEffect()
         {
             return Resources.Load<GameObject>("Prefabs/Effects/OrbEffects/LoaderLightningOrbEffect");
         }
