@@ -107,6 +107,13 @@ The two privates sat in complete silence.
         private void Setup()
         {
 #if NETWORKTEST
+            //This is so we can connect to ourselves.
+            //Instructions:
+            //Step One: Assuming this line is in your codebase, start two instances of RoR2 (do this through the .exe directly)
+            //Step Two: Host a game with one instance of RoR2.
+            //Step Three: On the instance that isn't hosting, open up the console (ctrl + alt + tilde) and enter the command "connect localhost:7777"
+            //DO NOT MAKE A MISTAKE SPELLING THE COMMAND OR YOU WILL HAVE TO RESTART THE CLIENT INSTANCE!!
+            //Step Four: Test whatever you were going to test.
             On.RoR2.Networking.GameNetworkManager.OnClientConnect += (self, user, t) => { };
 #endif
             ExecutionerAssets.PopulateAssets();
@@ -727,8 +734,8 @@ The two privates sat in complete silence.
                 {
                     assets = AssetBundle.LoadFromStream(strm);
                     //TODO: change me
-                    AssetBundleResourcesProvider provider = new AssetBundleResourcesProvider("@ExecutionerMod", assets);
-                    ResourcesAPI.AddProvider(provider);
+                    //AssetBundleResourcesProvider provider = new AssetBundleResourcesProvider("@ExecutionerMod", assets);
+                    //ResourcesAPI.AddProvider(provider);
                 }
             }
 

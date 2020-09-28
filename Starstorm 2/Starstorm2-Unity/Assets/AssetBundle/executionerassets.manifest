@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 3017466432
+CRC: 2002058426
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: caf30c36aad13911d6924cfa2c622614
+    Hash: 5504015f005d3bf20e334d81e00d7271
   TypeTreeHash:
     serializedVersion: 2
     Hash: f5b00c6616d47093309b517b40306553
@@ -41,14 +41,33 @@ ClassTypes:
   Script: {instanceID: 0}
 Assets:
 - Assets/Executioner/ExecAnimator.controller
+- Assets/Executioner/Armature_Primary.anim
+- Assets/Executioner/Armature_Ascending.anim
+- Assets/Executioner/Armature_Jump.anim
+- Assets/Executioner/Armature_Idle.anim
 - Assets/Executioner/ExecutionerModelMenu.prefab
 - Assets/Executioner/exeportrait.png
 - Assets/Executioner/ExecAnimatorMenu.controller
+- Assets/Executioner/Armature_Hitstun.anim
+- Assets/Executioner/Armature_Specia3Impact.anim
 - Assets/Executioner/skill2icon.png
+- Assets/Executioner/Armature_Secondary.anim
 - Assets/Executioner/skill3icon.png
 - Assets/Executioner/ExecutionerModel.prefab
+- Assets/Executioner/Armature_Descending.anim
+- Assets/Executioner/Armature_CharSelect.anim
+- Assets/Executioner/Armature_WalkFWD.anim
+- Assets/Executioner/Armature_Specia1lUP.anim
 - Assets/Executioner/Gun.mesh
+- Assets/Executioner/Armature_Specia2Down.anim
+- Assets/Executioner/Armature_Charidle.anim
+- Assets/Executioner/Armature_WalkLFT.anim
 - Assets/Executioner/skill4icon.png
+- Assets/Executioner/Armature_WalkRHT.anim
+- Assets/Executioner/Armature_Specia2Swing.anim
 - Assets/Executioner/skill1icon.png
+- Assets/Executioner/Armature_WalkBWD.anim
+- Assets/Executioner/Armature_SprintFWD.anim
 - Assets/Executioner/Axe.mesh
+- Assets/Executioner/Armature_Utility.anim
 Dependencies: []

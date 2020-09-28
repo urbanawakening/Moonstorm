@@ -24,7 +24,7 @@ namespace EntityStates.Executioner
 
             //set up ion gun stock system
             ionGunSkill = skillLocator.secondary;
-            storedChargeComp = characterBody.GetComponent<IonGunChargeComponent>();
+            storedChargeComp = base.GetComponent<IonGunChargeComponent>();
             if (ionGunSkill && storedChargeComp)
                 ionGunSkill.stock = storedChargeComp.storedCharges;
 
