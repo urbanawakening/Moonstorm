@@ -90,7 +90,7 @@ namespace EntityStates.Executioner
             hitTargets = new List<HealthComponent>();
 
             this.animator = base.GetModelAnimator();
-            base.PlayAnimation("FullBody, Override", "SpecialDown");
+            base.PlayAnimation("FullBody, Override", "SpecialSwing");
 
             if (base.isAuthority)
             {
