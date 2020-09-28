@@ -34,7 +34,7 @@ namespace Moonstorm.Cores.States.Bombardier
             FireProjectileInfo info = new FireProjectileInfo()
             {
                 crit = RollCrit(),
-                damage = damageCoeff * damageStat,
+                damage = 5 * damageStat,
                 damageColorIndex = RoR2.DamageColorIndex.Default,
                 damageTypeOverride = DamageType.Stun1s,
                 force = -2500,

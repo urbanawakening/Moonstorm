@@ -40,7 +40,7 @@ namespace Moonstorm.Cores.States.Bombardier
             {
                 attacker = base.gameObject,
                 attackerFiltering = AttackerFiltering.Default,
-                baseDamage = (5f + (Mathf.Abs(y) / 2)) * base.damageStat,
+                baseDamage = (6.3f + (Mathf.Abs(y) / 2)) * base.damageStat,
                 baseForce = -3000,
                 bonusForce = new Vector3(0, 0, 0),
                 crit = base.RollCrit(),

@@ -40,15 +40,15 @@ namespace Moonstorm.Cores
         protected void AddToSurvivorSelect() {
             GameObject display = body.GetComponent<ModelLocator>().modelTransform.gameObject;
 
-            string desc = "Bombardier loves bombs. Hell yeah!" + Environment.NewLine + Environment.NewLine;
-            desc = desc + "< ! > Sample Text 1" + Environment.NewLine + Environment.NewLine;
-            desc = desc + "< ! > Sample Text 2" + Environment.NewLine + Environment.NewLine;
-            desc = desc + "< ! > Sample Text 3" + Environment.NewLine + Environment.NewLine;
-            desc = desc + "< ! > Sample Text 4" + Environment.NewLine + Environment.NewLine;
+            string desc = "Bombardier is a master of unconventional warfare who can use his explosives to control the battle field" + Environment.NewLine + Environment.NewLine;
+            desc = desc + "< ! > Rocket Blast is weak against single targets, but excels in crowds. Blast into a large crowd of enemies for maximum destruction." + Environment.NewLine + Environment.NewLine;
+            desc = desc + "< ! > Use your Sticky Charges to set up bosses for huge damage potential. Keep in mind they only detonate when you use your primary, so use as many as you have." + Environment.NewLine + Environment.NewLine;
+            desc = desc + "< ! > Concussive Blast is an excellent escape and mobility tool, but it also pulls enemies towards you when used. Jump away and shoot straight down to quickly dispose of a crowd" + Environment.NewLine + Environment.NewLine;
+            desc = desc + "< ! > The key to success is realizing all of the Bombardier's abilitie propel him into the air. Try to gain as much height as possible when using Grand Slam to annihilate your enemies." + Environment.NewLine + Environment.NewLine;
 
             LanguageAPI.Add("BOMBARDIER_BASENAMETOKEN", "Bombardier");
             LanguageAPI.Add("BOMBARDIER_DESCRIPTION", desc);
-            LanguageAPI.Add("BOMBARDIER_FLAVORTOKEN", "And so he left, with a new bomb for a new adventure...");
+            LanguageAPI.Add("BOMBARDIER_FLAVORTOKEN", "And so he left, lighting the fuse for a new adventure...");
 
             SurvivorDef def = new SurvivorDef() {
                 bodyPrefab = body,
@@ -134,7 +134,7 @@ namespace Moonstorm.Cores
             primarySkillDef.icon = null;
             primarySkillDef.keywordTokens = Array.Empty<String>();
 
-            LanguageAPI.Add(primarySkillDef.skillDescriptionToken, "Fire a rocket that does <style=cIsDamage>320%</style> damage and <style=cIsDamage>explodes on contact</style>.");
+            LanguageAPI.Add(primarySkillDef.skillDescriptionToken, "Fire a rocket that does <style=cIsDamage>300%</style> damage and <style=cIsDamage>explodes on contact</style>.");
             LanguageAPI.Add(primarySkillDef.skillNameToken, "Rocket Blast");
 
             LoadoutAPI.AddSkillDef(primarySkillDef);
@@ -161,7 +161,7 @@ namespace Moonstorm.Cores
             secondarySkillDef.skillNameToken = "BOMBARDIER_SECONDARY_NAME";
             secondarySkillDef.skillDescriptionToken = "BOMBARDIER_SECONDARY_DESCRIPTION";
             secondarySkillDef.icon = null;
-            secondarySkillDef.baseMaxStock = 3;
+            secondarySkillDef.baseMaxStock = 1;
             secondarySkillDef.baseRechargeInterval = 3f;
             secondarySkillDef.beginSkillCooldownOnSkillEnd = true;
             secondarySkillDef.canceledFromSprinting = false;
@@ -201,7 +201,7 @@ namespace Moonstorm.Cores
                  "KEYWORD_STUNNING",
              };*/
 
-            LanguageAPI.Add(secondarySkillDef.skillDescriptionToken, "Toss a sticky bomb that deals <style=cIsDamage>300% damage</style>. <style=cIsDamage>Detonate all stickies</style> <style=cIsUtility>by using Rocket Blast.</style>");
+            LanguageAPI.Add(secondarySkillDef.skillDescriptionToken, "Toss a sticky bomb that deals <style=cIsDamage>380% damage</style>. <style=cIsDamage>Detonate all stickies</style> <style=cIsUtility>by using Rocket Blast.</style>");
             LanguageAPI.Add(secondarySkillDef.skillNameToken, "Sticky Charge");
 
             LoadoutAPI.AddSkillDef(secondarySkillDef);
@@ -250,7 +250,7 @@ namespace Moonstorm.Cores
             //LanguageAPI.Add(utilitySkillDef.skillDescriptionToken, "<style=cIsDamage>Forceful</style>. Pull enemies towards you for <style=cIsDamage>500%</style> damage and <style=cIsUtility>boost yourself upwards</style>.");
             //LanguageAPI.Add(utilitySkillDef.skillNameToken, "Plan B");
 
-            LanguageAPI.Add(utilitySkillDef.skillDescriptionToken, "<style=cIsDamage>Stunning</style>. Fire a stunning rocket that does <style=cIsDamage>500%</style> damage and <style=cIsDamage>explodes in a large radius on contact</style>.");
+            LanguageAPI.Add(utilitySkillDef.skillDescriptionToken, "<style=cIsDamage>Stunning</style>. Fire a stunning rocket that does <style=cIsDamage>400%</style> damage and <style=cIsDamage>explodes in a large radius on contact</style>.");
             LanguageAPI.Add(utilitySkillDef.skillNameToken, "Concussive Payload");
 
             LoadoutAPI.AddSkillDef(utilitySkillDef);
