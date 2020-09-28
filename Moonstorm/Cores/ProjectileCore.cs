@@ -49,13 +49,26 @@ namespace Moonstorm.Cores
 
         protected private void CreateStickyProjectile()
         {
-            stickyProjectile = Resources.Load<GameObject>("prefabs/projectiles/CryoCanisterBombletsProjectile").InstantiateClone("MIRVEquipmentProjectile", true);
+            stickyProjectile = Resources.Load<GameObject>("prefabs/projectiles/EngiMine").InstantiateClone("MIRVEquipmentProjectile", true);
             if (API.RegisterNewProjectile(stickyProjectile))
             {
                 stickyProjectile.AddComponent<BombardierStickyBombProjectile>();
 
-                GameObject.Destroy(stickyProjectile.GetComponent<ProjectileImpactExplosion>());
-                GameObject.Destroy(stickyProjectile.GetComponent<ApplyTorqueOnStart>());
+                GameObject.Destroy(stickyProjectile.GetComponent<ProjectileDeployToOwner>());
+                GameObject.Destroy(stickyProjectile.GetComponent<Deployable>());
+
+                GameObject.Destroy(stickyProjectile.GetComponent<RTPCController>());
+                foreach (var comp in stickyProjectile.GetComponents<EntityStateMachine>()) {
+                    GameObject.Destroy(comp);
+                }
+                GameObject.Destroy(stickyProjectile.GetComponent<NetworkStateMachine>());
+                GameObject.Destroy(stickyProjectile.GetComponent<ProjectileSphereTargetFinder>());
+                GameObject.Destroy(stickyProjectile.GetComponent<ProjectileTargetComponent>());
+               
+                
+                //GameObject.Destroy(stickyProjectile.GetComponent<ProjectileTargetComponent>());
+                //GameObject.Destroy(stickyProjectile.GetComponent<ProjectileTargetComponent>());
+                //GameObject.Destroy(stickyProjectile.GetComponent<ProjectileTargetComponent>());
             }
             else LogCore.LogF("FATAL ERROR:" + stickyProjectile.name + " failed to register!");
         }
@@ -105,6 +118,7 @@ namespace Moonstorm.Cores
                 impact.impactEffect = Resources.Load<GameObject>("prefabs/effects/omnieffect/OmniExplosionVFXArchWispCannonImpact");
                 impact.blastProcCoefficient = 1f;
                 impact.blastDamageCoefficient = 1f;
+                impact.blastRadius = 25;
             }
             else LogCore.LogF("FATAL ERROR:" + bombardierFireBombProjectile.name + " failed to register to the projectile catalog!");
         }

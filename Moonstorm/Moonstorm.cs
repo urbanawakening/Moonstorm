@@ -21,7 +21,7 @@ namespace Moonstorm
         "PrefabAPI",
         "LanguageAPI",
         "BuffAPI",
-        "EffectsAPI",
+        "EffectAPI",
         "LoadoutAPI",
         "DirectorAPI",
         "LanguageAPI",
@@ -119,14 +119,11 @@ namespace Moonstorm
             DefineConfig();
             InitializeCores();
 
-            if (!gameObject.HasComponent<ProgressTracker>() || !ProgressTracker.instance)
+            /*if (!gameObject.HasComponent<ProgressTracker>() || !ProgressTracker.instance)
             {
                 LogCore.LogI("Bepinex object does not have a progress tracker or there is no instance of the progress tracker. Attaching now.");
                 gameObject.AddComponent<ProgressTracker>();
-            }
-
-
-            
+            }*/
 
             LogCore.LogM("Moonstorm loaded!");
         }

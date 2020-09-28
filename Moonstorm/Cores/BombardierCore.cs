@@ -97,8 +97,8 @@ namespace Moonstorm.Cores
         private void CreatePassive() {
             LoadoutAPI.AddSkill(typeof(BombardierMain));
 
-            var stateMachine = body.GetComponent<EntityStateMachine>();
-            stateMachine.mainStateType = new SerializableEntityStateType(typeof(BombardierMain));
+            //var stateMachine = body.GetComponent<EntityStateMachine>();
+            //stateMachine.mainStateType = new SerializableEntityStateType(typeof(BombardierMain));
         }
 
         private void SetComponents() {
@@ -151,24 +151,47 @@ namespace Moonstorm.Cores
 
         private void CreateSecondary() {
             LoadoutAPI.AddSkill(typeof(FireFlameRocket));
-            LoadoutAPI.AddSkill(typeof(ThrowStickies));
+            LoadoutAPI.AddSkill(typeof(ThrowSticky));
+            LoadoutAPI.AddSkill(typeof(ThrowStickySimple));
 
             SkillDef secondarySkillDef = ScriptableObject.CreateInstance<SkillDef>();
-            secondarySkillDef.activationState = new SerializableEntityStateType(typeof(ThrowStickies));
+            secondarySkillDef.activationState = new EntityStates.SerializableEntityStateType(typeof(ThrowStickySimple));
             secondarySkillDef.activationStateMachineName = "Weapon";
-            secondarySkillDef.baseMaxStock = 1;
+            secondarySkillDef.skillName = "BOMBARDIER_SECONDARY_NAME";
+            secondarySkillDef.skillNameToken = "BOMBARDIER_SECONDARY_NAME";
+            secondarySkillDef.skillDescriptionToken = "BOMBARDIER_SECONDARY_DESCRIPTION";
+            secondarySkillDef.icon = null;
+            secondarySkillDef.baseMaxStock = 3;
             secondarySkillDef.baseRechargeInterval = 3f;
             secondarySkillDef.beginSkillCooldownOnSkillEnd = true;
             secondarySkillDef.canceledFromSprinting = false;
             secondarySkillDef.fullRestockOnAssign = false;
-            secondarySkillDef.interruptPriority = InterruptPriority.Skill;
+            secondarySkillDef.interruptPriority = EntityStates.InterruptPriority.Skill;
             secondarySkillDef.isBullets = false;
             secondarySkillDef.isCombatSkill = true;
+            secondarySkillDef.mustKeyPress = true;
+            secondarySkillDef.noSprint = true;
+            secondarySkillDef.rechargeStock = 1;
+            secondarySkillDef.requiredStock = 1;
+            secondarySkillDef.shootDelay = 0f;
+            secondarySkillDef.stockToConsume = 1;
+
+            /*SkillDef secondarySkillDef = ScriptableObject.CreateInstance<SkillDef>();
+            secondarySkillDef.activationState = new SerializableEntityStateType(typeof(ThrowSticky));
+            secondarySkillDef.activationStateMachineName = "Weapon";
+            secondarySkillDef.baseMaxStock = 3;
+            secondarySkillDef.baseRechargeInterval = 3f;
+            secondarySkillDef.beginSkillCooldownOnSkillEnd = true;
+            secondarySkillDef.canceledFromSprinting = false;
+            secondarySkillDef.fullRestockOnAssign = false;
+            secondarySkillDef.interruptPriority = InterruptPriority.PrioritySkill;
+            secondarySkillDef.isBullets = false;
+            secondarySkillDef.isCombatSkill = false;
             secondarySkillDef.mustKeyPress = false;
             secondarySkillDef.noSprint = false;
             secondarySkillDef.rechargeStock = 1;
             secondarySkillDef.requiredStock = 1;
-            secondarySkillDef.shootDelay = 0.05f;
+            secondarySkillDef.shootDelay = 0.85f;
             secondarySkillDef.stockToConsume = 1;
             secondarySkillDef.skillDescriptionToken = "BOMBARDIER_SECONDARY_DESC";
             secondarySkillDef.skillName = "StunningRocket";
@@ -176,10 +199,10 @@ namespace Moonstorm.Cores
             secondarySkillDef.icon = null;
             secondarySkillDef.keywordTokens = new string[] {
                  "KEYWORD_STUNNING",
-             };
+             };*/
 
-            LanguageAPI.Add(secondarySkillDef.skillDescriptionToken, "");
-            LanguageAPI.Add(secondarySkillDef.skillNameToken, "");
+            LanguageAPI.Add(secondarySkillDef.skillDescriptionToken, "Toss a sticky bomb that deals <style=cIsDamage>300% damage</style>. <style=cIsDamage>Detonate all stickies</style> <style=cIsUtility>by using Rocket Blast.</style>");
+            LanguageAPI.Add(secondarySkillDef.skillNameToken, "Sticky Charge");
 
             LoadoutAPI.AddSkillDef(secondarySkillDef);
             SkillFamily secondarySkillFamily = skillLocator.secondary.skillFamily;
@@ -242,8 +265,11 @@ namespace Moonstorm.Cores
         }
 
         private void CreateSpecial() {
+            LoadoutAPI.AddSkill(typeof(Mortar));
+            LoadoutAPI.AddSkill(typeof(GrandSlam));
+
             SkillDef specialSkillDef = ScriptableObject.CreateInstance<BombardierTrackingSkillDef>();
-            specialSkillDef.activationState = new SerializableEntityStateType(typeof(Mortar));
+            specialSkillDef.activationState = new SerializableEntityStateType(typeof(GrandSlam));
             specialSkillDef.activationStateMachineName = "Weapon";
             specialSkillDef.baseMaxStock = 1;
             specialSkillDef.baseRechargeInterval = 8;
@@ -260,12 +286,13 @@ namespace Moonstorm.Cores
             specialSkillDef.shootDelay = 0.5f;
             specialSkillDef.stockToConsume = 1;
             specialSkillDef.skillDescriptionToken = "BOMBARDIER_SPECIAL_DESC";
-            specialSkillDef.skillName = "Seekers";
+            specialSkillDef.skillName = "GrandSlam";
+            specialSkillDef.keywordTokens = new string[] { "KEYWORD_HEAVY" };
             specialSkillDef.skillNameToken = "BOMBARDIER_SPECIAL_NAME";
             specialSkillDef.icon = null;
 
-            LanguageAPI.Add(specialSkillDef.skillDescriptionToken, "Fire nine seeking rockets that each deal <style=cIsDamage>250%</style> damage.");
-            LanguageAPI.Add(specialSkillDef.skillNameToken, "Seeker Barrage");
+            LanguageAPI.Add(specialSkillDef.skillDescriptionToken, "<style=cIsDamage>Heavy</style>. Fire a rocket above you and slam downwards, dealing <style=cIsDamage>250%</style> damage on contact.");
+            LanguageAPI.Add(specialSkillDef.skillNameToken, "Grand Slam");
 
             LoadoutAPI.AddSkillDef(specialSkillDef);
             SkillFamily specialSkillFamily = skillLocator.special.skillFamily;

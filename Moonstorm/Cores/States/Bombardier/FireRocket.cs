@@ -16,7 +16,7 @@ namespace Moonstorm.Cores.States.Bombardier
         public static float damageCoeff = 3.2f;
         public static float procCoeff = 1;
         public static float force = 5000;
-        public static float baseDuration = .9f;
+        public static float baseDuration = 1f;
 
         public static float timeBeforeKnockback;
 
@@ -39,8 +39,26 @@ namespace Moonstorm.Cores.States.Bombardier
 
             timeBeforeKnockback += Time.deltaTime;
 
+            ProjectileManager.instance.FireProjectile(GetInfo(aimRay));
 
+            if (ShouldHaveKnockback() && !isGrounded && characterMotor)
+            {
+                characterMotor.ApplyForce(GetKnockback(aimRay), false, false);
+            }
 
+            if (characterBody && ShouldApplyBloom())
+            {
+                characterBody.AddSpreadBloom(GetBloom());
+            }
+
+            if (ShouldPopStickies())
+            {
+                gameObject.GetComponent<BombardierStickyBombManager>().PopStickiesAuthority();
+            }
+        }
+
+        public virtual FireProjectileInfo GetInfo(Ray aimRay)
+        {
             FireProjectileInfo info = new FireProjectileInfo()
             {
                 crit = RollCrit(),
@@ -57,20 +75,12 @@ namespace Moonstorm.Cores.States.Bombardier
                 useFuseOverride = false,
                 useSpeedOverride = false
             };
-            ModifyProjectileInfo(info);
-            ProjectileManager.instance.FireProjectile(info);
+            return info;
+        }
 
-            if (ShouldHaveKnockback() && !isGrounded && characterMotor)
-            {
-                characterMotor.ApplyForce(GetKnockback(aimRay), false, false);
-            }
-
-            if (characterBody && ShouldApplyBloom())
-            {
-                characterBody.AddSpreadBloom(GetBloom());
-            }
-
-            gameObject.GetComponent<BombardierStickyBombManager>().PopStickiesAuthority();
+        public virtual bool ShouldPopStickies()
+        {
+            return true;
         }
 
         public virtual bool ShouldHaveKnockback()

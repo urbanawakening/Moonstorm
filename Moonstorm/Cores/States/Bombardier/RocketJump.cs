@@ -1,4 +1,5 @@
-﻿using RoR2.Projectile;
+﻿using RoR2;
+using RoR2.Projectile;
 using UnityEngine;
 
 namespace Moonstorm.Cores.States.Bombardier
@@ -18,13 +19,35 @@ namespace Moonstorm.Cores.States.Bombardier
             return 800;
         }
 
+        public override bool ShouldPopStickies()
+        {
+            return false;
+        }
+
         public override void ModifyProjectileInfo(FireProjectileInfo info)
         {
             base.ModifyProjectileInfo(info);
+        }
 
-            info.damageTypeOverride = RoR2.DamageType.Stun1s;
-            info.force = -5000;
-            info.damageColorIndex = RoR2.DamageColorIndex.WeakPoint;
+        public override FireProjectileInfo GetInfo(Ray aimRay)
+        {
+            FireProjectileInfo info = new FireProjectileInfo()
+            {
+                crit = RollCrit(),
+                damage = damageCoeff * damageStat,
+                damageColorIndex = RoR2.DamageColorIndex.Default,
+                damageTypeOverride = DamageType.Stun1s,
+                force = -2500,
+                owner = gameObject,
+                position = transform.position,
+                procChainMask = default,
+                projectilePrefab = ProjectileCore.bombardierFireBombProjectile,
+                rotation = Util.QuaternionSafeLookRotation(aimRay.direction),
+                target = null,
+                useFuseOverride = false,
+                useSpeedOverride = false
+            };
+            return info;
         }
 
         public override Vector3 GetKnockback(Ray aimRay)

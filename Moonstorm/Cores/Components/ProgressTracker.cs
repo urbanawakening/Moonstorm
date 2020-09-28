@@ -2,8 +2,9 @@
 
 namespace Moonstorm.Cores.Components
 {
-    class ProgressTracker : NetworkBehaviour {
-        [SyncVar]
+    class ProgressTracker : NetworkBehaviour
+    {
+        /*[SyncVar]
         public static bool isVoidCompleted;
 
         public static ProgressTracker instance;
@@ -28,5 +29,6 @@ namespace Moonstorm.Cores.Components
             SingletonHelper.Unassign<ProgressTracker>(this, instance);
             LogCore.LogI("ProgressTracker destroyed.");
         }
+    }*/
     }
 }

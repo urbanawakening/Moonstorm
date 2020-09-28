@@ -15,12 +15,11 @@ namespace Moonstorm.Cores.Components
             manager = controller.owner.GetComponent<BombardierStickyBombManager>();
 
             manager.AddBombAuthority(base.gameObject);
-
         }
 
         public void Pop() {
             //pop!
-            LogCore.LogI("far away, i'll still be waiting for your train tonight");
+            //LogCore.LogI("far away, i'll still be waiting for your train tonight");
 
             if (!hasSwung)
             {
@@ -30,8 +29,8 @@ namespace Moonstorm.Cores.Components
                 {
                     attacker = base.gameObject,
                     attackerFiltering = AttackerFiltering.Default,
-                    baseDamage = 5f * controller.owner.GetComponent<CharacterBody>().damage,
-                    baseForce = -3000,
+                    baseDamage = 3f * controller.owner.GetComponent<CharacterBody>().damage,
+                    baseForce = 2000,
                     bonusForce = new Vector3(0, 0, 0),
                     crit = false,
                     damageColorIndex = DamageColorIndex.Default,
@@ -55,9 +54,23 @@ namespace Moonstorm.Cores.Components
 
                 Destroy(base.gameObject);
             }
+            var sphere = Physics.OverlapSphere(transform.position, 15);
+            foreach (var body in sphere) {
+                var cb = body.gameObject.GetComponentInParent<CharacterBody>();
+                if (cb) {
+                    if (cb.Equals(controller.owner.GetComponent<CharacterBody>())) {
+                        //LogCore.LogI("hello");
+                        var aim = cb.inputBank.GetAimRay();
+                        cb.characterMotor.ApplyForce(-(aim.direction * 2000), true, false);
+                        //cb.rigidbody.AddExplosionForce(cb.characterMotor.mass * 60, transform.position, 15);
+                        //characterMotor.ApplyForce(new Vector3(0, , 0), true, false);
+                        //(hitPoint2.hitPosition - this.position).normalized;
+                    }
+                }
+            }
         }
         public void OnDestroy() {
-            Pop();
+           //Pop();
         }
     }
 }

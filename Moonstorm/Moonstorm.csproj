@@ -42,6 +42,8 @@
     <Compile Include="API\ComponentHelpers.cs" />
     <Compile Include="API\LogCore.cs" />
     <Compile Include="Achivements\GrabOrDie.cs" />
+    <Compile Include="Cores\Components\Class1.cs" />
+    <Compile Include="Cores\States\Bombardier\ThrowStickySimple.cs" />
     <Compile Include="HONESTLYFUCKACCESSMODIFIERS.cs" />
     <Compile Include="Cores\ArchaicWispCore.cs" />
     <Compile Include="Cores\AssetsCore.cs" />
@@ -51,7 +53,7 @@
     <Compile Include="Cores\AchievementCore.cs" />
     <Compile Include="Cores\BombardierCore.cs" />
     <Compile Include="Cores\Components\BombardierTracker.cs" />
-    <Compile Include="Cores\Components\Class1.cs" />
+    <Compile Include="Cores\Components\BombardierSkillDef.cs" />
     <Compile Include="Cores\Components\BombardierStickyBombManager.cs" />
     <Compile Include="Cores\Components\StickyComponent.cs" />
     <Compile Include="Cores\DamageTypeCore.cs" />
@@ -60,7 +62,7 @@
     <Compile Include="Cores\Components\EnableGoldAffix.cs" />
     <Compile Include="Cores\Components\ProgressTracker.cs" />
     <Compile Include="Cores\States\Bombardier\BombardierMain.cs" />
-    <Compile Include="Cores\States\Bombardier\Class1.cs" />
+    <Compile Include="Cores\States\Bombardier\GRANDSLAM.cs" />
     <Compile Include="Cores\States\Bombardier\RocketJump.cs" />
     <Compile Include="Cores\States\Bombardier\Seekers.cs" />
     <Compile Include="Cores\States\Bombardier\FireFlameRocket.cs" />
