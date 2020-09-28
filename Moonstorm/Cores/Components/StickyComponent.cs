@@ -27,7 +27,7 @@ namespace Moonstorm.Cores.Components
 
                 BlastAttack attack = new BlastAttack()
                 {
-                    attacker = base.gameObject,
+                    attacker = controller.owner,
                     attackerFiltering = AttackerFiltering.Default,
                     baseDamage = 3f * controller.owner.GetComponent<CharacterBody>().damage,
                     baseForce = 2000,

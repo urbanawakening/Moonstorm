@@ -82,7 +82,7 @@ namespace Moonstorm.Cores
             EffectAPI.AddEffect(coinImpactEffect);
         }
 
-        #region HAN-D
+            #region HAN-D
         private void MakeHANDOrbEffect()
         {
             //all that glitters dies here

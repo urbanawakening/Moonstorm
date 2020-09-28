@@ -32,40 +32,17 @@ namespace Moonstorm.Cores.States.Bombardier
 
         private void CharacterMotor_onHitGround(ref RoR2.CharacterMotor.HitGroundInfo hitGroundInfo)
         {
-            hasLanded = true;
-
-
-            //kek!
-            BlastAttack attack = new BlastAttack()
+            if (!hasLanded)
             {
-                attacker = base.gameObject,
-                attackerFiltering = AttackerFiltering.Default,
-                baseDamage = (6.3f + (Mathf.Abs(y) / 2)) * base.damageStat,
-                baseForce = -3000,
-                bonusForce = new Vector3(0, 0, 0),
-                crit = base.RollCrit(),
-                damageColorIndex = DamageColorIndex.Default,
-                damageType = DamageTypeCore.bombardierKnockback,
-                falloffModel = BlastAttack.FalloffModel.None,
-                impactEffect = EffectIndex.Invalid,
-                inflictor = base.gameObject,
-                losType = BlastAttack.LoSType.NearestHit,
-                position = base.transform.position,
-                procChainMask = default,
-                procCoefficient = 0.5f,
-                radius = 15 + Mathf.Abs(y) / 2,
-                teamIndex = characterBody.teamComponent.teamIndex,
-            };
-            attack.Fire();
-            EffectManager.SpawnEffect(Resources.Load<GameObject>("prefabs/effects/omnieffect/OmniExplosionVFX"), new EffectData
-            {
-                origin = transform.position,
-                scale = 15 + Mathf.Abs(y) / 2,
-            }, true);
+                hasLanded = true;
 
-            /*LogCore.LogI(y);
-            LogCore.LogI(Mathf.Abs(y));
-            LogCore.LogI(Mathf.Abs(y) /2);*/
+
+
+
+                /*LogCore.LogI(y);
+                LogCore.LogI(Mathf.Abs(y));
+                LogCore.LogI(Mathf.Abs(y) /2);*/
+            }
         }
 
         public virtual void Slam()

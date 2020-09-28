@@ -9,6 +9,16 @@
         protected void Debug() {
             LogCore.LogI("Initializing Core: " + base.ToString());
             instance = this;
+
+            //This is so we can connect to ourselves.
+            //Instructions:
+            //Step One: Assuming this line is in your codebase, start two instances of RoR2 (do this through the .exe directly)
+            //Step Two: Host a game with one instance of RoR2.
+            //Step Three: On the instance that isn't hosting, open up the console (ctrl + alt + tilde) and enter the command "connect localhost:7777"
+            //DO NOT MAKE A MISTAKE SPELLING THE COMMAND OR YOU WILL HAVE TO RESTART THE CLIENT INSTANCE!!
+            //Step Four: Test whatever you were going to test.
+            On.RoR2.Networking.GameNetworkManager.OnClientConnect += (self, user, t) => { };
+
             //On.EntityStates.Missions.Arena.NullWard.Active.FixedUpdate += Active_FixedUpdate;
             //On.EntityStates.Toolbot.AimGrenade.OnEnter += AimGrenade_OnEnter;
             //On.EntityStates.Commando.CommandoWeapon.FireRocket.OnEnter += FireRocket_OnEnter;

@@ -35,25 +35,28 @@ namespace Moonstorm.Cores.States.Bombardier
 
         public virtual void FireProjectile()
         {
-            var aimRay = GetAimRay();
-
-            timeBeforeKnockback += Time.deltaTime;
-
-            ProjectileManager.instance.FireProjectile(GetInfo(aimRay));
-
-            if (ShouldHaveKnockback() && !isGrounded && characterMotor)
+            if (base.isAuthority)
             {
-                characterMotor.ApplyForce(GetKnockback(aimRay), false, false);
-            }
+                var aimRay = GetAimRay();
 
-            if (characterBody && ShouldApplyBloom())
-            {
-                characterBody.AddSpreadBloom(GetBloom());
-            }
+                timeBeforeKnockback += Time.deltaTime;
 
-            if (ShouldPopStickies())
-            {
-                gameObject.GetComponent<BombardierStickyBombManager>().PopStickiesAuthority();
+                ProjectileManager.instance.FireProjectile(GetInfo(aimRay));
+
+                if (ShouldHaveKnockback() && !isGrounded && characterMotor)
+                {
+                    characterMotor.ApplyForce(GetKnockback(aimRay), false, false);
+                }
+
+                if (characterBody && ShouldApplyBloom())
+                {
+                    characterBody.AddSpreadBloom(GetBloom());
+                }
+
+                if (ShouldPopStickies() && base.isAuthority)
+                {
+                    gameObject.GetComponent<BombardierStickyBombManager>().PopStickiesAuthority();
+                }
             }
         }
 

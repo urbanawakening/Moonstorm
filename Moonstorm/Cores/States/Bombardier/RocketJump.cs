@@ -45,7 +45,8 @@ namespace Moonstorm.Cores.States.Bombardier
                 rotation = Util.QuaternionSafeLookRotation(aimRay.direction),
                 target = null,
                 useFuseOverride = false,
-                useSpeedOverride = false
+                useSpeedOverride = true,
+                _speedOverride = 100
             };
             return info;
         }

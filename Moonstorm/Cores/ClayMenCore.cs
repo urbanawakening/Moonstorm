@@ -31,7 +31,7 @@ namespace Moonstorm.Cores
         {
             LogCore.LogI("Initializing Core: " + base.ToString());
             instance = this;
-
+            
             clayMan = Resources.Load<GameObject>("prefabs/characterbodies/ClayBody");
             clayManMaster = Resources.Load<GameObject>("prefabs/charactermasters/ClaymanMaster");
             skillLocator = clayMan.GetComponent<SkillLocator>();

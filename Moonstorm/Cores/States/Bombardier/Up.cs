@@ -29,7 +29,7 @@ namespace Moonstorm.Cores.States.Bombardier
         {
             base.FixedUpdate();
 
-            if (!hasSwung)
+            if (!hasSwung && base.isAuthority)
             {
                 hasSwung = true;
 
