@@ -96,8 +96,7 @@ namespace Starstorm2.Cores.States.Nucleator
                                 damageColorIndex = DamageColorIndex.Default,
                                 dotIndex = DotController.DotIndex.None
                             });
-                        }
-
+                        } 
                     }
                 }
             }

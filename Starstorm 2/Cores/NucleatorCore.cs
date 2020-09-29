@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using BepInEx;
 using EntityStates;
+using EntityStates.Engi.EngiWeapon;
 using R2API;
 using R2API.AssetPlus;
 using R2API.Utils;
 using RoR2;
+using RoR2.Projectile;
 using RoR2.Skills;
 using Starstorm2.Cores.States.Nucleator;
 using UnityEngine;
@@ -18,7 +20,7 @@ namespace Starstorm2.Cores
         public static NucleatorCore instance;
         public static GameObject characterPrefab;
         public static BuffIndex radionuclideSurgeBuffIndex;
-
+        public GameObject proj;
         public NucleatorCore() => Load();
 
         public void Load()
@@ -38,7 +40,54 @@ namespace Starstorm2.Cores
             BuffSetup();
             RegisterCharacter();
             SkillSetup();
-        }
+
+            this.proj = PrefabAPI.InstantiateClone(Resources.Load<GameObject>("prefabs/projectiles/DaggerProjectile"), "NucleatorProjectile");
+            
+            UnityEngine.Object.Destroy(this.proj.GetComponent<ProjectileSingleTargetImpact>());
+            UnityEngine.Object.Destroy(this.proj.GetComponent<DelayedEvent>());
+            UnityEngine.Object.Destroy(this.proj.GetComponent<AwakeEvent>());
+            UnityEngine.Object.Destroy(this.proj.GetComponent<DaggerController>());
+            UnityEngine.Object.Destroy(this.proj.GetComponent<DelayedEvent>());
+            UnityEngine.Object.Destroy(this.proj.GetComponent<AwakeEvent>());
+            this.proj.AddComponent<NucleatorProjectile>();
+
+            var impact = this.proj.AddComponent<ProjectileImpactExplosion>();
+            impact.blastAttackerFiltering = RoR2.AttackerFiltering.Default;
+            impact.blastDamageCoefficient = 1f;
+            impact.blastProcCoefficient = 1;
+            impact.blastRadius = 0f;
+            impact.childrenCount = 0;
+            impact.childrenDamageCoefficient = 0;
+            impact.childrenProjectilePrefab = null;
+            impact.destroyOnEnemy = true;
+            impact.destroyOnWorld = true;
+            impact.falloffModel = RoR2.BlastAttack.FalloffModel.None;
+            impact.fireChildren = false;
+            impact.impactEffect = Resources.Load<GameObject>("prefabs/effects/LightningStakeNova");
+            impact.lifetime = 10;
+            impact.lifetimeAfterImpact = 0;
+            impact.lifetimeRandomOffset = 0;
+
+            var targetFinder = this.proj.GetComponent<ProjectileDirectionalTargetFinder>();
+            targetFinder.lookCone = 90;
+            targetFinder.lookRange = 40f;
+            targetFinder.allowTargetLoss = true;
+            targetFinder.enabled = false;
+
+            var targetTracker = this.proj.GetComponent<ProjectileSteerTowardTarget>();
+            targetTracker.rotationSpeed = 45f;
+            targetTracker.enabled = false;
+
+
+            foreach (var comp in proj.GetComponents<Component>())
+                Debug.Log(comp.ToString());
+            if (this.proj.HasComponent<ProjectileController>())
+            {
+                ProjectileCatalog.getAdditionalEntries += list => list.Add(this.proj);
+            }
+
+            if (!proj) Debug.Log("What the fuck");
+    }
 
         void InitPrefab()
         {

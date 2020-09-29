@@ -1,5 +1,7 @@
 ﻿using EntityStates;
+using EntityStates.Engi.EngiWeapon;
 using RoR2;
+using RoR2.Projectile;
 using UnityEngine;
 
 namespace Starstorm2.Cores.States.Nucleator
@@ -10,7 +12,7 @@ namespace Starstorm2.Cores.States.Nucleator
         public GameObject hitEffectPrefab = Resources.Load<GameObject>("prefabs/effects/impacteffects/critspark");
         public GameObject tracerEffectPrefab = Resources.Load<GameObject>("prefabs/effects/tracers/tracerbanditshotgun");
 
-        public int i = 3;
+        private GameObject nucleatorProjectile = NucleatorCore.instance.proj;
 
         public static float minChargeDamageCoef = 1F;
         public static float maxChargeDamageCoef = 5F;
@@ -25,6 +27,7 @@ namespace Starstorm2.Cores.States.Nucleator
         public override void OnEnter()
         {
             base.OnEnter();
+
             CalculateDamage();
             Shoot();
         }
@@ -80,27 +83,40 @@ namespace Starstorm2.Cores.States.Nucleator
                 base.StartAimMode(aimRay, 2f, false);
                 if (base.isAuthority)
                 {
-                    new BulletAttack
+                    var baseRadius = this.charge * 10;
+                    this.nucleatorProjectile.GetComponent<NucleatorProjectile>().baseRadius = baseRadius;
+                    this.nucleatorProjectile.GetComponent<NucleatorProjectile>().charge = this.charge;
+
+                    this.nucleatorProjectile.GetComponent<ProjectileDamage>().damage = this.damage;
+
+                    if(this.charge > NucleatorSkillStateBase.overchargeThreshold)
                     {
-                        owner = base.gameObject,
-                        weapon = base.gameObject,
-                        origin = aimRay.origin,
-                        aimVector = aimRay.direction,
-                        minSpread = 0f,
-                        maxSpread = base.characterBody.spreadBloomAngle,
-                        bulletCount = 1U,
-                        procCoefficient = 1f,
-                        damage = this.damage,
-                        force = 3,
-                        falloffModel = BulletAttack.FalloffModel.None,
-                        tracerEffectPrefab = this.tracerEffectPrefab,
-                        hitEffectPrefab = this.hitEffectPrefab,
-                        isCrit = base.RollCrit(),
-                        HitEffectNormal = false,
-                        stopperMask = LayerIndex.world.mask,
-                        smartCollision = true,
-                        maxDistance = 300f
-                    }.Fire();
+                        this.nucleatorProjectile.GetComponent<ProjectileDirectionalTargetFinder>().enabled = true;
+                        this.nucleatorProjectile.GetComponent<ProjectileSteerTowardTarget>().enabled = true;
+                    }
+                    else
+                    {
+                        this.nucleatorProjectile.GetComponent<ProjectileDirectionalTargetFinder>().enabled = false;
+                        this.nucleatorProjectile.GetComponent<ProjectileSteerTowardTarget>().enabled = false;
+                    }
+
+                    FireProjectileInfo info = new FireProjectileInfo()
+                    {
+                        crit = RollCrit(),
+                        damage = 0f,
+                        damageColorIndex = RoR2.DamageColorIndex.Default,
+                        damageTypeOverride = DamageType.Generic,
+                        force = 0f,
+                        owner = gameObject,
+                        position = transform.position + GetAimRay().direction.normalized,
+                        procChainMask = default,
+                        projectilePrefab = NucleatorCore.instance.proj,
+                        rotation = Util.QuaternionSafeLookRotation(this.GetAimRay().direction),
+                        target = null,
+                        useFuseOverride = false,
+                        useSpeedOverride = false
+                    };
+                    ProjectileManager.instance.FireProjectile(info);
                 }
             }
         }

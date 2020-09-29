@@ -216,6 +216,7 @@
     <Compile Include="Cores\DotCore.cs" />
     <Compile Include="Cores\EquipmentCore.cs" />
     <Compile Include="Cores\BuffCore.cs" />
+    <Compile Include="Cores\States\Nucleator\Projectile.cs" />
     <Compile Include="Cores\States\Nucleator\ApplyRadionuclideSurge.cs" />
     <Compile Include="Cores\States\Nucleator\ChargeStates\ChargeFissionImpulse.cs" />
     <Compile Include="Cores\States\Nucleator\ChargeStates\ChargeIrradiate.cs" />
