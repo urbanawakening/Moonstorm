@@ -29,7 +29,7 @@ namespace EntityStates.Executioner
                 storedAirControlState = base.characterMotor.disableAirControlUntilCollision;
                 base.characterMotor.disableAirControlUntilCollision = true;
                 //iframes during and shortly after (prevents fall damage from slamming into ground)
-                base.characterBody.AddTimedBuff(BuffIndex.Immune, this.duration + ExecutionerAxeSlam.baseDuration);
+                base.characterBody.AddBuff(BuffIndex.ArmorBoost);
 
                 //SetCollisions(false);
             }
@@ -73,7 +73,9 @@ namespace EntityStates.Executioner
         public static float dropDamageCoefficient = 1.0f;
         public static float slamDamageCoefficient = 15.0f;
         public static float procCoefficient = 1.0f;
-        public static float baseDuration = 0.4f;
+        //shorter value if axe slam should be finite
+        //public static float baseDuration = 0.4f;
+        public static float baseDuration = 10f;
         public static float dropAttackRadius = 4f;
         public static float slamRadius = 14f;
 
@@ -100,6 +102,7 @@ namespace EntityStates.Executioner
                 base.characterMotor.velocity.x = 0f;
                 base.characterMotor.velocity.z = 0f;
                 this.crit = RollCrit();
+                base.characterBody.bodyFlags |= CharacterBody.BodyFlags.IgnoreFallDamage;
             }
         }
 
@@ -172,6 +175,8 @@ namespace EntityStates.Executioner
                 }
 
                 base.characterMotor.velocity.y = 0f;
+                base.characterBody.RemoveBuff(BuffIndex.ArmorBoost);
+                base.characterBody.bodyFlags -= CharacterBody.BodyFlags.IgnoreFallDamage;
             }
 
             base.OnExit();

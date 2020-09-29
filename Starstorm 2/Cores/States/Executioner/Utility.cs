@@ -7,8 +7,8 @@ namespace EntityStates.Executioner
     public class ExecutionerDash : BaseSkillState
     {
         public static float baseDuration = 0.9f;
-        public static float speedMultiplier = 2.2f;
-        public static float debuffRadius = 20f;
+        public static float speedMultiplier = 2.0f;
+        public static float debuffRadius = 30f;
         public static float debuffDuration = 3.0f;
 
         private float duration;
@@ -71,7 +71,7 @@ namespace EntityStates.Executioner
 
             if (base.characterDirection && base.characterMotor)
             {
-                base.characterMotor.rootMotion += (base.characterDirection.moveVector * base.characterBody.moveSpeed * speedMultiplier) * Time.fixedDeltaTime;
+                base.characterMotor.rootMotion += (base.characterDirection.forward * base.characterBody.moveSpeed * speedMultiplier) * Time.fixedDeltaTime;
             }
 
             if (base.fixedAge >= this.duration)
