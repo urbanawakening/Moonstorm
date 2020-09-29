@@ -113,7 +113,7 @@ namespace Starstorm2
                 dotCore = new DoTCore();
 
                 if (EnableExecutioner.Value) {
-                    executionerCore = new ExecutionerCore();
+                   //executionerCore = new ExecutionerCore();
                 }
                 if (EnableCyborg.Value) {
                     cyborgCore = new CyborgCore();
