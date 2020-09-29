@@ -8,11 +8,7 @@ namespace Starstorm2.Cores.States.Nucleator
 {
     class FireIrradiate : BaseSkillState
     {
-        public GameObject effectPrefab = Resources.Load<GameObject>("prefabs/effects/impacteffects/Hitspark");
-        public GameObject hitEffectPrefab = Resources.Load<GameObject>("prefabs/effects/impacteffects/critspark");
-        public GameObject tracerEffectPrefab = Resources.Load<GameObject>("prefabs/effects/tracers/tracerbanditshotgun");
-
-        private GameObject nucleatorProjectile = NucleatorCore.instance.proj;
+        private GameObject nucleatorProjectile = NucleatorCore.instance.primaryProjectile;
 
         public static float minChargeDamageCoef = 1F;
         public static float maxChargeDamageCoef = 5F;
@@ -80,7 +76,7 @@ namespace Starstorm2.Cores.States.Nucleator
                 Util.PlayScaledSound(EntityStates.Commando.CommandoWeapon.FirePistol.firePistolSoundString, base.gameObject, this.attackSpeedStat);
                 base.characterBody.AddSpreadBloom(EntityStates.Commando.CommandoWeapon.FirePistol2.spreadBloomValue * 1.5f);
                 Ray aimRay = base.GetAimRay();
-                base.StartAimMode(aimRay, 2f, false);
+                base.StartAimMode(aimRay, 1f, false);
                 if (base.isAuthority)
                 {
                     var baseRadius = this.charge * 10;
@@ -108,10 +104,10 @@ namespace Starstorm2.Cores.States.Nucleator
                         damageTypeOverride = DamageType.Generic,
                         force = 0f,
                         owner = gameObject,
-                        position = transform.position + GetAimRay().direction.normalized,
+                        position = aimRay.origin + aimRay.direction.normalized,
                         procChainMask = default,
-                        projectilePrefab = NucleatorCore.instance.proj,
-                        rotation = Util.QuaternionSafeLookRotation(this.GetAimRay().direction),
+                        projectilePrefab = NucleatorCore.instance.primaryProjectile,
+                        rotation = Util.QuaternionSafeLookRotation(aimRay.direction),
                         target = null,
                         useFuseOverride = false,
                         useSpeedOverride = false

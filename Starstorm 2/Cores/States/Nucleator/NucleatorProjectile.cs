@@ -45,10 +45,7 @@ namespace Starstorm2.Cores.States.Nucleator
             this.fixedAge = 0f;
             this.baseDamage = projectileDamage.damage;
             this.projectileImpactExplosion.lifetime = this.baseDuration;
-            this.acceleration = (1 - this.charge) * (50f - 20f) + 20f;
-
-
-            Chat.AddMessage(acceleration.ToString());
+            this.acceleration = (1 - this.charge) * (50f - 20f) + 20f;           
 
             pos = transform.position;
             axis = transform.up * -1;  // May or may not be the axis you want
@@ -60,9 +57,7 @@ namespace Starstorm2.Cores.States.Nucleator
             var lifetimeCoef = this.fixedAge / this.baseDuration;
 
             if (this.fixedAge < this.baseDuration)
-            {
-                Debug.Log(lifetimeCoef);
-                
+            {                
                 this.projectileImpactExplosion.blastRadius = baseRadius + lifetimeCoef * (baseRadius * 1.25f - 1) + 1;
                 this.projectileDamage.damage = baseDamage + lifetimeCoef * (baseDamage * 1.25f - 1) + 1;
 

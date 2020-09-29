@@ -25,7 +25,10 @@ namespace Starstorm2.Cores
         public static GameObject chargeCrosshair;
 
         public static BuffIndex radionuclideSurgeBuffIndex;
-        public GameObject proj;
+        public static BuffIndex radiationBuffIndex;
+        public static DotController.DotIndex radiationDotIndex;
+
+        public GameObject primaryProjectile;
         public NucleatorCore() => Load();
 
         public void Load()
@@ -45,18 +48,54 @@ namespace Starstorm2.Cores
             BuffSetup();
             RegisterCharacter();
             SkillSetup();
+            CreatePrimaryProjectile();            
+        }
 
-            this.proj = PrefabAPI.InstantiateClone(Resources.Load<GameObject>("prefabs/projectiles/DaggerProjectile"), "NucleatorProjectile");
-            
-            UnityEngine.Object.Destroy(this.proj.GetComponent<ProjectileSingleTargetImpact>());
-            UnityEngine.Object.Destroy(this.proj.GetComponent<DelayedEvent>());
-            UnityEngine.Object.Destroy(this.proj.GetComponent<AwakeEvent>());
-            UnityEngine.Object.Destroy(this.proj.GetComponent<DaggerController>());
-            UnityEngine.Object.Destroy(this.proj.GetComponent<DelayedEvent>());
-            UnityEngine.Object.Destroy(this.proj.GetComponent<AwakeEvent>());
-            this.proj.AddComponent<NucleatorProjectile>();
+        void CreateUiChargeWidget(GameObject crosshairPrefab)
+        {
+            NucleatorCore.defaultCrosshair = crosshairPrefab;
+            var chargeCrosshair = Resources.Load<GameObject>("prefabs/crosshair/SniperCrosshair");
 
-            var impact = this.proj.AddComponent<ProjectileImpactExplosion>();
+            UnityEngine.Object.Destroy(chargeCrosshair.GetComponent<RawImage>());
+            UnityEngine.Object.Destroy(chargeCrosshair.GetComponent<SniperScopeChargeIndicatorController>());
+            UnityEngine.Object.Destroy(chargeCrosshair.GetComponent<SniperRangeIndicator>());
+            UnityEngine.Object.Destroy(chargeCrosshair.GetComponent<DisplayStock>());
+            var chargeController = chargeCrosshair.AddComponent<ChargeController>();
+
+            foreach (Transform child in chargeCrosshair.transform)
+            {
+                if (child.name == "ChargeIndicator")
+                    chargeController.image = child.GetComponent<Image>();
+                else if (child.name != "Image")
+                {
+                    Debug.Log("Destroying :" + child.name);
+                    child.SetParent(null);
+                    UnityEngine.Object.Destroy(child.gameObject);
+                }
+            }
+
+
+            NucleatorCore.chargeCrosshair = chargeCrosshair;
+        }
+
+        void RegisterDot()
+        {
+            NucleatorCore.radiationDotIndex = DotAPI.RegisterDotDef(1, 1, DamageColorIndex.Poison, radiationBuffIndex);
+        }
+
+        void CreatePrimaryProjectile()
+        {
+            this.primaryProjectile = PrefabAPI.InstantiateClone(Resources.Load<GameObject>("prefabs/projectiles/DaggerProjectile"), "NucleatorProjectile");
+
+            UnityEngine.Object.Destroy(this.primaryProjectile.GetComponent<ProjectileSingleTargetImpact>());
+            UnityEngine.Object.Destroy(this.primaryProjectile.GetComponent<DelayedEvent>());
+            UnityEngine.Object.Destroy(this.primaryProjectile.GetComponent<AwakeEvent>());
+            UnityEngine.Object.Destroy(this.primaryProjectile.GetComponent<DaggerController>());
+            UnityEngine.Object.Destroy(this.primaryProjectile.GetComponent<DelayedEvent>());
+            UnityEngine.Object.Destroy(this.primaryProjectile.GetComponent<AwakeEvent>());
+            this.primaryProjectile.AddComponent<NucleatorProjectile>();
+
+            var impact = this.primaryProjectile.AddComponent<ProjectileImpactExplosion>();
             impact.blastAttackerFiltering = RoR2.AttackerFiltering.Default;
             impact.blastDamageCoefficient = 1f;
             impact.blastProcCoefficient = 1;
@@ -73,26 +112,21 @@ namespace Starstorm2.Cores
             impact.lifetimeAfterImpact = 0;
             impact.lifetimeRandomOffset = 0;
 
-            var targetFinder = this.proj.GetComponent<ProjectileDirectionalTargetFinder>();
+            var targetFinder = this.primaryProjectile.GetComponent<ProjectileDirectionalTargetFinder>();
             targetFinder.lookCone = 90;
-            targetFinder.lookRange = 40f;
+            targetFinder.lookRange = 45f;
             targetFinder.allowTargetLoss = true;
             targetFinder.enabled = false;
 
-            var targetTracker = this.proj.GetComponent<ProjectileSteerTowardTarget>();
+            var targetTracker = this.primaryProjectile.GetComponent<ProjectileSteerTowardTarget>();
             targetTracker.rotationSpeed = 45f;
             targetTracker.enabled = false;
 
-
-            foreach (var comp in proj.GetComponents<Component>())
-                Debug.Log(comp.ToString());
-            if (this.proj.HasComponent<ProjectileController>())
+            if (this.primaryProjectile.HasComponent<ProjectileController>())
             {
-                ProjectileCatalog.getAdditionalEntries += list => list.Add(this.proj);
+                ProjectileCatalog.getAdditionalEntries += list => list.Add(this.primaryProjectile);
             }
-
-            if (!proj) Debug.Log("What the fuck");
-    }
+        }
 
         void InitPrefab()
         {
@@ -124,28 +158,6 @@ namespace Starstorm2.Cores
             component.name = "Nucleator";
             component.subtitleNameToken = "Nucleator";
 
-            //NucleatorCore.defaultCrosshair = component.crosshairPrefab;
-
-            //var crosshairCharge = component.crosshairPrefab;
-            //var chargeIndicator = new HudElement();
-
-            //var texture = new Texture2D(2, 2, TextureFormat.ARGB32, false);
-            //texture.SetPixel(0, 0, Color.green);
-            //texture.SetPixel(1, 0, Color.green);
-            //texture.SetPixel(0, 1, Color.green);
-            //texture.SetPixel(1, 1, Color.green);
-            //
-            //texture.Apply();
-
-            //var image = chargeIndicator.AddComponent<Image>();
-            //image.sprite = Sprite.Create(texture, new Rect(0.0f, 0.0f, 64, 16), new Vector2(0.5f, 0.5f), 100.0f);
-            //image.type = Image.Type.Filled;
-            //image.fillMethod = Image.FillMethod.Horizontal;
-            //image.fillOrigin = 0;
-            //
-            //chargeIndicator.AddComponent<ChargeController>();
-            //NucleatorCore.chargeCrosshair = crosshairCharge;
-
 
             characterPrefab.GetComponent<CharacterBody>().preferredPodPrefab = Resources.Load<GameObject>("Prefabs/CharacterBodies/toolbotbody").GetComponent<CharacterBody>().preferredPodPrefab;
             LanguageAPI.Add("NUCLEATOR_DESCRIPTION"
@@ -169,6 +181,7 @@ namespace Starstorm2.Cores
             };
 
             SurvivorAPI.AddSurvivor(mySurvivorDef);
+            CreateUiChargeWidget(component.crosshairPrefab);
         }
 
         void BuffSetup()
@@ -180,6 +193,14 @@ namespace Starstorm2.Cores
                 buffColor = new Color(0, 130, 0),
                 canStack = false,
                 isDebuff = false
+            }));
+            NucleatorCore.radiationBuffIndex = BuffAPI.Add(new CustomBuff(new BuffDef()
+            {
+                name = "Radiation",
+                iconPath = "",
+                buffColor = new Color(0, 130, 0),
+                canStack = false,
+                isDebuff = true
             }));
         }
         void SkillSetup()

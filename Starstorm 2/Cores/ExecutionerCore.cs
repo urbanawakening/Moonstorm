@@ -133,7 +133,6 @@ The two privates sat in complete silence.
                     break;
                 default:
                     model = ExecutionerAssets.assets.LoadAsset<GameObject>("ExecutionerMeshMenu");
-                    if (!model) Debug.Log("WHAT THE FUCK SHIT");
                     break;
             }
 
