@@ -109,7 +109,7 @@ namespace EntityStates.Executioner
                     falloffModel = BulletAttack.FalloffModel.None,
                     maxDistance = range,
                     force = Commando.CommandoWeapon.FireBarrage.force,
-                    hitMask = LayerIndex.CommonMasks.bullet,
+                    //hitMask = LayerIndex.CommonMasks.bullet,
                     isCrit = isCrit,
                     owner = base.gameObject,
                     muzzleName = muzzleString,
@@ -117,11 +117,11 @@ namespace EntityStates.Executioner
                     procChainMask = default(ProcChainMask),
                     procCoefficient = procCoefficient,
                     radius = 0.5f,
-                    stopperMask = LayerIndex.world.collisionMask,
+                    //stopperMask = LayerIndex.world.collisionMask,
                     weapon = base.gameObject,
                     tracerEffectPrefab = Commando.CommandoWeapon.FireBarrage.tracerEffectPrefab,
-                    hitEffectPrefab = Commando.CommandoWeapon.FireBarrage.hitEffectPrefab,
-                    HitEffectNormal = ClayBruiser.Weapon.MinigunFire.bulletHitEffectNormal
+                    hitEffectPrefab = Commando.CommandoWeapon.FireBarrage.hitEffectPrefab
+                    //HitEffectNormal = ClayBruiser.Weapon.MinigunFire.bulletHitEffectNormal
                 };
                 bullet.Fire();
             }

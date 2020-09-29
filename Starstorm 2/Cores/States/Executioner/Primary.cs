@@ -5,7 +5,7 @@ namespace EntityStates.Executioner
 {
     public class ExecutionerPistol : BaseSkillState
     {
-        public static float damageCoefficient = 1.3f;
+        public static float damageCoefficient = 1.2f;
         public static float procCoefficient = 1f;
         public static float baseDuration = 0.25f;
         public static float recoil = 1f;
@@ -75,7 +75,7 @@ namespace EntityStates.Executioner
                         maxSpread = base.characterBody.spreadBloomAngle * 0.5f,
                         falloffModel = BulletAttack.FalloffModel.DefaultBullet,
                         force = Commando.CommandoWeapon.FirePistol.force,
-                        hitMask = LayerIndex.CommonMasks.bullet,
+                        //hitMask = LayerIndex.CommonMasks.bullet,
                         isCrit = isCrit,
                         owner = base.gameObject,
                         muzzleName = muzzleString,
@@ -83,11 +83,11 @@ namespace EntityStates.Executioner
                         procChainMask = default(ProcChainMask),
                         procCoefficient = procCoefficient,
                         radius = 0.2f,
-                        stopperMask = LayerIndex.world.collisionMask,
+                        //stopperMask = LayerIndex.world.collisionMask,
                         weapon = base.gameObject,
                         tracerEffectPrefab = Commando.CommandoWeapon.FirePistol.tracerEffectPrefab,
-                        hitEffectPrefab = Commando.CommandoWeapon.FirePistol.hitEffectPrefab,
-                        HitEffectNormal = ClayBruiser.Weapon.MinigunFire.bulletHitEffectNormal
+                        hitEffectPrefab = Commando.CommandoWeapon.FirePistol.hitEffectPrefab
+                        //HitEffectNormal = ClayBruiser.Weapon.MinigunFire.bulletHitEffectNormal
                     };
                     bullet.Fire();
                 }
