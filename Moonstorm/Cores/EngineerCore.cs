@@ -158,8 +158,10 @@ namespace Moonstorm.Cores
             newDef.activationState = new SerializableEntityStateType(typeof(PlaceFlameTurret));
             newDef.baseMaxStock = 4;
             newDef.skillName = "FUCKIL";
+            newDef.icon = AssetsCore.engiFlameTurrets;
             newDef.skillNameToken = "ENGI_SPECIAL_ALT2_NAME";
             newDef.skillDescriptionToken = "ENGI_SPECIAL_ALT2_DESCRIPTION";
+            newDef.icon = AssetsCore.engiFlameTurrets;
 
             var locator = engineerObject.GetComponent<SkillLocator>();
 
@@ -192,6 +194,7 @@ namespace Moonstorm.Cores
             newDef.skillNameToken = "ENGINEER_PRIMARY_ALT_NAME";
             //newDef.beginSkillCooldownOnSkillEnd = true;
             //newDef.baseRechargeInterval = .1f;
+            newDef.icon = AssetsCore.engiImpact;
             newDef.canceledFromSprinting = false;
             //newDef.noSprint = false;
             
