@@ -1,6 +1,7 @@
 ﻿using EntityStates;
 using EntityStates.Captain.Weapon;
 using RoR2;
+using RoR2.UI;
 using UnityEngine;
 
 namespace Starstorm2.Cores.States.Nucleator
@@ -32,7 +33,7 @@ namespace Starstorm2.Cores.States.Nucleator
             this.maxChargeTime = NucleatorSkillStateBase.baseMaxChargeTime / this.attackSpeedStat;
             this.playerHealth = this.characterBody.healthComponent.combinedHealth;
             this.playerHealthFinal = playerHealth - playerHealth * maxOverchargePlayerDamageDealt;
-
+            //this.characterBody.crosshairPrefab = NucleatorCore.chargeCrosshair;
             Transform modelTransform = base.GetModelTransform();
 
             if (modelTransform)
@@ -57,6 +58,8 @@ namespace Starstorm2.Cores.States.Nucleator
                 EntityState.Destroy(this.chargeupVfxGameObject);
                 this.chargeupVfxGameObject = null;
             }
+
+            //this.characterBody.crosshairPrefab = NucleatorCore.defaultCrosshair;
             base.OnExit();
         }
         public override void FixedUpdate()

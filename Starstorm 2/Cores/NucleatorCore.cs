@@ -9,9 +9,11 @@ using R2API.Utils;
 using RoR2;
 using RoR2.Projectile;
 using RoR2.Skills;
+using RoR2.UI;
 using Starstorm2.Cores.States.Nucleator;
 using UnityEngine;
 using UnityEngine.Networking;
+using UnityEngine.UI;
 
 namespace Starstorm2.Cores
 {
@@ -19,6 +21,9 @@ namespace Starstorm2.Cores
     {
         public static NucleatorCore instance;
         public static GameObject characterPrefab;
+        public static GameObject defaultCrosshair;
+        public static GameObject chargeCrosshair;
+
         public static BuffIndex radionuclideSurgeBuffIndex;
         public GameObject proj;
         public NucleatorCore() => Load();
@@ -118,6 +123,29 @@ namespace Starstorm2.Cores
             component.baseAttackSpeed = 1f;
             component.name = "Nucleator";
             component.subtitleNameToken = "Nucleator";
+
+            //NucleatorCore.defaultCrosshair = component.crosshairPrefab;
+
+            //var crosshairCharge = component.crosshairPrefab;
+            //var chargeIndicator = new HudElement();
+
+            //var texture = new Texture2D(2, 2, TextureFormat.ARGB32, false);
+            //texture.SetPixel(0, 0, Color.green);
+            //texture.SetPixel(1, 0, Color.green);
+            //texture.SetPixel(0, 1, Color.green);
+            //texture.SetPixel(1, 1, Color.green);
+            //
+            //texture.Apply();
+
+            //var image = chargeIndicator.AddComponent<Image>();
+            //image.sprite = Sprite.Create(texture, new Rect(0.0f, 0.0f, 64, 16), new Vector2(0.5f, 0.5f), 100.0f);
+            //image.type = Image.Type.Filled;
+            //image.fillMethod = Image.FillMethod.Horizontal;
+            //image.fillOrigin = 0;
+            //
+            //chargeIndicator.AddComponent<ChargeController>();
+            //NucleatorCore.chargeCrosshair = crosshairCharge;
+
 
             characterPrefab.GetComponent<CharacterBody>().preferredPodPrefab = Resources.Load<GameObject>("Prefabs/CharacterBodies/toolbotbody").GetComponent<CharacterBody>().preferredPodPrefab;
             LanguageAPI.Add("NUCLEATOR_DESCRIPTION"
