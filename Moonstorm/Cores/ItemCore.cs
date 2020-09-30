@@ -390,7 +390,7 @@ namespace Moonstorm.Cores
                 name = "GeigerCounter",
                 //nameToken = "ITEM_EXTENDEDENEMYBUFFDURATIOM_NAME",
                 //pickupIconPath = "@Cloudburst:Assets/Items/Lemdog/LemDog_TexIcon.png",
-                //pickupModelPath = "@Cloudburst:Assets/Items/Lemdog/MDLLemDog.prefab",
+                pickupModelPath = "@Moonstorm:Assets/Moonstorm/Items/GeigerCounter/MDLGeigerCounter.prefab",
                 //pickupToken = "ITEM_EXTENDEDENEMYBUFFDURATIOM_PICKUP",
                 tags = geigerCounterTags,
                 tier = ItemTier.Tier3,
