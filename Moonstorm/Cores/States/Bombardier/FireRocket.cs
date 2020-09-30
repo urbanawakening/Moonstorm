@@ -55,7 +55,8 @@ namespace Moonstorm.Cores.States.Bombardier
 
                 if (ShouldPopStickies() && base.isAuthority)
                 {
-                    gameObject.GetComponent<BombardierStickyBombManager>().PopStickiesAuthority();
+                    //do nothing lol
+                    //gameObject.GetComponent<BombardierStickyBombManager>().PopStickiesAuthority();
                 }
             }
         }

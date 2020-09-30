@@ -64,6 +64,17 @@ namespace Moonstorm.Cores.States.Bombardier
                     teamIndex = characterBody.teamComponent.teamIndex,
                 };
                 attack.Fire();
+                EffectManager.SpawnEffect(Resources.Load<GameObject>("prefabs/effects/impacteffects/BeetleGuardGroundSlam"), new EffectData
+                {
+                    origin = characterBody.footPosition,
+                    scale = 15,
+                }, true);
+                EffectManager.SpawnEffect(Resources.Load<GameObject>("prefabs/effects/impacteffects/BeetleQueenDeathImpact"), new EffectData
+                {
+                    origin = characterBody.footPosition,
+                    scale = 15 + boost,
+                }, true);
+                /*
                 EffectManager.SpawnEffect(Resources.Load<GameObject>("prefabs/effects/omnieffect/OmniExplosionVFX"), new EffectData
                 {
                     origin = transform.position,
@@ -106,7 +117,17 @@ namespace Moonstorm.Cores.States.Bombardier
                 teamIndex = characterBody.teamComponent.teamIndex,
             };
             attack.Fire();
-            EffectManager.SpawnEffect(Resources.Load<GameObject>("prefabs/effects/omnieffect/OmniExplosionVFX"), new EffectData
+            EffectManager.SpawnEffect(Resources.Load<GameObject>("prefabs/effects/impacteffects/BeetleGuardGroundSlam"), new EffectData
+            {
+                origin = transform.position,
+                scale = 15,
+            }, true);
+            EffectManager.SpawnEffect(Resources.Load<GameObject>("prefabs/effects/impacteffects/BeetleQueenDeathImpact"), new EffectData
+            {
+                origin = transform.position,
+                scale = 15 + boost,
+            }, true);
+            /*EffectManager.SpawnEffect(Resources.Load<GameObject>("prefabs/effects/omnieffect/OmniExplosionVFX"), new EffectData
             {
                 origin = transform.position,
                 scale = 15 + boost,

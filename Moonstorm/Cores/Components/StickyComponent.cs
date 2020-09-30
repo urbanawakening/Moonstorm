@@ -16,7 +16,7 @@ namespace Moonstorm.Cores.Components
             manager = controller.owner.GetComponent<BombardierStickyBombManager>();
             var networkComponent = gameObject.GetComponent<NetworkIdentity>();
 
-            if (networkComponent.hasAuthority)
+            if (Util.HasEffectiveAuthority(networkComponent))
             {
                 manager.AddBombAuthority(base.gameObject);
             }
@@ -40,7 +40,7 @@ namespace Moonstorm.Cores.Components
                     bonusForce = new Vector3(0, 0, 0),
                     crit = false,
                     damageColorIndex = DamageColorIndex.Default,
-                    damageType = DamageTypeCore.bombardierKnockback,
+                    damageType = DamageType.Generic,
                     falloffModel = BlastAttack.FalloffModel.None,
                     impactEffect = EffectIndex.Invalid,
                     inflictor = base.gameObject,

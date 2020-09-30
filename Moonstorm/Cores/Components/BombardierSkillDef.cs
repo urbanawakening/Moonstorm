@@ -35,6 +35,5 @@ namespace Moonstorm.Cores.Skills
 
             public CharacterMotor characterMotor;
         }
-
     }
 }

@@ -191,7 +191,7 @@ namespace Moonstorm.Cores
             LoadoutAPI.AddSkill(typeof(ThrowSticky));
             LoadoutAPI.AddSkill(typeof(ThrowStickySimple));
 
-            SkillDef secondarySkillDef = ScriptableObject.CreateInstance<SkillDef>();
+            SkillDef secondarySkillDef = ScriptableObject.CreateInstance<BombardierStickySkillDef>();
             secondarySkillDef.activationState = new EntityStates.SerializableEntityStateType(typeof(ThrowStickySimple));
             secondarySkillDef.activationStateMachineName = "Weapon";
             secondarySkillDef.skillName = "BOMBARDIER_SECONDARY_NAME";

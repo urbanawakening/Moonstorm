@@ -5,7 +5,7 @@ using UnityEngine.Networking;
 
 namespace Moonstorm.Cores.Components
 {
-    class BombardierStickyBombManager : NetworkBehaviour {
+    public class BombardierStickyBombManager : NetworkBehaviour {
         private List<GameObject> bombs;
         public void Awake()
         {

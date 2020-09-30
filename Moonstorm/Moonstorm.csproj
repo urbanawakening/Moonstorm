@@ -42,6 +42,7 @@
     <Compile Include="API\ComponentHelpers.cs" />
     <Compile Include="API\LogCore.cs" />
     <Compile Include="Achivements\GrabOrDie.cs" />
+    <Compile Include="Cores\Components\BombardierStickySkillDef.cs" />
     <Compile Include="Cores\ShitpostCore.cs" />
     <Compile Include="Cores\Components\SlamController.cs" />
     <Compile Include="Cores\States\Bombardier\ThrowStickySimple.cs" />
