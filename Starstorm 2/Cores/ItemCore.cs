@@ -1,5 +1,6 @@
 ﻿using R2API;
 using RoR2;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
@@ -24,7 +25,8 @@ namespace Starstorm2.Cores
         protected internal ItemIndex itemOnLevelUpIndex;
         protected internal ItemIndex damageOverTimeToLowHealthIndex;
         protected internal ItemIndex moneyOnHealIndex;
-        protected internal ItemIndex fireOnEquipmentUseIndex;
+        //protected internal ItemIndex fireOnEquipmentUseIndex;
+        protected internal ItemIndex poisonOnHitIndex;
 
         public void DropShipCall(Transform transform, int itemCount)
         {
@@ -168,23 +170,42 @@ namespace Starstorm2.Cores
                 tier = ItemTier.Tier1,
                 unlockableName = ""
             });
-            ItemTag[] fireOnEquipmentUseTags = new ItemTag[2]
+            //ItemTag[] fireOnEquipmentUseTags = new ItemTag[2]
+            //{
+            //        ItemTag.Damage,
+            //        ItemTag.AIBlacklist
+            //};
+            //RegisterItem(new ItemDef
+            //{
+            //    canRemove = true,
+            //    descriptionToken = "ITEM_FIREONEQUIPMENTUSE_DESC",
+            //    hidden = false,
+            //    loreToken = "",
+            //    name = "Sauce",
+            //    nameToken = "ITEM_FIREONEQUIPMENTUSE_NAME",
+            //    //pickupIconPath = "@Cloudburst:Assets/Items/Lemdog/LemDog_TexIcon.png",
+            //    pickupModelPath = "@Starstorm2:Assets/Starstorm 2/Items/DormantFungus/MDLDormantFungus.prefab",
+            //    pickupToken = "ITEM_FIREONEQUIPMENTUSE_PICKUP",
+            //    tags = fireOnEquipmentUseTags,
+            //    tier = ItemTier.Tier2,
+            //    unlockableName = ""
+            //});
+            ItemTag[] poisonOnHitTags = new ItemTag[1]
             {
-                    ItemTag.Damage,
-                    ItemTag.AIBlacklist
+                    ItemTag.Damage
             };
             RegisterItem(new ItemDef
             {
                 canRemove = true,
-                //descriptionToken = "ITEM_FIREONEQUIPMENTUSE_DESC",
+                descriptionToken = "ITEM_POISONONHIT_DESC",
                 hidden = false,
                 loreToken = "",
-                name = "Sauce",
-                //nameToken = "ITEM_FIREONEQUIPMENTUSE_NAME",
+                name = "StrangeCan",
+                nameToken = "ITEM_POISONONHIT_NAME",
                 //pickupIconPath = "@Cloudburst:Assets/Items/Lemdog/LemDog_TexIcon.png",
                 pickupModelPath = "@Starstorm2:Assets/Starstorm 2/Items/DormantFungus/MDLDormantFungus.prefab",
-                //pickupToken = "ITEM_FIREONEQUIPMENTUSE_PICKUP",
-                tags = fireOnEquipmentUseTags,
+                pickupToken = "ITEM_POISONONHIT_PICKUP",
+                tags = poisonOnHitTags,
                 tier = ItemTier.Tier2,
                 unlockableName = ""
             });
@@ -215,9 +236,13 @@ namespace Starstorm2.Cores
             LanguageAPI.Add("ITEM_ITEMONLEVELUP_DESC", "Gain an item on level up."); //by 2<style=cStack>(+1 per stack)</style> seconds.");
             LanguageAPI.Add("ITEM_ITEMONLEVELUP_PICKUP", "Gain an item on level up.");
 
-            LanguageAPI.Add("ITEM_FIREONEQUIPMENTUSE_NAME", "Hottest Sauce");
-            LanguageAPI.Add("ITEM_FIREONEQUIPMENTUSE_DESC", "Activating your equipment sets the surroundings on fire");
-            LanguageAPI.Add("ITEM_FIREONEQUIPMENTUSE_PICKUP", "Activating your equipment sets the surroundings on fire");
+            //LanguageAPI.Add("ITEM_FIREONEQUIPMENTUSE_NAME", "Hottest Sauce");
+            //LanguageAPI.Add("ITEM_FIREONEQUIPMENTUSE_DESC", "Activating your equipment sets the surroundings on fire");
+            //LanguageAPI.Add("ITEM_FIREONEQUIPMENTUSE_PICKUP", "Activating your equipment sets the surroundings on fire");
+
+            LanguageAPI.Add("ITEM_POISONONHIT_NAME", "Strange Can");
+            LanguageAPI.Add("ITEM_POISONONHIT_DESC", "Chance to intoxicate enemies, causing damage over time.");
+            LanguageAPI.Add("ITEM_POISONONHIT_PICKUP", "Chance to intoxicate enemies, causing damage over time.");
         }
 
         protected internal void RegisterItem(ItemDef itemDef)
@@ -261,8 +286,11 @@ namespace Starstorm2.Cores
                 case "ItemOnLevelUp":
                     itemOnLevelUpIndex = ItemAPI.Add(customItem);
                     break;
-                case "Sauce":
-                    fireOnEquipmentUseIndex = ItemAPI.Add(customItem);
+                //case "Sauce":
+                //    fireOnEquipmentUseIndex = ItemAPI.Add(customItem);
+                //    break;
+                case "StrangeCan":
+                    poisonOnHitIndex = ItemAPI.Add(customItem);
                     break;
                 default:
                     LogCore.LogF(itemDef.name + " is unregistered! Item will not spawn!");
@@ -277,6 +305,7 @@ namespace Starstorm2.Cores
             On.RoR2.CharacterBody.OnInventoryChanged += CharacterBody_OnInventoryChanged;
             On.RoR2.HealthComponent.TakeDamage += HealthComponent_TakeDamage;
             //On.RoR2.EquipmentSlot.PerformEquipmentAction += EquipmentSlot_PerformEquipmentAction;
+            On.RoR2.GlobalEventManager.OnHitEnemy += GlobalEventManager_OnHitEnemy;
         }
 
 
@@ -411,7 +440,7 @@ namespace Starstorm2.Cores
         //        var body = self.GetComponent<CharacterBody>().corePosition;
         //        var inventory = self.characterBody.inventory;
         //        int itemCount = inventory.GetItemCount(fireOnEquipmentUseIndex);
-        //        if (itemCount > 0)
+        //        if(itemCount > 0)
         //        {
         //            Collider[] colliders = Physics.OverlapSphere(body, 20f, LayerIndex.defaultLayer.mask);
         //            foreach (Collider col in colliders)
@@ -424,6 +453,24 @@ namespace Starstorm2.Cores
         //    }
         //    return orig(self, equipmentIndex);
         //}
+
+        public void GlobalEventManager_OnHitEnemy(On.RoR2.GlobalEventManager.orig_OnHitEnemy orig, GlobalEventManager self, DamageInfo damageInfo, GameObject victim)
+        {
+            if(self)
+            {
+                var master = damageInfo.attacker.GetComponent<CharacterMaster>();
+                var inventory = damageInfo.attacker.GetComponent<CharacterBody>().inventory;
+                int itemCount = inventory.GetItemCount(poisonOnHitIndex);
+                GameObject chad = damageInfo.attacker;
+                bool flag = (damageInfo.damageType & DamageType.PoisonOnHit) > DamageType.Generic;
+                if ((itemCount > 0 || flag) && (flag || Util.CheckRoll((8f + (5f * (float)itemCount)) * damageInfo.procCoefficient, master)))
+                {
+                    ProcChainMask procChainMask = damageInfo.procChainMask;
+                    procChainMask.AddProc(ProcType.BleedOnHit);
+                    DotController.InflictDot(victim, chad, DoTCore.instance.strangeCanPoison, 7f, 1f);
+                }
+            }
+        }
     }
     public class DormantFungusBehavior : CharacterBody.ItemBehavior
     {

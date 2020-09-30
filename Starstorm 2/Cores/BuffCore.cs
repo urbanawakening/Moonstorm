@@ -12,6 +12,7 @@ namespace Starstorm2.Cores
         protected internal BuffIndex lightBringerIndex;
         protected internal BuffIndex greaterBannerIndex;
         protected internal BuffIndex detritiveIndex;
+        protected internal BuffIndex strangeCanPoisonIndex;
 
         public BuffCore() => RegisterBuffs();
 
@@ -43,7 +44,7 @@ namespace Starstorm2.Cores
                 name = "Infested"
             });
 
-            RegisterBuff(new BuffDef()
+            RegisterBuff(new BuffDef
             {
                 buffIndex = BuffIndex.Count,
                 canStack = false,
@@ -51,6 +52,17 @@ namespace Starstorm2.Cores
                 iconPath = "Textures/BuffIcons/texBuffWarbannerIcon",
                 name = "GreaterWarbanner",
                 buffColor = new Color(0.8392157f, 0.7882353f, 0.22745098f)
+            });
+
+            RegisterBuff(new BuffDef
+            {
+                buffIndex = BuffIndex.Count,
+                canStack = false,
+                eliteIndex = EliteIndex.None,
+                iconPath = "Textures/BuffIcons/texBuffPowerIcon",
+                name = "StrangeCanPoison",
+                isDebuff = true,
+                buffColor = Color.green
             });
 
 
@@ -120,8 +132,10 @@ namespace Starstorm2.Cores
                 case "GreaterWarbanner":
                     greaterBannerIndex = BuffAPI.Add(customBuff);
                     break;
+                case "StrangeCanPoison":
+                    strangeCanPoisonIndex = BuffAPI.Add(customBuff);
+                    break;
                 default:
-                    //feel my haunted lust
                     LogCore.LogF(string.Format("{0} doesn't have a case!", buffDef));
                     break;
             }
