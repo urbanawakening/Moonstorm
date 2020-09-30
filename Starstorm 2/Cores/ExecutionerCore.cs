@@ -350,7 +350,7 @@ The two privates sat in complete silence.
             BuffDef fearDef = new BuffDef()
             {
                 buffColor = Color.white,
-                iconPath = "Textures/BuffIcons/texBuffCloakIcon",
+                iconPath = "@Executioner:Assets/Executioner/surprised-skull.png",
                 isDebuff = true,
                 name = "FearDebuff",
                 eliteIndex = EliteIndex.None,
@@ -733,9 +733,8 @@ The two privates sat in complete silence.
                 using (var strm = Assembly.GetExecutingAssembly().GetManifestResourceStream("Starstorm2.Assets.executionerassets"))
                 {
                     assets = AssetBundle.LoadFromStream(strm);
-                    //TODO: change me
-                    //AssetBundleResourcesProvider provider = new AssetBundleResourcesProvider("@ExecutionerMod", assets);
-                    //ResourcesAPI.AddProvider(provider);
+                    AssetBundleResourcesProvider provider = new AssetBundleResourcesProvider("@Executioner", assets);
+                    ResourcesAPI.AddProvider(provider);
                 }
             }
 

@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 2002058426
+CRC: 3032556520
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 5504015f005d3bf20e334d81e00d7271
+    Hash: 85f0c8dff69d3d8c91315afcf808245c
   TypeTreeHash:
     serializedVersion: 2
     Hash: f5b00c6616d47093309b517b40306553
@@ -59,6 +59,7 @@ Assets:
 - Assets/Executioner/Armature_WalkFWD.anim
 - Assets/Executioner/Armature_Specia1lUP.anim
 - Assets/Executioner/Gun.mesh
+- Assets/Executioner/surprised-skull.png
 - Assets/Executioner/Armature_Specia2Down.anim
 - Assets/Executioner/Armature_Charidle.anim
 - Assets/Executioner/Armature_WalkLFT.anim
