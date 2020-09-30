@@ -1,6 +1,7 @@
 ﻿using RoR2;
 using RoR2.Projectile;
 using UnityEngine;
+using UnityEngine.Networking;
 
 namespace Moonstorm.Cores.Components
 {
@@ -13,8 +14,13 @@ namespace Moonstorm.Cores.Components
         public void Start() {
             controller = base.gameObject.GetComponent<ProjectileController>();
             manager = controller.owner.GetComponent<BombardierStickyBombManager>();
+            var networkComponent = gameObject.GetComponent<NetworkIdentity>();
 
-            manager.AddBombAuthority(base.gameObject);
+            if (networkComponent.hasAuthority)
+            {
+                manager.AddBombAuthority(base.gameObject);
+            }
+            //manager.AddStickyProjectile(base.gameObject);
         }
 
         public void Pop() {
@@ -61,7 +67,7 @@ namespace Moonstorm.Cores.Components
                     if (cb.Equals(controller.owner.GetComponent<CharacterBody>())) {
                         //LogCore.LogI("hello");
                         var aim = cb.inputBank.GetAimRay();
-                        cb.characterMotor.ApplyForce(-(aim.direction * 1000), true, false);
+                        cb.characterMotor.ApplyForce(-(aim.direction * 1500), true, false);
                         //cb.rigidbody.AddExplosionForce(cb.characterMotor.mass * 60, transform.position, 15);
                         //characterMotor.ApplyForce(new Vector3(0, , 0), true, false);
                         //(hitPoint2.hitPosition - this.position).normalized;

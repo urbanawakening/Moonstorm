@@ -72,7 +72,9 @@ namespace Moonstorm.Cores.States.Bombardier
         {
             var aimRay = GetAimRay();
 
-            ProjectileManager.instance.FireProjectile(GetInfo(aimRay));
+            if (base.isAuthority) {
+                ProjectileManager.instance.FireProjectile(GetInfo(aimRay));
+            }
         }
 
         public virtual FireProjectileInfo GetInfo(Ray aimRay)

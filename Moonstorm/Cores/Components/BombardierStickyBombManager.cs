@@ -33,7 +33,12 @@ namespace Moonstorm.Cores.Components
             CmdPopStickiesInternal() ;
         }
         #endregion
-         
+
+        [Server]
+        public void AddStickyProjectile(GameObject sticky) {
+            bombs.Add(sticky);
+        }
+
         [Server]
         private void AddStickyInternal(GameObject sticky) {
             bombs.Add(sticky);
