@@ -1,0 +1,74 @@
+ManifestFileVersion: 0
+CRC: 3032556520
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 85f0c8dff69d3d8c91315afcf808245c
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: f5b00c6616d47093309b517b40306553
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 4
+  Script: {instanceID: 0}
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 23
+  Script: {instanceID: 0}
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 33
+  Script: {instanceID: 0}
+- Class: 43
+  Script: {instanceID: 0}
+- Class: 48
+  Script: {instanceID: 0}
+- Class: 74
+  Script: {instanceID: 0}
+- Class: 90
+  Script: {instanceID: 0}
+- Class: 91
+  Script: {instanceID: 0}
+- Class: 95
+  Script: {instanceID: 0}
+- Class: 136
+  Script: {instanceID: 0}
+- Class: 137
+  Script: {instanceID: 0}
+- Class: 213
+  Script: {instanceID: 0}
+Assets:
+- Assets/Executioner/ExecAnimator.controller
+- Assets/Executioner/Armature_Primary.anim
+- Assets/Executioner/Armature_Ascending.anim
+- Assets/Executioner/Armature_Jump.anim
+- Assets/Executioner/Armature_Idle.anim
+- Assets/Executioner/ExecutionerModelMenu.prefab
+- Assets/Executioner/exeportrait.png
+- Assets/Executioner/ExecAnimatorMenu.controller
+- Assets/Executioner/Armature_Hitstun.anim
+- Assets/Executioner/Armature_Specia3Impact.anim
+- Assets/Executioner/skill2icon.png
+- Assets/Executioner/Armature_Secondary.anim
+- Assets/Executioner/skill3icon.png
+- Assets/Executioner/ExecutionerModel.prefab
+- Assets/Executioner/Armature_Descending.anim
+- Assets/Executioner/Armature_CharSelect.anim
+- Assets/Executioner/Armature_WalkFWD.anim
+- Assets/Executioner/Armature_Specia1lUP.anim
+- Assets/Executioner/Gun.mesh
+- Assets/Executioner/surprised-skull.png
+- Assets/Executioner/Armature_Specia2Down.anim
+- Assets/Executioner/Armature_Charidle.anim
+- Assets/Executioner/Armature_WalkLFT.anim
+- Assets/Executioner/skill4icon.png
+- Assets/Executioner/Armature_WalkRHT.anim
+- Assets/Executioner/Armature_Specia2Swing.anim
+- Assets/Executioner/skill1icon.png
+- Assets/Executioner/Armature_WalkBWD.anim
+- Assets/Executioner/Armature_SprintFWD.anim
+- Assets/Executioner/Axe.mesh
+- Assets/Executioner/Armature_Utility.anim
+Dependencies: []

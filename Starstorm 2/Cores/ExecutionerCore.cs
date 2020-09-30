@@ -107,37 +107,22 @@ The two privates sat in complete silence.
         private void Setup()
         {
 #if NETWORKTEST
+            //This is so we can connect to ourselves.
+            //Instructions:
+            //Step One: Assuming this line is in your codebase, start two instances of RoR2 (do this through the .exe directly)
+            //Step Two: Host a game with one instance of RoR2.
+            //Step Three: On the instance that isn't hosting, open up the console (ctrl + alt + tilde) and enter the command "connect localhost:7777"
+            //DO NOT MAKE A MISTAKE SPELLING THE COMMAND OR YOU WILL HAVE TO RESTART THE CLIENT INSTANCE!!
+            //Step Four: Test whatever you were going to test.
             On.RoR2.Networking.GameNetworkManager.OnClientConnect += (self, user, t) => { };
 #endif
             ExecutionerAssets.PopulateAssets();
             CreatePrefab();
-            CreateDisplayPrefab();
             RegisterBuffs();
             RegisterProjectiles();
             RegisterStates();
             RegisterCharacter();
             RegisterHooks();
-        }
-
-        private static GameObject CreateModel(GameObject obj, int index)
-        {
-            UnityEngine.Object.Destroy(obj.transform.Find("ModelBase").gameObject);
-            UnityEngine.Object.Destroy(obj.transform.Find("CameraPivot").gameObject);
-            UnityEngine.Object.Destroy(obj.transform.Find("AimOrigin").gameObject);
-
-            GameObject model;
-            switch (index)
-            {
-                case 0:
-                    model = ExecutionerAssets.assets.LoadAsset<GameObject>("ExecutionerMesh");
-                    break;
-                default:
-                    model = ExecutionerAssets.assets.LoadAsset<GameObject>("ExecutionerMeshMenu");
-                    if (!model) Debug.Log("WHAT THE FUCK SHIT");
-                    break;
-            }
-
-            return model;
         }
 
         internal static void CreatePrefab()
@@ -149,7 +134,7 @@ The two privates sat in complete silence.
             UnityEngine.Object.Destroy(execPrefab.transform.Find("CameraPivot").gameObject);
             UnityEngine.Object.Destroy(execPrefab.transform.Find("AimOrigin").gameObject);
 
-            GameObject model = ExecutionerAssets.assets.LoadAsset<GameObject>("ExecutionerMesh");
+            GameObject model = ExecutionerAssets.assets.LoadAsset<GameObject>("ExecutionerModel");
 
             GameObject modelBase = new GameObject("ModelBase");
             modelBase.transform.parent = execPrefab.transform;
@@ -360,70 +345,12 @@ The two privates sat in complete silence.
             IonGunChargeComponent charges = execPrefab.AddComponent<IonGunChargeComponent>();
         }
 
-        //at this point i'm just blatantly copy/pasting enforcer code and wishing i had the energy to figure out how this can be done better
-        //IS THERE A BETTER WAY???
-        internal static void CreateDisplayPrefab()
-        {
-            execDisplay = PrefabAPI.InstantiateClone(Resources.Load<GameObject>("Prefabs/CharacterBodies/CommandoBody"), "ExecutionerDisplay");
-            execDisplay.AddComponent<NetworkIdentity>();
-
-            UnityEngine.Object.Destroy(execPrefab.transform.Find("ModelBase").gameObject);
-            UnityEngine.Object.Destroy(execPrefab.transform.Find("CameraPivot").gameObject);
-            UnityEngine.Object.Destroy(execPrefab.transform.Find("AimOrigin").gameObject);
-
-            GameObject model = ExecutionerAssets.assets.LoadAsset<GameObject>("ExecutionerMeshMenu");
-
-            GameObject modelBase = new GameObject("ModelBase");
-            modelBase.transform.parent = execDisplay.transform;
-            modelBase.transform.localPosition = new Vector3(0f, -0.81f, 0f);
-            modelBase.transform.localRotation = Quaternion.identity;
-            modelBase.transform.localScale = Vector3.one;
-
-            GameObject camPivot = new GameObject("CameraPivot");
-            camPivot.transform.parent = execDisplay.transform;
-            camPivot.transform.localPosition = new Vector3(0f, -0.81f, 0f);
-            camPivot.transform.rotation = Quaternion.identity;
-            camPivot.transform.localScale = Vector3.one;
-
-            GameObject aimOrigin = new GameObject("AimOrigin");
-            aimOrigin.transform.parent = execDisplay.transform;
-            aimOrigin.transform.localPosition = new Vector3(0f, 1.4f, 0f);
-            aimOrigin.transform.rotation = Quaternion.identity;
-            aimOrigin.transform.localScale = Vector3.one;
-
-            Transform transform = model.transform;
-            transform.parent = modelBase.transform;
-            transform.localPosition = Vector3.zero;
-            transform.localRotation = Quaternion.identity;
-
-            ModelLocator locator = execDisplay.GetComponent<ModelLocator>();
-            locator.modelTransform = transform;
-            locator.modelBaseTransform = modelBase.transform;
-
-            ChildLocator childLoc = model.GetComponent<ChildLocator>();
-
-            CharacterModel charModel = model.AddComponent<CharacterModel>();
-            charModel.body = null;
-            charModel.baseRendererInfos = new CharacterModel.RendererInfo[] {
-                new CharacterModel.RendererInfo
-                {
-                    defaultMaterial = model.GetComponentInChildren<SkinnedMeshRenderer>().material,
-                    renderer = model.GetComponentInChildren<SkinnedMeshRenderer>(),
-                    defaultShadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On,
-                    ignoreOverlays = false
-                }
-            };
-            charModel.autoPopulateLightInfos = true;
-            charModel.invisibilityCount = 0;
-            charModel.temporaryOverlays = new List<TemporaryOverlay>();
-        }
-
         private void RegisterBuffs()
         {
             BuffDef fearDef = new BuffDef()
             {
                 buffColor = Color.white,
-                iconPath = "Textures/BuffIcons/texBuffCloakIcon",
+                iconPath = "@Executioner:Assets/Executioner/surprised-skull.png",
                 isDebuff = true,
                 name = "FearDebuff",
                 eliteIndex = EliteIndex.None,
@@ -498,6 +425,7 @@ The two privates sat in complete silence.
 
         private void RegisterCharacter()
         {
+            execDisplay = ExecutionerAssets.assets.LoadAsset<GameObject>("ExecutionerModelMenu");
 
             LanguageAPI.Add("EXECUTIONER_NAME", charName);
             LanguageAPI.Add("EXECUTIONER_SUBTITLE", charSubt);
@@ -528,7 +456,7 @@ The two privates sat in complete silence.
 
         private void RegisterHooks()
         {
-            //On.RoR2.CharacterBody. += HandleFearDebuff;
+            //On.RoR2.CharacterBody.RecalculateStats += HandleFearDebuff;
 
             IL.EntityStates.AI.Walker.Combat.UpdateAI += (il) =>
             {
@@ -802,11 +730,10 @@ The two privates sat in complete silence.
         {
             if (assets == null)
             {
-                using (var strm = Assembly.GetExecutingAssembly().GetManifestResourceStream("Starstorm2.executionerassets"))
+                using (var strm = Assembly.GetExecutingAssembly().GetManifestResourceStream("Starstorm2.Assets.executionerassets"))
                 {
                     assets = AssetBundle.LoadFromStream(strm);
-                    //TODO: change me
-                    AssetBundleResourcesProvider provider = new AssetBundleResourcesProvider("@ExecutionerMod", assets);
+                    AssetBundleResourcesProvider provider = new AssetBundleResourcesProvider("@Executioner", assets);
                     ResourcesAPI.AddProvider(provider);
                 }
             }

@@ -17,7 +17,7 @@ namespace Starstorm2.Cores
             // populate ASSETS
             if (mainAssetBundle == null)
             {
-                using (var assetStream = Assembly.GetExecutingAssembly().GetManifestResourceStream("Starstorm2.assetstorm"))
+                using (var assetStream = Assembly.GetExecutingAssembly().GetManifestResourceStream("Starstorm2.Assets.assetstorm"))
                 {
                     mainAssetBundle = AssetBundle.LoadFromStream(assetStream);
                     provider = new AssetBundleResourcesProvider("@Starstorm2", mainAssetBundle);
