@@ -90,7 +90,7 @@ namespace Starstorm2.Cores
         {
             if (equipmentIndex == greaterWarbannerIndex)
             {
-                GameObject gameObject = Object.Instantiate<GameObject>(greaterWarbanner, self.characterBody.transform.position, Quaternion.identity);
+                GameObject gameObject = Object.Instantiate<GameObject>(greaterWarbanner, self.GetComponent<CharacterBody>().corePosition, Quaternion.identity);
                 gameObject.GetComponent<TeamFilter>().teamIndex = self.characterBody.teamComponent.teamIndex;
                 gameObject.GetComponent<BuffWard>().radius = 25;
                 NetworkServer.Spawn(gameObject);

@@ -52,7 +52,6 @@
     <Compile Include="Cores\BombardierCore.cs" />
     <Compile Include="Cores\Components\BombardierTracker.cs" />
     <Compile Include="Cores\Components\Class1.cs" />
-    <Compile Include="Cores\Components\Class2.cs" />
     <Compile Include="Cores\DamageTypeCore.cs" />
     <Compile Include="Cores\ProjectileCore.cs" />
     <Compile Include="Cores\CommonAssets.cs" />
