@@ -49,7 +49,7 @@ namespace Moonstorm.Achievements
 
         private void RoR2Application_onFixedUpdate()
         {
-            LogCore.LogI(TeamManager.naturalLevelCap);
+            //LogCore.LogI(TeamManager.naturalLevelCap);
             if (body && body.level == TeamManager.naturalLevelCap) {
                 base.Grant();
             }   

@@ -13,7 +13,7 @@ namespace Moonstorm.Cores.States.Bombardier
         public static GameObject effectPrefab = EntityStates.Commando.CommandoWeapon.FireRocket.effectPrefab;
 
         public static DamageType damageType = DamageType.Generic;
-        public static float damageCoeff = 3f;
+        public static float damageCoeff = 3.5f;
         public static float procCoeff = 1;
         public static float force = 5000;
         public static float baseDuration = 1f;

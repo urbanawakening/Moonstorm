@@ -1,6 +1,7 @@
 ﻿using EntityStates;
 using RoR2;
 using RoR2.Projectile;
+using System;
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -13,20 +14,22 @@ namespace Moonstorm.Cores.States.Bombardier
         private float duration;
         private bool hasLanded;
         private float y;
-        private float bY;
+        private bool isClient;
         public override void OnEnter()
         {
             base.OnEnter();
             y = 0;
-            bY = base.characterDirection.moveVector.y;
-
             this.duration = baseDuration / this.attackSpeedStat;
             base.StartAimMode(2f, false);
             if (base.isAuthority)
             {
                 Slam();
-                if (characterMotor) {
+                if (characterMotor && NetworkServer.active)
+                {
                     characterMotor.onHitGround += CharacterMotor_onHitGround;
+                }
+                else {
+                    isClient = true;
                 }
             }
         }
@@ -37,17 +40,20 @@ namespace Moonstorm.Cores.States.Bombardier
             {
                 hasLanded = true;
 
+                var boost = Mathf.Abs(y) / 210;
+                LogCore.LogI(boost);
+
                 BlastAttack attack = new BlastAttack()
                 {
                     attacker = base.gameObject,
                     attackerFiltering = AttackerFiltering.Default,
-                    baseDamage = (5f + (Mathf.Abs(y) / 2)) * base.damageStat,
+                    baseDamage = (6.3f + boost) * base.damageStat,
                     baseForce = -3000,
                     bonusForce = new Vector3(0, 0, 0),
                     crit = base.RollCrit(),
                     damageColorIndex = DamageColorIndex.Default,
-                    damageType = DamageTypeCore.bombardierKnockback,
-                    falloffModel = BlastAttack.FalloffModel.None,
+                    damageType = DamageType.Generic,
+                    falloffModel = BlastAttack.FalloffModel.Linear,
                     impactEffect = EffectIndex.Invalid,
                     inflictor = base.gameObject,
                     losType = BlastAttack.LoSType.NearestHit,
@@ -61,7 +67,7 @@ namespace Moonstorm.Cores.States.Bombardier
                 EffectManager.SpawnEffect(Resources.Load<GameObject>("prefabs/effects/omnieffect/OmniExplosionVFX"), new EffectData
                 {
                     origin = transform.position,
-                    scale = 15 + Mathf.Abs(y) / 2,
+                    scale = 15 + boost,
                 }, true);
                 /*LogCore.LogI(y);
                 LogCore.LogI(Mathf.Abs(y));
@@ -70,6 +76,44 @@ namespace Moonstorm.Cores.States.Bombardier
             else if (!NetworkServer.active) {
                 hasLanded = true;
             }
+        }
+        
+        public virtual void CLientSlam()
+        {
+            hasLanded = true;
+
+            var boost = Mathf.Abs(y) / 210;
+            LogCore.LogI(boost);
+
+            BlastAttack attack = new BlastAttack()
+            {
+                attacker = base.gameObject,
+                attackerFiltering = AttackerFiltering.Default,
+                baseDamage = (6.3f + boost) * base.damageStat,
+                baseForce = -3000,
+                bonusForce = new Vector3(0, 0, 0),
+                crit = base.RollCrit(),
+                damageColorIndex = DamageColorIndex.Default,
+                damageType = DamageType.Generic,
+                falloffModel = BlastAttack.FalloffModel.Linear,
+                impactEffect = EffectIndex.Invalid,
+                inflictor = base.gameObject,
+                losType = BlastAttack.LoSType.NearestHit,
+                position = base.transform.position,
+                procChainMask = default,
+                procCoefficient = 0.5f,
+                radius = 15 + Mathf.Abs(y) / 2,
+                teamIndex = characterBody.teamComponent.teamIndex,
+            };
+            attack.Fire();
+            EffectManager.SpawnEffect(Resources.Load<GameObject>("prefabs/effects/omnieffect/OmniExplosionVFX"), new EffectData
+            {
+                origin = transform.position,
+                scale = 15 + boost,
+            }, true);
+            /*LogCore.LogI(y);
+            LogCore.LogI(Mathf.Abs(y));
+            LogCore.LogI(Mathf.Abs(y) /2);*/
         }
 
         public virtual void Slam()
@@ -83,10 +127,15 @@ namespace Moonstorm.Cores.States.Bombardier
         public override void FixedUpdate()
         {
             base.FixedUpdate();
+            characterBody.AddSpreadBloom(10);
 
             if (!hasLanded) {
-                y += base.characterDirection.moveVector.y;
+                y += characterMotor.velocity.y;
                 //LogCore.LogI(y);
+            }
+
+            if (isClient && !hasLanded && isGrounded) {
+                CLientSlam();
             }
 
             if (base.fixedAge >= this.duration && base.isAuthority && this.hasLanded)
@@ -104,7 +153,10 @@ namespace Moonstorm.Cores.States.Bombardier
         public override void OnExit()
         {
             base.OnExit();
-            characterMotor.onHitGround -= CharacterMotor_onHitGround;
+            if (NetworkServer.active) {
+                characterMotor.onHitGround -= CharacterMotor_onHitGround;
+            }
+
         }
     }
 }

@@ -35,6 +35,7 @@ namespace Moonstorm.Cores
         public static Sprite engiImpact;
         public static Sprite engiFlameTurrets;
 
+        public static Material brickWall;
         public AssetsCore()
         {
             LogCore.LogI("Initializing Core: " + base.ToString());
@@ -66,6 +67,8 @@ namespace Moonstorm.Cores
 
             engiImpact = mainAssetBundle.LoadAsset<Sprite>("Assets/Moonstorm/Icons/Engineer/Impact_Grenades.png");
             engiFlameTurrets = mainAssetBundle.LoadAsset<Sprite>("Assets/Moonstorm/Icons/Engineer/TR75_Immolator_Turret_2.png");
+
+            brickWall = mainAssetBundle.LoadAsset<Material>("Assets/Moonstorm/Materials/brickwall.mat");
 
             //HAN-D
             winchIcon = HANDAssetBundle.LoadAsset<Sprite>("Assets/Import/HAND_ICONS/Winch.png");

@@ -29,7 +29,7 @@ namespace Moonstorm.Cores.Components
                 {
                     attacker = controller.owner,
                     attackerFiltering = AttackerFiltering.Default,
-                    baseDamage = 3f * controller.owner.GetComponent<CharacterBody>().damage,
+                    baseDamage = 4.5f * controller.owner.GetComponent<CharacterBody>().damage,
                     baseForce = 2000,
                     bonusForce = new Vector3(0, 0, 0),
                     crit = false,

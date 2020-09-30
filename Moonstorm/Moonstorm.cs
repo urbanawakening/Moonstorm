@@ -73,6 +73,7 @@ namespace Moonstorm
         private DoTCore dotCore;
         private EffectCore effectCore;
         private DebuggingCore debugCore;
+        //private ShitpostCore lolCore;
 
         //Content Cores; Can be disabled
         private ItemCore itemCore;
@@ -216,14 +217,12 @@ namespace Moonstorm
                     wipCore = new HuntressCore();
                 }
 
+                
                 //and thus
                 //we reach the end
                 qol = new QOLCore();
                 // ancientWisp = new AncientWispCore();
                 bombManCore = new BombardierCore();
-                // artifactCore = new ArtifactsCore();
-
-
 #if DEBUG
                 //unlock!
                 debugCore = new DebuggingCore();

@@ -20,6 +20,7 @@ namespace Moonstorm.Cores
         public BombardierCore() => CreateBombardier();
 
         protected internal GameObject body;
+        protected internal CharacterBody characterBody;
         protected internal SkillLocator skillLocator;
         protected void CreateBombardier() {
             instance = this;
@@ -64,15 +65,51 @@ namespace Moonstorm.Cores
             SurvivorAPI.AddSurvivor(def);
         }
 
+        private void SetCharacterBody()
+        {
+            //characterBody.baseAcceleration = 70f;
+            //characterBody.baseArmor = 20; //Base armor this character has, set to 20 if this character is melee 
+            characterBody.baseAttackSpeed = 1; //Base attack speed, usually 1
+            characterBody.baseCrit = 1;  //Base crit, usually one
+            characterBody.baseDamage = 12; //Base damage
+            characterBody.baseJumpCount = 1; //Base jump amount, set to 2 for a double jump. 
+            characterBody.baseJumpPower = 16; //Base jump power
+            characterBody.baseMaxHealth = 150; //Base health, basically the health you have when you start a new run
+            characterBody.baseMaxShield = 0; //Base shield, basically the same as baseMaxHealth but with shields
+            characterBody.baseMoveSpeed = 7; //Base move speed, this is usual 7
+            characterBody.baseNameToken = "BOMBARDIER_BODY_NAME"; //The base name token. 
+            characterBody.subtitleNameToken = "BOMBARDIER_BODY_SUBTITLE"; //Set this if its a boss
+            characterBody.baseRegen = 1.5f; //Base health regen.
+            characterBody.bodyFlags = (CharacterBody.BodyFlags.ImmuneToExecutes | CharacterBody.BodyFlags.IgnoreFallDamage); ///Base body flags, should be self explanatory 
+            characterBody.crosshairPrefab = characterBody.crosshairPrefab = Resources.Load<GameObject>("Prefabs/CharacterBodies/HuntressBody").GetComponent<CharacterBody>().crosshairPrefab; //The crosshair prefab.
+            characterBody.hideCrosshair = false; //Whether or not to hide the crosshair
+            characterBody.hullClassification = HullClassification.Human; //The hull classification, usually used for AI
+            characterBody.isChampion = false; //Set this to true if its A. A boss or B. A miniboss
+            characterBody.levelArmor = 0; //Armor gained when leveling up. 
+            characterBody.levelAttackSpeed = 0; //Attackspeed gained when leveling up. 
+            characterBody.levelCrit = 0; //Crit chance gained when leveling up. 
+            characterBody.levelDamage = 2.4f; //Damage gained when leveling up. 
+            characterBody.levelArmor = 0; //Armor gained when leveling up. 
+            characterBody.levelJumpPower = 0; //Jump power gained when leveling up. 
+            characterBody.levelMaxHealth = 42; //Health gained when leveling up. 
+            characterBody.levelMaxShield = 0; //Shield gained when leveling up. 
+            characterBody.levelMoveSpeed = 0; //Move speed gained when leveling up. 
+            characterBody.levelRegen = 0.5f; //Regen gained when leveling up. 
+            //fuck you moffein no credit
+            //eat my ass    
+            //characterBody.portraitIcon = AssetsCore.portraitIcon; //The portrait icon, shows up in multiplayer and the death UI
+            //characterBody.preferredPodPrefab = Resources.Load<GameObject>("prefabs/networkedobjects/robocratepod");
+        }
+
         private void CreateSkills()
         {
             API.CreateEmptySkills(body);
             skillLocator = body.GetComponent<SkillLocator>();
 
-            var cbody = body.GetComponent<CharacterBody>();
+            characterBody = body.GetComponent<CharacterBody>();
 
-            cbody.crosshairPrefab = Resources.Load<GameObject>("prefabs/crosshair/StraightBracketCrosshair");
-            cbody.bodyFlags |= CharacterBody.BodyFlags.IgnoreFallDamage;
+            characterBody.crosshairPrefab = Resources.Load<GameObject>("prefabs/crosshair/TiltedBracketCrosshair");
+            characterBody.bodyFlags |= CharacterBody.BodyFlags.IgnoreFallDamage;
 
             body.AddComponent<BombardierStickyBombManager>();
 
@@ -102,8 +139,8 @@ namespace Moonstorm.Cores
         }
 
         private void SetComponents() {
-            var tracker = body.AddComponent<BombardierTracker>();
-            tracker.maxTrackingDistance = 150;
+            //var tracker = body.AddComponent<BombardierTracker>();
+            //tracker.maxTrackingDistance = 150;
         }
 
         private void CreatePrimary()
@@ -134,7 +171,7 @@ namespace Moonstorm.Cores
             primarySkillDef.icon = null;
             primarySkillDef.keywordTokens = Array.Empty<String>();
 
-            LanguageAPI.Add(primarySkillDef.skillDescriptionToken, "Fire a rocket that does <style=cIsDamage>300%</style> damage and <style=cIsDamage>explodes on contact</style>.");
+            LanguageAPI.Add(primarySkillDef.skillDescriptionToken, "Fire a rocket that does <style=cIsDamage>350%</style> damage and <style=cIsDamage>explodes on contact</style>.");
             LanguageAPI.Add(primarySkillDef.skillNameToken, "Rocket Blast");
 
             LoadoutAPI.AddSkillDef(primarySkillDef);
@@ -201,7 +238,7 @@ namespace Moonstorm.Cores
                  "KEYWORD_STUNNING",
              };*/
 
-            LanguageAPI.Add(secondarySkillDef.skillDescriptionToken, "Toss a sticky bomb that deals <style=cIsDamage>380% damage</style>. <style=cIsDamage>Detonate all stickies</style> <style=cIsUtility>by using Rocket Blast.</style>");
+            LanguageAPI.Add(secondarySkillDef.skillDescriptionToken, "Toss a sticky bomb that deals <style=cIsDamage>450% damage</style>. <style=cIsDamage>Detonate all stickies</style> <style=cIsUtility>by using Rocket Blast.</style>");
             LanguageAPI.Add(secondarySkillDef.skillNameToken, "Sticky Charge");
 
             LoadoutAPI.AddSkillDef(secondarySkillDef);
@@ -250,7 +287,7 @@ namespace Moonstorm.Cores
             //LanguageAPI.Add(utilitySkillDef.skillDescriptionToken, "<style=cIsDamage>Forceful</style>. Pull enemies towards you for <style=cIsDamage>500%</style> damage and <style=cIsUtility>boost yourself upwards</style>.");
             //LanguageAPI.Add(utilitySkillDef.skillNameToken, "Plan B");
 
-            LanguageAPI.Add(utilitySkillDef.skillDescriptionToken, "<style=cIsDamage>Stunning</style>. Fire a stunning rocket that does <style=cIsDamage>400%</style> damage and <style=cIsDamage>explodes in a large radius on contact</style>.");
+            LanguageAPI.Add(utilitySkillDef.skillDescriptionToken, "<style=cIsDamage>Stunning</style>. <style=cIsDamage>Forceful</style>. Fire a powerful rocket that does <style=cIsDamage>500%</style> damage and <style=cIsDamage>explodes in a large radius on contact</style>.");
             LanguageAPI.Add(utilitySkillDef.skillNameToken, "Concussive Payload");
 
             LoadoutAPI.AddSkillDef(utilitySkillDef);
@@ -291,7 +328,7 @@ namespace Moonstorm.Cores
             specialSkillDef.skillNameToken = "BOMBARDIER_SPECIAL_NAME";
             specialSkillDef.icon = null;
 
-            LanguageAPI.Add(specialSkillDef.skillDescriptionToken, "<style=cIsDamage>Heavy</style>. Fire a rocket above you and slam downwards, dealing <style=cIsDamage>250%</style> damage on contact.");
+            LanguageAPI.Add(specialSkillDef.skillDescriptionToken, "<style=cIsDamage>Heavy</style>. Slam downwards, dealing <style=cIsDamage>630%</style> damage on contact.");
             LanguageAPI.Add(specialSkillDef.skillNameToken, "Grand Slam");
 
             LoadoutAPI.AddSkillDef(specialSkillDef);
