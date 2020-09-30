@@ -238,6 +238,6 @@
   <PropertyGroup>
     <PostBuildEvent>if "$(Username)" == "Flan" copy /Y "$(TargetPath)" "F:\SteamLibrary\steamapps\common\Risk of Rain 2\BepInEx\plugins"
 if "$(Username)" == "kurog" copy /Y "$(TargetPath)" "E:\Steam\steamapps\common\Risk of Rain 2\BepInEx\plugins\"
-if "$(Username)" == "User2" copy /Y "$(TargetPath)" "{RoR2Path}"</PostBuildEvent>
+if "$(Username)" == "pmble" copy /Y "$(TargetPath)" "D:\Steam\steamapps\common\Risk of Rain 2\BepInEx\plugins"</PostBuildEvent>
   </PropertyGroup>
 </Project>
