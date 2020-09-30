@@ -171,7 +171,7 @@ namespace Moonstorm.Cores
                 name = "CloakOnInteraction",
                 nameToken = "ITEM_CLOAKBUFFONINTERACTION_NAME",
                 //pickupIconPath = pickUpIconPath,
-                //pickupModelPath = pickUpModelPath,
+                pickupModelPath = "@Moonstorm:Assets/Moonstorm/Items/Cloak/MDLCloak.prefab",
                 pickupToken = "ITEM_CLOAKBUFFONINTERACTION_PICKUP",
                 tags = cloakOnInteractionTags,
                 tier = ItemTier.Tier2,
@@ -331,7 +331,7 @@ namespace Moonstorm.Cores
                 name = "ExtendedEnemyBuffDuration",
                 nameToken = "ITEM_EXTENDEDENEMYBUFFDURATIOM_NAME",
                 //pickupIconPath = "@Cloudburst:Assets/Items/Lemdog/LemDog_TexIcon.png",
-                ////pickupModelPath = "@Cloudburst:Assets/Items/Lemdog/MDLLemDog.prefab",
+                pickupModelPath = "@Moonstorm:Assets/Moonstorm/Items/Earrings/MDLEarrings.prefab",
                 pickupToken = "ITEM_EXTENDEDENEMYBUFFDURATIOM_PICKUP",
                 tags = extendEnemyBuffDurationTags,
                 tier = ItemTier.Tier2,
@@ -430,7 +430,7 @@ namespace Moonstorm.Cores
                 name = "Chip",
                 //nameToken = "ITEM_EXTENDEDENEMYBUFFDURATIOM_NAME",
                 //pickupIconPath = "@Cloudburst:Assets/Items/Lemdog/LemDog_TexIcon.png",
-                //pickupModelPath = "@Cloudburst:Assets/Items/Lemdog/MDLLemDog.prefab",
+                pickupModelPath = "@Moonstorm:Assets/Moonstorm/Items/MortarChip/MDLMortarChip.prefab",
                 //pickupToken = "ITEM_EXTENDEDENEMYBUFFDURATIOM_PICKUP",
                 tags = chipTags,
                 tier = ItemTier.Tier3,
@@ -1150,5 +1150,4 @@ namespace Moonstorm.Cores
             }
         }
     }
-
 }
