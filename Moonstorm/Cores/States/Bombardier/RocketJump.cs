@@ -53,7 +53,7 @@ namespace Moonstorm.Cores.States.Bombardier
 
         public override Vector3 GetKnockback(Ray aimRay)
         {
-            return aimRay.direction * (-characterMotor.mass * 45);
+            return aimRay.direction * (-characterMotor.mass * 30);
         }
 
         public override bool ShouldHaveKnockback()

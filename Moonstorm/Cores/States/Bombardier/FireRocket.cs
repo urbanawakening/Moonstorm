@@ -4,6 +4,7 @@ using Moonstorm.Cores.Components;
 using RoR2;
 using RoR2.Projectile;
 using UnityEngine;
+using UnityEngine.Networking;
 
 namespace Moonstorm.Cores.States.Bombardier
 {
@@ -53,10 +54,7 @@ namespace Moonstorm.Cores.States.Bombardier
                     characterBody.AddSpreadBloom(GetBloom());
                 }
 
-                if (ShouldPopStickies() && base.isAuthority)
-                {
-                    //do nothing lol
-                    //gameObject.GetComponent<BombardierStickyBombManager>().PopStickiesAuthority();
+                if (ShouldPopStickies() && base.isAuthority) {
                 }
             }
         }
