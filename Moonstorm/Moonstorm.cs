@@ -17,6 +17,7 @@ namespace Moonstorm
     [R2APISubmoduleDependency(new string[]
     {
         "ItemAPI",
+        "SurvivorAPI",
         "ResourcesAPI",
         "PrefabAPI",
         "LanguageAPI",

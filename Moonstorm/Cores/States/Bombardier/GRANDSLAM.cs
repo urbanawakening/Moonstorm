@@ -7,11 +7,7 @@ using UnityEngine.Networking;
 
 namespace Moonstorm.Cores.States.Bombardier
 {
-    class GrandSlam : BaseSkillState
-    {
-
-        public static float baseDuration = 2f;
-        private float duration;
+    class GrandSlam : BaseSkillState {
         private bool hasLanded;
         private float y;
         private bool isClient;
@@ -19,7 +15,6 @@ namespace Moonstorm.Cores.States.Bombardier
         {
             base.OnEnter();
             y = 0;
-            this.duration = baseDuration / this.attackSpeedStat;
             base.StartAimMode(2f, false);
             if (base.isAuthority)
             {
@@ -60,7 +55,7 @@ namespace Moonstorm.Cores.States.Bombardier
                     position = base.transform.position,
                     procChainMask = default,
                     procCoefficient = 0.5f,
-                    radius = 15 + Mathf.Abs(y) / 2,
+                    radius = 15 + boost,
                     teamIndex = characterBody.teamComponent.teamIndex,
                 };
                 attack.Fire();
@@ -159,7 +154,7 @@ namespace Moonstorm.Cores.States.Bombardier
                 CLientSlam();
             }
 
-            if (base.fixedAge >= this.duration && base.isAuthority && this.hasLanded)
+            if (base.isAuthority && this.hasLanded)
             {
                 this.outer.SetNextStateToMain();
                 return;

@@ -63,6 +63,7 @@ namespace Moonstorm.Cores
                 unlockableName = ""
             };
             SurvivorAPI.AddSurvivor(def);
+            
         }
 
         private void SetCharacterBody()
@@ -71,17 +72,17 @@ namespace Moonstorm.Cores
             //characterBody.baseArmor = 20; //Base armor this character has, set to 20 if this character is melee 
             characterBody.baseAttackSpeed = 1; //Base attack speed, usually 1
             characterBody.baseCrit = 1;  //Base crit, usually one
-            characterBody.baseDamage = 12; //Base damage
+            characterBody.baseDamage = 14; //Base damage
             characterBody.baseJumpCount = 1; //Base jump amount, set to 2 for a double jump. 
             characterBody.baseJumpPower = 16; //Base jump power
-            characterBody.baseMaxHealth = 150; //Base health, basically the health you have when you start a new run
+            characterBody.baseMaxHealth = 160; //Base health, basically the health you have when you start a new run
             characterBody.baseMaxShield = 0; //Base shield, basically the same as baseMaxHealth but with shields
             characterBody.baseMoveSpeed = 7; //Base move speed, this is usual 7
             characterBody.baseNameToken = "BOMBARDIER_BODY_NAME"; //The base name token. 
             characterBody.subtitleNameToken = "BOMBARDIER_BODY_SUBTITLE"; //Set this if its a boss
-            characterBody.baseRegen = 1.5f; //Base health regen.
+            characterBody.baseRegen = 1f; //Base health regen.
             characterBody.bodyFlags = (CharacterBody.BodyFlags.ImmuneToExecutes | CharacterBody.BodyFlags.IgnoreFallDamage); ///Base body flags, should be self explanatory 
-            characterBody.crosshairPrefab = characterBody.crosshairPrefab = Resources.Load<GameObject>("Prefabs/CharacterBodies/HuntressBody").GetComponent<CharacterBody>().crosshairPrefab; //The crosshair prefab.
+            characterBody.crosshairPrefab = Resources.Load<GameObject>("prefabs/crosshair/TiltedBracketCrosshair"); ; //The crosshair prefab.
             characterBody.hideCrosshair = false; //Whether or not to hide the crosshair
             characterBody.hullClassification = HullClassification.Human; //The hull classification, usually used for AI
             characterBody.isChampion = false; //Set this to true if its A. A boss or B. A miniboss
@@ -94,7 +95,7 @@ namespace Moonstorm.Cores
             characterBody.levelMaxHealth = 42; //Health gained when leveling up. 
             characterBody.levelMaxShield = 0; //Shield gained when leveling up. 
             characterBody.levelMoveSpeed = 0; //Move speed gained when leveling up. 
-            characterBody.levelRegen = 0.5f; //Regen gained when leveling up. 
+            characterBody.levelRegen = 0.2f; //Regen gained when leveling up. 
             //fuck you moffein no credit
             //eat my ass    
             //characterBody.portraitIcon = AssetsCore.portraitIcon; //The portrait icon, shows up in multiplayer and the death UI
@@ -104,12 +105,11 @@ namespace Moonstorm.Cores
         private void CreateSkills()
         {
             API.CreateEmptySkills(body);
-            skillLocator = body.GetComponent<SkillLocator>();
 
+            skillLocator = body.GetComponent<SkillLocator>();
             characterBody = body.GetComponent<CharacterBody>();
 
-            characterBody.crosshairPrefab = Resources.Load<GameObject>("prefabs/crosshair/TiltedBracketCrosshair");
-            characterBody.bodyFlags |= CharacterBody.BodyFlags.IgnoreFallDamage;
+            SetCharacterBody();
 
             body.AddComponent<BombardierStickyBombManager>();
 
@@ -171,7 +171,7 @@ namespace Moonstorm.Cores
             primarySkillDef.icon = null;
             primarySkillDef.keywordTokens = Array.Empty<String>();
 
-            LanguageAPI.Add(primarySkillDef.skillDescriptionToken, "Fire a rocket that does <style=cIsDamage>350%</style> damage and <style=cIsDamage>explodes on contact</style>.");
+            LanguageAPI.Add(primarySkillDef.skillDescriptionToken, "Fire a rocket that does <style=cIsDamage>385</style> damage and <style=cIsDamage>explodes on contact</style>.");
             LanguageAPI.Add(primarySkillDef.skillNameToken, "Rocket Blast");
 
             LoadoutAPI.AddSkillDef(primarySkillDef);
@@ -262,7 +262,7 @@ namespace Moonstorm.Cores
             utilitySkillDef.activationState = new SerializableEntityStateType(typeof(RocketJump));
             utilitySkillDef.activationStateMachineName = "Weapon";
             utilitySkillDef.baseMaxStock = 1;
-            utilitySkillDef.baseRechargeInterval = 5f;
+            utilitySkillDef.baseRechargeInterval = 4f;
             utilitySkillDef.beginSkillCooldownOnSkillEnd = true;
             utilitySkillDef.canceledFromSprinting = false;
             utilitySkillDef.fullRestockOnAssign = false;
@@ -309,7 +309,7 @@ namespace Moonstorm.Cores
             specialSkillDef.activationState = new SerializableEntityStateType(typeof(GrandSlam));
             specialSkillDef.activationStateMachineName = "Weapon";
             specialSkillDef.baseMaxStock = 1;
-            specialSkillDef.baseRechargeInterval = 8;
+            specialSkillDef.baseRechargeInterval = 6;
             specialSkillDef.beginSkillCooldownOnSkillEnd = true;
             specialSkillDef.canceledFromSprinting = false;
             specialSkillDef.fullRestockOnAssign = true;
