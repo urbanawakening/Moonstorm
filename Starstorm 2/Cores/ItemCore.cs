@@ -551,6 +551,13 @@ namespace Starstorm2.Cores
         //YOUUUUU
         private float timer;
         private bool fatalLogged;
+
+        private Starstorm2ItemManager manager;
+        public void Awake()
+        {
+            manager = GetComponent<Starstorm2ItemManager>();
+        }
+
         public void FixedUpdate()
         {
             timer += Time.deltaTime;
@@ -558,7 +565,8 @@ namespace Starstorm2.Cores
             {
                 if (body.teamComponent)
                 {
-                    TeamManager.instance.GiveTeamExperience(body.teamComponent.teamIndex, (ulong)(1 * stack));
+                    manager.AddExperienceAuthority((uint)(1 * stack));
+
                 }
                 else
                 {
