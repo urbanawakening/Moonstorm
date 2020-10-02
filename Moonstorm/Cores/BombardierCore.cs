@@ -49,7 +49,7 @@ namespace Moonstorm.Cores
 
             LanguageAPI.Add("BOMBARDIER_BASENAMETOKEN", "Bombardier");
             LanguageAPI.Add("BOMBARDIER_DESCRIPTION", desc);
-            LanguageAPI.Add("BOMBARDIER_FLAVORTOKEN", "And so he left, lighting the fuse for a new adventure...");
+            LanguageAPI.Add("BOMBARDIER_FLAVORTOKEN", "...and so he left, lighting the fuse for a new adventure.");
 
             SurvivorDef def = new SurvivorDef() {
                 bodyPrefab = body,
