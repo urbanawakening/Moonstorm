@@ -3,10 +3,45 @@ using UnityEngine.Networking;
 
 namespace Starstorm2.Cores
 {
-    class Starstorm2ItemManager : NetworkBehaviour
+    public class Starstorm2ItemManager : NetworkBehaviour
     {
-        public void AddExperienceAuthority(uint experience) {
-            if (NetworkServer.active) {
+        public HealthComponent health;
+
+        public void Awake() {
+            gameObject.GetComponent<HealthComponent>();
+        }
+
+        #region Dungus
+        public void HealFractionAuthority(float frac)
+        {
+            if (NetworkServer.active)
+            {
+                HealFractionInternal(frac);
+                return;
+            }
+            CmdHealFractionInternal(frac);
+        }
+
+        [Server]
+        private void HealFractionInternal(float frac) {
+            if (!health) {
+                health = gameObject.GetComponent<HealthComponent>();
+                LogCore.LogE(gameObject.name + "'s health component was null!");
+            }
+            health.HealFraction(frac, default);
+        }
+
+        [Command]
+        private void CmdHealFractionInternal(float frac)
+        {
+            HealFractionInternal(frac);
+        }
+        #endregion
+        #region Diary
+        public void AddExperienceAuthority(uint experience)
+        {
+            if (NetworkServer.active)
+            {
                 AddExperienceInternal(experience);
                 return;
             }
@@ -14,13 +49,16 @@ namespace Starstorm2.Cores
         }
 
         [Server]
-        private void AddExperienceInternal(uint experience) {
+        private void AddExperienceInternal(uint experience)
+        {
             TeamManager.instance.GiveTeamExperience(TeamIndex.Player, experience);
         }
 
         [Command]
-        private void CmdAddExperienceInternal(uint experience) {
+        private void CmdAddExperienceInternal(uint experience)
+        {
             AddExperienceInternal(experience);
         }
+        #endregion
     }
 }

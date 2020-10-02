@@ -1,5 +1,5 @@
 ﻿//XXX REMOVE FOR PUBLIC BUILDS
-#define NETWORKTEST
+//#define NETWORKTEST
 
 using System;
 using System.Collections.Generic;

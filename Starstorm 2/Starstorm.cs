@@ -73,8 +73,9 @@ namespace Starstorm2
         ItemCore itemCore;
         EquipmentCore equipmentCore;
         DoTCore dotCore;
+        DamageTypeCore damageType;
 
-        NucleatorCore nucleatorCore;
+        //NucleatorCore nucleatorCore;
         CyborgCore cyborgCore;
         ExecutionerCore executionerCore;
 
@@ -111,6 +112,7 @@ namespace Starstorm2
                 assetsCore = new AssetsCore();
                 buffCore = new BuffCore();
                 dotCore = new DoTCore();
+                damageType = new DamageTypeCore();
 
                 if (EnableExecutioner.Value) {
                    //executionerCore = new ExecutionerCore();
@@ -119,7 +121,7 @@ namespace Starstorm2
                     cyborgCore = new CyborgCore();
                 }
                 if (EnableNucleator.Value) {
-                    nucleatorCore = new NucleatorCore();
+                    //nucleatorCore = new NucleatorCore();
                 }
 
                 if (EnableItems.Value)

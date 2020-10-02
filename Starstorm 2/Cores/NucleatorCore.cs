@@ -1,4 +1,4 @@
-﻿using System;
+﻿/*using System;
 using System.Collections.Generic;
 using BepInEx;
 using EntityStates;
@@ -307,4 +307,4 @@ The bullet's damage increases the farther the it travels. ");
             };
         }
     }
-}
+}*/
