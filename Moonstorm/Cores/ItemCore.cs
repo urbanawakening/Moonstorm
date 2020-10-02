@@ -153,7 +153,7 @@ namespace Moonstorm.Cores
                 pickupModelPath = "@Moonstorm:Assets/Moonstorm/Items/FabinhoruDagger/MDLDagger.prefab",
                 pickupToken = "ITEM_CRIPPLEONHIT_PICKUP",
                 tags = crippleOnHitTags,
-                tier = ItemTier.Tier1,
+                tier = ItemTier.Tier2,
                 unlockableName = ""
             });
             ItemTag[] cloakOnInteractionTags = new ItemTag[2]
@@ -519,7 +519,7 @@ namespace Moonstorm.Cores
             LanguageAPI.Add("ITEM_EXTENDEDENEMYBUFFDURATIOM_PICKUP", "Extend positive buff duration.");
 
             LanguageAPI.Add("ITEM_FREEZEENEMIESONHIT_NAME", "Relegdon's Veil");
-            LanguageAPI.Add("ITEM_FREEZEENEMIESONHIT_DESC", "10% chance to <style=cIsUtility>freeze</style> enemies for 3 seconds <style=cStack>(+1 per stack)</style> seconds.");
+            LanguageAPI.Add("ITEM_FREEZEENEMIESONHIT_DESC", "5% chance to <style=cIsUtility>freeze</style> enemies for 3 seconds <style=cStack>(+1 per stack)</style> seconds.");
             LanguageAPI.Add("ITEM_FREEZEENEMIESONHIT_PICKUP", "Chance to freeze enemies on hit.");
 
             LanguageAPI.Add("ITEM_GEIGERCOUNTER_NAME", "Geiger Counter");
@@ -936,12 +936,12 @@ namespace Moonstorm.Cores
                     victimBody.AddTimedBuff(BuffIndex.Cripple, 3);
                 }
 
-                if (freezeCount > 0 && Util.CheckRoll(10, attackerMaster) && victimBody)
+                if (freezeCount > 0 && Util.CheckRoll(5, attackerMaster) && victimBody && !victimBody.isBoss)
                 {
                     var setStateOnHurt = victimBody.GetComponent<SetStateOnHurt>();
                     if (setStateOnHurt)
                     {
-                        setStateOnHurt.SetFrozen(2 + freezeCount);
+                        setStateOnHurt.SetFrozen(5 + freezeCount);
                     }
                 }
 
