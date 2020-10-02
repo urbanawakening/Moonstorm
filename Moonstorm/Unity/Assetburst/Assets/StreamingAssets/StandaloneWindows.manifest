@@ -1,0 +1,7 @@
+ManifestFileVersion: 0
+CRC: 695224026
+AssetBundleManifest:
+  AssetBundleInfos:
+    Info_0:
+      Name: cloudburst
+      Dependencies: {}
