@@ -533,13 +533,37 @@ namespace Starstorm2.Cores
         {
             if(self)
             {
-                var inventory = self.characterBody.inventory;
-                if (inventory)
+                var body = self.characterBody;
+                if (body)
                 {
-                    int itemCount = inventory.GetItemCount(fireOnEquipmentUseIndex);
-                    if (itemCount > 0)
+                    var inventory = body.inventory;
+                    if (inventory)
                     {
-                        var body = self.GetComponent<CharacterBody>().corePosition;
+                        int itemCount = inventory.GetItemCount(fireOnEquipmentUseIndex);
+                        if (itemCount > 0)
+                        {
+                            new BlastAttack()
+                            {
+                                attacker = self.gameObject,
+                                attackerFiltering = AttackerFiltering.Default,
+                                baseDamage = 0,
+                                baseForce = 100,
+                                //bonusForce = 0,
+                                crit = false,
+                                damageColorIndex = DamageColorIndex.Item,
+                                damageType = DamageTypeCore.burnOnHit,
+                                falloffModel = BlastAttack.FalloffModel.None,
+                                impactEffect = EffectIndex.Invalid,
+                                inflictor = self.gameObject,
+                                losType = BlastAttack.LoSType.None,
+                                position = self.transform.position,
+                                procChainMask = default,
+                                procCoefficient = 0,
+                                radius = 10,
+                                teamIndex = body.teamComponent.teamIndex
+                            }.Fire();
+                        }
+                        /*var body = self.GetComponent<CharacterBody>().corePosition;
                         Collider[] colliders = Physics.OverlapSphere(body, 30f, LayerIndex.defaultLayer.mask);
                         foreach (Collider col in colliders)
                         {
@@ -562,7 +586,7 @@ namespace Starstorm2.Cores
                                     DotController.InflictDot(bitch, chad, DotController.DotIndex.Burn, 5f + (4 * itemCount), 10f);
                                 }
                             }
-                        }
+                        }*/
                     }
                 }
             }
@@ -615,11 +639,19 @@ namespace Starstorm2.Cores
             orig(self, damageInfo, victim);
         }
     }
+
     public class DormantFungusBehavior : CharacterBody.ItemBehavior
     {
         //VICE VS YOU
         //YOUUUUU
+
         private float timer;
+
+        public Starstorm2ItemManager manager;
+        public void Awake()
+        {
+            manager = body.AddOrGetComponent<Starstorm2ItemManager>();
+        }
         public void FixedUpdate()
         {
             if (body.isSprinting)
@@ -627,7 +659,7 @@ namespace Starstorm2.Cores
                 timer += Time.deltaTime;
                 if (timer >= 5)
                 {
-                    body.healthComponent.HealFraction(.1f * stack, default);
+                    manager.HealFractionAuthority(.1f * stack);
                     timer = 0;
                 }
             }
@@ -643,6 +675,13 @@ namespace Starstorm2.Cores
         //YOUUUUU
         private float timer;
         private bool fatalLogged;
+
+        public Starstorm2ItemManager manager;
+        public void Awake()
+        {
+            manager = body.AddOrGetComponent<Starstorm2ItemManager>();
+        }
+
         public void FixedUpdate()
         {
             timer += Time.deltaTime;
@@ -650,7 +689,8 @@ namespace Starstorm2.Cores
             {
                 if (body.teamComponent)
                 {
-                    TeamManager.instance.GiveTeamExperience(body.teamComponent.teamIndex, (ulong)(1 * stack));
+                    manager.AddExperienceAuthority((uint)(3 * stack));
+
                 }
                 else
                 {

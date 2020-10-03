@@ -1,5 +1,5 @@
 ﻿//XXX REMOVE FOR PUBLIC BUILDS
-#define NETWORKTEST
+//#define NETWORKTEST
 
 using System;
 using System.Collections.Generic;
@@ -20,12 +20,7 @@ using KinematicCharacterController;
 using System.Reflection;
 
 //known bugs/issues:
-//getting a kill with ion burst does not (always) grant an ion burst stock
-//ion burst stocks do not carry over between stages
-//crowd dispersion debuff spawns on the ground directly below you if you are airborne
-//crowd dispersion needs forced forward movement for the authentic executioner experience™
 //multiplayer not tested and probably broken
-//make exe no-collide during axe jump/maybe dash
 
 namespace Starstorm2.Cores
 {
@@ -587,7 +582,7 @@ The two privates sat in complete silence.
             def.rechargeStock = 0;
             def.requiredStock = 1;
             def.shootDelay = 0f;
-            def.stockToConsume = 1;
+            def.stockToConsume = 0;
 
             LoadoutAPI.AddSkillDef(def);
 

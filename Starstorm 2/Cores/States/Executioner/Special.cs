@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 //FIXME: axe drop damage doesn't show damage numbers
+//FIXME: make exe no-collide during axe jump?
 
 namespace EntityStates.Executioner
 {
@@ -162,11 +163,11 @@ namespace EntityStates.Executioner
                         var locator = base.characterBody.skillLocator;
                         if (locator)
                         {
-                            if (locator.secondary)
-                                locator.secondary.rechargeStopwatch += 1f;
-                            if (locator.utility)
+                            //if (locator.secondary && locator.secondary.stock < locator.secondary.maxStock)
+                                //locator.secondary.rechargeStopwatch += 1f;
+                            if (locator.utility && locator.utility.cooldownRemaining > 0)
                                 locator.utility.rechargeStopwatch += 1f;
-                            if (locator.special)
+                            if (locator.special && locator.special.cooldownRemaining > 0)
                                 locator.special.rechargeStopwatch += 1f;
                         }
                         //should cdr apply once per kill or once per attack? if once per attack uncomment the following
