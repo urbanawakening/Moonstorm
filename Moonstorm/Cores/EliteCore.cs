@@ -286,7 +286,7 @@ namespace Moonstorm.Cores
             {
                 name = "Enrolled",
                 buffColor = warColor,
-                iconPath = "Textures/BuffIcons/texBuffWarbannerIcon",
+                iconPath = "@Moonstorm:Assets/Moonstorm/EliteIcons/rallyingIcon.png",
                 canStack = false
             };
 
@@ -294,7 +294,7 @@ namespace Moonstorm.Cores
             {
                 name = "Frenzied",
                 buffColor = warColor,
-                iconPath = "Textures/BuffIcons/texBuffWarbannerIcon",
+                iconPath = "@Moonstorm:Assets/Moonstorm/EliteIcons/rallyingIcon.png",
                 canStack = false
             };
 
@@ -354,9 +354,12 @@ namespace Moonstorm.Cores
         private void CharacterBody_AddTimedBuff(On.RoR2.CharacterBody.orig_AddTimedBuff orig, CharacterBody self, BuffIndex buffType, float duration)
         {
             bool shouldOrigSelf = true;
-            if (buffType == warFriendlyBuffIndex && self && self.HasBuff(warIndex))
+            if (self)
             {
-                shouldOrigSelf = false;
+                if (buffType == warFriendlyBuffIndex && self.HasBuff(warIndex))
+                {
+                    shouldOrigSelf = false;
+                }
             }
             if (shouldOrigSelf)
             {
