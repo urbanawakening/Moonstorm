@@ -43,7 +43,7 @@ namespace Moonstorm.Cores
             LogCore.LogI("Initializing Core: " + base.ToString());
             instance = this;
 
-            Void();
+            //Void();
             War();
             Tar();
 
@@ -60,12 +60,14 @@ namespace Moonstorm.Cores
                 float attackSpeed = self.attackSpeed;
                 float armor = self.armor;
                 float moveSpeed = self.moveSpeed;
-                if (self.HasBuff(tarIndex)) {
+                if (self.HasBuff(tarIndex))
+                {
                     //"hey what if i made an enemy that had 1000% move speed?"
                     //"wait. oh, no"
                     self.SetPropertyValue("moveSpeed", moveSpeed += 5);
                 };
-                if (self.HasBuff(warIndex)) {
+                if (self.HasBuff(warIndex))
+                {
                     self.SetPropertyValue("attackSpeed", attackSpeed += 1);
                     self.SetPropertyValue("moveSpeed", moveSpeed += 3);
                     self.SetPropertyValue("armor", armor += 1f);
@@ -113,15 +115,12 @@ namespace Moonstorm.Cores
                 Inventory inv = self.inventory;
                 self.AddItemBehavior<AffixWarBehavior>(self.HasBuff(warIndex) ? 1 : 0);
 
-                if (self.HasBuff(tarIndex))
+                /*if (self.HasBuff(tarIndex))
                 {
                     Transform modelBaseTransform = self.modelLocator.modelBaseTransform;
                     if (modelBaseTransform)
                     {
-                        EnableGoldAffixEffect gold = self.gameObject.AddComponent<EnableGoldAffixEffect>();
-                        if (!gold.isGoldEffectEnabled) {
-                            gold.EnableGoldAffix();
-                        }
+
                         //Legacy
                         /*var characterModel = modelBaseTransform.GetComponent<CharacterModel>();
 
@@ -132,9 +131,9 @@ namespace Moonstorm.Cores
                         temporaryOverlay.destroyComponentOnEnd = false;
                         temporaryOverlay.originalMaterial = CharacterModel.clayGooMaterial;
 
-                        temporaryOverlay.AddToCharacerModel(characterModel);*/
+                        temporaryOverlay.AddToCharacerModel(characterModel);
                     }
-                }
+                }*/
             }
         }
 
@@ -259,13 +258,16 @@ namespace Moonstorm.Cores
 
         }
 
-        protected internal bool KinIsntActive() {
+        protected internal bool KinIsntActive()
+        {
             return !RunArtifactManager.instance.IsArtifactEnabled(RoR2Content.Artifacts.eliteOnlyArtifactDef);
         }
 
         protected internal void War()
         {
-            Color warColor = new Color(0.8392157f, 0.7882353f, 0.22745098f);
+            //spawn cmd:
+            //spawn_ai beetle 1 6 0 2
+            Color warColor = new Color(0.827451f, 0.19607843f, 0.09803922f); ; ; ; ; ;
 
             EquipmentDef equipmentDef = new EquipmentDef
             {
@@ -307,7 +309,7 @@ namespace Moonstorm.Cores
             CustomEquipment customEquipment = new CustomEquipment(equipmentDef, new ItemDisplayRule[0]);
             CustomBuff customBuff = new CustomBuff(buffDef);
             CustomBuff customBuff2 = new CustomBuff(buffDef2);
-            CustomElite customElite = new CustomElite(eliteDef, 1);
+            CustomElite customElite = new CustomElite(eliteDef, 2);
 
             warElite = EliteAPI.Add(customElite);
             warIndex = BuffAPI.Add(customBuff);
@@ -318,29 +320,55 @@ namespace Moonstorm.Cores
             equipmentDef.passiveBuff = warIndex;
             buffDef.eliteIndex = warElite;
 
-            LanguageAPI.Add(eliteDef.modifierToken, "War {0}");
+            LanguageAPI.Add(eliteDef.modifierToken, "Warmongering {0}");
             LanguageAPI.Add(equipmentDef.nameToken, "War's Embrace");
             LanguageAPI.Add(equipmentDef.pickupToken, "Become an aspect of War");
             LanguageAPI.Add(equipmentDef.descriptionToken, "");
-            warBubble = Resources.Load<GameObject>("Prefabs/NetworkedObjects/WarBannerWard").InstantiateClone("AffixWarWard", true);
+
+            warBubble = Resources.Load<GameObject>("Prefabs/NetworkedObjects/AffixHauntedWard").InstantiateClone("AffixWarWard", true);
             BuffWard ward = warBubble.GetComponent<BuffWard>();
             ward.buffType = warFriendlyBuffIndex;
             ward.floorWard = false;
-            NetworkedBodyAttachment attachment = warBubble.AddComponent<NetworkedBodyAttachment>();
-            attachment.shouldParentToAttachedBody = true;
-            attachment.forceHostAuthority = false;
 
-            Transform mdlWarbanner = warBubble.transform.Find("mdlWarbanner");
+            Transform mdlWarbanner = warBubble.transform.Find("Indicator/IndicatorSphere");
+            Transform spores = warBubble.transform.Find("Indicator/Spores");
+
+            if (spores)
+            {
+                spores.gameObject.SetActive(false);
+            }
             if (mdlWarbanner)
             {
-                mdlWarbanner.gameObject.SetActive(false);
+                var renderer = mdlWarbanner.GetComponent<Renderer>();
+
+                renderer.material = Resources.Load<GameObject>("prefabs/networkedobjects/teleporters/Teleporter1").transform.Find("TeleporterBaseMesh/BuiltInEffects/ChargingEffect/RadiusScaler/ClearAreaIndicator").GetComponent<Renderer>().material;
+                renderer.sharedMaterial.SetColor("_TintColor", new Color(255 / 255, 192 / 255, 203)); ;
+
+                //GRAVEYARD OF PREVIOUS COLORS
+                //renderer.sharedMaterial.SetColor("_TintColor", new Color(75 / 255, 0 / 255, 130)); ;
+            }
+
+            On.RoR2.CharacterBody.AddTimedBuff += CharacterBody_AddTimedBuff;
+        }
+
+        private void CharacterBody_AddTimedBuff(On.RoR2.CharacterBody.orig_AddTimedBuff orig, CharacterBody self, BuffIndex buffType, float duration)
+        {
+            bool shouldOrigSelf = true;
+            if (buffType == warFriendlyBuffIndex && self && self.HasBuff(warIndex))
+            {
+                shouldOrigSelf = false;
+            }
+            if (shouldOrigSelf)
+            {
+                orig(self, buffType, duration);
             }
         }
 
         protected internal void Tar()
         {
             Color tarColor = new Color(0.2f, 0.09019608f, 0.09019608f);
-            EquipmentDef equipmentDef = new EquipmentDef {
+            EquipmentDef equipmentDef = new EquipmentDef
+            {
                 name = "AffixTar",
                 cooldown = 10f,
                 pickupModelPath = "",
@@ -352,14 +380,16 @@ namespace Moonstorm.Cores
                 enigmaCompatible = false
             };
 
-            BuffDef buffDef = new BuffDef {
+            BuffDef buffDef = new BuffDef
+            {
                 name = "TarBorne",
                 iconPath = "Textures/BuffIcons/texMovespeedBuffIcon",
                 canStack = false,
                 buffColor = tarColor
             };
 
-            EliteDef eliteDef = new EliteDef {
+            EliteDef eliteDef = new EliteDef
+            {
                 name = "TarBorne",
                 modifierToken = "ELITE_MODIFIER_TAR",
             };
@@ -413,7 +443,8 @@ namespace Moonstorm.Cores
                 Destroy(warWard);
             }
         }
-
     }
 }
-
+//CULTURE'S NOT YOUR CULTURE
+//FUCK YOUR CULTURE
+//I AIN'T GOT NO CULTURE
