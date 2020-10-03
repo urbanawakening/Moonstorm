@@ -48,7 +48,7 @@ namespace Starstorm2.Cores
             BuffSetup();
             RegisterCharacter();
             SkillSetup();
-            CreatePrimaryProjectile();            
+            CreatePrimaryProjectile();   
         }
 
         void CreateUiChargeWidget(GameObject crosshairPrefab)

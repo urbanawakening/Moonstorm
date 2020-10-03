@@ -110,7 +110,7 @@ namespace Starstorm2.Cores.States.Nucleator
                         rotation = Util.QuaternionSafeLookRotation(aimRay.direction),
                         target = null,
                         useFuseOverride = false,
-                        useSpeedOverride = false
+                        useSpeedOverride = false                        
                     };
                     ProjectileManager.instance.FireProjectile(info);
                 }
