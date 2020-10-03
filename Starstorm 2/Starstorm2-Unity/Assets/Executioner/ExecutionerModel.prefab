@@ -1393,7 +1393,8 @@ Transform:
   m_LocalRotation: {x: -0.033772275, y: 0.6939567, z: 0.7176469, w: 0.047607597}
   m_LocalPosition: {x: -0.0009185165, y: 0.0018570265, z: -0.00012746929}
   m_LocalScale: {x: 0.23047307, y: 0.230473, z: 0.230473}
-  m_Children: []
+  m_Children:
+  - {fileID: 188970498196410916}
   m_Father: {fileID: 3323291611496120596}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1455,6 +1456,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3323291611496120614}
   - component: {fileID: 3323291611505749712}
+  - component: {fileID: 7647554478034573169}
   m_Layer: 0
   m_Name: ExecutionerModel
   m_TagString: Untagged
@@ -1498,6 +1500,185 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &7647554478034573169
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3323291611496226054}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 10276f4c15347d549a11822bba5cf3ce, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  transformPairs:
+  - name: Axe
+    transform: {fileID: 3323291611496120626}
+  - name: Axe 1
+    transform: {fileID: 3323291611496120628}
+  - name: Axe_end
+    transform: {fileID: 3323291611496120630}
+  - name: Root
+    transform: {fileID: 3323291611496120486}
+  - name: ik.armpole.l
+    transform: {fileID: 3323291611496120604}
+  - name: ik.armpole.l_end
+    transform: {fileID: 3323291611496120606}
+  - name: ik.armpole.r
+    transform: {fileID: 3323291611496120576}
+  - name: ik.armpole.r_end
+    transform: {fileID: 3323291611496120578}
+  - name: ik.armtarget.l
+    transform: {fileID: 3323291611496120580}
+  - name: ik.armtarget.l_end
+    transform: {fileID: 3323291611496120582}
+  - name: ik.armtarget.r
+    transform: {fileID: 3323291611496120584}
+  - name: ik.armtarget.r_end
+    transform: {fileID: 3323291611496120586}
+  - name: ik.foothandle.l
+    transform: {fileID: 3323291611496120588}
+  - name: ik.legtarget.l
+    transform: {fileID: 3323291611496120696}
+  - name: ik.legtarget.l_end
+    transform: {fileID: 3323291611496120698}
+  - name: ik.foothandle.r
+    transform: {fileID: 3323291611496120590}
+  - name: ik.legtarget.r
+    transform: {fileID: 3323291611496120700}
+  - name: ik.legtarget.r_end
+    transform: {fileID: 3323291611496120702}
+  - name: ik.legpole.l
+    transform: {fileID: 3323291611496120688}
+  - name: ik.legpole.l_end
+    transform: {fileID: 3323291611496120690}
+  - name: ik.legpole.r
+    transform: {fileID: 3323291611496120692}
+  - name: ik.legpole.r_end
+    transform: {fileID: 3323291611496120694}
+  - name: LowerTorso
+    transform: {fileID: 3323291611496120656}
+  - name: ThighLeft
+    transform: {fileID: 3323291611496120492}
+  - name: ShinLeft
+    transform: {fileID: 3323291611496120488}
+  - name: FootLeft
+    transform: {fileID: 3323291611496120616}
+  - name: FootLeft_end
+    transform: {fileID: 3323291611496120618}
+  - name: ThighRight
+    transform: {fileID: 3323291611496120494}
+  - name: ShinRight
+    transform: {fileID: 3323291611496120490}
+  - name: FootRight
+    transform: {fileID: 3323291611496120620}
+  - name: FootRight_end
+    transform: {fileID: 3323291611496120622}
+  - name: UpperTorso
+    transform: {fileID: 3323291611496120472}
+  - name: BicepLeft
+    transform: {fileID: 3323291611496120632}
+  - name: ForearmLeft
+    transform: {fileID: 3323291611496120592}
+  - name: Index1Left
+    transform: {fileID: 3323291611496120672}
+  - name: Index2Left
+    transform: {fileID: 3323291611496120676}
+  - name: Index3Left
+    transform: {fileID: 3323291611496120680}
+  - name: Index3Left_end
+    transform: {fileID: 3323291611496120682}
+  - name: Middle1Left
+    transform: {fileID: 3323291611496120658}
+  - name: Middle2Left
+    transform: {fileID: 3323291611496120662}
+  - name: Middle3Left
+    transform: {fileID: 3323291611496120666}
+  - name: Middle3Left_end
+    transform: {fileID: 3323291611496120668}
+  - name: Pinkie1Left
+    transform: {fileID: 3323291611496120644}
+  - name: Pinkie2Left
+    transform: {fileID: 3323291611496120648}
+  - name: Pinkie3Left
+    transform: {fileID: 3323291611496120652}
+  - name: Pinkie3Left_end
+    transform: {fileID: 3323291611496120654}
+  - name: Ring1Left
+    transform: {fileID: 3323291611496120502}
+  - name: Ring2Left
+    transform: {fileID: 3323291611496120506}
+  - name: Ring3Left
+    transform: {fileID: 3323291611496120510}
+  - name: Ring3Left_end
+    transform: {fileID: 3323291611496120480}
+  - name: Thumb1Left
+    transform: {fileID: 3323291611496120464}
+  - name: Thumb2Left
+    transform: {fileID: 3323291611496120466}
+  - name: Thumb3Left
+    transform: {fileID: 3323291611496120468}
+  - name: Thumb3Left_end
+    transform: {fileID: 3323291611496120470}
+  - name: BicepRight
+    transform: {fileID: 3323291611496120634}
+  - name: ForearmRight
+    transform: {fileID: 3323291611496120594}
+  - name: Bone.017
+    transform: {fileID: 3323291611496120636}
+  - name: Bone.018
+    transform: {fileID: 3323291611496120638}
+  - name: Bone.043
+    transform: {fileID: 3323291611496120608}
+  - name: Bone.043_end
+    transform: {fileID: 3323291611496120610}
+  - name: Index1Right
+    transform: {fileID: 3323291611496120674}
+  - name: Index2Right
+    transform: {fileID: 3323291611496120678}
+  - name: Index3Right
+    transform: {fileID: 3323291611496120684}
+  - name: Index3Right_end
+    transform: {fileID: 3323291611496120686}
+  - name: Middle1Right
+    transform: {fileID: 3323291611496120660}
+  - name: Middle2Right
+    transform: {fileID: 3323291611496120664}
+  - name: Middle3Right
+    transform: {fileID: 3323291611496120670}
+  - name: Middle3Right_end
+    transform: {fileID: 3323291611496120640}
+  - name: Pinkie1Right
+    transform: {fileID: 3323291611496120646}
+  - name: Pinkie2Right
+    transform: {fileID: 3323291611496120650}
+  - name: Pinkie3Right
+    transform: {fileID: 3323291611496120496}
+  - name: Pinkie3Right_end
+    transform: {fileID: 3323291611496120498}
+  - name: Ring1Right
+    transform: {fileID: 3323291611496120504}
+  - name: Gun
+    transform: {fileID: 3323291611496120596}
+  - name: Cube.001
+    transform: {fileID: 3323291611496120612}
+  - name: Muzzle
+    transform: {fileID: 188970498196410916}
+  - name: Gun_end
+    transform: {fileID: 3323291611496120598}
+  - name: Ring2Right
+    transform: {fileID: 3323291611496120508}
+  - name: Ring3Right
+    transform: {fileID: 3323291611496120482}
+  - name: Ring3Right_end
+    transform: {fileID: 3323291611496120484}
+  - name: Neck
+    transform: {fileID: 3323291611496120642}
+  - name: Head
+    transform: {fileID: 3323291611496120600}
+  - name: Head_end
+    transform: {fileID: 3323291611496120602}
 --- !u!1 &3323291611496226056
 GameObject:
   m_ObjectHideFlags: 0
@@ -2902,5 +3083,35 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 3323291611496120604}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &5637930120248209456
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 188970498196410916}
+  m_Layer: 0
+  m_Name: Muzzle
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &188970498196410916
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5637930120248209456}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.01906, y: 0, z: 0.02555}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 3323291611496120612}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

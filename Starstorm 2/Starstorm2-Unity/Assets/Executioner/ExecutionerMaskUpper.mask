@@ -58,7 +58,7 @@ AvatarMask:
   - m_Path: Armature/Root/ik.legpole.r/ik.legpole.r_end
     m_Weight: 0
   - m_Path: Armature/Root/LowerTorso
-    m_Weight: 0
+    m_Weight: 1
   - m_Path: Armature/Root/LowerTorso/ThighLeft
     m_Weight: 0
   - m_Path: Armature/Root/LowerTorso/ThighLeft/ShinLeft
