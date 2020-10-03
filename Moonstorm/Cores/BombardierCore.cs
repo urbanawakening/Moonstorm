@@ -171,7 +171,7 @@ namespace Moonstorm.Cores
             primarySkillDef.icon = null;
             primarySkillDef.keywordTokens = Array.Empty<String>();
 
-            LanguageAPI.Add(primarySkillDef.skillDescriptionToken, "Fire a rocket that does <style=cIsDamage>385</style> damage and <style=cIsDamage>explodes on contact</style>.");
+            LanguageAPI.Add(primarySkillDef.skillDescriptionToken, "Fire a rocket that does <style=cIsDamage>385%</style> damage and <style=cIsDamage>explodes on contact</style>.");
             LanguageAPI.Add(primarySkillDef.skillNameToken, "Rocket Blast");
 
             LoadoutAPI.AddSkillDef(primarySkillDef);
