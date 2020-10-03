@@ -28,6 +28,7 @@ namespace Starstorm2.Cores
         protected internal ItemIndex fireOnEquipmentUseIndex;
         protected internal ItemIndex poisonOnHitIndex;
         protected internal ItemIndex erraticGadgetIndex;
+        protected internal ItemIndex explodeOnJumpIndex;
 
         public void DropShipCall(Transform transform, int itemCount)
         {
@@ -230,6 +231,25 @@ namespace Starstorm2.Cores
                 tier = ItemTier.Tier3,
                 unlockableName = ""
             });
+            ItemTag[] explodeOnJumpTags = new ItemTag[1]
+            {
+                    ItemTag.Damage
+            };
+            RegisterItem(new ItemDef
+            {
+                canRemove = true,
+                descriptionToken = "ITEM_EXPLODEONJUMP_DESC",
+                hidden = false,
+                loreToken = "",
+                name = "PrototypeJetBoots",
+                nameToken = "ITEM_EXPLODEONJUMP_NAME",
+                //pickupIconPath = "@Cloudburst:Assets/Items/Lemdog/LemDog_TexIcon.png",
+                //pickupModelPath = "@Starstorm2:Assets/Starstorm 2/Items/DormantFungus/MDLDormantFungus.prefab",
+                pickupToken = "ITEM_EXPLODEONJUMP_PICKUP",
+                tags = explodeOnJumpTags,
+                tier = ItemTier.Tier2,
+                unlockableName = ""
+            });
             Hook();
         }
 
@@ -268,6 +288,10 @@ namespace Starstorm2.Cores
             LanguageAPI.Add("ITEM_ERRATICGADGET_NAME", "Erratic Gadget");
             LanguageAPI.Add("ITEM_ERRATICGADGET_DESC", "Critical strikes deal 50% <style=cStack>(+50% per stack)</style> extra damage.");
             LanguageAPI.Add("ITEM_ERRATICGADGET_PICKUP", "Critical strikes deal extra damage.");
+
+            LanguageAPI.Add("ITEM_EXPLODEONJUMP_NAME", "Prototype Jet Boots");
+            LanguageAPI.Add("ITEM_EXPLODEONJUMP_DESC", "Create an explosion in a small area around you whenever you jump for <style=cIsDamage>150%</style> <style=cStack>(+100% per stack)</style> <style=cIsDamage>damage.</style>.");
+            LanguageAPI.Add("ITEM_EXPLODEONJUMP_PICKUP", "Detonate on jump!");
         }
 
         protected internal void RegisterItem(ItemDef itemDef)
@@ -317,8 +341,11 @@ namespace Starstorm2.Cores
                 case "StrangeCan":
                     poisonOnHitIndex = ItemAPI.Add(customItem);
                     break;
-                case "Erratic Gadget":
+                case "ErraticGadget":
                     erraticGadgetIndex = ItemAPI.Add(customItem);
+                    break;
+                case "PrototypeJetBoots":
+                    explodeOnJumpIndex = ItemAPI.Add(customItem);
                     break;
                 default:
                     LogCore.LogF(itemDef.name + " is unregistered! Item will not spawn!");
@@ -334,8 +361,45 @@ namespace Starstorm2.Cores
             On.RoR2.HealthComponent.TakeDamage += HealthComponent_TakeDamage;
             On.RoR2.EquipmentSlot.PerformEquipmentAction += EquipmentSlot_PerformEquipmentAction;
             On.RoR2.GlobalEventManager.OnHitEnemy += GlobalEventManager_OnHitEnemy;
+            On.RoR2.CharacterMotor.OnLeaveStableGround += CharacterMotor_OnLeaveStableGround;
         }
 
+        private void CharacterMotor_OnLeaveStableGround(On.RoR2.CharacterMotor.orig_OnLeaveStableGround orig, CharacterMotor self)
+        {
+            bool hasJumped = self.GetComponent<InputBankTest>().jump.justPressed;
+            if(self && hasJumped)
+            {
+                var inventory = self.GetComponent<CharacterBody>().inventory;
+                if (inventory)
+                {
+                    var boots = inventory.GetItemCount(explodeOnJumpIndex);
+                    if(boots > 0)
+                    {
+                        var attacker = self.GetComponent<CharacterBody>().gameObject;
+                        var damage = attacker.GetComponent<CharacterBody>().damage * (1.5f + (1 * boots));
+                        GameObject bootsEffect = Resources.Load<GameObject>("prefabs/effects/omnieffect/OmniExplosionVFX");
+                        EffectData bootsEffectData = new EffectData()
+                        {
+                            color = new Color32(0, 255, 0, 255),
+                            scale = 7.5f,
+                            origin = self.GetComponent<CharacterBody>().footPosition
+                        };
+                        new BlastAttack
+                        {
+                            attacker = attacker,
+                            baseDamage = damage,
+                            radius = 7.5f,
+                            falloffModel = BlastAttack.FalloffModel.None,
+                            procCoefficient = 0f,
+                            teamIndex = TeamIndex.Player,
+                            position = attacker.transform.position,
+                        }.Fire();
+                        EffectManager.SpawnEffect(bootsEffect, bootsEffectData, false);
+                    }
+                }
+            }
+            orig(self);
+        }
 
         private void CharacterBody_OnInventoryChanged(On.RoR2.CharacterBody.orig_OnInventoryChanged orig, CharacterBody self)
         {
@@ -358,6 +422,10 @@ namespace Starstorm2.Cores
                     if (diaryCount > 0)
                     {
                         self.AddItemBehavior<DairyBehavior>(diaryCount);
+                    }
+                    if(erraticGadgetCount > 0)
+                    {
+                        //This is where you add the actual model of the item as a body attachment... I think
                     }
                 }
             }
@@ -510,13 +578,37 @@ namespace Starstorm2.Cores
                 {
                     var master = damageInfo.attacker.GetComponent<CharacterMaster>();
                     int itemCount = inventory.GetItemCount(poisonOnHitIndex);
-                    GameObject chad = damageInfo.attacker;
-                    bool flag = (damageInfo.damageType & DamageType.PoisonOnHit) > DamageType.Generic;
-                    if ((itemCount > 0 || flag) && (flag || Util.CheckRoll((8.5f + (5f * (float)itemCount)) * damageInfo.procCoefficient, master)))
+                    int itemCount2 = inventory.GetItemCount(erraticGadgetIndex);
+                    if (itemCount > 0)
                     {
-                        ProcChainMask procChainMask = damageInfo.procChainMask;
-                        procChainMask.AddProc(ProcType.BleedOnHit);
-                        DotController.InflictDot(victim, chad, DoTCore.instance.strangeCanPoison, 3.5f, 1f);
+                        GameObject chad = damageInfo.attacker;
+                        bool flag = (damageInfo.damageType & DamageType.PoisonOnHit) > DamageType.Generic;
+                        if ((itemCount > 0 || flag) && (flag || Util.CheckRoll((8.5f + (5f * (float)itemCount)) * damageInfo.procCoefficient, master)))
+                        {
+                            ProcChainMask procChainMask = damageInfo.procChainMask;
+                            procChainMask.AddProc(ProcType.BleedOnHit);
+                            DotController.InflictDot(victim, chad, DoTCore.instance.strangeCanPoison, 3.5f, 1f);
+                        }
+                    }
+                    if (itemCount2 > 0)
+                    {
+                        if (damageInfo.crit)
+                        {
+                            GameObject erraticGadgetEffectPrefab = Resources.Load<GameObject>("prefabs/effects/tracers/TracerCaptainDefenseMatrix");
+                            if (erraticGadgetEffectPrefab)
+                            {
+                                EffectData effectData = new EffectData
+                                {
+                                    origin = victim.GetComponent<CharacterBody>().corePosition,
+                                    start = damageInfo.attacker.GetComponent<CharacterBody>().corePosition
+                                };
+                                EffectManager.SpawnEffect(erraticGadgetEffectPrefab, effectData, true);
+                            }
+                            DamageInfo newDamageInfo = damageInfo;
+                            newDamageInfo.damage = damageInfo.damage * (.5f * itemCount2);
+                            victim.GetComponent<HealthComponent>().TakeDamage(newDamageInfo);
+                            //This needs to be edited so that the effect actually originates from a body attachment
+                        }
                     }
                 }
             }
