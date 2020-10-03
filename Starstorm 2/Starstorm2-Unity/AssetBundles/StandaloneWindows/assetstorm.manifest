@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 2810382276
+CRC: 2297951793
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: a7240f747d2cbcf164d05310adaf7e4f
+    Hash: d113141fa8ea1dd811580a0a7bf0b5f6
   TypeTreeHash:
     serializedVersion: 2
     Hash: 9ca72c2331eceffe3b2d8c129a87631a
@@ -58,6 +58,7 @@ Assets:
 - Assets/Items/DormantFungus/MDLDormantFungus.prefab
 - Assets/Executioner/surprised-skull.png
 - Assets/Items/MoltenCoin/Molten_Coin.blend
+- Assets/TyphoonIcon.png
 - Assets/Executioner/skill4icon.png
 - Assets/Executioner/skill1icon.png
 Dependencies: []
