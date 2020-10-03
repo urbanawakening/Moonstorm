@@ -19,8 +19,7 @@ namespace Starstorm2.Cores
 
 >Player health regeneration: <style=cIsHealth>-40%</style>
 >Difficulty scaling: <style=cIsHealth>+75%</style></style>";
-        //piggybacking the icon into the exec bundle isn't working - we need a main unified asset bundle (yell at enigma)
-        public const string iconPath = "@Executioner:Assets/TyphoonIcon.png";
+        public const string iconPath = "@Starstorm2:Assets/TyphoonIcon.png";
         public const string difServerTag = "ty";
         public Color difColor = new Color(0.71f, 0.25f, 0.50f);
 
