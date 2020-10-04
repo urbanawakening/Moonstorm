@@ -9,6 +9,7 @@ namespace Starstorm2.Cores
         public static DoTCore instance;
 
         protected internal DotIndex detritive;
+        protected internal DotIndex gouge;
 
         public DoTCore() => RegisterDoTs();
 

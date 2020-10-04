@@ -53,7 +53,6 @@ namespace Starstorm2.Cores
                 buffColor = new Color(0.8392157f, 0.7882353f, 0.22745098f)
             });
 
-
             On.RoR2.CharacterBody.RecalculateStats += CharacterBody_RecalculateStats;
         }
 
@@ -65,7 +64,6 @@ namespace Starstorm2.Cores
             var moveSpeed = self.moveSpeed;
             var regen = self.regen;
             var crit = self.crit;
-
 
             if (self.HasBuff(lightBringerIndex))
             {

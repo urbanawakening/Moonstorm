@@ -204,6 +204,7 @@
     <Compile Include="API\ComponentHelpers.cs" />
     <Compile Include="API\LogCore.cs" />
     <Compile Include="Cores\AssetsCore.cs" />
+    <Compile Include="Cores\DamageTypeCore.cs" />
     <Compile Include="Cores\NemmandoCore.cs" />
     <Compile Include="Cores\States\Executioner\MainState.cs" />
     <Compile Include="Cores\States\Executioner\Primary.cs" />
@@ -217,6 +218,10 @@
     <Compile Include="Cores\DotCore.cs" />
     <Compile Include="Cores\EquipmentCore.cs" />
     <Compile Include="Cores\BuffCore.cs" />
+    <Compile Include="Cores\States\Nemmando\Submission.cs" />
+    <Compile Include="Cores\States\Nemmando\InvasiveFlurry.cs" />
+    <Compile Include="Cores\States\Nemmando\Retaliate.cs" />
+    <Compile Include="Cores\States\Nemmando\BladeOfCessation.cs" />
     <Compile Include="Cores\States\Nucleator\ApplyRadionuclideSurge.cs" />
     <Compile Include="Cores\States\Nucleator\ChargeStates\ChargeFissionImpulse.cs" />
     <Compile Include="Cores\States\Nucleator\ChargeStates\ChargeIrradiate.cs" />
@@ -235,9 +240,7 @@
   <ItemGroup>
     <EmbeddedResource Include="Assets\executionerassets" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Cores\States\Nemmando\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>if "$(Username)" == "Flan" copy /Y "$(TargetPath)" "F:\SteamLibrary\steamapps\common\Risk of Rain 2\BepInEx\plugins"

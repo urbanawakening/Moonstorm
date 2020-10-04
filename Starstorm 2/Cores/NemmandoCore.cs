@@ -28,10 +28,10 @@ namespace Starstorm2.Cores
             {
                 instance = this;
             }
-            CreateNEMMANDO();
+            CreateNemmando();
         }
 
-        public void CreateNEMMANDO()
+        public void CreateNemmando()
         {
             InitPrefab();
             RegisterCharacter();
@@ -40,13 +40,13 @@ namespace Starstorm2.Cores
 
         void InitPrefab()
         {
-            characterPrefab = PrefabAPI.InstantiateClone(Resources.Load<GameObject>("Prefabs/CharacterBodies/MercBody"), "NEMMANDOBody");
+            characterPrefab = PrefabAPI.InstantiateClone(Resources.Load<GameObject>("Prefabs/CharacterBodies/MercBody"), "NemmandoBody");
         }
 
         void RegisterCharacter()
         {
-            GameObject NEMMANDODisplay = PrefabAPI.InstantiateClone(characterPrefab.GetComponent<ModelLocator>().modelBaseTransform.gameObject, "NemmandoDisplay", true);
-            NEMMANDODisplay.AddComponent<NetworkIdentity>();
+            GameObject nemmandodisplay = PrefabAPI.InstantiateClone(characterPrefab.GetComponent<ModelLocator>().modelBaseTransform.gameObject, "NemmandoDisplay", true);
+            nemmandodisplay.AddComponent<NetworkIdentity>();
 
             BodyCatalog.getAdditionalEntries += delegate (List<GameObject> list)
             {
@@ -77,7 +77,7 @@ namespace Starstorm2.Cores
             {
                 bodyPrefab = characterPrefab,
                 descriptionToken = "NEMMANDO_DESCRIPTION",
-                displayPrefab = NEMMANDODisplay,
+                displayPrefab = nemmandodisplay,
                 primaryColor = new Color(0.8039216f, 0.482352942f, 0.843137264f),
                 name = "NEMMANDO",
                 outroFlavorToken = "NEMMANDO_OUTRO_FLAVOR",
@@ -89,8 +89,6 @@ namespace Starstorm2.Cores
 
         void SkillSetup()
         {
-            // get rid of the original skills first, otherwise we'll have commando's loadout and we don't want that
-            //API.CreateEmptySkills(characterPrefab);
             foreach (GenericSkill obj in characterPrefab.GetComponentsInChildren<GenericSkill>())
             {
                 UnityEngine.Object.DestroyImmediate(obj);
@@ -110,8 +108,8 @@ namespace Starstorm2.Cores
             LanguageAPI.Add("NEMMANDO_PRIMARY_SKILLNAME_NAME", "");
             LanguageAPI.Add("NEMMANDO_PRIMARY_SKILLNAME_DESCRIPTION", @"");
 
-            var mySkillDef = ScriptableObject.CreateInstance<SkillDef>();
-            mySkillDef.activationState = new SerializableEntityStateType(typeof(FireScorch));
+            var mySkillDef = ScriptableObject.CreateInstance<SteppedSkillDef>();
+            mySkillDef.activationState = new SerializableEntityStateType(typeof(BladeOfCessation));
             mySkillDef.activationStateMachineName = "Weapon";
             mySkillDef.baseMaxStock = 1;
             mySkillDef.baseRechargeInterval = 0.1f;
@@ -131,6 +129,8 @@ namespace Starstorm2.Cores
             mySkillDef.skillDescriptionToken = "NEMMANDO_PRIMARY_SKILLNAME_DESCRIPTION";
             mySkillDef.skillName = "NEMMANDO_PRIMARY_SKILLNAME_NAME";
             mySkillDef.skillNameToken = "NEMMANDO_PRIMARY_SKILLNAME_NAME";
+            mySkillDef.stepCount = 2;
+            mySkillDef.resetStepsOnIdle = true;
 
             LoadoutAPI.AddSkillDef(mySkillDef);
 
@@ -157,7 +157,7 @@ namespace Starstorm2.Cores
             LanguageAPI.Add("NEMMANDO_SECONDARY_QUARANTINE_DESCRIPTION", "");
 
             var mySkillDef = ScriptableObject.CreateInstance<SkillDef>();
-            mySkillDef.activationState = new SerializableEntityStateType(typeof(FireSuppresiveFire));
+            mySkillDef.activationState = new SerializableEntityStateType(typeof(Retaliate));
             mySkillDef.activationStateMachineName = "Weapon";
             mySkillDef.baseMaxStock = 1;
             mySkillDef.baseRechargeInterval = 3f;
@@ -203,7 +203,7 @@ namespace Starstorm2.Cores
             LanguageAPI.Add("NEMMANDO_UTILITY_FISSION_DESCRIPTION", "");
 
             var mySkillDef = ScriptableObject.CreateInstance<SkillDef>();
-            mySkillDef.activationState = new SerializableEntityStateType(typeof(FirePlanB));
+            mySkillDef.activationState = new SerializableEntityStateType(typeof(InvasiveFlurry));
             mySkillDef.activationStateMachineName = "Weapon";
             mySkillDef.baseMaxStock = 1;
             mySkillDef.baseRechargeInterval = 0f;
@@ -249,7 +249,7 @@ namespace Starstorm2.Cores
             LanguageAPI.Add("NEMMANDO_SPECIAL_SURGE_DESCRIPTION", "");
 
             var mySkillDef = ScriptableObject.CreateInstance<SkillDef>();
-            mySkillDef.activationState = new SerializableEntityStateType(typeof(FireBlazeborne));
+            mySkillDef.activationState = new SerializableEntityStateType(typeof(Submission));
             mySkillDef.activationStateMachineName = "Weapon";
             mySkillDef.baseMaxStock = 1;
             mySkillDef.baseRechargeInterval = 13f;

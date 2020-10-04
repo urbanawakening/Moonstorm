@@ -22,7 +22,8 @@ namespace Starstorm2
         "ResourcesAPI",
         "UnlockablesAPI",
         "SurvivorAPI",
-        "DotAPI"
+        "DotAPI",
+        "EffectAPI"
     })]
 
     public class Starstorm : BaseUnityPlugin
@@ -60,6 +61,7 @@ namespace Starstorm2
         public static ConfigEntry<bool> EnableExecutioner;
         public static ConfigEntry<bool> EnableCyborg;
         public static ConfigEntry<bool> EnableNucleator;
+        public static ConfigEntry<bool> EnableNemmando;
 
         public static ConfigEntry<bool> EnableItems;
         public static ConfigEntry<bool> EnableEquipment;
@@ -73,10 +75,12 @@ namespace Starstorm2
         ItemCore itemCore;
         EquipmentCore equipmentCore;
         DoTCore dotCore;
+        DamageTypeCore damageTypeCore;
 
         NucleatorCore nucleatorCore;
         CyborgCore cyborgCore;
-        ExecutionerCore executionerCore;
+        //ExecutionerCore executionerCore;
+        NemmandoCore nemmandoCore;
 
         public Starstorm()
         {
@@ -102,6 +106,7 @@ namespace Starstorm2
             EnableExecutioner = Config.Bind("Starstorm 2 :: Executioner", "Enabled", true, "Enables Starstorm 2's Executioner survivor. Set to false to disable Starstorm 2's Executioner survivor.");
             EnableNucleator = Config.Bind("Starstorm 2 :: Nucleator", "Enabled", true, "Enables Starstorm 2's Nucleator survivor. Set to false to disable Starstorm 2's Nucleator survivor.");
             EnableCyborg = Config.Bind("Starstorm 2 :: Cyborg", "Enabled", true, "Enables Starstorm 2's Cyborg survivor. Set to false to disable Starstorm 2's Cyborg survivor.");
+            EnableNemmando = Config.Bind("Starstorm 2 :: Nemmando", "Enabled", true, "Enables Starstorm 2's Nemesis Commando survivor. Set to false to disable Starstorm 2's Nemesis Commando survivor.");
         }
 
         private void InitializeCores()
@@ -113,13 +118,16 @@ namespace Starstorm2
                 dotCore = new DoTCore();
 
                 if (EnableExecutioner.Value) {
-                   executionerCore = new ExecutionerCore();
+                   //executionerCore = new ExecutionerCore();
                 }
                 if (EnableCyborg.Value) {
                     cyborgCore = new CyborgCore();
                 }
                 if (EnableNucleator.Value) {
                     nucleatorCore = new NucleatorCore();
+                }
+                if (EnableNemmando.Value) {
+                    nemmandoCore = new NemmandoCore();
                 }
 
                 if (EnableItems.Value)
@@ -130,6 +138,7 @@ namespace Starstorm2
                 {
                     equipmentCore = new EquipmentCore();
                 }
+                damageTypeCore = new DamageTypeCore();
             }
             else
             {
