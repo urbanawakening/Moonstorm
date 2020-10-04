@@ -218,8 +218,8 @@
     <Compile Include="Cores\DotCore.cs" />
     <Compile Include="Cores\EquipmentCore.cs" />
     <Compile Include="Cores\BuffCore.cs" />
-    <Compile Include="Cores\States\Nemmando\Submission.cs" />
-    <Compile Include="Cores\States\Nemmando\InvasiveFlurry.cs" />
+    <Compile Include="Cores\States\Nemmando\FireShotgun.cs" />
+    <Compile Include="Cores\States\Nemmando\DodgeState.cs" />
     <Compile Include="Cores\States\Nemmando\Retaliate.cs" />
     <Compile Include="Cores\States\Nemmando\BladeOfCessation.cs" />
     <Compile Include="Cores\States\Nucleator\ApplyRadionuclideSurge.cs" />

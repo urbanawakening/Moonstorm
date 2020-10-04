@@ -36,7 +36,7 @@ namespace Starstorm2.Cores
 
         private void HealthComponent_TakeDamage(On.RoR2.HealthComponent.orig_TakeDamage orig, HealthComponent self, DamageInfo damageInfo)
         {
-
+            orig(self, damageInfo);
         }
 
         protected void AddDamageTypes() {

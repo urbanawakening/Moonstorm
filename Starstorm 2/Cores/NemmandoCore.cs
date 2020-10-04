@@ -203,7 +203,7 @@ namespace Starstorm2.Cores
             LanguageAPI.Add("NEMMANDO_UTILITY_FISSION_DESCRIPTION", "");
 
             var mySkillDef = ScriptableObject.CreateInstance<SkillDef>();
-            mySkillDef.activationState = new SerializableEntityStateType(typeof(InvasiveFlurry));
+            mySkillDef.activationState = new SerializableEntityStateType(typeof(DodgeState));
             mySkillDef.activationStateMachineName = "Weapon";
             mySkillDef.baseMaxStock = 1;
             mySkillDef.baseRechargeInterval = 0f;
@@ -249,10 +249,10 @@ namespace Starstorm2.Cores
             LanguageAPI.Add("NEMMANDO_SPECIAL_SURGE_DESCRIPTION", "");
 
             var mySkillDef = ScriptableObject.CreateInstance<SkillDef>();
-            mySkillDef.activationState = new SerializableEntityStateType(typeof(Submission));
+            mySkillDef.activationState = new SerializableEntityStateType(typeof(FireShotgun));
             mySkillDef.activationStateMachineName = "Weapon";
             mySkillDef.baseMaxStock = 1;
-            mySkillDef.baseRechargeInterval = 13f;
+            mySkillDef.baseRechargeInterval = 2f;
             mySkillDef.beginSkillCooldownOnSkillEnd = false;
             mySkillDef.canceledFromSprinting = false;
             mySkillDef.fullRestockOnAssign = true;
