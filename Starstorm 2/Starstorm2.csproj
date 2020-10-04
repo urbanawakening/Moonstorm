@@ -204,6 +204,7 @@
     <Compile Include="API\ComponentHelpers.cs" />
     <Compile Include="API\LogCore.cs" />
     <Compile Include="Cores\AssetsCore.cs" />
+    <Compile Include="Cores\NemmandoCore.cs" />
     <Compile Include="Cores\States\Executioner\MainState.cs" />
     <Compile Include="Cores\States\Executioner\Primary.cs" />
     <Compile Include="Cores\States\Executioner\Secondary.cs" />
@@ -233,6 +234,9 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Assets\executionerassets" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Cores\States\Nemmando\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
