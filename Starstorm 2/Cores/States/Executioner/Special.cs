@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 //FIXME: axe drop damage doesn't show damage numbers
+//FIXME: make exe no-collide during axe jump?
 
 namespace EntityStates.Executioner
 {
@@ -29,7 +30,7 @@ namespace EntityStates.Executioner
                 storedAirControlState = base.characterMotor.disableAirControlUntilCollision;
                 base.characterMotor.disableAirControlUntilCollision = true;
                 //iframes during and shortly after (prevents fall damage from slamming into ground)
-                base.characterBody.AddTimedBuff(BuffIndex.Immune, this.duration + ExecutionerAxeSlam.baseDuration);
+                base.characterBody.AddBuff(BuffIndex.ArmorBoost);
 
                 //SetCollisions(false);
             }
@@ -73,7 +74,9 @@ namespace EntityStates.Executioner
         public static float dropDamageCoefficient = 1.0f;
         public static float slamDamageCoefficient = 15.0f;
         public static float procCoefficient = 1.0f;
-        public static float baseDuration = 0.4f;
+        //shorter value if axe slam should be finite
+        //public static float baseDuration = 0.4f;
+        public static float baseDuration = 10f;
         public static float dropAttackRadius = 4f;
         public static float slamRadius = 14f;
 
@@ -100,6 +103,7 @@ namespace EntityStates.Executioner
                 base.characterMotor.velocity.x = 0f;
                 base.characterMotor.velocity.z = 0f;
                 this.crit = RollCrit();
+                base.characterBody.bodyFlags |= CharacterBody.BodyFlags.IgnoreFallDamage;
             }
         }
 
@@ -159,11 +163,11 @@ namespace EntityStates.Executioner
                         var locator = base.characterBody.skillLocator;
                         if (locator)
                         {
-                            if (locator.secondary)
-                                locator.secondary.rechargeStopwatch += 1f;
-                            if (locator.utility)
+                            //if (locator.secondary && locator.secondary.stock < locator.secondary.maxStock)
+                                //locator.secondary.rechargeStopwatch += 1f;
+                            if (locator.utility && locator.utility.cooldownRemaining > 0)
                                 locator.utility.rechargeStopwatch += 1f;
-                            if (locator.special)
+                            if (locator.special && locator.special.cooldownRemaining > 0)
                                 locator.special.rechargeStopwatch += 1f;
                         }
                         //should cdr apply once per kill or once per attack? if once per attack uncomment the following
@@ -172,6 +176,8 @@ namespace EntityStates.Executioner
                 }
 
                 base.characterMotor.velocity.y = 0f;
+                base.characterBody.RemoveBuff(BuffIndex.ArmorBoost);
+                base.characterBody.bodyFlags -= CharacterBody.BodyFlags.IgnoreFallDamage;
             }
 
             base.OnExit();

@@ -226,6 +226,7 @@
     <Compile Include="Cores\States\Nucleator\FireStates\FireFissionImpulse.cs" />
     <Compile Include="Cores\States\Nucleator\FireStates\FireIrradiate.cs" />
     <Compile Include="Cores\States\Nucleator\FireStates\FireQuarantine.cs" />
+    <Compile Include="Cores\TyphoonCore.cs" />
     <Compile Include="FUCKACCESSMODIFIERS.cs" />
     <Compile Include="Starstorm.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -240,6 +241,6 @@
   <PropertyGroup>
     <PostBuildEvent>if "$(Username)" == "Flan" copy /Y "$(TargetPath)" "F:\SteamLibrary\steamapps\common\Risk of Rain 2\BepInEx\plugins"
 if "$(Username)" == "kurog" copy /Y "$(TargetPath)" "E:\Steam\steamapps\common\Risk of Rain 2\BepInEx\plugins\"
-if "$(Username)" == "User2" copy /Y "$(TargetPath)" "{RoR2Path}"</PostBuildEvent>
+if "$(Username)" == "test" copy /Y "$(TargetPath)" "C:\Program Files (x86)\Steam\steamapps\common\Risk of Rain 2\BepInEx\plugins"</PostBuildEvent>
   </PropertyGroup>
 </Project>

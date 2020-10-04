@@ -170,8 +170,8 @@ namespace Moonstorm.Cores
                 loreToken = "",
                 name = "CloakOnInteraction",
                 nameToken = "ITEM_CLOAKBUFFONINTERACTION_NAME",
-                //pickupIconPath = pickUpIconPath,
-                //pickupModelPath = pickUpModelPath,
+                pickupIconPath = "@Moonstorm:Assets/Moonstorm/Items/Cloak/JapeIcon.png",
+                pickupModelPath = "@Moonstorm:Assets/Moonstorm/Items/Cloak/MDLCloak.prefab",
                 pickupToken = "ITEM_CLOAKBUFFONINTERACTION_PICKUP",
                 tags = cloakOnInteractionTags,
                 tier = ItemTier.Tier2,
@@ -330,8 +330,8 @@ namespace Moonstorm.Cores
                 loreToken = "",
                 name = "ExtendedEnemyBuffDuration",
                 nameToken = "ITEM_EXTENDEDENEMYBUFFDURATIOM_NAME",
-                //pickupIconPath = "@Cloudburst:Assets/Items/Lemdog/LemDog_TexIcon.png",
-                ////pickupModelPath = "@Cloudburst:Assets/Items/Lemdog/MDLLemDog.prefab",
+                pickupIconPath = "@Moonstorm:Assets/Moonstorm/Items/Earrings/magicicon.png",
+                pickupModelPath = "@Moonstorm:Assets/Moonstorm/Items/Earrings/MDLEarrings.prefab",
                 pickupToken = "ITEM_EXTENDEDENEMYBUFFDURATIOM_PICKUP",
                 tags = extendEnemyBuffDurationTags,
                 tier = ItemTier.Tier2,
@@ -389,8 +389,8 @@ namespace Moonstorm.Cores
                 loreToken = "",
                 name = "GeigerCounter",
                 //nameToken = "ITEM_EXTENDEDENEMYBUFFDURATIOM_NAME",
-                //pickupIconPath = "@Cloudburst:Assets/Items/Lemdog/LemDog_TexIcon.png",
-                //pickupModelPath = "@Cloudburst:Assets/Items/Lemdog/MDLLemDog.prefab",
+                pickupIconPath = "@Moonstorm:Assets/Moonstorm/Items/GeigerCounter/geigericon.png",
+                pickupModelPath = "@Moonstorm:Assets/Moonstorm/Items/GeigerCounter/MDLGeigerCounter.prefab",
                 //pickupToken = "ITEM_EXTENDEDENEMYBUFFDURATIOM_PICKUP",
                 tags = geigerCounterTags,
                 tier = ItemTier.Tier3,
@@ -429,8 +429,8 @@ namespace Moonstorm.Cores
                 loreToken = "",
                 name = "Chip",
                 //nameToken = "ITEM_EXTENDEDENEMYBUFFDURATIOM_NAME",
-                //pickupIconPath = "@Cloudburst:Assets/Items/Lemdog/LemDog_TexIcon.png",
-                //pickupModelPath = "@Cloudburst:Assets/Items/Lemdog/MDLLemDog.prefab",
+                pickupIconPath = "@Moonstorm:Assets/Moonstorm/Items/MortarChip/chipIcon.png",
+                pickupModelPath = "@Moonstorm:Assets/Moonstorm/Items/MortarChip/MDLMortarChip.prefab",
                 //pickupToken = "ITEM_EXTENDEDENEMYBUFFDURATIOM_PICKUP",
                 tags = chipTags,
                 tier = ItemTier.Tier3,
@@ -1150,5 +1150,4 @@ namespace Moonstorm.Cores
             }
         }
     }
-
 }

@@ -5,7 +5,7 @@ namespace EntityStates.Executioner
 {
     public class ExecutionerPistol : BaseSkillState
     {
-        public static float damageCoefficient = 1.3f;
+        public static float damageCoefficient = 1.2f;
         public static float procCoefficient = 1f;
         public static float baseDuration = 0.25f;
         public static float recoil = 1f;
@@ -55,7 +55,7 @@ namespace EntityStates.Executioner
                 this.hasFired = true;
                 bool isCrit = base.RollCrit();
 
-                Util.PlayScaledSound(Commando.CommandoWeapon.FirePistol.firePistolSoundString, base.gameObject, this.attackSpeedStat);
+                Util.PlayScaledSound(Commando.CommandoWeapon.FirePistol2.firePistolSoundString, base.gameObject, this.attackSpeedStat);
                 base.AddRecoil(-0.4f * recoil, -0.8f * recoil, -0.3f * recoil, 0.3f * recoil);
                 EffectManager.SimpleMuzzleFlash(Commando.CommandoWeapon.FirePistol.effectPrefab, base.gameObject, this.muzzleString, false);
                 base.PlayAnimation("UpperBody, Override", "Primary", "Primary.rate", this.duration);
@@ -75,7 +75,7 @@ namespace EntityStates.Executioner
                         maxSpread = base.characterBody.spreadBloomAngle * 0.5f,
                         falloffModel = BulletAttack.FalloffModel.DefaultBullet,
                         force = Commando.CommandoWeapon.FirePistol.force,
-                        hitMask = LayerIndex.CommonMasks.bullet,
+                        //hitMask = LayerIndex.CommonMasks.bullet,
                         isCrit = isCrit,
                         owner = base.gameObject,
                         muzzleName = muzzleString,
@@ -83,11 +83,11 @@ namespace EntityStates.Executioner
                         procChainMask = default(ProcChainMask),
                         procCoefficient = procCoefficient,
                         radius = 0.2f,
-                        stopperMask = LayerIndex.world.collisionMask,
+                        //stopperMask = LayerIndex.world.collisionMask,
                         weapon = base.gameObject,
                         tracerEffectPrefab = Commando.CommandoWeapon.FirePistol.tracerEffectPrefab,
-                        hitEffectPrefab = Commando.CommandoWeapon.FirePistol.hitEffectPrefab,
-                        HitEffectNormal = ClayBruiser.Weapon.MinigunFire.bulletHitEffectNormal
+                        hitEffectPrefab = Commando.CommandoWeapon.FirePistol.hitEffectPrefab
+                        //HitEffectNormal = ClayBruiser.Weapon.MinigunFire.bulletHitEffectNormal
                     };
                     bullet.Fire();
                 }

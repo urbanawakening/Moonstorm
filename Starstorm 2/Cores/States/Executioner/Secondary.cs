@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 //FIXME: ion gun doesn't build charges in mp if player is not host
+//FIXME: ion burst stocks do not carry over between stages (may leave this as feature)
 
 namespace EntityStates.Executioner
 {
@@ -35,6 +36,7 @@ namespace EntityStates.Executioner
             this.muzzleString = "Muzzle";
 
             Shoot();
+            shotsToFire--;
         }
 
         public override void OnExit()
@@ -61,7 +63,6 @@ namespace EntityStates.Executioner
                     if (this.isAuthority)
                         this.outer.SetNextStateToMain();
                 }
-                skill.DeductStock(1);
             }
         }
 
@@ -109,7 +110,7 @@ namespace EntityStates.Executioner
                     falloffModel = BulletAttack.FalloffModel.None,
                     maxDistance = range,
                     force = Commando.CommandoWeapon.FireBarrage.force,
-                    hitMask = LayerIndex.CommonMasks.bullet,
+                    //hitMask = LayerIndex.CommonMasks.bullet,
                     isCrit = isCrit,
                     owner = base.gameObject,
                     muzzleName = muzzleString,
@@ -117,19 +118,20 @@ namespace EntityStates.Executioner
                     procChainMask = default(ProcChainMask),
                     procCoefficient = procCoefficient,
                     radius = 0.5f,
-                    stopperMask = LayerIndex.world.collisionMask,
+                    //stopperMask = LayerIndex.world.collisionMask,
                     weapon = base.gameObject,
                     tracerEffectPrefab = Commando.CommandoWeapon.FireBarrage.tracerEffectPrefab,
-                    hitEffectPrefab = Commando.CommandoWeapon.FireBarrage.hitEffectPrefab,
-                    HitEffectNormal = ClayBruiser.Weapon.MinigunFire.bulletHitEffectNormal
+                    hitEffectPrefab = Commando.CommandoWeapon.FireBarrage.hitEffectPrefab
+                    //HitEffectNormal = ClayBruiser.Weapon.MinigunFire.bulletHitEffectNormal
                 };
                 bullet.Fire();
+                skill.DeductStock(1);
             }
         }
 
         public override InterruptPriority GetMinimumInterruptPriority()
         {
-            return InterruptPriority.PrioritySkill;
+            return InterruptPriority.Pain;
         }
     }
 }

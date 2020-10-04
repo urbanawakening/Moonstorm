@@ -1,0 +1,63 @@
+ManifestFileVersion: 0
+CRC: 2374710047
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 1b2a43a73ba254c95614e5812e8c58c9
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: e2bdfcc9e91c780b368e748dee5ff1cc
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 4
+  Script: {instanceID: 0}
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 23
+  Script: {instanceID: 0}
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 33
+  Script: {instanceID: 0}
+- Class: 43
+  Script: {instanceID: 0}
+- Class: 48
+  Script: {instanceID: 0}
+- Class: 74
+  Script: {instanceID: 0}
+- Class: 90
+  Script: {instanceID: 0}
+- Class: 91
+  Script: {instanceID: 0}
+- Class: 95
+  Script: {instanceID: 0}
+- Class: 114
+  Script: {fileID: 11500000, guid: 10276f4c15347d549a11822bba5cf3ce, type: 3}
+- Class: 115
+  Script: {instanceID: 0}
+- Class: 136
+  Script: {instanceID: 0}
+- Class: 137
+  Script: {instanceID: 0}
+- Class: 213
+  Script: {instanceID: 0}
+Assets:
+- Assets/Executioner/ExecAnimator.controller
+- Assets/Items/DetritiveTrematode/DetritiveTrematode_Icon.png
+- Assets/Executioner/exeportrait.png
+- Assets/Executioner/ExecAnimatorMenu.controller
+- Assets/Items/Diary/MDLDiary.prefab
+- Assets/Executioner/ExecutionerModelMenu.prefab
+- Assets/Items/DetritiveTrematode/MDLDetritiveTrematode.prefab
+- Assets/Items/Diary/Diary_Icon.png
+- Assets/Executioner/skill2icon.png
+- Assets/Executioner/skill3icon.png
+- Assets/Items/DormantFungus/MDLDormantFungus.prefab
+- Assets/Executioner/surprised-skull.png
+- Assets/Items/MoltenCoin/MDLMoltenCoin.prefab
+- Assets/Executioner/skill4icon.png
+- Assets/Executioner/skill1icon.png
+- Assets/Executioner/ExecutionerModel.prefab
+Dependencies: []
