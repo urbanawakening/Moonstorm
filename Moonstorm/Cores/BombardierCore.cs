@@ -47,7 +47,7 @@ namespace Moonstorm.Cores
             desc = desc + "< ! > Concussive Blast is an excellent escape and mobility tool, but it also pulls enemies towards you when used. Jump away and shoot straight down to quickly dispose of a crowd" + Environment.NewLine + Environment.NewLine;
             desc = desc + "< ! > The key to success is realizing all of the Bombardier's abilitie propel him into the air. Try to gain as much height as possible when using Grand Slam to annihilate your enemies." + Environment.NewLine + Environment.NewLine;
 
-            LanguageAPI.Add("BOMBARDIER_BASENAMETOKEN", "Bombardier");
+            //LanguageAPI.Add("BOMBARDIER_BASENAMETOKEN", "Bombardier");
             LanguageAPI.Add("BOMBARDIER_DESCRIPTION", desc);
             LanguageAPI.Add("BOMBARDIER_FLAVORTOKEN", "...and so he left, lighting the fuse for a new adventure.");
 
