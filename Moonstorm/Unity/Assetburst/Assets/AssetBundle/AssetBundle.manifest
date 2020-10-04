@@ -1,7 +1,10 @@
 ManifestFileVersion: 0
-CRC: 3899954407
+CRC: 2768552841
 AssetBundleManifest:
   AssetBundleInfos:
     Info_0:
-      Name: exampleitemmod
+      Name: assetstorm
+      Dependencies: {}
+    Info_1:
+      Name: assetburst
       Dependencies: {}

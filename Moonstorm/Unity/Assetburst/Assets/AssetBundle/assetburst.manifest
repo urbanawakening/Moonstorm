@@ -1,0 +1,207 @@
+ManifestFileVersion: 0
+CRC: 2505116630
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: b8582c596e042c090cf934ceffabbe1c
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 87095a85d917a02675d1b927900810c1
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 4
+  Script: {instanceID: 0}
+- Class: 20
+  Script: {instanceID: 0}
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 23
+  Script: {instanceID: 0}
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 33
+  Script: {instanceID: 0}
+- Class: 43
+  Script: {instanceID: 0}
+- Class: 48
+  Script: {instanceID: 0}
+- Class: 74
+  Script: {instanceID: 0}
+- Class: 90
+  Script: {instanceID: 0}
+- Class: 91
+  Script: {instanceID: 0}
+- Class: 95
+  Script: {instanceID: 0}
+- Class: 108
+  Script: {instanceID: 0}
+- Class: 114
+  Script: {instanceID: 0}
+- Class: 114
+  Script: {fileID: 11500000, guid: aaabc320440a02340b0239f0cf1745a2, type: 3}
+- Class: 136
+  Script: {instanceID: 0}
+- Class: 137
+  Script: {instanceID: 0}
+- Class: 213
+  Script: {instanceID: 0}
+- Class: 319
+  Script: {instanceID: 0}
+Assets:
+- Assets/Moonstorm/Icons/Engineer/Impact_Grenades.png
+- Assets/Moonstorm/Items/Earrings/Magicians_earings.fbx
+- Assets/Moonstorm/Survivors/Bombardier/Animations/Sprint.anim
+- Assets/Moonstorm/Items/MechanicalTrinket/hitchhiker.fbx
+- Assets/Moonstorm/Teaser/tex/Materials/Ice_Tool_Tex.mat
+- Assets/Moonstorm/Items/Earrings/magicicon.png
+- Assets/Moonstorm/Items/Lemdog/LemDog_TexIcon.png
+- Assets/Moonstorm/Items/Icon.mat
+- Assets/Moonstorm/Teaser/tex/Materials/T_Executor_V2_Color.mat
+- Assets/Moonstorm/Survivors/Bombardier/Animations/Utility.anim
+- Assets/Moonstorm/Survivors/Bombardier/Materials/Materials/T_Bombardier_Emissive2.mat
+- Assets/Moonstorm/Items/Cloak/MDLCloak.prefab
+- Assets/Moonstorm/Teaser/tex/Materials/Dormant_Fungus_Tex.mat
+- Assets/Moonstorm/Items/GeigerCounter/geigericon.png
+- Assets/Moonstorm/Teaser/tex/Dormant_Fungus_Tex.png
+- Assets/Moonstorm/Items/FabinhoruDagger/Cloaking4.fbx
+- Assets/Moonstorm/Survivors/Bombardier/Animations/Jump.anim
+- Assets/Moonstorm/Teaser/tex/HottestSauceT2.png
+- Assets/Moonstorm/Items/MortarChip/chipIcon.png
+- Assets/Moonstorm/Survivors/Bombardier/Materials/T_Bombardier_Color.mat
+- Assets/Moonstorm/Items/FabinhoruDagger/Materials/fab_dagger.mat
+- Assets/Moonstorm/Teaser/tex/Materials/LampBoss.mat
+- Assets/Moonstorm/Items/Cloak/Japes_cloak.fbx
+- Assets/Moonstorm/Items/MortarChip/Mortar_chip.fbx
+- Assets/Moonstorm/Items/Lemdog/LemDog_Tex.png
+- Assets/Moonstorm/Materials/LampBoss.mat
+- Assets/Moonstorm/Items/Lemdog/MDLLemDog.prefab
+- Assets/Moonstorm/EliteIcons/rallyingIcon.png
+- Assets/Moonstorm/Teaser/tex/Materials/axetexture.mat
+- Assets/Moonstorm/Items/GeigerCounter/Materials/Geiger.mat
+- Assets/Moonstorm/Materials/DiaryTexture.mat
+- Assets/Moonstorm/Items/Earrings/MDLEarrings.prefab
+- Assets/Moonstorm/Items/GeigerCounter/Geiger.png
+- Assets/Moonstorm/Survivors/Bombardier/Animations/animExampleSurvivor.controller
+- Assets/Moonstorm/Items/FabinhoruDagger/Materials/Cloaking_M.mat
+- Assets/Moonstorm/Items/Grinder/textures/bump-map-concrete-with-damaged-paint-0.jpeg
+- Assets/Moonstorm/MDLTeaser.prefab
+- Assets/Moonstorm/Teaser/tex/Materials/DiaryTexture.mat
+- Assets/Moonstorm/Survivors/Bombardier/Animations/CharSelectIdle.anim
+- Assets/Moonstorm/brickwall.png
+- Assets/Moonstorm/Enemies/matExampleSurvivor.mat
+- Assets/Moonstorm/Items/Grinder/Materials/Long_BUMP.mat
+- Assets/Moonstorm/Survivors/Bombardier/T_Bombardier_Color.png
+- Assets/Moonstorm/Survivors/Bombardier/Animations/Ascending.anim
+- Assets/Moonstorm/Materials/T_Executor_Emissive.mat
+- Assets/Moonstorm/Survivors/Bombardier/Materials/T_Bombardier_Color 1.mat
+- Assets/Moonstorm/Items/MechanicalTrinket/MDLMechanicalTrinket.prefab
+- Assets/Moonstorm/Items/UESKeycard/textures/keycard_metal.png
+- Assets/Moonstorm/Items/MortarChip/Materials/mortar_chip.mat
+- Assets/Moonstorm/Enemies/texExampleSurvivor.png
+- Assets/Moonstorm/Materials/texTrimSheetMetalVibrant.mat
+- Assets/Moonstorm/Items/UESKeycard/textures/keycard_texture_red.png
+- Assets/Moonstorm/Teaser/tex/Ice_Tool_Tex.png
+- Assets/Moonstorm/Items/Grinder/textures/Handle_COL.png
+- Assets/Moonstorm/Teaser/tex/axetexture.png
+- Assets/Moonstorm/Teaser/tex/DiaryTexture.png
+- Assets/Moonstorm/Items/Lemdog/Materials/LemDog_TexEmission.mat
+- Assets/Moonstorm/Teaser/tex/texTrimSheetMetalVibrant.png
+- Assets/Moonstorm/Teaser/tex/texTrimSheetMetalNormal.png
+- Assets/Moonstorm/Items/Cloak/JapeIcon.png
+- Assets/Moonstorm/Items/Earrings/Materials/Magicians_earrings.mat
+- Assets/Moonstorm/Items/Earrings/Magicians_earrings.png
+- Assets/Moonstorm/Enemies/DeployedLamp/LampDelpoyed.fbx
+- Assets/Moonstorm/Items/GeigerCounter/geiger_counter.fbx
+- Assets/Moonstorm/Teaser/TEASER 1.fbx
+- Assets/Moonstorm/Survivors/Bombardier/Animations/Falling.anim
+- Assets/Moonstorm/Items/FabinhoruDagger/textures/Cloaking.jpg
+- Assets/Moonstorm/Survivors/ExampleSurvivorGestureMask.mask
+- Assets/Moonstorm/Items/Grinder/textures/Long_BUMP.png
+- Assets/Moonstorm/Items/FabinhoruDagger/New Animator Controller.controller
+- Assets/Moonstorm/Items/FabinhoruDagger/textures/Cloaking_M.jpg
+- Assets/Moonstorm/Items/Grinder/Materials/Handle_BUMP.mat
+- Assets/Moonstorm/Items/UESKeycard/Materials/keycard_gloss.mat
+- Assets/Moonstorm/Materials/Dormant_Fungus_Tex.mat
+- Assets/Moonstorm/Survivors/Bombardier/Animations/WalkLFT.anim
+- Assets/Moonstorm/Items/mdlExampleSurvivor.prefab
+- Assets/Moonstorm/Materials/axetexture.mat
+- Assets/Moonstorm/Teaser/tex/LampBoss.png
+- Assets/Moonstorm/Items/FabinhoruDagger/textures/Cloaking_n.jpg
+- Assets/Moonstorm/Items/UESKeycard/MDLKeycard.prefab
+- Assets/Moonstorm/Items/RedSkull/Materials/redskulltex.mat
+- Assets/Moonstorm/Items/GeigerCounter/MDLGeigerCounter.prefab
+- Assets/Moonstorm/Items/FabinhoruDagger/fab_dagger.fbx
+- Assets/Moonstorm/Items/RedSkull/MDLRedskull.prefab
+- Assets/Moonstorm/Items/FabinhoruDagger/Materials/Cloaking_r.mat
+- Assets/Moonstorm/Teaser/tex/Materials/texTrimSheetMetalNormal.mat
+- Assets/Moonstorm/Survivors/Bombardier/Animations/Idle.anim
+- Assets/Moonstorm/Items/Cloak/Materials/japes_cloak.mat
+- Assets/Moonstorm/Items/UESKeycard/textures/keycard_transparency.png
+- Assets/Moonstorm/Teaser/TEASER.fbx
+- Assets/Moonstorm/Teaser/tex/Materials/Materials/texMetalTrimDiffuse.mat
+- Assets/Moonstorm/logo.png
+- Assets/Moonstorm/Survivors/Bombardier/Materials/T_Bombardier_Emissive2.png
+- Assets/Moonstorm/Enemies/Boss/LampBoss.prefab
+- Assets/Moonstorm/Items/Grinder/Materials/Long_COL.mat
+- Assets/Moonstorm/Survivors/Bombardier/Animations/Special2.anim
+- Assets/Moonstorm/Enemies/DeployedLamp/LampDeployedEmis.png
+- Assets/Moonstorm/Teaser/tex/Materials/T_Executor_Emissive.mat
+- Assets/Moonstorm/Items/Grinder/Materials/Handle_COL.mat
+- Assets/Moonstorm/Items/UESKeycard/keycard.fbx
+- Assets/Moonstorm/Survivors/Bombardier/Animations/Special1.anim
+- Assets/Moonstorm/Teaser/tex/Detritive_Trematode_Tex.png
+- Assets/Moonstorm/Items/UESKeycard/Materials/keycard_texture_red.mat
+- Assets/Moonstorm/Items/FabinhoruDagger/MDLDagger.prefab
+- Assets/Moonstorm/Survivors/Bombardier/Animations/Primary.anim
+- Assets/Moonstorm/Items/RedSkull/redskullfinal.blend
+- Assets/Moonstorm/Items/FabinhoruDagger/fab_dagger.png
+- Assets/Moonstorm/Items/MortarChip/mortar_chip.png
+- Assets/Moonstorm/Items/FabinhoruDagger/textures/Cloaking_r.jpg
+- Assets/Moonstorm/Items/Grinder/Materials/bump-map-concrete-with-damaged-paint-0.mat
+- Assets/Moonstorm/Items/Grinder/textures/Long_COL.png
+- Assets/Moonstorm/Items/Cloak/japes_cloak.png
+- Assets/Moonstorm/Materials/Ice_Tool_Tex.mat
+- Assets/Moonstorm/Enemies/Boss/LampBossEmis.png
+- Assets/Moonstorm/Survivors/Bombardier/Animations/WalkBWD.anim
+- Assets/Moonstorm/Items/Lemdog/Materials/LemDog_TexIcon.mat
+- Assets/Moonstorm/Items/Grinder/textures/Handle_BUMP.png
+- Assets/Moonstorm/Items/Lemdog/Materials/LemDog_Tex.mat
+- Assets/Moonstorm/Items/UESKeycard/source/keycard.fbx
+- Assets/Moonstorm/Survivors/Bombardier/icon.png
+- Assets/Moonstorm/Enemies/DeployedLamp/LampDeployed.png
+- Assets/Moonstorm/Teaser/tex/T_Executor_Emissive.png
+- Assets/Moonstorm/Materials/brickwall.mat
+- Assets/Moonstorm/Survivors/Bombardier/Animations/WalkFWD.anim
+- Assets/Moonstorm/Items/MortarChip/MDLMortarChip.prefab
+- Assets/Moonstorm/Survivors/Bombardier/bombsAnims.blend
+- Assets/Moonstorm/Items/MechanicalTrinket/Icon.png
+- Assets/Moonstorm/Items/UESKeycard/textures/keycard_gloss.png
+- Assets/Moonstorm/Survivors/Bombardier/Materials/T_Bombardier_Emissive2.mat
+- Assets/Moonstorm/Teaser/tex/Materials/Detritive_Trematode_Tex.mat
+- Assets/Moonstorm/Enemies/Boss/LampBoss.png
+- Assets/Moonstorm/Items/UESKeycard/textures/keycard_normals.png
+- Assets/Moonstorm/Items/FabinhoruDagger/Materials/Cloaking.mat
+- Assets/Moonstorm/Survivors/Bombardier/Animations/WalkRHT.anim
+- Assets/Moonstorm/Items/Grinder/Grinder.fbx
+- Assets/Moonstorm/Items/Lemdog/LemDog_TexEmission.png
+- Assets/Moonstorm/Teaser/TEASER 2.fbx
+- Assets/Moonstorm/Teaser/tex/Materials/texMetalTrimDiffuse.png
+- Assets/Moonstorm/Teaser/tex/Materials/texTrimSheetMetalVibrant.mat
+- Assets/Moonstorm/Items/Lemdog/LemDog.fbx
+- Assets/Moonstorm/Teaser/MDLTeaser.prefab
+- Assets/Moonstorm/Items/LightningEye/MDLLightningEye.prefab
+- Assets/Moonstorm/Survivors/Bombardier/Animations/Secondary.anim
+- Assets/Moonstorm/Teaser/tex/T_Executor_V2_Color.png
+- Assets/Moonstorm/Items/Grinder/MDLGrinder.prefab
+- Assets/Moonstorm/Survivors/Bombardier/mdlBombardier.prefab
+- Assets/Moonstorm/Icons/Engineer/TR75_Immolator_Turret_2.png
+- Assets/Moonstorm/Items/UESKeycard/Materials/keycard_normals.mat
+- Assets/Moonstorm/Icons/REX/texTreebotHarvester.png
+- Assets/Moonstorm/Materials/T_Executor_V2_Color.mat
+- Assets/Moonstorm/Materials/texTrimSheetMetalNormal.mat
+- Assets/Moonstorm/Survivors/Bombardier/Animations/CharSelect.anim
+- Assets/Moonstorm/Items/RedSkull/redskulltex.png
+- Assets/Moonstorm/Survivors/Bombardier/Materials/T_Bombardier_Color 2.mat
+Dependencies: []

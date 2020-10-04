@@ -11,6 +11,9 @@ using RoR2;
 using Moonstorm.Cores.States.Bombardier;
 using Moonstorm.Cores.Components;
 using Moonstorm.Cores.Skills;
+using BepInEx;
+using UnityEngine.Networking;
+using KinematicCharacterController;
 
 namespace Moonstorm.Cores
 {
@@ -19,7 +22,7 @@ namespace Moonstorm.Cores
         public static BombardierCore instance;
         public BombardierCore() => CreateBombardier();
 
-        protected internal GameObject body;
+        protected internal GameObject characterPrefab;
         protected internal CharacterBody characterBody;
         protected internal SkillLocator skillLocator;
         protected void CreateBombardier() {
@@ -27,19 +30,255 @@ namespace Moonstorm.Cores
 
             LogCore.LogI("Initializing Core: " + base.ToString());
 
-            CreateBody();
+            CreatePrefab();
             SetComponents();
             CreateSkills();
             AddToSurvivorSelect();
         }
 
-        protected void CreateBody() {
-            body = Resources.Load<GameObject>("prefabs/characterbodies/CommandoBody").InstantiateClone("BombardierBody", true);
-            API.RegisterNewBody(body);
+        internal GameObject CreateModel(GameObject main)
+        {
+            BaseUnityPlugin.Destroy(main.transform.Find("ModelBase").gameObject);
+            BaseUnityPlugin.Destroy(main.transform.Find("CameraPivot").gameObject);
+            BaseUnityPlugin.Destroy(main.transform.Find("AimOrigin").gameObject);
+
+            // make sure it's set up right in the unity project
+            GameObject model = AssetsCore.mainAssetBundle.LoadAsset<GameObject>("Assets/Moonstorm/Survivors/Bombardier/mdlBombardier.prefab");
+
+            return model;
         }
 
+        internal  void CreatePrefab()
+        {
+            // first clone the commando prefab so we can turn that into our own survivor
+            characterPrefab = PrefabAPI.InstantiateClone(Resources.Load<GameObject>("Prefabs/CharacterBodies/CommandoBody"), "ExampleSurvivorBody", true, "C:\\Users\\test\\Documents\\ror2mods\\ExampleSurvivor\\ExampleSurvivor\\ExampleSurvivor\\ExampleSurvivor.cs", "CreatePrefab", 151);
+
+            characterPrefab.GetComponent<NetworkIdentity>().localPlayerAuthority = true;
+
+            // create the model here, we're gonna replace commando's model with our own
+            GameObject model = CreateModel(characterPrefab);
+
+            GameObject gameObject = new GameObject("ModelBase");
+            gameObject.transform.parent = characterPrefab.transform;
+            gameObject.transform.localPosition = new Vector3(0f, -0.81f, 0f);
+            gameObject.transform.localRotation = Quaternion.identity;
+            gameObject.transform.localScale = new Vector3(1f, 1f, 1f);
+
+            GameObject gameObject2 = new GameObject("CameraPivot");
+            gameObject2.transform.parent = gameObject.transform;
+            gameObject2.transform.localPosition = new Vector3(0f, 1.6f, 0f);
+            gameObject2.transform.localRotation = Quaternion.identity;
+            gameObject2.transform.localScale = Vector3.one;
+
+            GameObject gameObject3 = new GameObject("AimOrigin");
+            gameObject3.transform.parent = gameObject.transform;
+            gameObject3.transform.localPosition = new Vector3(0f, 1.4f, 0f);
+            gameObject3.transform.localRotation = Quaternion.identity;
+            gameObject3.transform.localScale = Vector3.one;
+
+            Transform transform = model.transform;
+            transform.parent = gameObject.transform;
+            transform.localPosition = Vector3.zero;
+            transform.localScale = new Vector3(0.01f, 0.01f, 0.01f);
+            transform.localRotation = Quaternion.identity;
+
+            CharacterDirection characterDirection = characterPrefab.GetComponent<CharacterDirection>();
+            characterDirection.moveVector = Vector3.zero;
+            characterDirection.targetTransform = gameObject.transform;
+            characterDirection.overrideAnimatorForwardTransform = null;
+            characterDirection.rootMotionAccumulator = null;
+            characterDirection.modelAnimator = model.GetComponentInChildren<Animator>();
+            characterDirection.driveFromRootRotation = false;
+            characterDirection.turnSpeed = 720f;
+
+            // set up the character body here
+            CharacterBody bodyComponent = characterPrefab.GetComponent<CharacterBody>();
+
+            // the charactermotor controls the survivor's movement and stuff
+            CharacterMotor characterMotor = characterPrefab.GetComponent<CharacterMotor>();
+            characterMotor.walkSpeedPenaltyCoefficient = 1f;
+            characterMotor.characterDirection = characterDirection;
+            characterMotor.muteWalkMotion = false;
+            characterMotor.mass = 100f;
+            characterMotor.airControl = 0.25f;
+            characterMotor.disableAirControlUntilCollision = false;
+            characterMotor.generateParametersOnAwake = true;
+            characterMotor.useGravity = true;
+            characterMotor.isFlying = false;
+
+            InputBankTest inputBankTest = characterPrefab.GetComponent<InputBankTest>();
+            inputBankTest.moveVector = Vector3.zero;
+
+            CameraTargetParams cameraTargetParams = characterPrefab.GetComponent<CameraTargetParams>();
+            cameraTargetParams.cameraParams = Resources.Load<GameObject>("Prefabs/CharacterBodies/CommandoBody").GetComponent<CameraTargetParams>().cameraParams;
+            cameraTargetParams.cameraPivotTransform = null;
+            cameraTargetParams.aimMode = CameraTargetParams.AimType.Standard;
+            cameraTargetParams.recoil = Vector2.zero;
+            cameraTargetParams.idealLocalCameraPos = Vector3.zero;
+            cameraTargetParams.dontRaycastToPivot = false;
+
+            // this component is used to locate the character model(duh), important to set this up here
+            ModelLocator modelLocator = characterPrefab.GetComponent<ModelLocator>();
+            modelLocator.modelTransform = transform;
+            modelLocator.modelBaseTransform = gameObject.transform;
+            modelLocator.dontReleaseModelOnDeath = false;
+            modelLocator.autoUpdateModelTransform = true;
+            modelLocator.dontDetatchFromParent = false;
+            modelLocator.noCorpse = false;
+            modelLocator.normalizeToFloor = false; // set true if you want your character to rotate on terrain like acrid does
+            modelLocator.preserveModel = false;
+
+            // childlocator is something that must be set up in the unity project, it's used to find any child objects for things like footsteps or muzzle flashes
+            // also important to set up if you want quality
+            ChildLocator childLocator = model.GetComponent<ChildLocator>();
+
+            // this component is used to handle all overlays and whatever on your character, without setting this up you won't get any cool effects like burning or freeze on the character
+            // it goes on the model object of course
+            CharacterModel characterModel = model.AddComponent<CharacterModel>();
+            characterModel.body = bodyComponent;
+            characterModel.baseRendererInfos = new CharacterModel.RendererInfo[]
+            {
+                // set up multiple rendererinfos if needed, but for this example there's only the one
+                new CharacterModel.RendererInfo
+                {
+                    defaultMaterial = model.GetComponentInChildren<SkinnedMeshRenderer>().material,
+                    renderer = model.GetComponentInChildren<SkinnedMeshRenderer>(),
+                    defaultShadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On,
+                    ignoreOverlays = false
+                }
+            };
+
+            characterModel.autoPopulateLightInfos = true;
+            characterModel.invisibilityCount = 0;
+            characterModel.temporaryOverlays = new List<TemporaryOverlay>();
+
+            TeamComponent teamComponent = null;
+            if (characterPrefab.GetComponent<TeamComponent>() != null) teamComponent = characterPrefab.GetComponent<TeamComponent>();
+            else teamComponent = characterPrefab.GetComponent<TeamComponent>();
+            teamComponent.hideAllyCardDisplay = false;
+            teamComponent.teamIndex = TeamIndex.None;
+
+            HealthComponent healthComponent = characterPrefab.GetComponent<HealthComponent>();
+            healthComponent.health = 90f;
+            healthComponent.shield = 0f;
+            healthComponent.barrier = 0f;
+            healthComponent.magnetiCharge = 0f;
+            healthComponent.body = null;
+            healthComponent.dontShowHealthbar = false;
+            healthComponent.globalDeathEventChanceCoefficient = 1f;
+
+            characterPrefab.GetComponent<Interactor>().maxInteractionDistance = 3f;
+            characterPrefab.GetComponent<InteractionDriver>().highlightInteractor = true;
+
+            // this disables ragdoll since the character's not set up for it, and instead plays a death animation
+            CharacterDeathBehavior characterDeathBehavior = characterPrefab.GetComponent<CharacterDeathBehavior>();
+            characterDeathBehavior.deathStateMachine = characterPrefab.GetComponent<EntityStateMachine>();
+            characterDeathBehavior.deathState = new SerializableEntityStateType(typeof(GenericCharacterDeath));
+
+            // edit the sfxlocator if you want different sounds
+            SfxLocator sfxLocator = characterPrefab.GetComponent<SfxLocator>();
+            sfxLocator.deathSound = "Play_ui_player_death";
+            sfxLocator.barkSound = "";
+            sfxLocator.openSound = "";
+            sfxLocator.landingSound = "Play_char_land";
+            sfxLocator.fallDamageSound = "Play_char_land_fall_damage";
+            sfxLocator.aliveLoopStart = "";
+            sfxLocator.aliveLoopStop = "";
+
+            Rigidbody rigidbody = characterPrefab.GetComponent<Rigidbody>();
+            rigidbody.mass = 100f;
+            rigidbody.drag = 0f;
+            rigidbody.angularDrag = 0f;
+            rigidbody.useGravity = false;
+            rigidbody.isKinematic = true;
+            rigidbody.interpolation = RigidbodyInterpolation.None;
+            rigidbody.collisionDetectionMode = CollisionDetectionMode.Discrete;
+            rigidbody.constraints = RigidbodyConstraints.None;
+
+            CapsuleCollider capsuleCollider = characterPrefab.GetComponent<CapsuleCollider>();
+            capsuleCollider.isTrigger = false;
+            capsuleCollider.material = null;
+            capsuleCollider.center = new Vector3(0f, 0f, 0f);
+            capsuleCollider.radius = 0.5f;
+            capsuleCollider.height = 1.82f;
+            capsuleCollider.direction = 1;
+
+            KinematicCharacterMotor kinematicCharacterMotor = characterPrefab.GetComponent<KinematicCharacterMotor>();
+            kinematicCharacterMotor.CharacterController = characterMotor;
+            kinematicCharacterMotor.Capsule = capsuleCollider;
+            kinematicCharacterMotor.Rigidbody = rigidbody;
+
+            capsuleCollider.radius = 0.5f;
+            capsuleCollider.height = 1.82f;
+            capsuleCollider.center = new Vector3(0, 0, 0);
+            capsuleCollider.material = null;
+
+            kinematicCharacterMotor.DetectDiscreteCollisions = false;
+            kinematicCharacterMotor.GroundDetectionExtraDistance = 0f;
+            kinematicCharacterMotor.MaxStepHeight = 0.2f;
+            kinematicCharacterMotor.MinRequiredStepDepth = 0.1f;
+            kinematicCharacterMotor.MaxStableSlopeAngle = 55f;
+            kinematicCharacterMotor.MaxStableDistanceFromLedge = 0.5f;
+            kinematicCharacterMotor.PreventSnappingOnLedges = false;
+            kinematicCharacterMotor.MaxStableDenivelationAngle = 55f;
+            kinematicCharacterMotor.RigidbodyInteractionType = RigidbodyInteractionType.None;
+            kinematicCharacterMotor.PreserveAttachedRigidbodyMomentum = true;
+            kinematicCharacterMotor.HasPlanarConstraint = false;
+            kinematicCharacterMotor.PlanarConstraintAxis = Vector3.up;
+            kinematicCharacterMotor.StepHandling = StepHandlingMethod.None;
+            kinematicCharacterMotor.LedgeHandling = true;
+            kinematicCharacterMotor.InteractiveRigidbodyHandling = true;
+            kinematicCharacterMotor.SafeMovement = false;
+
+            // this sets up the character's hurtbox, kinda confusing, but should be fine as long as it's set up in unity right
+            HurtBoxGroup hurtBoxGroup = model.AddComponent<HurtBoxGroup>();
+
+            HurtBox componentInChildren = model.GetComponentInChildren<CapsuleCollider>().gameObject.AddComponent<HurtBox>();
+            componentInChildren.gameObject.layer = LayerIndex.entityPrecise.intVal;
+            componentInChildren.healthComponent = healthComponent;
+            componentInChildren.isBullseye = true;
+            componentInChildren.damageModifier = HurtBox.DamageModifier.Normal;
+            componentInChildren.hurtBoxGroup = hurtBoxGroup;
+            componentInChildren.indexInGroup = 0;
+
+            hurtBoxGroup.hurtBoxes = new HurtBox[]
+            {
+                componentInChildren
+            };
+
+            hurtBoxGroup.mainHurtBox = componentInChildren;
+            hurtBoxGroup.bullseyeCount = 1;
+
+            // this is for handling footsteps, not needed but polish is always good
+            FootstepHandler footstepHandler = model.AddComponent<FootstepHandler>();
+            footstepHandler.baseFootstepString = "Play_player_footstep";
+            footstepHandler.sprintFootstepOverrideString = "";
+            footstepHandler.enableFootstepDust = true;
+            footstepHandler.footstepDustPrefab = Resources.Load<GameObject>("Prefabs/GenericFootstepDust");
+
+            // ragdoll controller is a pain to set up so we won't be doing that here..
+            RagdollController ragdollController = model.AddComponent<RagdollController>();
+            ragdollController.bones = null;
+            ragdollController.componentsToDisableOnRagdoll = null;
+
+            // this handles the pitch and yaw animations, but honestly they are nasty and a huge pain to set up so i didn't bother
+            AimAnimator aimAnimator = model.AddComponent<AimAnimator>();
+            aimAnimator.inputBank = inputBankTest;
+            aimAnimator.directionComponent = characterDirection;
+            aimAnimator.pitchRangeMax = 55f;
+            aimAnimator.pitchRangeMin = -50f;
+            aimAnimator.yawRangeMin = -44f;
+            aimAnimator.yawRangeMax = 44f;
+            aimAnimator.pitchGiveupRange = 30f;
+            aimAnimator.yawGiveupRange = 10f;
+            aimAnimator.giveupDuration = 8f;
+
+            API.RegisterNewBody(characterPrefab);
+        }
+
+
         protected void AddToSurvivorSelect() {
-            GameObject display = body.GetComponent<ModelLocator>().modelTransform.gameObject;
+            GameObject display = characterPrefab.GetComponent<ModelLocator>().modelTransform.gameObject;
 
             string desc = "Bombardier is a master of unconventional warfare who can use his explosives to control the battle field" + Environment.NewLine + Environment.NewLine;
             desc = desc + "< ! > Rocket Blast is weak against single targets, but excels in crowds. Blast into a large crowd of enemies for maximum destruction." + Environment.NewLine + Environment.NewLine;
@@ -47,19 +286,19 @@ namespace Moonstorm.Cores
             desc = desc + "< ! > Concussive Blast is an excellent escape and mobility tool, but it also pulls enemies towards you when used. Jump away and shoot straight down to quickly dispose of a crowd" + Environment.NewLine + Environment.NewLine;
             desc = desc + "< ! > The key to success is realizing all of the Bombardier's abilitie propel him into the air. Try to gain as much height as possible when using Grand Slam to annihilate your enemies." + Environment.NewLine + Environment.NewLine;
 
-            //LanguageAPI.Add("BOMBARDIER_BASENAMETOKEN", "Bombardier");
+            LanguageAPI.Add("BOMBARDIER_BASENAMETOKEN", "Bombardier");
             LanguageAPI.Add("BOMBARDIER_DESCRIPTION", desc);
             LanguageAPI.Add("BOMBARDIER_FLAVORTOKEN", "...and so he left, lighting the fuse for a new adventure.");
 
             SurvivorDef def = new SurvivorDef() {
-                bodyPrefab = body,
+                bodyPrefab = characterPrefab,
                 descriptionToken = "BOMBARDIER_DESCRIPTION",
                 displayNameToken = "BOMBARDIER_BASENAMETOKEN",
                 //nigga stop smoking and work
                 displayPrefab = display,
                 name = "Bombardier",
                 outroFlavorToken = "BOMBARDIER_FLAVORTOKEN",
-                primaryColor = new Color(253f / 255f, 118f / 255f, 26f / 255f), 
+                primaryColor = new Color(253f / 255f, 118f / 255f, 26f), /// 255), 
                 unlockableName = ""
             };
             SurvivorAPI.AddSurvivor(def);
@@ -98,20 +337,20 @@ namespace Moonstorm.Cores
             characterBody.levelRegen = 0.2f; //Regen gained when leveling up. 
             //fuck you moffein no credit
             //eat my ass    
-            //characterBody.portraitIcon = AssetsCore.portraitIcon; //The portrait icon, shows up in multiplayer and the death UI
+            characterBody.portraitIcon = AssetsCore.mainAssetBundle.LoadAsset<Texture>("Assets/Moonstorm/Survivors/Bombardier/icon.png"); ; //The portrait icon, shows up in multiplayer and the death UI
             //characterBody.preferredPodPrefab = Resources.Load<GameObject>("prefabs/networkedobjects/robocratepod");
         }
 
         private void CreateSkills()
         {
-            API.CreateEmptySkills(body);
+            API.CreateEmptySkills(characterPrefab);
 
-            skillLocator = body.GetComponent<SkillLocator>();
-            characterBody = body.GetComponent<CharacterBody>();
+            skillLocator = characterPrefab.GetComponent<SkillLocator>();
+            characterBody = characterPrefab.GetComponent<CharacterBody>();
 
             SetCharacterBody();
 
-            body.AddComponent<BombardierStickyBombManager>();
+            characterPrefab.AddComponent<BombardierStickyBombManager>();
 
             skillLocator.passiveSkill.enabled = true;
 

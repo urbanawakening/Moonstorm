@@ -1,0 +1,57 @@
+ManifestFileVersion: 0
+CRC: 3963526168
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 0b4eec2a3037e64238689585a19e464f
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 99af7a0ab6b71be53ebcca623a4c7cf1
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 4
+  Script: {instanceID: 0}
+- Class: 20
+  Script: {instanceID: 0}
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 23
+  Script: {instanceID: 0}
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 33
+  Script: {instanceID: 0}
+- Class: 43
+  Script: {instanceID: 0}
+- Class: 48
+  Script: {instanceID: 0}
+- Class: 108
+  Script: {instanceID: 0}
+Assets:
+- Assets/Starstorm 2/Items/MoltenCoin/Materials/Molten_Coin_EmissionMask.mat
+- Assets/Starstorm 2/Items/DetritiveTrematode/DetritiveTrematode_Icon.png
+- Assets/Starstorm 2/Items/MoltenCoin/diffuse.mat
+- Assets/Starstorm 2/Items/DetritiveTrematode/MDLDetritiveTrematode.prefab
+- Assets/Starstorm 2/Items/DetritiveTrematode/Materials/Detritive_Trematode_Tex.mat
+- Assets/Starstorm 2/Items/DetritiveTrematode/Detritive_Trematode_Tex.png
+- Assets/Starstorm 2/Items/MoltenCoin/MDLMoltenCoin.prefab
+- Assets/Starstorm 2/Items/DormantFungus/MDLDormantFungus.prefab
+- Assets/Starstorm 2/Items/Diary/Diary_Icon.png
+- Assets/Starstorm 2/Items/Diary/Diary_V01.blend
+- Assets/Starstorm 2/Items/MoltenCoin/MoltenCoinDiffuse.png
+- Assets/Starstorm 2/Items/Diary/Materials/DiaryTexture.mat
+- Assets/Starstorm 2/Items/MoltenCoin/Molten_Coin.blend
+- Assets/Starstorm 2/Items/DormantFungus/Dormant_Fungus_V01.blend
+- Assets/Starstorm 2/Items/MoltenCoin/Materials/Materials/Molten_Coin_EmissionMask.mat
+- Assets/Starstorm 2/Items/DetritiveTrematode/Detritive_Trematode.blend
+- Assets/Starstorm 2/Items/DormantFungus/Materials/Dormant_Fungus_Tex.mat
+- Assets/Starstorm 2/Items/MoltenCoin/MoltenCoinDiffuse2.png
+- Assets/Starstorm 2/Items/Diary/DiaryTexture.png
+- Assets/Starstorm 2/Items/DormantFungus/Dormant_Fungus_Tex.png
+- Assets/Starstorm 2/Items/Diary/MDLDiary.prefab
+- Assets/Starstorm 2/Items/MoltenCoin/Materials/MoltenCoinDiffuse.mat
+- Assets/Starstorm 2/Items/MoltenCoin/Materials/MoltenCoinDiffuse2.mat
+- Assets/Starstorm 2/Items/MoltenCoin/Materials/Molten_Coin_EmissionMask.png
+Dependencies: []
