@@ -55,7 +55,7 @@ namespace EntityStates.Executioner
                 this.hasFired = true;
                 bool isCrit = base.RollCrit();
 
-                Util.PlayScaledSound(Commando.CommandoWeapon.FirePistol.firePistolSoundString, base.gameObject, this.attackSpeedStat);
+                Util.PlayScaledSound(Commando.CommandoWeapon.FirePistol2.firePistolSoundString, base.gameObject, this.attackSpeedStat);
                 base.AddRecoil(-0.4f * recoil, -0.8f * recoil, -0.3f * recoil, 0.3f * recoil);
                 EffectManager.SimpleMuzzleFlash(Commando.CommandoWeapon.FirePistol.effectPrefab, base.gameObject, this.muzzleString, false);
                 base.PlayAnimation("UpperBody, Override", "Primary", "Primary.rate", this.duration);
