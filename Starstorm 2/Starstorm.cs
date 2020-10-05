@@ -22,6 +22,7 @@ namespace Starstorm2
         "ResourcesAPI",
         "UnlockablesAPI",
         "SurvivorAPI",
+        "DifficultyAPI",
         "DotAPI"
     })]
 
@@ -64,6 +65,8 @@ namespace Starstorm2
         public static ConfigEntry<bool> EnableItems;
         public static ConfigEntry<bool> EnableEquipment;
 
+        public static ConfigEntry<bool> EnableTyphoon;
+
         public static ConfigEntry<bool> EnableUnlockAll;
         public static ConfigEntry<bool> Enabled;
         #endregion
@@ -74,6 +77,7 @@ namespace Starstorm2
         EquipmentCore equipmentCore;
         DoTCore dotCore;
         DamageTypeCore damageType;
+        TyphoonCore typhoonCore;
 
         //NucleatorCore nucleatorCore;
         CyborgCore cyborgCore;
@@ -98,6 +102,7 @@ namespace Starstorm2
             //as every good day goes on by
             EnableItems = Config.Bind("Starstorm 2 :: Items", "Enabled", true, "Enables Starstorm 2's items. Set to false to disable Starstorm 2's items.");
             EnableEquipment = Config.Bind("Starstorm 2 :: Equipment", "Enabled", true, "Enables Starstorm 2's equipment. Set to false to disable Starstorm 2's equipment.");
+            EnableTyphoon = Config.Bind("Starstorm 2 :: Typhoon", "Enabled", true, "Enables Starstorm 2's Typhoon difficulty. Set to false to prevent Typhoon from appearing in difficulty selection.");
 
             //survivors
             EnableExecutioner = Config.Bind("Starstorm 2 :: Executioner", "Enabled", true, "Enables Starstorm 2's Executioner survivor. Set to false to disable Starstorm 2's Executioner survivor.");
@@ -115,7 +120,7 @@ namespace Starstorm2
                 damageType = new DamageTypeCore();
 
                 if (EnableExecutioner.Value) {
-                   //executionerCore = new ExecutionerCore();
+                   executionerCore = new ExecutionerCore();
                 }
                 if (EnableCyborg.Value) {
                     cyborgCore = new CyborgCore();
@@ -131,6 +136,10 @@ namespace Starstorm2
                 if (EnableEquipment.Value)
                 {
                     equipmentCore = new EquipmentCore();
+                }
+                if (EnableTyphoon.Value)
+                {
+                    typhoonCore = new TyphoonCore();
                 }
             }
             else
