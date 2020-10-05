@@ -477,8 +477,8 @@ namespace Moonstorm.Cores
                  "KEYWORD_STUNNING",
              };*/
 
-            LanguageAPI.Add(secondarySkillDef.skillDescriptionToken, "Toss a sticky bomb that deals <style=cIsDamage>450% damage</style>. <style=cIsDamage>Detonate all stickies</style> <style=cIsUtility>by using Rocket Blast.</style>");
-            LanguageAPI.Add(secondarySkillDef.skillNameToken, "Sticky Charge");
+            LanguageAPI.Add(secondarySkillDef.skillDescriptionToken, "Toss a satchel charge that deals <style=cIsDamage>450% damage</style>. <style=cIsDamage>Detonate all deployed charges</style> <style=cIsUtility>by using while on cooldown.</style>");
+            LanguageAPI.Add(secondarySkillDef.skillNameToken, "Satchel Charge");
 
             LoadoutAPI.AddSkillDef(secondarySkillDef);
             SkillFamily secondarySkillFamily = skillLocator.secondary.skillFamily;

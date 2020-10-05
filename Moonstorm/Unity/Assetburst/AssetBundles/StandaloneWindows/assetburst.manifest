@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 1087870796
+CRC: 481058061
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 0680a0c12c0a1f818e83f145b7d5dd4d
+    Hash: 00453ec52434885149d0bb873b5ac2b5
   TypeTreeHash:
     serializedVersion: 2
     Hash: 87095a85d917a02675d1b927900810c1
@@ -67,6 +67,7 @@ Assets:
 - Assets/Moonstorm/Teaser/tex/Dormant_Fungus_Tex.png
 - Assets/Moonstorm/Items/FabinhoruDagger/Cloaking4.fbx
 - Assets/Moonstorm/Survivors/Bombardier/Animations/Jump.anim
+- Assets/Moonstorm/Survivors/Bombardier/Materials/T_BombardierM2_color.mat
 - Assets/Moonstorm/Teaser/tex/HottestSauceT2.png
 - Assets/Moonstorm/Items/MortarChip/chipIcon.png
 - Assets/Moonstorm/Survivors/Bombardier/Materials/T_Bombardier_Color.mat
@@ -81,6 +82,7 @@ Assets:
 - Assets/Moonstorm/Teaser/tex/Materials/axetexture.mat
 - Assets/Moonstorm/Items/GeigerCounter/Materials/Geiger.mat
 - Assets/Moonstorm/Materials/DiaryTexture.mat
+- Assets/Moonstorm/Survivors/Bombardier/satchel.blend
 - Assets/Moonstorm/Items/Earrings/MDLEarrings.prefab
 - Assets/Moonstorm/Items/GeigerCounter/Geiger.png
 - Assets/Moonstorm/Survivors/Bombardier/Animations/animExampleSurvivor.controller
@@ -121,6 +123,7 @@ Assets:
 - Assets/Moonstorm/Items/Grinder/textures/Long_BUMP.png
 - Assets/Moonstorm/Items/FabinhoruDagger/New Animator Controller.controller
 - Assets/Moonstorm/Items/FabinhoruDagger/textures/Cloaking_M.jpg
+- Assets/Moonstorm/Survivors/Bombardier/ExecAnimsupdate(Updated)2.blend
 - Assets/Moonstorm/Items/Grinder/Materials/Handle_BUMP.mat
 - Assets/Moonstorm/Items/UESKeycard/Materials/keycard_gloss.mat
 - Assets/Moonstorm/Materials/Dormant_Fungus_Tex.mat
@@ -128,6 +131,7 @@ Assets:
 - Assets/Moonstorm/Items/mdlExampleSurvivor.prefab
 - Assets/Moonstorm/Materials/axetexture.mat
 - Assets/Moonstorm/Teaser/tex/LampBoss.png
+- Assets/Moonstorm/Survivors/Bombardier/T_BombardierM2_color.png
 - Assets/Moonstorm/Items/FabinhoruDagger/textures/Cloaking_n.jpg
 - Assets/Moonstorm/Items/UESKeycard/MDLKeycard.prefab
 - Assets/Moonstorm/Items/RedSkull/Materials/redskulltex.mat
@@ -201,6 +205,7 @@ Assets:
 - Assets/Moonstorm/Icons/REX/texTreebotHarvester.png
 - Assets/Moonstorm/Materials/T_Executor_V2_Color.mat
 - Assets/Moonstorm/Materials/texTrimSheetMetalNormal.mat
+- Assets/Moonstorm/Survivors/Bombardier/mdlSatchel.prefab
 - Assets/Moonstorm/Survivors/Bombardier/Animations/CharSelect.anim
 - Assets/Moonstorm/Items/RedSkull/redskulltex.png
 - Assets/Moonstorm/Survivors/Bombardier/Materials/T_Bombardier_Color 2.mat

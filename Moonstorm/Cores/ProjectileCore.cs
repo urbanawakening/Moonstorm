@@ -1,4 +1,5 @@
-﻿using Moonstorm.Cores.Components;
+﻿using BepInEx;
+using Moonstorm.Cores.Components;
 using R2API;
 using RoR2;
 using RoR2.Projectile;
@@ -18,6 +19,7 @@ namespace Moonstorm.Cores
         public static GameObject MIRVClusterProjectile;
 
         public static GameObject stickyProjectile;
+        private GameObject stickyGhost;
 
         public ProjectileCore() => CreateProjectiles();
 
@@ -46,6 +48,29 @@ namespace Moonstorm.Cores
             }
             else LogCore.LogF("FATAL ERROR:" + MIRVProjectile.name + " failed to register!");
         }
+        #endregion
+
+        #region Bombardier
+        protected private void CreateBombardierProjectiles() {
+            CreateBombardierRocketProjectile();
+            CreateBombardierBetterRocketProjectile();
+            CreateBombardierPayloadProjectile();
+            CreateStickyGhost();
+            CreateStickyProjectile();
+        }
+
+        private protected void CreateStickyGhost() {
+            stickyGhost = Resources.Load<GameObject>("prefabs/projectileghosts/EngiMineGhost").InstantiateClone("BombardierStickyGhost", false);
+            foreach (Transform child in stickyGhost.transform) {
+                //destroy the child. 
+                BaseUnityPlugin.Destroy(child.gameObject);
+            }
+            BaseUnityPlugin.Destroy(stickyGhost.GetComponent<EngiMineAnimator>());
+            BaseUnityPlugin.Destroy(stickyGhost.GetComponent<EngiMineGhostController>());
+
+            var newGhost = BaseUnityPlugin.Instantiate<GameObject>(AssetsCore.mainAssetBundle.LoadAsset<GameObject>("mdlSatchel"));
+            newGhost.transform.SetParent(stickyGhost.transform);
+        }
 
         protected private void CreateStickyProjectile()
         {
@@ -53,37 +78,34 @@ namespace Moonstorm.Cores
             if (API.RegisterNewProjectile(stickyProjectile))
             {
                 stickyProjectile.AddComponent<BombardierStickyBombProjectile>();
+                stickyProjectile.GetComponent<ProjectileController>().ghostPrefab = stickyGhost;
+
+                var sticky = stickyProjectile.AddComponent<ProjectileStickOnImpact>();
+                sticky.ignoreCharacters = false;
+                sticky.ignoreWorld = false;
+                sticky.alignNormals = false;
+
+                var rigidBody = stickyProjectile.GetComponent<Rigidbody>();
+                rigidBody.freezeRotation = false;
 
                 GameObject.Destroy(stickyProjectile.GetComponent<ProjectileDeployToOwner>());
                 GameObject.Destroy(stickyProjectile.GetComponent<Deployable>());
-
                 GameObject.Destroy(stickyProjectile.GetComponent<RTPCController>());
-                foreach (var comp in stickyProjectile.GetComponents<EntityStateMachine>()) {
+                foreach (var comp in stickyProjectile.GetComponents<EntityStateMachine>())
+                {
                     GameObject.Destroy(comp);
                 }
                 GameObject.Destroy(stickyProjectile.GetComponent<NetworkStateMachine>());
                 GameObject.Destroy(stickyProjectile.GetComponent<ProjectileSphereTargetFinder>());
                 GameObject.Destroy(stickyProjectile.GetComponent<ProjectileTargetComponent>());
-               
-                
+
+
                 //GameObject.Destroy(stickyProjectile.GetComponent<ProjectileTargetComponent>());
                 //GameObject.Destroy(stickyProjectile.GetComponent<ProjectileTargetComponent>());
                 //GameObject.Destroy(stickyProjectile.GetComponent<ProjectileTargetComponent>());
             }
             else LogCore.LogF("FATAL ERROR:" + stickyProjectile.name + " failed to register!");
         }
-
-
-
-        #endregion
-        #region Bombardier
-        protected private void CreateBombardierProjectiles() {
-            CreateBombardierRocketProjectile();
-            CreateBombardierBetterRocketProjectile();
-            CreateBombardierPayloadProjectile();
-            CreateStickyProjectile();
-        }
-
         protected private void CreateBombardierRocketProjectile() {
             bombardierBombProjectile = Resources.Load<GameObject>("prefabs/projectiles/PaladinRocket").InstantiateClone("BombardierRocketProjectile", true);
             var registered = API.RegisterNewProjectile(bombardierBombProjectile);
