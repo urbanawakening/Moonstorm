@@ -194,6 +194,18 @@ namespace Moonstorm.Cores.States.Bombardier
             public override InterruptPriority GetMinimumInterruptPriority()
             {
                 return InterruptPriority.Skill;
+                //things on the dev team are really getting uhh
+                //heated.
+                //and two things are gonna happen
+                //A: dev team has a falling out and all our work goes to shit (the bad ending)
+                //B: we find a middle ground 
+                //the latter is much less likely to happen as each side has made their point
+                //i guess i'm just writing this down to write it down but at the same time
+                //we make the mod, without us coders, there is no mod
+                //so ultimately in a situation like this i feel like it's our responsability 
+                //to fix this mess and make the final decision
+
+                //i know this sounds like crap or whatever but i'm genuinely getting scared all hell is gonna break loose 
             }
         }
     }
