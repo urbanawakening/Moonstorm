@@ -221,7 +221,8 @@
     <Compile Include="Cores\BuffCore.cs" />
     <Compile Include="Cores\States\Nemmando\FireShotgun.cs" />
     <Compile Include="Cores\States\Nemmando\DodgeState.cs" />
-    <Compile Include="Cores\States\Nemmando\Retaliate.cs" />
+    <Compile Include="Cores\States\Nemmando\MainState.cs" />
+    <Compile Include="Cores\States\Nemmando\ConcussionGranade.cs" />
     <Compile Include="Cores\States\Nemmando\BladeOfCessation.cs" />
     <Compile Include="Cores\States\Nucleator\ChargeController.cs" />
     <Compile Include="Cores\States\Nucleator\NucleatorProjectile.cs" />

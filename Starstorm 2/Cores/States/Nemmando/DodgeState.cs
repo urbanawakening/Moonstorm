@@ -20,41 +20,28 @@ namespace Starstorm2.Cores.States.Nemmando
 			Vector3 rhs2 = Vector3.Cross(Vector3.up, rhs);
 
 			base.characterBody.AddBuff(BuffIndex.ArmorBoost);
-			this.RecalculateRollSpeed();
 
 			if (base.characterMotor && base.characterDirection)
 			{
 				base.characterMotor.velocity.y = 0f;
-				base.characterMotor.velocity = this.forwardDirection * this.rollSpeed;
 			}
 			Vector3 b = base.characterMotor ? base.characterMotor.velocity : Vector3.zero;
 			this.previousPosition = base.transform.position - b;
 		}
 
-		private void RecalculateRollSpeed()
-		{
-			this.rollSpeed = this.moveSpeedStat * Mathf.Lerp(this.initialSpeedCoefficient, this.finalSpeedCoefficient, base.fixedAge / this.duration);
-		}
-
 		public override void FixedUpdate()
 		{
 			base.FixedUpdate();
-			this.RecalculateRollSpeed();
 			if (base.cameraTargetParams)
 			{
-				base.cameraTargetParams.fovOverride = Mathf.Lerp(DodgeState.dodgeFOV, 60f, base.fixedAge / this.duration);
+				//base.cameraTargetParams.fovOverride = Mathf.Lerp(DodgeState.dodgeFOV, 60f, base.fixedAge / this.duration);
 			}
+
 			Vector3 normalized = (base.transform.position - this.previousPosition).normalized;
 			if (base.characterMotor && base.characterDirection && normalized != Vector3.zero)
 			{
-				Vector3 vector = normalized * this.rollSpeed;
-				float y = vector.y;
-				vector.y = 0f;
-				float d = Mathf.Max(Vector3.Dot(vector, this.forwardDirection), 0f);
-				vector = this.forwardDirection * d;
-				vector.y += Mathf.Max(y, 0f);
-				base.characterMotor.velocity = vector;
-			}
+				base.characterMotor.rootMotion += this.forwardDirection * this.moveSpeedStat * this.speedCoefficient * Time.fixedDeltaTime;			}
+
 			this.previousPosition = base.transform.position;
 			if (base.fixedAge >= this.duration && base.isAuthority)
 			{
@@ -87,9 +74,7 @@ namespace Starstorm2.Cores.States.Nemmando
 
 		public float duration = 1f;
 
-		public float initialSpeedCoefficient = 5f;
-
-		public float finalSpeedCoefficient = 2f;
+		public float speedCoefficient = 5f;
 
 		public static float dodgeFOV = -1f;
 

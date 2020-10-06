@@ -131,11 +131,11 @@ namespace Starstorm2.Cores
             mySkillDef.skillNameToken = "NEMMANDO_PRIMARY_SKILLNAME_NAME";
             mySkillDef.stepCount = 2;
             mySkillDef.resetStepsOnIdle = true;
+           
 
             LoadoutAPI.AddSkillDef(mySkillDef);
 
             skillLocator.primary = characterPrefab.AddComponent<GenericSkill>();
-
             SkillFamily newFamily = ScriptableObject.CreateInstance<SkillFamily>();
             newFamily.variants = new SkillFamily.Variant[1];
             LoadoutAPI.AddSkillFamily(newFamily);
@@ -157,7 +157,7 @@ namespace Starstorm2.Cores
             LanguageAPI.Add("NEMMANDO_SECONDARY_QUARANTINE_DESCRIPTION", "");
 
             var mySkillDef = ScriptableObject.CreateInstance<SkillDef>();
-            mySkillDef.activationState = new SerializableEntityStateType(typeof(Retaliate));
+            mySkillDef.activationState = new SerializableEntityStateType(typeof(ConcussionGranade));
             mySkillDef.activationStateMachineName = "Weapon";
             mySkillDef.baseMaxStock = 1;
             mySkillDef.baseRechargeInterval = 3f;
@@ -206,7 +206,7 @@ namespace Starstorm2.Cores
             mySkillDef.activationState = new SerializableEntityStateType(typeof(DodgeState));
             mySkillDef.activationStateMachineName = "Weapon";
             mySkillDef.baseMaxStock = 1;
-            mySkillDef.baseRechargeInterval = 0f;
+            mySkillDef.baseRechargeInterval = 3f;
             mySkillDef.beginSkillCooldownOnSkillEnd = true;
             mySkillDef.canceledFromSprinting = false;
             mySkillDef.fullRestockOnAssign = true;

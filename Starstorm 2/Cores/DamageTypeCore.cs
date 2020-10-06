@@ -10,6 +10,7 @@ namespace Starstorm2.Cores
         public static DamageTypeCore instance;
 
         public static DamageType burnOnHit;
+        public static DamageType gougeOnHit;
 
         public DamageTypeCore()
         {
@@ -38,6 +39,17 @@ namespace Starstorm2.Cores
             {
                 DotController.InflictDot(self.gameObject, damageInfo.attacker, DotController.DotIndex.Burn, 5);
             }
+            else if (damageInfo.damageType.HasFlag(gougeOnHit) && self && self.body && damageInfo.attacker)
+            {
+                CharacterBody attacker = damageInfo.attacker.GetComponent<CharacterBody>();
+                var damageCoef = damageInfo.crit ? 2f : 1f;
+                if(attacker && attacker.HasBuff(BuffCore.instance.awarenessIndex))
+                {
+                    damageCoef *= 2f;
+                    attacker.RemoveBuff(BuffCore.instance.awarenessIndex);
+                }    
+                DotController.InflictDot(self.gameObject, damageInfo.attacker, DoTCore.instance.gougeIndex, 1.5f, damageCoef);
+            }
 
             orig(self, damageInfo);
 
@@ -46,6 +58,7 @@ namespace Starstorm2.Cores
         protected void AddDamageTypes()
         {
             burnOnHit = AddDamageType();
+            gougeOnHit = AddDamageType();
             LogCore.LogI(burnOnHit);
         }
 

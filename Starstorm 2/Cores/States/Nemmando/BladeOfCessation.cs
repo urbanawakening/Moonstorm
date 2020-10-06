@@ -9,6 +9,18 @@ namespace Starstorm2.Cores.States.Nemmando
 {
     class BladeOfCessation : BasicMeleeAttack, SteppedSkillDef.IStepSetter
 	{
+
+		public int step = 0;
+		public static float recoilAmplitude = 0.5f;
+		public static float baseDurationBeforeInterruptable = 0.5f;
+		public float bloom = 1f;
+		public static float comboFinisherBaseDuration = 0.5f;
+		public static float comboFinisherhitPauseDuration = 0.15f;
+		public static float comboFinisherBloom = 0.5f;
+		public static float comboFinisherBaseDurationBeforeInterruptable = 0.5f;
+		private string animationStateName;
+		private float durationBeforeInterruptable;
+
 		private bool isComboFinisher
 		{
 			get
@@ -28,6 +40,7 @@ namespace Starstorm2.Cores.States.Nemmando
 		void SteppedSkillDef.IStepSetter.SetStep(int i)
 		{
 			this.step = i;
+			Chat.AddMessage(this.step.ToString());
 		}
 
 		public override void OnEnter()
@@ -59,7 +72,7 @@ namespace Starstorm2.Cores.States.Nemmando
 		public override void AuthorityModifyOverlapAttack(OverlapAttack overlapAttack)
 		{
 			base.AuthorityModifyOverlapAttack(overlapAttack);
-			overlapAttack.damageType = isComboFinisher ? DamageType.BleedOnHit | DamageType.Generic : DamageType.Generic;
+			overlapAttack.damageType = isComboFinisher ? DamageTypeCore.gougeOnHit | DamageType.Generic : DamageTypeCore.gougeOnHit | DamageType.Generic;
 		}
 
 		public override void PlayAnimation()
@@ -125,16 +138,6 @@ namespace Starstorm2.Cores.States.Nemmando
 			return InterruptPriority.PrioritySkill;
 		}
 
-		public int step = 0;
-		public static float recoilAmplitude = 0.5f;
-		public static float baseDurationBeforeInterruptable = 0.5f;
-		public float bloom = 1f;
-		public static float comboFinisherBaseDuration = 0.5f;
-		public static float comboFinisherhitPauseDuration = 0.15f;
-		public static float comboFinisherBloom = 0.5f;
-		public static float comboFinisherBaseDurationBeforeInterruptable = 0.5f;
-		private string animationStateName;
-		private float durationBeforeInterruptable;
 	}
 }
 
