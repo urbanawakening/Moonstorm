@@ -563,30 +563,6 @@ namespace Starstorm2.Cores
                                 teamIndex = body.teamComponent.teamIndex
                             }.Fire();
                         }
-                        /*var body = self.GetComponent<CharacterBody>().corePosition;
-                        Collider[] colliders = Physics.OverlapSphere(body, 30f, LayerIndex.defaultLayer.mask);
-                        foreach (Collider col in colliders)
-                        {
-                            GameObject bitch = col.GetComponent<HealthComponent>().gameObject;
-                            GameObject chad = self.gameObject;
-                            if (!RunArtifactManager.instance.IsArtifactEnabled(RoR2Content.Artifacts.friendlyFireArtifactDef.artifactIndex))
-                            {
-                                if (bitch.GetComponent<TeamComponent>().teamIndex != chad.GetComponent<TeamComponent>().teamIndex)
-                                {
-                                    if (bitch.GetComponent<CharacterBody>() != chad.GetComponent<CharacterBody>())
-                                    {
-                                        DotController.InflictDot(bitch, chad, DotController.DotIndex.Burn, 5f + (4 * itemCount), 10f);
-                                    }
-                                }
-                            }
-                            else
-                            {
-                                if (bitch.GetComponent<CharacterBody>() != chad.GetComponent<CharacterBody>())
-                                {
-                                    DotController.InflictDot(bitch, chad, DotController.DotIndex.Burn, 5f + (4 * itemCount), 10f);
-                                }
-                            }
-                        }*/
                     }
                 }
             }
