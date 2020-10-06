@@ -204,6 +204,7 @@
     <Compile Include="API\ComponentHelpers.cs" />
     <Compile Include="API\LogCore.cs" />
     <Compile Include="Cores\AssetsCore.cs" />
+    <Compile Include="Cores\Starstorm2ItemManager.cs" />
     <Compile Include="Cores\States\Executioner\MainState.cs" />
     <Compile Include="Cores\States\Executioner\Primary.cs" />
     <Compile Include="Cores\States\Executioner\Secondary.cs" />
@@ -225,6 +226,7 @@
     <Compile Include="Cores\States\Nucleator\FireStates\FireIrradiate.cs" />
     <Compile Include="Cores\States\Nucleator\FireStates\FireQuarantine.cs" />
     <Compile Include="Cores\TyphoonCore.cs" />
+    <Compile Include="Cores\DamageTypeCore.cs" />
     <Compile Include="FUCKACCESSMODIFIERS.cs" />
     <Compile Include="Starstorm.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

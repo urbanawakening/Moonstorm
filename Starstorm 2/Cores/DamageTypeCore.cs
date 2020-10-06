@@ -34,7 +34,8 @@ namespace Starstorm2.Cores
 
         private void HealthComponent_TakeDamage(On.RoR2.HealthComponent.orig_TakeDamage orig, HealthComponent self, DamageInfo damageInfo)
         {
-            if (damageInfo.damageType == burnOnHit && self && self.body && damageInfo.attacker) {
+            if (damageInfo.damageType == burnOnHit && self && self.body && damageInfo.attacker)
+            {
                 DotController.InflictDot(self.gameObject, damageInfo.attacker, DotController.DotIndex.Burn, 5);
             }
 
