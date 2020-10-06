@@ -59,7 +59,7 @@ namespace Starstorm2.Cores
                 buffIndex = BuffIndex.Count,
                 canStack = false,
                 eliteIndex = EliteIndex.None,
-                iconPath = "Textures/BuffIcons/texBuffPowerIcon",
+                iconPath = "Textures/BuffIcons/texBuffBleedingIcon",
                 name = "StrangeCanPoison",
                 isDebuff = true,
                 buffColor = Color.green
