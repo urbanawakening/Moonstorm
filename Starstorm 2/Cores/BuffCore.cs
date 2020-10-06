@@ -81,38 +81,37 @@ namespace Starstorm2.Cores
                 var crit = self.crit;
 
 
-                if (self.HasBuff(lightBringerIndex))
+            if (self.HasBuff(lightBringerIndex))
+            {
+                self.SetPropertyValue("attackSpeed", attackSpeed += 2);
+                self.SetPropertyValue("moveSpeed", moveSpeed += 2f);
+                self.SetPropertyValue("armor", armor += 20);
+            }
+            if (self.HasBuff(greaterBannerIndex))
+            {
+                self.SetPropertyValue("crit", crit += .2f);
+                self.SetPropertyValue("regen", regen += .2f);
+                if (self.skillLocator)
                 {
-                    self.SetPropertyValue("attackSpeed", attackSpeed += 2);
-                    self.SetPropertyValue("moveSpeed", moveSpeed += 2f);
-                    self.SetPropertyValue("armor", armor += 20);
-                }
-                if (self.HasBuff(greaterBannerIndex))
-                {
-                    self.SetPropertyValue("crit", crit += .2f);
-                    self.SetPropertyValue("regen", regen += .2f);
-                    if (self.skillLocator)
+                    var skillLocator = self.skillLocator;
+                    //pssst kid, wanna buff greater warbanner?
+                    //just turn to the 0.5f into a 0!
+                    var reduction = .5f;
+                    if (skillLocator.primary)
                     {
-                        var skillLocator = self.skillLocator;
-                        //pssst kid, wanna buff greater warbanner?
-                        //just turn to the 0.5f into a 0!
-                        var reduction = .5f;
-                        if (skillLocator.primary)
-                        {
-                            skillLocator.primary.cooldownScale = reduction;
-                        }
-                        if (skillLocator.secondary)
-                        {
-                            skillLocator.secondary.cooldownScale = reduction;
-                        }
-                        if (skillLocator.utility)
-                        {
-                            skillLocator.utility.cooldownScale = reduction;
-                        }
-                        if (skillLocator.special)
-                        {
-                            skillLocator.special.cooldownScale = reduction;
-                        }
+                        skillLocator.primary.cooldownScale = reduction;
+                    }
+                    if (skillLocator.secondary)
+                    {
+                        skillLocator.secondary.cooldownScale = reduction;
+                    }
+                    if (skillLocator.utility)
+                    {
+                        skillLocator.utility.cooldownScale = reduction;
+                    }
+                    if (skillLocator.special)
+                    {
+                        skillLocator.special.cooldownScale = reduction;
                     }
                 }
             }
