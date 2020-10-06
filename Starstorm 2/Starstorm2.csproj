@@ -204,6 +204,8 @@
     <Compile Include="API\ComponentHelpers.cs" />
     <Compile Include="API\LogCore.cs" />
     <Compile Include="Cores\AssetsCore.cs" />
+    <Compile Include="Cores\DamageTypeCore.cs" />
+    <Compile Include="Cores\Starstorm2ItemManager.cs" />
     <Compile Include="Cores\States\Executioner\MainState.cs" />
     <Compile Include="Cores\States\Executioner\Primary.cs" />
     <Compile Include="Cores\States\Executioner\Secondary.cs" />
