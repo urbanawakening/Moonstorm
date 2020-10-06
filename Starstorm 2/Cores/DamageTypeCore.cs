@@ -1,10 +1,5 @@
-﻿using R2API.Networking;
-using RoR2;
+﻿using RoR2;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Starstorm2.Cores
 {
@@ -14,7 +9,10 @@ namespace Starstorm2.Cores
 
         public static DamageTypeCore instance;
 
-        public DamageTypeCore() {
+        public static DamageType burnOnHit;
+
+        public DamageTypeCore()
+        {
             instance = this;
             LogCore.LogI("Initializing Core: " + base.ToString());
 
@@ -36,15 +34,25 @@ namespace Starstorm2.Cores
 
         private void HealthComponent_TakeDamage(On.RoR2.HealthComponent.orig_TakeDamage orig, HealthComponent self, DamageInfo damageInfo)
         {
+            if (damageInfo.damageType == burnOnHit && self && self.body && damageInfo.attacker)
+            {
+                DotController.InflictDot(self.gameObject, damageInfo.attacker, DotController.DotIndex.Burn, 5);
+            }
+
             orig(self, damageInfo);
+
         }
 
-        protected void AddDamageTypes() {
+        protected void AddDamageTypes()
+        {
+            burnOnHit = AddDamageType();
+            LogCore.LogI(burnOnHit);
         }
 
-        protected DamageType AddDamageType() {
+        protected DamageType AddDamageType()
+        {
             currentMax *= 2;
-            var damageType = (RoR2.DamageType)currentMax;
+            var damageType = (DamageType)currentMax;
             return damageType;
         }
     }
