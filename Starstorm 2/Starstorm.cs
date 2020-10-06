@@ -23,7 +23,8 @@ namespace Starstorm2
         "UnlockablesAPI",
         "SurvivorAPI",
         "DifficultyAPI",
-        "DotAPI"
+        "DotAPI",
+        "EffectAPI"
     })]
 
     public class Starstorm : BaseUnityPlugin
