@@ -40,7 +40,6 @@ namespace Starstorm2.Cores.States.Nemmando
 		void SteppedSkillDef.IStepSetter.SetStep(int i)
 		{
 			this.step = i;
-			Chat.AddMessage(this.step.ToString());
 		}
 
 		public override void OnEnter()
@@ -48,12 +47,11 @@ namespace Starstorm2.Cores.States.Nemmando
 			this.hitBoxGroupName = "SwordLarge";
 			this.baseDuration = 0.5f;
 			this.hitPauseDuration = 0.01f;
-			this.damageCoefficient = 1.0f;
+			this.damageCoefficient = 2.5f;
 
 			if (this.isComboFinisher)
 			{
 				this.hitPauseDuration = BladeOfCessation.comboFinisherhitPauseDuration;
-				this.damageCoefficient = 1f;
 				this.bloom = BladeOfCessation.comboFinisherBloom;
 				this.hitBoxGroupName = "SwordLarge";
 				this.baseDuration = BladeOfCessation.comboFinisherBaseDuration;
@@ -72,7 +70,16 @@ namespace Starstorm2.Cores.States.Nemmando
 		public override void AuthorityModifyOverlapAttack(OverlapAttack overlapAttack)
 		{
 			base.AuthorityModifyOverlapAttack(overlapAttack);
-			overlapAttack.damageType = isComboFinisher ? DamageTypeCore.gougeOnHit | DamageType.Generic : DamageTypeCore.gougeOnHit | DamageType.Generic;
+			if(base.characterBody.HasBuff(BuffCore.instance.awarenessIndex))
+            {
+				overlapAttack.damageType = DamageTypeCore.gougeOnHit | DamageType.Generic;
+			}
+			else
+            {
+				overlapAttack.damageType = Util.CheckRoll(25) ? 
+					DamageTypeCore.gougeOnHit | DamageType.Generic : 
+					DamageType.Generic;
+			}
 		}
 
 		public override void PlayAnimation()

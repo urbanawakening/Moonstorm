@@ -54,24 +54,26 @@ namespace Starstorm2.Cores
             };
 
             CharacterBody component = characterPrefab.GetComponent<CharacterBody>();
-            component.baseDamage = 10f;
+            component.baseDamage = 14f;
             component.baseCrit = 1f;
             component.levelCrit = 0f;
-            component.baseMaxHealth = 400f;
-            component.levelMaxHealth = 40f;
+            component.baseMaxHealth = 150f;
+            component.levelMaxHealth = 15f;
             component.baseArmor = 20f;
             component.baseRegen = 2f;
             component.levelRegen = 0.2f;
             component.baseMoveSpeed = 8f;
             component.levelMoveSpeed = 0.25f;
             component.baseAttackSpeed = 1f;
+            component.levelDamage = 4f;
             component.name = "Nemesis Commando";
             component.subtitleNameToken = "Nemesis Commando";
 
             characterPrefab.GetComponent<CharacterBody>().preferredPodPrefab = Resources.Load<GameObject>("Prefabs/CharacterBodies/toolbotbody").GetComponent<CharacterBody>().preferredPodPrefab;
             LanguageAPI.Add("");
 
-            LanguageAPI.Add("NEMMANDO_OUTRO_FLAVOR", "...and so he left.");
+            LanguageAPI.Add("NEMMANDO_DESCRIPTION", "This mofo looks for sum nice chicken.");
+            LanguageAPI.Add("NEMMANDO_OUTRO_FLAVOR", "...and so he left, with KFC in his pockets.");
 
             var mySurvivorDef = new SurvivorDef
             {
@@ -105,8 +107,8 @@ namespace Starstorm2.Cores
 
         private void PrimarySetup(SkillLocator skillLocator)
         {
-            LanguageAPI.Add("NEMMANDO_PRIMARY_SKILLNAME_NAME", "");
-            LanguageAPI.Add("NEMMANDO_PRIMARY_SKILLNAME_DESCRIPTION", @"");
+            LanguageAPI.Add("NEMMANDO_PRIMARY_BLADE_NAME", "Blade of Cessation");
+            LanguageAPI.Add("NEMMANDO_PRIMARY_BLADE_DESCRIPTION", @"Slice enemies with a chance to bleed");
 
             var mySkillDef = ScriptableObject.CreateInstance<SteppedSkillDef>();
             mySkillDef.activationState = new SerializableEntityStateType(typeof(BladeOfCessation));
@@ -126,9 +128,9 @@ namespace Starstorm2.Cores
             mySkillDef.shootDelay = 0f;
             mySkillDef.stockToConsume = 1;
             mySkillDef.icon = Resources.Load<Sprite>("");
-            mySkillDef.skillDescriptionToken = "NEMMANDO_PRIMARY_SKILLNAME_DESCRIPTION";
-            mySkillDef.skillName = "NEMMANDO_PRIMARY_SKILLNAME_NAME";
-            mySkillDef.skillNameToken = "NEMMANDO_PRIMARY_SKILLNAME_NAME";
+            mySkillDef.skillDescriptionToken = "NEMMANDO_PRIMARY_BLADE_DESCRIPTION";
+            mySkillDef.skillName = "NEMMANDO_PRIMARY_BLADE_NAME";
+            mySkillDef.skillNameToken = "NEMMANDO_PRIMARY_BLADE_NAME";
             mySkillDef.stepCount = 2;
             mySkillDef.resetStepsOnIdle = true;
            
@@ -153,30 +155,30 @@ namespace Starstorm2.Cores
 
         private void SecondarySetup(SkillLocator skillLocator)
         {
-            LanguageAPI.Add("NEMMANDO_SECONDARY_QUARANTINE_NAME", "");
-            LanguageAPI.Add("NEMMANDO_SECONDARY_QUARANTINE_DESCRIPTION", "");
+            LanguageAPI.Add("NEMMANDO_SECONDARY_CONCUSSION_NAME", "Concussion Grenade");
+            LanguageAPI.Add("NEMMANDO_SECONDARY_CONCUSSION_DESCRIPTION", "Throw grenade above you stunning enemies on explosion.");
 
             var mySkillDef = ScriptableObject.CreateInstance<SkillDef>();
-            mySkillDef.activationState = new SerializableEntityStateType(typeof(ConcussionGranade));
+            mySkillDef.activationState = new SerializableEntityStateType(typeof(ConcussionGrenade));
             mySkillDef.activationStateMachineName = "Weapon";
             mySkillDef.baseMaxStock = 1;
             mySkillDef.baseRechargeInterval = 3f;
             mySkillDef.beginSkillCooldownOnSkillEnd = true;
             mySkillDef.canceledFromSprinting = false;
+            mySkillDef.noSprint = false;
             mySkillDef.fullRestockOnAssign = true;
             mySkillDef.interruptPriority = InterruptPriority.Any;
             mySkillDef.isBullets = false;
             mySkillDef.isCombatSkill = true;
             mySkillDef.mustKeyPress = true;
-            mySkillDef.noSprint = true;
             mySkillDef.rechargeStock = 1;
             mySkillDef.requiredStock = 1;
             mySkillDef.shootDelay = 0f;
             mySkillDef.stockToConsume = 1;
             mySkillDef.icon = Resources.Load<Sprite>("");
-            mySkillDef.skillDescriptionToken = "NEMMANDO_SECONDARY_QUARANTINE_DESCRIPTION";
-            mySkillDef.skillName = "NEMMANDO_SECONDARY_QUARANTINE_NAME";
-            mySkillDef.skillNameToken = "NEMMANDO_SECONDARY_QUARANTINE_NAME";
+            mySkillDef.skillDescriptionToken = "NEMMANDO_SECONDARY_CONCUSSION_DESCRIPTION";
+            mySkillDef.skillName = "NEMMANDO_SECONDARY_CONCUSSION_NAME";
+            mySkillDef.skillNameToken = "NEMMANDO_SECONDARY_CONCUSSION_NAME";
 
             LoadoutAPI.AddSkillDef(mySkillDef);
 
@@ -199,30 +201,30 @@ namespace Starstorm2.Cores
 
         private void UtilitySetup(SkillLocator skillLocator)
         {
-            LanguageAPI.Add("NEMMANDO_UTILITY_FISSION_NAME", "");
-            LanguageAPI.Add("NEMMANDO_UTILITY_FISSION_DESCRIPTION", "");
+            LanguageAPI.Add("NEMMANDO_UTILITY_DODGE_NAME", "Redacted, think of a name for utility");
+            LanguageAPI.Add("NEMMANDO_UTILITY_DODGE_DESCRIPTION", "Pretty please");
 
             var mySkillDef = ScriptableObject.CreateInstance<SkillDef>();
             mySkillDef.activationState = new SerializableEntityStateType(typeof(DodgeState));
             mySkillDef.activationStateMachineName = "Weapon";
             mySkillDef.baseMaxStock = 1;
-            mySkillDef.baseRechargeInterval = 3f;
+            mySkillDef.baseRechargeInterval = 6f;
             mySkillDef.beginSkillCooldownOnSkillEnd = true;
             mySkillDef.canceledFromSprinting = false;
             mySkillDef.fullRestockOnAssign = true;
-            //mySkillDef.interruptPriority = InterruptPriority.Any;
+            mySkillDef.interruptPriority = InterruptPriority.Any;
             mySkillDef.isBullets = false;
             mySkillDef.isCombatSkill = false;
             mySkillDef.mustKeyPress = false;
-            mySkillDef.noSprint = true;
+            mySkillDef.noSprint = false;
             mySkillDef.rechargeStock = 1;
             mySkillDef.requiredStock = 1;
             mySkillDef.shootDelay = 0f;
             mySkillDef.stockToConsume = 1;
             mySkillDef.icon = Resources.Load<Sprite>("");
-            mySkillDef.skillDescriptionToken = "NEMMANDO_UTILITY_FISSION_DESCRIPTION";
-            mySkillDef.skillName = "NEMMANDO_UTILITY_FISSION_NAME";
-            mySkillDef.skillNameToken = "NEMMANDO_UTILITY_FISSION_NAME";
+            mySkillDef.skillDescriptionToken = "NEMMANDO_UTILITY_DODGE_DESCRIPTION";
+            mySkillDef.skillName = "NEMMANDO_UTILITY_DODGE_NAME";
+            mySkillDef.skillNameToken = "NEMMANDO_UTILITY_DODGE_NAME";
 
             LoadoutAPI.AddSkillDef(mySkillDef);
 
@@ -245,14 +247,14 @@ namespace Starstorm2.Cores
 
         private void SpecialSetup(SkillLocator skillLocator)
         {
-            LanguageAPI.Add("NEMMANDO_SPECIAL_SURGE_NAME", "");
-            LanguageAPI.Add("NEMMANDO_SPECIAL_SURGE_DESCRIPTION", "");
+            LanguageAPI.Add("NEMMANDO_SPECIAL_SUBMISSION_NAME", "Submission");
+            LanguageAPI.Add("NEMMANDO_SPECIAL_SUBMISSION_DESCRIPTION", "Shoot enemies in front of you, don't stop after safe word.");
 
             var mySkillDef = ScriptableObject.CreateInstance<SkillDef>();
-            mySkillDef.activationState = new SerializableEntityStateType(typeof(FireShotgun));
+            mySkillDef.activationState = new SerializableEntityStateType(typeof(Submission));
             mySkillDef.activationStateMachineName = "Weapon";
             mySkillDef.baseMaxStock = 1;
-            mySkillDef.baseRechargeInterval = 2f;
+            mySkillDef.baseRechargeInterval = 10f;
             mySkillDef.beginSkillCooldownOnSkillEnd = false;
             mySkillDef.canceledFromSprinting = false;
             mySkillDef.fullRestockOnAssign = true;
@@ -266,9 +268,9 @@ namespace Starstorm2.Cores
             mySkillDef.shootDelay = 0f;
             mySkillDef.stockToConsume = 1;
             mySkillDef.icon = Resources.Load<Sprite>("");
-            mySkillDef.skillDescriptionToken = "NEMMANDO_SPECIAL_SURGE_DESCRIPTION";
-            mySkillDef.skillName = "NEMMANDO_SPECIAL_SURGE_NAME";
-            mySkillDef.skillNameToken = "NEMMANDO_SPECIAL_SURGE_NAME";
+            mySkillDef.skillDescriptionToken = "NEMMANDO_SPECIAL_SUBMISSION_DESCRIPTION";
+            mySkillDef.skillName = "NEMMANDO_SPECIAL_SUBMISSION_NAME";
+            mySkillDef.skillNameToken = "NEMMANDO_SPECIAL_SUBMISSION_NAME";
 
             LoadoutAPI.AddSkillDef(mySkillDef);
 

@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Starstorm2.Cores.States.Nemmando
 {
-    class ConcussionGranade : BaseSkillState
+    class ConcussionGrenade : BaseSkillState
     {
         private float baseDuration = 0.4f;
         private float baseExplosionFuse = 0.4f;
@@ -43,7 +43,7 @@ namespace Starstorm2.Cores.States.Nemmando
                 baseDamage = (base.characterBody.damage * 0.1f),
                 damageColorIndex = DamageColorIndex.Default,
                 falloffModel = BlastAttack.FalloffModel.None,
-                damageType = DamageType.Generic | DamageType.Stun1s
+                damageType = DamageType.Generic | DamageType.Stun1s               
             };
             blast.teamIndex = TeamComponent.GetObjectTeam(blast.attacker);
             blast.Fire();
@@ -55,7 +55,7 @@ namespace Starstorm2.Cores.States.Nemmando
         {
             base.FixedUpdate();
 
-            if (this.isAuthority && this.fixedAge > baseDuration)
+            if (this.isAuthority && this.fixedAge > this.baseDuration)
             {
                 this.outer.SetNextStateToMain();
                 return;
