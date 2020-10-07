@@ -1,6 +1,7 @@
 ﻿using EntityStates;
 using EntityStates.Captain.Weapon;
 using RoR2;
+using RoR2.UI;
 using UnityEngine;
 
 namespace Starstorm2.Cores.States.Nucleator
@@ -25,6 +26,7 @@ namespace Starstorm2.Cores.States.Nucleator
         private float playerHealth;
         private float damageDealt;
         private float nextDamageInstance = 0.05f;
+        private bool isCrosshairInitialized = false;
 
         public override void OnEnter()
         {
@@ -32,7 +34,16 @@ namespace Starstorm2.Cores.States.Nucleator
             this.maxChargeTime = NucleatorSkillStateBase.baseMaxChargeTime / this.attackSpeedStat;
             this.playerHealth = this.characterBody.healthComponent.combinedHealth;
             this.playerHealthFinal = playerHealth - playerHealth * maxOverchargePlayerDamageDealt;
+            this.characterBody.crosshairPrefab = NucleatorCore.chargeCrosshair;
 
+            if(!isCrosshairInitialized)
+            {
+                foreach (Transform child in NucleatorCore.chargeCrosshair.transform)
+                {
+                    if (child.name == "Zoom Amount") Destroy(child.gameObject);
+                }
+                isCrosshairInitialized = true;
+            }
             Transform modelTransform = base.GetModelTransform();
 
             if (modelTransform)
@@ -57,6 +68,8 @@ namespace Starstorm2.Cores.States.Nucleator
                 EntityState.Destroy(this.chargeupVfxGameObject);
                 this.chargeupVfxGameObject = null;
             }
+
+            this.characterBody.crosshairPrefab = NucleatorCore.defaultCrosshair;
             base.OnExit();
         }
         public override void FixedUpdate()

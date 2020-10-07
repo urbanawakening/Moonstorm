@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 //FIXME: ion gun doesn't build charges in mp if player is not host
+//FIXME: ion burst stocks do not carry over between stages (may leave this as feature)
 
 namespace EntityStates.Executioner
 {
@@ -35,6 +36,7 @@ namespace EntityStates.Executioner
             this.muzzleString = "Muzzle";
 
             Shoot();
+            shotsToFire--;
         }
 
         public override void OnExit()
@@ -61,7 +63,6 @@ namespace EntityStates.Executioner
                     if (this.isAuthority)
                         this.outer.SetNextStateToMain();
                 }
-                skill.DeductStock(1);
             }
         }
 
@@ -124,12 +125,13 @@ namespace EntityStates.Executioner
                     //HitEffectNormal = ClayBruiser.Weapon.MinigunFire.bulletHitEffectNormal
                 };
                 bullet.Fire();
+                skill.DeductStock(1);
             }
         }
 
         public override InterruptPriority GetMinimumInterruptPriority()
         {
-            return InterruptPriority.PrioritySkill;
+            return InterruptPriority.Pain;
         }
     }
 }

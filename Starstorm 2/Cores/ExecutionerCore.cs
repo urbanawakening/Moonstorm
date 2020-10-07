@@ -1,5 +1,5 @@
 ﻿//XXX REMOVE FOR PUBLIC BUILDS
-#define NETWORKTEST
+//#define NETWORKTEST
 
 using System;
 using System.Collections.Generic;
@@ -20,12 +20,7 @@ using KinematicCharacterController;
 using System.Reflection;
 
 //known bugs/issues:
-//getting a kill with ion burst does not (always) grant an ion burst stock
-//ion burst stocks do not carry over between stages
-//crowd dispersion debuff spawns on the ground directly below you if you are airborne
-//crowd dispersion needs forced forward movement for the authentic executioner experience™
 //multiplayer not tested and probably broken
-//make exe no-collide during axe jump/maybe dash
 
 namespace Starstorm2.Cores
 {
@@ -116,7 +111,6 @@ The two privates sat in complete silence.
             //Step Four: Test whatever you were going to test.
             On.RoR2.Networking.GameNetworkManager.OnClientConnect += (self, user, t) => { };
 #endif
-            ExecutionerAssets.PopulateAssets();
             CreatePrefab();
             RegisterBuffs();
             RegisterProjectiles();
@@ -134,7 +128,7 @@ The two privates sat in complete silence.
             UnityEngine.Object.Destroy(execPrefab.transform.Find("CameraPivot").gameObject);
             UnityEngine.Object.Destroy(execPrefab.transform.Find("AimOrigin").gameObject);
 
-            GameObject model = ExecutionerAssets.assets.LoadAsset<GameObject>("ExecutionerModel");
+            GameObject model = AssetsCore.mainAssetBundle.LoadAsset<GameObject>("ExecutionerModel");
 
             GameObject modelBase = new GameObject("ModelBase");
             modelBase.transform.parent = execPrefab.transform;
@@ -173,7 +167,7 @@ The two privates sat in complete silence.
             body.name = "ExecutionerBody";
             body.baseNameToken = "EXECUTIONER_NAME";
             body.subtitleNameToken = "EXECUTIONER_SUBTITLE";
-            body.portraitIcon = ExecutionerAssets.charPortrait;
+            body.portraitIcon = AssetsCore.mainAssetBundle.LoadAsset<Texture2D>("exeportrait");
             body.bodyFlags = CharacterBody.BodyFlags.ImmuneToExecutes;
             body.rootMotionInMainState = false;
             body.mainRootSpeed = 0;
@@ -350,7 +344,7 @@ The two privates sat in complete silence.
             BuffDef fearDef = new BuffDef()
             {
                 buffColor = Color.white,
-                iconPath = "@Executioner:Assets/Executioner/surprised-skull.png",
+                iconPath = "@Starstorm2:Assets/Executioner/surprised-skull.png",
                 isDebuff = true,
                 name = "FearDebuff",
                 eliteIndex = EliteIndex.None,
@@ -425,7 +419,7 @@ The two privates sat in complete silence.
 
         private void RegisterCharacter()
         {
-            execDisplay = ExecutionerAssets.assets.LoadAsset<GameObject>("ExecutionerModelMenu");
+            execDisplay = AssetsCore.mainAssetBundle.LoadAsset<GameObject>("ExecutionerModelMenu");
 
             LanguageAPI.Add("EXECUTIONER_NAME", charName);
             LanguageAPI.Add("EXECUTIONER_SUBTITLE", charSubt);
@@ -525,7 +519,7 @@ The two privates sat in complete silence.
             def.skillName = "EXECUTIONER_PISTOL_NAME";
             def.skillNameToken = "EXECUTIONER_PISTOL_NAME";
             def.skillDescriptionToken = "EXECUTIONER_PISTOL_DESCRIPTION";
-            def.icon = ExecutionerAssets.icon1;
+            def.icon = AssetsCore.mainAssetBundle.LoadAsset<Sprite>("skill1icon");
             def.baseMaxStock = 1;
             def.baseRechargeInterval = 0f;
             def.beginSkillCooldownOnSkillEnd = false;
@@ -573,7 +567,7 @@ The two privates sat in complete silence.
             def.skillName = "EXECUTIONER_IONGUN_NAME";
             def.skillNameToken = "EXECUTIONER_IONGUN_NAME";
             def.skillDescriptionToken = "EXECUTIONER_IONGUN_DESCRIPTION";
-            def.icon = ExecutionerAssets.icon2;
+            def.icon = AssetsCore.mainAssetBundle.LoadAsset<Sprite>("skill2icon");
             def.baseMaxStock = 10;
             def.baseRechargeInterval = 0f;
             def.beginSkillCooldownOnSkillEnd = true;
@@ -587,7 +581,7 @@ The two privates sat in complete silence.
             def.rechargeStock = 0;
             def.requiredStock = 1;
             def.shootDelay = 0f;
-            def.stockToConsume = 1;
+            def.stockToConsume = 0;
 
             LoadoutAPI.AddSkillDef(def);
 
@@ -623,7 +617,7 @@ The two privates sat in complete silence.
             def.skillName = "EXECUTIONER_DASH_NAME";
             def.skillNameToken = "EXECUTIONER_DASH_NAME";
             def.skillDescriptionToken = "EXECUTIONER_DASH_DESCRIPTION";
-            def.icon = ExecutionerAssets.icon3;
+            def.icon = AssetsCore.mainAssetBundle.LoadAsset<Sprite>("skill3icon");
             def.baseMaxStock = 1;
             def.baseRechargeInterval = 7.0f;
             def.beginSkillCooldownOnSkillEnd = true;
@@ -672,7 +666,7 @@ The two privates sat in complete silence.
             def.skillName = "EXECUTIONER_AXE_NAME";
             def.skillNameToken = "EXECUTIONER_AXE_NAME";
             def.skillDescriptionToken = "EXECUTIONER_AXE_DESCRIPTION";
-            def.icon = ExecutionerAssets.icon4;
+            def.icon = AssetsCore.mainAssetBundle.LoadAsset<Sprite>("skill4icon");
             def.baseMaxStock = 1;
             def.baseRechargeInterval = 8.0f;
             def.beginSkillCooldownOnSkillEnd = true;
@@ -709,45 +703,6 @@ The two privates sat in complete silence.
     public class IonGunChargeComponent : NetworkBehaviour
     {
         public int storedCharges = 0;
-    }
-
-    public static class ExecutionerAssets
-    {
-        public static AssetBundle assets = null;
-
-        public static Texture charPortrait;
-
-        public static Sprite icon1;
-        public static Sprite icon2;
-        public static Sprite icon3;
-        public static Sprite icon4;
-
-        //visual effect meshes
-
-        //sounds (i don't have the wwise stuff needed to create soundbanks (yet))
-
-        public static void PopulateAssets()
-        {
-            if (assets == null)
-            {
-                using (var strm = Assembly.GetExecutingAssembly().GetManifestResourceStream("Starstorm2.Assets.executionerassets"))
-                {
-                    assets = AssetBundle.LoadFromStream(strm);
-                    AssetBundleResourcesProvider provider = new AssetBundleResourcesProvider("@Executioner", assets);
-                    ResourcesAPI.AddProvider(provider);
-                }
-            }
-
-            //load sounds from bank here
-
-            charPortrait = assets.LoadAsset<Texture2D>("exeportrait");
-
-            //skill icons in asset bundle should have a texture type of sprite rather than texture2d (this caused headaches)
-            icon1 = assets.LoadAsset<Sprite>("skill1icon");
-            icon2 = assets.LoadAsset<Sprite>("skill2icon");
-            icon3 = assets.LoadAsset<Sprite>("skill3icon");
-            icon4 = assets.LoadAsset<Sprite>("skill4icon");
-        }
     }
 }
 
