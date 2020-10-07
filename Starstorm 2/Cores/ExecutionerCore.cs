@@ -197,7 +197,7 @@ The two privates sat in complete silence.
             motor.generateParametersOnAwake = true;
 
             CameraTargetParams camParams = execPrefab.GetComponent<CameraTargetParams>();
-            camParams.cameraParams = Resources.Load<GameObject>("Prefabs/CharacterBodies/CommandoBody").GetComponent<CameraTargetParams>().cameraParams;
+            camParams.cameraParams = Resources.Load<GameObject>("Prefabs/CharacterBodies/EngiBody").GetComponent<CameraTargetParams>().cameraParams;
             camParams.cameraPivotTransform = null;
             camParams.aimMode = CameraTargetParams.AimType.Standard;
             camParams.recoil = Vector2.zero;
@@ -703,6 +703,15 @@ The two privates sat in complete silence.
     public class IonGunChargeComponent : NetworkBehaviour
     {
         public int storedCharges = 0;
+
+        [ClientRpc]
+        public void RpcAddIonCharge()
+        {
+            SkillLocator skillLoc = this.gameObject.GetComponent<SkillLocator>();
+            GenericSkill ionGunSkill = skillLoc?.secondary;
+            if (this.hasAuthority && ionGunSkill && ionGunSkill.stock < ionGunSkill.maxStock)
+                ionGunSkill.AddOneStock();
+        }
     }
 }
 
