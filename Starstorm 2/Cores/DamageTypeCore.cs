@@ -18,7 +18,7 @@ namespace Starstorm2.Cores
 
             //maxPossible = 0b_1ul << 32;
 
-            var damageValues = Enum.GetValues(typeof(RoR2.DamageType)) as UInt32[];
+            var damageValues = Enum.GetValues(typeof(DamageType)) as UInt32[];
             for (int i = 0; i < damageValues.Length; i++)
             {
                 var value = damageValues[i];
@@ -34,7 +34,7 @@ namespace Starstorm2.Cores
 
         private void HealthComponent_TakeDamage(On.RoR2.HealthComponent.orig_TakeDamage orig, HealthComponent self, DamageInfo damageInfo)
         {
-            if (damageInfo.damageType == burnOnHit && self && self.body && damageInfo.attacker)
+            if (damageInfo.damageType.HasFlag(burnOnHit) && self && self.body && damageInfo.attacker)
             {
                 DotController.InflictDot(self.gameObject, damageInfo.attacker, DotController.DotIndex.Burn, 5);
             }

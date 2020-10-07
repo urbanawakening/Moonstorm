@@ -626,7 +626,8 @@ namespace Starstorm2.Cores
         public Starstorm2ItemManager manager;
         public void Awake()
         {
-            manager = body.AddOrGetComponent<Starstorm2ItemManager>();
+            body = gameObject.GetComponent<CharacterBody>();
+            manager = body.gameObject.AddOrGetComponent<Starstorm2ItemManager>();
         }
         public void FixedUpdate()
         {
@@ -655,7 +656,8 @@ namespace Starstorm2.Cores
         public Starstorm2ItemManager manager;
         public void Awake()
         {
-            manager = body.AddOrGetComponent<Starstorm2ItemManager>();
+            body = gameObject.GetComponent<CharacterBody>();
+            manager = body.gameObject.AddOrGetComponent<Starstorm2ItemManager>();
         }
 
         public void FixedUpdate()
@@ -666,7 +668,6 @@ namespace Starstorm2.Cores
                 if (body.teamComponent)
                 {
                     manager.AddExperienceAuthority((uint)(3 * stack));
-
                 }
                 else
                 {

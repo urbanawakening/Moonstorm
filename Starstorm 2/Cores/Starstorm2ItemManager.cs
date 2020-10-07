@@ -48,6 +48,10 @@ namespace Starstorm2.Cores
                 AddExperienceInternal(experience);
                 return;
             }
+            else
+            {
+                Chat.AddMessage("AddExperienceAuthority broke");
+            }
             CmdAddExperienceInternal(experience);
         }
 

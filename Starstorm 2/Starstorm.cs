@@ -78,6 +78,7 @@ namespace Starstorm2
         EquipmentCore equipmentCore;
         DoTCore dotCore;
         TyphoonCore typhoonCore;
+        DamageTypeCore damageTypeCore;
 
         NucleatorCore nucleatorCore;
         CyborgCore cyborgCore;
@@ -117,6 +118,7 @@ namespace Starstorm2
                 assetsCore = new AssetsCore();
                 buffCore = new BuffCore();
                 dotCore = new DoTCore();
+                damageTypeCore = new DamageTypeCore();
 
                 if (EnableExecutioner.Value) {
                    executionerCore = new ExecutionerCore();
