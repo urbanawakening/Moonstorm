@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 481058061
+CRC: 698576053
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 00453ec52434885149d0bb873b5ac2b5
+    Hash: 2e7ffc278272b63ceeb0f45f66b739c9
   TypeTreeHash:
     serializedVersion: 2
     Hash: 87095a85d917a02675d1b927900810c1
@@ -85,7 +85,7 @@ Assets:
 - Assets/Moonstorm/Survivors/Bombardier/satchel.blend
 - Assets/Moonstorm/Items/Earrings/MDLEarrings.prefab
 - Assets/Moonstorm/Items/GeigerCounter/Geiger.png
-- Assets/Moonstorm/Survivors/Bombardier/Animations/animExampleSurvivor.controller
+- Assets/Moonstorm/Survivors/Bombardier/animExampleSurvivor.controller
 - Assets/Moonstorm/Items/FabinhoruDagger/Materials/Cloaking_M.mat
 - Assets/Moonstorm/Items/Grinder/textures/bump-map-concrete-with-damaged-paint-0.jpeg
 - Assets/Moonstorm/MDLTeaser.prefab
@@ -131,6 +131,7 @@ Assets:
 - Assets/Moonstorm/Items/mdlExampleSurvivor.prefab
 - Assets/Moonstorm/Materials/axetexture.mat
 - Assets/Moonstorm/Teaser/tex/LampBoss.png
+- Assets/Moonstorm/Survivors/Bombardier/Animations/bombsAnims 1.blend
 - Assets/Moonstorm/Survivors/Bombardier/T_BombardierM2_color.png
 - Assets/Moonstorm/Items/FabinhoruDagger/textures/Cloaking_n.jpg
 - Assets/Moonstorm/Items/UESKeycard/MDLKeycard.prefab
