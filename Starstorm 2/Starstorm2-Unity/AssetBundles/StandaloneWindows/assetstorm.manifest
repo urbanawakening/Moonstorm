@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 4069336376
+CRC: 8601706
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: d29642808b0631acfaef53436e0470b5
+    Hash: db3e614bee9b8c11b219e3c48c7e02e6
   TypeTreeHash:
     serializedVersion: 2
     Hash: e2bdfcc9e91c780b368e748dee5ff1cc
@@ -65,6 +65,7 @@ Assets:
 - Assets/Executioner/surprised-skull.png
 - Assets/Items/MoltenCoin/MDLMoltenCoin.prefab
 - Assets/Items/MoltenCoin/MoltenCoin_Icon.png
+- Assets/TyphoonIcon.png
 - Assets/Executioner/skill4icon.png
 - Assets/Executioner/skill1icon.png
 - Assets/Items/NkotasHeritage/MDLNkotasHeritage.prefab
