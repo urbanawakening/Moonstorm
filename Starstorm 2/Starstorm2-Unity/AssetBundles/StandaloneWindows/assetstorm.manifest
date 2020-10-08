@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 4045470565
+CRC: 8601706
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 30a9b1dcecf3121223b7bbf9e1f260de
+    Hash: db3e614bee9b8c11b219e3c48c7e02e6
   TypeTreeHash:
     serializedVersion: 2
     Hash: e2bdfcc9e91c780b368e748dee5ff1cc
@@ -48,17 +48,29 @@ Assets:
 - Assets/Items/DetritiveTrematode/DetritiveTrematode_Icon.png
 - Assets/Executioner/exeportrait.png
 - Assets/Executioner/ExecAnimatorMenu.controller
+- Assets/Items/BloodTester/BloodTester_Icon.png
 - Assets/Items/Diary/MDLDiary.prefab
+- Assets/Items/StrangeCan/StrangeCan_Icon.png
+- Assets/Items/GreaterWarbanner/GreaterWarbanner_Icon.png
 - Assets/Executioner/ExecutionerModelMenu.prefab
+- Assets/Items/DormantFungus/DormantFungus_Icon.png
 - Assets/Items/DetritiveTrematode/MDLDetritiveTrematode.prefab
+- Assets/Items/NkotasHeritage/NkotasHeritage_Icon.png
+- Assets/Items/BloodTester/MDLBloodTester.prefab
 - Assets/Items/Diary/Diary_Icon.png
+- Assets/Items/StrangeCan/MDLStrangeCan.prefab
 - Assets/Executioner/skill2icon.png
 - Assets/Executioner/skill3icon.png
 - Assets/Items/DormantFungus/MDLDormantFungus.prefab
 - Assets/Executioner/surprised-skull.png
 - Assets/Items/MoltenCoin/MDLMoltenCoin.prefab
+- Assets/Items/MoltenCoin/MoltenCoin_Icon.png
 - Assets/TyphoonIcon.png
 - Assets/Executioner/skill4icon.png
 - Assets/Executioner/skill1icon.png
+- Assets/Items/NkotasHeritage/MDLNkotasHeritage.prefab
+- Assets/Items/JetBoots/JetBoots_Icon.png
+- Assets/Items/JetBoots/MDLJetBoots.prefab
+- Assets/Items/GreaterWarbanner/MDLGreaterWarbanner.prefab
 - Assets/Executioner/ExecutionerModel.prefab
 Dependencies: []
