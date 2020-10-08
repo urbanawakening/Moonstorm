@@ -9,6 +9,7 @@ namespace Starstorm2.Cores
         public static DoTCore instance;
 
         protected internal DotIndex detritive;
+        protected internal DotIndex strangeCanPoison;
 
         public DoTCore() => RegisterDoTs();
 
@@ -19,11 +20,12 @@ namespace Starstorm2.Cores
             LogCore.LogI("Initializing Core: " + base.ToString());
 
             detritive = RegisterDoT(1, 0.5f, DamageColorIndex.Item, BuffCore.instance.detritiveIndex);
+            strangeCanPoison = RegisterDoT(.5f, 0.5f, DamageColorIndex.Item, BuffCore.instance.strangeCanPoisonIndex);
         }
 
-        protected internal DotIndex RegisterDoT(float interval, float damageCoeff, DamageColorIndex colorIndex, BuffIndex assocatedBuff)
+        protected internal DotIndex RegisterDoT(float interval, float damageCoeff, DamageColorIndex colorIndex, BuffIndex associatedBuff)
         {
-            return DotAPI.RegisterDotDef(interval, damageCoeff, colorIndex, assocatedBuff);
+            return DotAPI.RegisterDotDef(interval, damageCoeff, colorIndex, associatedBuff);
         }
     }
 }

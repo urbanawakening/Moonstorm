@@ -61,6 +61,7 @@ namespace Starstorm2.Cores.States.Nucleator
             {
                 this.overlapAttack = base.InitMeleeOverlap(FireFissionImpulse.damageCoef, null, modelTransform, "Assaulter");
                 this.overlapAttack.damageType = DamageType.Generic;
+                this.overlapAttack.teamIndex = base.GetTeam();
                 //this.overlapAttack.pushAwayForce 
             }
         }
