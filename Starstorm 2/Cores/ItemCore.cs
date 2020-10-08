@@ -25,6 +25,9 @@ namespace Starstorm2.Cores
         protected internal ItemIndex damageOverTimeToLowHealthIndex;
         protected internal ItemIndex moneyOnHealIndex;
 
+        private const string modPrefix = "@Starstorm2:";
+        private const string prefabPath = modPrefix + "Assets/Items/";
+
         public void DropShipCall(Transform transform, int itemCount)
         {
             List<PickupIndex> list = Util.CheckRoll((5 * itemCount)) ? Run.instance.availableTier2DropList : Run.instance.availableTier1DropList;
@@ -61,8 +64,8 @@ namespace Starstorm2.Cores
                 loreToken = "",
                 name = "ItemOnLevelUp",
                 nameToken = "ITEM_ITEMONLEVELUP_NAME",
-                //pickupIconPath = pickUpIconPath,
-                //pickupModelPath = pickUpModelPath,
+                pickupIconPath = prefabPath + "NkotasHeritage/NkotasHeritage_Icon.png",
+                pickupModelPath = prefabPath + "NkotasHeritage/MDLNkotasHeritage.prefab",
                 pickupToken = "ITEM_ITEMONLEVELUP_PICKUP",
                 tags = itemOnLevelUpTags,
                 tier = ItemTier.Tier3,
@@ -81,8 +84,8 @@ namespace Starstorm2.Cores
                 loreToken = "",
                 name = "LightningOnCrit",
                 nameToken = "ITEM_LIGHTNINGONCRIT_NAME",
-                pickupIconPath = "@Starstorm2:Assets/Items/DetritiveTrematode/DetritiveTrematode_Icon.png",
-                pickupModelPath = "@Starstorm2:Assets/Items/DetritiveTrematode/MDLDetritiveTrematode.prefab",
+                pickupIconPath = prefabPath + "DetritiveTrematode/DetritiveTrematode_Icon.png",
+                pickupModelPath = prefabPath + "DetritiveTrematode/MDLDetritiveTrematode.prefab",
                 pickupToken = "ITEM_LIGHTNINGONCRIT_PICKUP",
                 tags = lightningOnCritTags,
                 tier = ItemTier.Tier1,
@@ -101,8 +104,8 @@ namespace Starstorm2.Cores
                 loreToken = "",
                 name = "BloodTester",
                 nameToken = "ITEM_BLOODTESTER_NAME",
-                //pickupIconPath = "@Starstorm2:Assets/Items/DetritiveTrematode/DetritiveTrematode_Icon.png",
-                //pickupModelPath = "@Starstorm2:Assets/Items/DetritiveTrematode/MDLDetritiveTrematode.prefab",
+                pickupIconPath = prefabPath + "BloodTester/BloodTester_Icon.png",
+                pickupModelPath = prefabPath + "BloodTester/MDLBloodTester.prefab",
                 pickupToken = "ITEM_BLOODTESTER_PICKUP",
                 tags = moneyOnHealTags,
                 tier = ItemTier.Tier2,
@@ -121,8 +124,8 @@ namespace Starstorm2.Cores
                 loreToken = "",
                 name = "DormantFungus",
                 //nameToken = "ITEM_EXTENDEDENEMYBUFFDURATIOM_NAME",
-                //pickupIconPath = "@Cloudburst:Assets/Items/Lemdog/LemDog_TexIcon.png",
-                pickupModelPath = "@Starstorm2:Assets/Items/DormantFungus/MDLDormantFungus.prefab",
+                pickupIconPath = prefabPath + "DormantFungus/DormantFungus_Icon.png",
+                pickupModelPath = prefabPath + "DormantFungus/MDLDormantFungus.prefab",
                 //pickupToken = "ITEM_EXTENDEDENEMYBUFFDURATIOM_PICKUP",
                 tags = dormantFungusTags,
                 tier = ItemTier.Tier1,
@@ -141,8 +144,8 @@ namespace Starstorm2.Cores
                 loreToken = "",
                 name = "Diary",
                 //nameToken = "ITEM_EXTENDEDENEMYBUFFDURATIOM_NAME",
-                pickupIconPath = "@Starstorm2:Assets/Items/Diary/Diary_Icon.png",
-                pickupModelPath = "@Starstorm2:Assets/Items/Diary/MDLDiary.prefab",
+                pickupIconPath = prefabPath + "Diary/Diary_Icon.png",
+                pickupModelPath = prefabPath + "Diary/MDLDiary.prefab",
                 //pickupToken = "ITEM_EXTENDEDENEMYBUFFDURATIOM_PICKUP",
                 tags = diaryTags,
                 tier = ItemTier.Tier1,
@@ -160,8 +163,8 @@ namespace Starstorm2.Cores
                 loreToken = "",
                 name = "Coin",
                 //nameToken = "ITEM_EXTENDEDENEMYBUFFDURATIOM_NAME",
-                //pickupIconPath = "@Cloudburst:Assets/Items/Lemdog/LemDog_TexIcon.png",
-                pickupModelPath = "@Starstorm2:Assets/Items/MoltenCoin/MDLMoltenCoin.prefab",
+                pickupIconPath = prefabPath + "MoltenCoin/MoltenCoin_Icon.png",
+                pickupModelPath = prefabPath + "MoltenCoin/MDLMoltenCoin.prefab",
                 //pickupToken = "ITEM_EXTENDEDENEMYBUFFDURATIOM_PICKUP",
                 tags = coinTags,
                 tier = ItemTier.Tier1,
@@ -177,6 +180,10 @@ namespace Starstorm2.Cores
             LanguageAPI.Add("ITEM_LIGHTNINGONCRIT_NAME", "Detritive Trematode"); //model(??)
             LanguageAPI.Add("ITEM_LIGHTNINGONCRIT_DESC", "Enemies with low health recieve a <style=cIsDamage>damage over time</style> that deals 100%<style=cStack>(+100% per stack)</style> damage.");
             LanguageAPI.Add("ITEM_LIGHTNINGONCRIT_PICKUP", "Low health enemies recieve damage over time.");
+
+            LanguageAPI.Add("ITEM_BLOODTESTER_NAME", "Broken Blood Tester");
+            LanguageAPI.Add("ITEM_BLOODTESTER_DESC", "Gain <style=cIsUtility>5 gold</style> <style=cStack>(+5 gold per stack)</style> every time you heal.");
+            LanguageAPI.Add("ITEM_BLOODTESTER_PICKUP", "Gain money on healing.");
 
             LanguageAPI.Add("ITEM_DORMANTFUNGUS_NAME", "Dormant Fungus");
             LanguageAPI.Add("ITEM_DORMANTFUNGUS_DESC", "<style=cIsHealing>Heal</style> 1% <style=cStack>(+1% per stack)</style> every five seconds while sprinting."); //by 2<style=cStack>(+1 per stack)</style> seconds.");

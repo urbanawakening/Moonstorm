@@ -58,8 +58,8 @@ namespace Starstorm2.Cores
                 loreToken = "EQUIPMENT_GREATERWARBANNER_LORE",
                 name = "GreaterWarbanner",
                 nameToken = "EQUIPMENT_GREATERWARBANNER_NAME",
-                pickupIconPath = pickUpIconPath,
-                pickupModelPath = pickUpModelPath,
+                pickupIconPath = "@Starstorm2:Assets/Items/GreaterWarbanner/GreaterWarbanner_Icon.png",
+                pickupModelPath = "@Starstorm2:Assets/Items/GreaterWarbanner/MDLGreaterWarbanner.prefab",
                 pickupToken = "EQUIPMENT_GREATERWARBANNER_PICKUP",
                 unlockableName = "",
             });
