@@ -41,7 +41,7 @@ namespace Starstorm2.Cores.States.Nemmando
 			this.search.sortMode = BullseyeSearch.SortMode.Angle;
 			this.search.maxDistanceFilter = this.maxDistance;
 			this.search.minAngleFilter = 0f;
-			this.search.maxAngleFilter = 75f;
+			this.search.maxAngleFilter = 10f;
 			this.search.RefreshCandidates();
 			this.search.FilterOutGameObject(base.gameObject);
 			this.search.teamMaskFilter = TeamMask.AllExcept(GetTeam());
@@ -79,39 +79,38 @@ namespace Starstorm2.Cores.States.Nemmando
 
 		private void Shoot()
         {
-			if (base.isAuthority && this.enemiesFound.Count > 0)
+			if (base.isAuthority)
 			{
-				HurtBox enemy = this.enemiesFound.First();
-				if (enemy)
+				var aimRay = base.GetAimRay();
+				HurtBox enemy = this.enemiesFound.FirstOrDefault();
+				Vector3 toOther = enemy ? enemy.transform.position - this.characterBody.transform.position : aimRay.direction;
+				new BulletAttack
 				{
-					Vector3 toOther = enemy.transform.position - this.characterBody.transform.position;
-					var aimRay = base.GetAimRay();
-					new BulletAttack
-					{
-						owner = base.gameObject,
-						weapon = base.gameObject,
-						origin = aimRay.origin,
-						aimVector = toOther,
-						minSpread = 0f,
-						maxSpread = 0f,
-						bulletCount = 1,
-						procCoefficient = 0.25f,
-						damage = Submission.damageCoefficient * this.damageStat,
-						force = 0f,
-						falloffModel = BulletAttack.FalloffModel.None,
-						tracerEffectPrefab = Submission.tracerEffectPrefab,
-						muzzleName = "AimOrigin",
-						hitEffectPrefab = Submission.hitEffectPrefab,
-						isCrit = Util.CheckRoll(this.critStat, base.characterBody.master),
-						HitEffectNormal = false,
-						radius = 1f,
-						damageType = DamageType.Generic
-					}.Fire();
-				}
-				this.enemiesFound.RemoveAt(0);					
-			}
-			this.bulletCount--;
-			this.nextShotInterval += this.duration / (float)this.maxBullets;			
+					owner = base.gameObject,
+					weapon = base.gameObject,
+					origin = aimRay.origin,
+					aimVector = toOther,
+					minSpread = 0f,
+					maxSpread = 0f,
+					bulletCount = 1,
+					procCoefficient = 0.25f,
+					damage = Submission.damageCoefficient * this.damageStat,
+					force = 0f,
+					falloffModel = BulletAttack.FalloffModel.None,
+					tracerEffectPrefab = Submission.tracerEffectPrefab,
+					muzzleName = "AimOrigin",
+					hitEffectPrefab = Submission.hitEffectPrefab,
+					isCrit = Util.CheckRoll(this.critStat, base.characterBody.master),
+					HitEffectNormal = false,
+					radius = 1f,
+					damageType = DamageType.Generic
+				}.Fire();
+
+				if(enemy)
+					this.enemiesFound.RemoveAt(0);
+				this.bulletCount--;
+				this.nextShotInterval += this.duration / (float)this.maxBullets;
+			}		
 				
 		}
 

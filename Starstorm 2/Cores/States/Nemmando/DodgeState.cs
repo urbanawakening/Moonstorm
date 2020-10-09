@@ -35,7 +35,6 @@ namespace Starstorm2.Cores.States.Nemmando
 
 		private Transform FindClosestEnemyInFront()
 		{
-			this.aimRay = this.GetAimRay();
 			this.search.searchOrigin = aimRay.origin;
 			this.search.RefreshCandidates();
 			this.search.FilterOutGameObject(base.gameObject);
@@ -66,7 +65,7 @@ namespace Starstorm2.Cores.States.Nemmando
 			this.search.sortMode = BullseyeSearch.SortMode.Distance;
 			this.search.maxDistanceFilter = this.maxDistance;
 			this.search.minAngleFilter = 0f;
-			this.search.maxAngleFilter = 90f;
+			this.search.maxAngleFilter = 15f;
 			this.search.teamMaskFilter = TeamMask.AllExcept(GetTeam());
 			base.characterBody.AddBuff(BuffIndex.ArmorBoost);
 
@@ -99,8 +98,9 @@ namespace Starstorm2.Cores.States.Nemmando
 
 		private void Shoot()
         {
+			this.aimRay = this.GetAimRay();
 			var enemyPosition = this.FindClosestEnemyInFront();
-			if(enemyPosition)
+			if(enemyPosition && this.bulletCount > 0)
 			{
 				Vector3 toOther = enemyPosition.position - this.characterBody.transform.position;
 				new BulletAttack
