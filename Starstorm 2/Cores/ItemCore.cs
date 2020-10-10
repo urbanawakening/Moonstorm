@@ -30,6 +30,9 @@ namespace Starstorm2.Cores
         protected internal ItemIndex erraticGadgetIndex;
         protected internal ItemIndex explodeOnJumpIndex;
 
+        private const string modPrefix = "@Starstorm2:";
+        private const string prefabPath = modPrefix + "Assets/Items/";
+
         public void DropShipCall(Transform transform, int itemCount)
         {
             List<PickupIndex> list = Util.CheckRoll((5 * itemCount)) ? Run.instance.availableTier2DropList : Run.instance.availableTier1DropList;
@@ -66,8 +69,8 @@ namespace Starstorm2.Cores
                 loreToken = "",
                 name = "ItemOnLevelUp",
                 nameToken = "ITEM_ITEMONLEVELUP_NAME",
-                //pickupIconPath = pickUpIconPath,
-                //pickupModelPath = pickUpModelPath,
+                pickupIconPath = prefabPath + "NkotasHeritage/NkotasHeritage_Icon.png",
+                pickupModelPath = prefabPath + "NkotasHeritage/MDLNkotasHeritage.prefab",
                 pickupToken = "ITEM_ITEMONLEVELUP_PICKUP",
                 tags = itemOnLevelUpTags,
                 tier = ItemTier.Tier3,
@@ -86,8 +89,8 @@ namespace Starstorm2.Cores
                 loreToken = "",
                 name = "LightningOnCrit",
                 nameToken = "ITEM_LIGHTNINGONCRIT_NAME",
-                pickupIconPath = "@Starstorm2:Assets/Starstorm 2/Items/DetritiveTrematode/DetritiveTrematode_Icon.png",
-                pickupModelPath = "@Starstorm2:Assets/Starstorm 2/Items/DetritiveTrematode/MDLDetritiveTrematode.prefab",
+                pickupIconPath = prefabPath + "DetritiveTrematode/DetritiveTrematode_Icon.png",
+                pickupModelPath = prefabPath + "DetritiveTrematode/MDLDetritiveTrematode.prefab",
                 pickupToken = "ITEM_LIGHTNINGONCRIT_PICKUP",
                 tags = lightningOnCritTags,
                 tier = ItemTier.Tier1,
@@ -106,8 +109,8 @@ namespace Starstorm2.Cores
                 loreToken = "",
                 name = "BloodTester",
                 nameToken = "ITEM_BLOODTESTER_NAME",
-                //pickupIconPath = "@Starstorm2:Assets/Starstorm 2/Items/DetritiveTrematode/DetritiveTrematode_Icon.png",
-                //pickupModelPath = "@Starstorm2:Assets/Starstorm 2/Items/DetritiveTrematode/MDLDetritiveTrematode.prefab",
+                pickupIconPath = prefabPath + "BloodTester/BloodTester_Icon.png",
+                pickupModelPath = prefabPath + "BloodTester/MDLBloodTester.prefab",
                 pickupToken = "ITEM_BLOODTESTER_PICKUP",
                 tags = moneyOnHealTags,
                 tier = ItemTier.Tier2,
@@ -126,8 +129,8 @@ namespace Starstorm2.Cores
                 loreToken = "",
                 name = "DormantFungus",
                 //nameToken = "ITEM_EXTENDEDENEMYBUFFDURATIOM_NAME",
-                //pickupIconPath = "@Cloudburst:Assets/Items/Lemdog/LemDog_TexIcon.png",
-                pickupModelPath = "@Starstorm2:Assets/Starstorm 2/Items/DormantFungus/MDLDormantFungus.prefab",
+                pickupIconPath = prefabPath + "DormantFungus/DormantFungus_Icon.png",
+                pickupModelPath = prefabPath + "DormantFungus/MDLDormantFungus.prefab",
                 //pickupToken = "ITEM_EXTENDEDENEMYBUFFDURATIOM_PICKUP",
                 tags = dormantFungusTags,
                 tier = ItemTier.Tier1,
@@ -146,8 +149,8 @@ namespace Starstorm2.Cores
                 loreToken = "",
                 name = "Diary",
                 //nameToken = "ITEM_EXTENDEDENEMYBUFFDURATIOM_NAME",
-                pickupIconPath = "@Starstorm2:Assets/Starstorm 2/Items/Diary/Diary_Icon.png",
-                pickupModelPath = "@Starstorm2:Assets/Starstorm 2/Items/Diary/MDLDiary.prefab",
+                pickupIconPath = prefabPath + "Diary/Diary_Icon.png",
+                pickupModelPath = prefabPath + "Diary/MDLDiary.prefab",
                 //pickupToken = "ITEM_EXTENDEDENEMYBUFFDURATIOM_PICKUP",
                 tags = diaryTags,
                 tier = ItemTier.Tier1,
@@ -165,8 +168,8 @@ namespace Starstorm2.Cores
                 loreToken = "",
                 name = "Coin",
                 //nameToken = "ITEM_EXTENDEDENEMYBUFFDURATIOM_NAME",
-                //pickupIconPath = "@Cloudburst:Assets/Items/Lemdog/LemDog_TexIcon.png",
-                pickupModelPath = "@Starstorm2:Assets/Starstorm 2/Items/MoltenCoin/MDLMoltenCoin.prefab",
+                pickupIconPath = prefabPath + "MoltenCoin/MoltenCoin_Icon.png",
+                pickupModelPath = prefabPath + "MoltenCoin/MDLMoltenCoin.prefab",
                 //pickupToken = "ITEM_EXTENDEDENEMYBUFFDURATIOM_PICKUP",
                 tags = coinTags,
                 tier = ItemTier.Tier1,
@@ -204,8 +207,8 @@ namespace Starstorm2.Cores
                 loreToken = "",
                 name = "StrangeCan",
                 nameToken = "ITEM_POISONONHIT_NAME",
-                //pickupIconPath = "@Cloudburst:Assets/Items/Lemdog/LemDog_TexIcon.png",
-                //pickupModelPath = "@Starstorm2:Assets/Starstorm 2/Items/DormantFungus/MDLDormantFungus.prefab",
+                pickupIconPath = prefabPath + "StrangeCan/StrangeCan_Icon.png",
+                pickupModelPath = prefabPath + "StrangeCan/MDLStrangeCan.prefab",
                 pickupToken = "ITEM_POISONONHIT_PICKUP",
                 tags = poisonOnHitTags,
                 tier = ItemTier.Tier2,
@@ -243,8 +246,8 @@ namespace Starstorm2.Cores
                 loreToken = "",
                 name = "PrototypeJetBoots",
                 nameToken = "ITEM_EXPLODEONJUMP_NAME",
-                //pickupIconPath = "@Cloudburst:Assets/Items/Lemdog/LemDog_TexIcon.png",
-                //pickupModelPath = "@Starstorm2:Assets/Starstorm 2/Items/DormantFungus/MDLDormantFungus.prefab",
+                pickupIconPath = prefabPath + "JetBoots/JetBoots_Icon.png",
+                pickupModelPath = prefabPath + "Jetboots/MDLJetBoots.prefab",
                 pickupToken = "ITEM_EXPLODEONJUMP_PICKUP",
                 tags = explodeOnJumpTags,
                 tier = ItemTier.Tier2,
@@ -258,19 +261,23 @@ namespace Starstorm2.Cores
             //STARSTORM 2
 
             LanguageAPI.Add("ITEM_LIGHTNINGONCRIT_NAME", "Detritive Trematode"); //model(??)
-            LanguageAPI.Add("ITEM_LIGHTNINGONCRIT_DESC", "Enemies with low health recieve a <style=cIsDamage>damage over time</style> that deals 100%<style=cStack>(+100% per stack)</style> damage.");
+            LanguageAPI.Add("ITEM_LIGHTNINGONCRIT_DESC", "Enemies with low health recieve a <style=cIsDamage>damage over time</style> that deals <style=cIsDamage>100%</style> <style=cStack>(+100% per stack)</style> damage.");
             LanguageAPI.Add("ITEM_LIGHTNINGONCRIT_PICKUP", "Low health enemies recieve damage over time.");
 
+            LanguageAPI.Add("ITEM_BLOODTESTER_NAME", "Broken Blood Tester");
+            LanguageAPI.Add("ITEM_BLOODTESTER_DESC", "Gain <style=cIsUtility>5 gold</style> <style=cStack>(+5 gold per stack)</style> every time you heal.");
+            LanguageAPI.Add("ITEM_BLOODTESTER_PICKUP", "Gain money on healing.");
+
             LanguageAPI.Add("ITEM_DORMANTFUNGUS_NAME", "Dormant Fungus");
-            LanguageAPI.Add("ITEM_DORMANTFUNGUS_DESC", "<style=cIsHealing>Heal</style> 1% <style=cStack>(+1% per stack)</style> every five seconds while sprinting."); //by 2<style=cStack>(+1 per stack)</style> seconds.");
+            LanguageAPI.Add("ITEM_DORMANTFUNGUS_DESC", "<style=cIsHealing>Heal 1%</style> <style=cStack>(+1% per stack)</style> every <style=cIsHealing>5</style> seconds while sprinting."); //by 2<style=cStack>(+1 per stack)</style> seconds.");
             LanguageAPI.Add("ITEM_DORMANTFUNGUS_PICKUP", "Heal every five seconds while sprinting.");
 
             LanguageAPI.Add("ITEM_DIARY_NAME", "Diary");
-            LanguageAPI.Add("ITEM_DIARY_DESC", "Gain 5% <style=cIsUtility>experience</style> <style=cStack>(+5% per stack)</style> every two seconds."); //by 2<style=cStack>(+1 per stack)</style> seconds.");
+            LanguageAPI.Add("ITEM_DIARY_DESC", "Gain <style=cIsUtility>5% experience</style> <style=cStack>(+5% per stack)</style> every <style=cIsUtility>2</style> seconds."); //by 2<style=cStack>(+1 per stack)</style> seconds.");
             LanguageAPI.Add("ITEM_DIARY_PICKUP", "Gain experience overtime.");
 
             LanguageAPI.Add("ITEM_COIN_NAME", "Molten Coin");
-            LanguageAPI.Add("ITEM_COIN_DESC", "4% <style=cStack>(+3% per stack)</style> chance to <style=cIsDamage>ignite</style> enemies on hit for +5 money."); //by 2<style=cStack>(+1 per stack)</style> seconds.");
+            LanguageAPI.Add("ITEM_COIN_DESC", "<style=cIsHealing>4%</style> <style=cStack>(+3% per stack)</style> chance to <style=cIsDamage>ignite</style> enemies on hit for <style=cIsUtility>+$5</style>."); //by 2<style=cStack>(+1 per stack)</style> seconds.");
             LanguageAPI.Add("ITEM_COIN_PICKUP", "Chance to ignite enemies on hit.");
 
             LanguageAPI.Add("ITEM_ITEMONLEVELUP_NAME", "N'khato's Heritage");
@@ -278,19 +285,19 @@ namespace Starstorm2.Cores
             LanguageAPI.Add("ITEM_ITEMONLEVELUP_PICKUP", "Gain an item on level up.");
 
             LanguageAPI.Add("ITEM_FIREONEQUIPMENTUSE_NAME", "Hottest Sauce");
-            LanguageAPI.Add("ITEM_FIREONEQUIPMENTUSE_DESC", "Activating your equipment sets enemies within 30ft on fire for 5 <style=cStack>(+4 per stack)</style> seconds.");
-            LanguageAPI.Add("ITEM_FIREONEQUIPMENTUSE_PICKUP", "Activating your equipment sets all enemies.");
+            LanguageAPI.Add("ITEM_FIREONEQUIPMENTUSE_DESC", "Activating your equipment <style=cIsDamage>ignites</style> enemies within <style=cIsDamage>30m</style> for <style=cIsDamage>5</style> <style=cStack>(+4 per stack)</style> seconds.");
+            LanguageAPI.Add("ITEM_FIREONEQUIPMENTUSE_PICKUP", "Activating your equipment ignites nearby enemies.");
 
             LanguageAPI.Add("ITEM_POISONONHIT_NAME", "Strange Can");
-            LanguageAPI.Add("ITEM_POISONONHIT_DESC", "8.5% <style=cStack>(+5% per stack)</style> chance to intoxicate enemies dealing <style=cIsDamage>350% damage over time.</style>");
+            LanguageAPI.Add("ITEM_POISONONHIT_DESC", "<style=cIsDamage>8.5%</style> <style=cStack>(+5% per stack)</style> chance to <style=cIsDamage>intoxicate</style> enemies dealing <style=cIsDamage>350% damage over time</style>.");
             LanguageAPI.Add("ITEM_POISONONHIT_PICKUP", "Chance to intoxicate enemies, causing damage over time.");
 
             LanguageAPI.Add("ITEM_ERRATICGADGET_NAME", "Erratic Gadget");
-            LanguageAPI.Add("ITEM_ERRATICGADGET_DESC", "Critical strikes deal 50% <style=cStack>(+50% per stack)</style> extra damage.");
+            LanguageAPI.Add("ITEM_ERRATICGADGET_DESC", "Critical strikes deal <style=cIsDamage>50%</style> <style=cStack>(+50% per stack)</style> extra damage.");
             LanguageAPI.Add("ITEM_ERRATICGADGET_PICKUP", "Critical strikes deal extra damage.");
 
             LanguageAPI.Add("ITEM_EXPLODEONJUMP_NAME", "Prototype Jet Boots");
-            LanguageAPI.Add("ITEM_EXPLODEONJUMP_DESC", "Create an explosion in a small area around you whenever you jump for <style=cIsDamage>150%</style> <style=cStack>(+100% per stack)</style> <style=cIsDamage>damage.</style>.");
+            LanguageAPI.Add("ITEM_EXPLODEONJUMP_DESC", "Create an <style=cIsDamage>explosion</style> in a small area around you whenever you jump for <style=cIsDamage>150%</style> <style=cStack>(+100% per stack)</style> damage.");
             LanguageAPI.Add("ITEM_EXPLODEONJUMP_PICKUP", "Detonate on jump!");
         }
 
@@ -626,7 +633,8 @@ namespace Starstorm2.Cores
         public Starstorm2ItemManager manager;
         public void Awake()
         {
-            manager = body.AddOrGetComponent<Starstorm2ItemManager>();
+            body = gameObject.GetComponent<CharacterBody>();
+            manager = body.gameObject.AddOrGetComponent<Starstorm2ItemManager>();
         }
         public void FixedUpdate()
         {
@@ -655,7 +663,8 @@ namespace Starstorm2.Cores
         public Starstorm2ItemManager manager;
         public void Awake()
         {
-            manager = body.AddOrGetComponent<Starstorm2ItemManager>();
+            body = gameObject.GetComponent<CharacterBody>();
+            manager = body.gameObject.AddOrGetComponent<Starstorm2ItemManager>();
         }
 
         public void FixedUpdate()
@@ -666,7 +675,6 @@ namespace Starstorm2.Cores
                 if (body.teamComponent)
                 {
                     manager.AddExperienceAuthority((uint)(3 * stack));
-
                 }
                 else
                 {
