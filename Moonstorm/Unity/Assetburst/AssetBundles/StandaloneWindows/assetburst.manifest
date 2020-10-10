@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 698576053
+CRC: 2637665764
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 2e7ffc278272b63ceeb0f45f66b739c9
+    Hash: 0161dadb1325bdc3454c2de0397b6f30
   TypeTreeHash:
     serializedVersion: 2
     Hash: 87095a85d917a02675d1b927900810c1
@@ -51,6 +51,7 @@ ClassTypes:
   Script: {instanceID: 0}
 Assets:
 - Assets/Moonstorm/Icons/Engineer/Impact_Grenades.png
+- Assets/Moonstorm/Survivors/Bombardier/Flan/ExecAnimator.controller
 - Assets/Moonstorm/Items/Earrings/Magicians_earings.fbx
 - Assets/Moonstorm/Survivors/Bombardier/Animations/Sprint.anim
 - Assets/Moonstorm/Items/MechanicalTrinket/hitchhiker.fbx
@@ -82,6 +83,7 @@ Assets:
 - Assets/Moonstorm/Teaser/tex/Materials/axetexture.mat
 - Assets/Moonstorm/Items/GeigerCounter/Materials/Geiger.mat
 - Assets/Moonstorm/Materials/DiaryTexture.mat
+- Assets/Moonstorm/Survivors/Bombardier/Flan/ExecAnimatorMenu.controller
 - Assets/Moonstorm/Survivors/Bombardier/satchel.blend
 - Assets/Moonstorm/Items/Earrings/MDLEarrings.prefab
 - Assets/Moonstorm/Items/GeigerCounter/Geiger.png
@@ -95,9 +97,12 @@ Assets:
 - Assets/Moonstorm/Enemies/matExampleSurvivor.mat
 - Assets/Moonstorm/Items/Grinder/Materials/Long_BUMP.mat
 - Assets/Moonstorm/Survivors/Bombardier/T_Bombardier_Color.png
+- Assets/Moonstorm/Survivors/Bombardier/Flan/ExecutionerModelMenu.prefab
 - Assets/Moonstorm/Survivors/Bombardier/Animations/Ascending.anim
+- Assets/Moonstorm/Survivors/Bombardier/Flan/ExecAnims.fbx
 - Assets/Moonstorm/Materials/T_Executor_Emissive.mat
 - Assets/Moonstorm/Survivors/Bombardier/Materials/T_Bombardier_Color 1.mat
+- Assets/Moonstorm/Survivors/Bombardier/Flan/ExecutionerMaskUpper.mask
 - Assets/Moonstorm/Items/MechanicalTrinket/MDLMechanicalTrinket.prefab
 - Assets/Moonstorm/Items/UESKeycard/textures/keycard_metal.png
 - Assets/Moonstorm/Items/MortarChip/Materials/mortar_chip.mat
@@ -131,10 +136,12 @@ Assets:
 - Assets/Moonstorm/Items/mdlExampleSurvivor.prefab
 - Assets/Moonstorm/Materials/axetexture.mat
 - Assets/Moonstorm/Teaser/tex/LampBoss.png
+- Assets/Moonstorm/Survivors/Bombardier/Flan/ExecutionerMaskFlinch.mask
 - Assets/Moonstorm/Survivors/Bombardier/Animations/bombsAnims 1.blend
 - Assets/Moonstorm/Survivors/Bombardier/T_BombardierM2_color.png
 - Assets/Moonstorm/Items/FabinhoruDagger/textures/Cloaking_n.jpg
 - Assets/Moonstorm/Items/UESKeycard/MDLKeycard.prefab
+- Assets/Moonstorm/Survivors/Bombardier/Flan/Materials/T_Executor_V2_Color.mat
 - Assets/Moonstorm/Items/RedSkull/Materials/redskulltex.mat
 - Assets/Moonstorm/Items/GeigerCounter/MDLGeigerCounter.prefab
 - Assets/Moonstorm/Items/FabinhoruDagger/fab_dagger.fbx
@@ -149,6 +156,7 @@ Assets:
 - Assets/Moonstorm/logo.png
 - Assets/Moonstorm/Survivors/Bombardier/Materials/T_Bombardier_Emissive2.png
 - Assets/Moonstorm/Enemies/Boss/LampBoss.prefab
+- Assets/Moonstorm/Survivors/Bombardier/Flan/Materials/Executioner_Emissive.mat
 - Assets/Moonstorm/Items/Grinder/Materials/Long_COL.mat
 - Assets/Moonstorm/Survivors/Bombardier/Animations/Special2.anim
 - Assets/Moonstorm/Enemies/DeployedLamp/LampDeployedEmis.png
@@ -184,7 +192,10 @@ Assets:
 - Assets/Moonstorm/Items/MechanicalTrinket/Icon.png
 - Assets/Moonstorm/Items/UESKeycard/textures/keycard_gloss.png
 - Assets/Moonstorm/Survivors/Bombardier/Materials/T_Bombardier_Emissive2.mat
+- Assets/Moonstorm/Survivors/Bombardier/Flan/Executioner_Emissive.png
+- Assets/Moonstorm/Survivors/Bombardier/Flan/ExecAnimsupdate(Updated)2.blend
 - Assets/Moonstorm/Teaser/tex/Materials/Detritive_Trematode_Tex.mat
+- Assets/Moonstorm/Survivors/Bombardier/Flan/Materials/axetexture.mat
 - Assets/Moonstorm/Enemies/Boss/LampBoss.png
 - Assets/Moonstorm/Items/UESKeycard/textures/keycard_normals.png
 - Assets/Moonstorm/Items/FabinhoruDagger/Materials/Cloaking.mat
@@ -196,6 +207,7 @@ Assets:
 - Assets/Moonstorm/Teaser/tex/Materials/texTrimSheetMetalVibrant.mat
 - Assets/Moonstorm/Items/Lemdog/LemDog.fbx
 - Assets/Moonstorm/Teaser/MDLTeaser.prefab
+- Assets/Moonstorm/Survivors/Bombardier/Flan/bombsAnims.blend
 - Assets/Moonstorm/Items/LightningEye/MDLLightningEye.prefab
 - Assets/Moonstorm/Survivors/Bombardier/Animations/Secondary.anim
 - Assets/Moonstorm/Teaser/tex/T_Executor_V2_Color.png
@@ -204,10 +216,13 @@ Assets:
 - Assets/Moonstorm/Icons/Engineer/TR75_Immolator_Turret_2.png
 - Assets/Moonstorm/Items/UESKeycard/Materials/keycard_normals.mat
 - Assets/Moonstorm/Icons/REX/texTreebotHarvester.png
+- Assets/Moonstorm/Survivors/Bombardier/Flan/BROJUSTFUCKINGWORK.prefab
 - Assets/Moonstorm/Materials/T_Executor_V2_Color.mat
 - Assets/Moonstorm/Materials/texTrimSheetMetalNormal.mat
+- Assets/Moonstorm/Survivors/Bombardier/Flan/T_Bombardier_Color 3.mat
 - Assets/Moonstorm/Survivors/Bombardier/mdlSatchel.prefab
 - Assets/Moonstorm/Survivors/Bombardier/Animations/CharSelect.anim
 - Assets/Moonstorm/Items/RedSkull/redskulltex.png
+- Assets/Moonstorm/Survivors/Bombardier/Flan/axetexture.png
 - Assets/Moonstorm/Survivors/Bombardier/Materials/T_Bombardier_Color 2.mat
 Dependencies: []

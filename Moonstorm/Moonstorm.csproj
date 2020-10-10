@@ -297,6 +297,9 @@
       <HintPath>libs\Zio.dll</HintPath>
     </Reference>
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="examplesurvivorbundle" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>if "$(Username)" == "Flan" copy /Y "$(TargetPath)" "F:\SteamLibrary\steamapps\common\Risk of Rain 2\BepInEx\plugins"

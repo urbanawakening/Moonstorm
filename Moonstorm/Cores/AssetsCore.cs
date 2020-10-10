@@ -13,6 +13,9 @@ namespace Moonstorm.Cores
         public static AssetBundle HANDAssetBundle = null;
         public static AssetBundleResourcesProvider HANDProvider;
 
+        public static AssetBundle bombAssetBundle = null;
+        public static AssetBundleResourcesProvider bombProvider;
+
         // icons
         public static GameObject grinderModel;
 
@@ -57,6 +60,15 @@ namespace Moonstorm.Cores
                     HANDAssetBundle = AssetBundle.LoadFromStream(assetStream);
                     HANDProvider = new AssetBundleResourcesProvider("@EngimaHANDREBOOTED", HANDAssetBundle);
                     ResourcesAPI.AddProvider(HANDProvider);
+                }
+            }
+            if (bombAssetBundle == null)
+            {
+                using (var assetStream = Assembly.GetExecutingAssembly().GetManifestResourceStream("Moonstorm.examplesurvivorbundle"))
+                {
+                    bombAssetBundle= AssetBundle.LoadFromStream(assetStream);
+                    bombProvider = new AssetBundleResourcesProvider("@Bombardier", bombAssetBundle);
+                    ResourcesAPI.AddProvider(bombProvider);
                 }
             }
             // gather assets

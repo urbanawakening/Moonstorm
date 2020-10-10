@@ -14,6 +14,7 @@ using Moonstorm.Cores.Skills;
 using BepInEx;
 using UnityEngine.Networking;
 using KinematicCharacterController;
+using R2API.Utils;
 
 namespace Moonstorm.Cores
 {
@@ -33,7 +34,83 @@ namespace Moonstorm.Cores
             CreatePrefab();
             SetComponents();
             CreateSkills();
+            FixSkin();
             AddToSurvivorSelect();
+        }
+
+        protected void FixSkin()
+        {
+            GameObject model = characterPrefab.GetComponentInChildren<ModelLocator>().modelTransform.gameObject;
+            CharacterModel characterModel = model.GetComponent<CharacterModel>();
+
+            SkinnedMeshRenderer FixRenderInfo()
+            {
+                SkinnedMeshRenderer mainRenderer = Reflection.GetFieldValue<SkinnedMeshRenderer>(characterModel, "mainSkinnedMeshRenderer"); //Reflection.GetFieldValue<CharacterModel.RendererInfo>(modelController, "baseRenderInfos")
+                if (mainRenderer == null)
+                {
+                    CharacterModel.RendererInfo[] info = Reflection.GetFieldValue<CharacterModel.RendererInfo[]>(characterModel, "baseRendererInfos");
+                    if (info != null)
+                    {
+                        foreach (CharacterModel.RendererInfo rendererInfo in info)
+                        {
+                            if (rendererInfo.renderer is SkinnedMeshRenderer)
+                            {
+                                mainRenderer = (SkinnedMeshRenderer)rendererInfo.renderer;
+                                break;
+                            }
+                        }
+                        if (mainRenderer != null)
+                        {
+                            characterModel.SetFieldValue<SkinnedMeshRenderer>("mainSkinnedMeshRenderer", mainRenderer);
+                        }
+                    }
+                }
+                return mainRenderer;
+            }
+
+            void CreateSkinInfo(SkinnedMeshRenderer mainRenderer)
+            {
+                ModelSkinController skinController = model.AddOrGetComponent<ModelSkinController>();
+
+                LoadoutAPI.SkinDefInfo defaultSkinInfo = default(LoadoutAPI.SkinDefInfo);
+                defaultSkinInfo.BaseSkins = Array.Empty<SkinDef>();
+                defaultSkinInfo.GameObjectActivations = Array.Empty<SkinDef.GameObjectActivation>();
+                defaultSkinInfo.Icon = LoadoutAPI.CreateSkinIcon(
+                    //top - filled
+                    new Color(250f / 255f, 234f / 255f, 202f / 255f),
+                    //right 
+                    new Color(53f / 255f, 55f / 255f, 72f / 255f),
+                    //bottom - filled
+                    new Color(28f / 255f, 131f / 255f, 148f / 255f),
+                    //left - fillfed
+                    new Color(106f / 255f, 108f / 255f, 130f / 255f));
+
+                defaultSkinInfo.MeshReplacements = new SkinDef.MeshReplacement[] {
+                    new SkinDef.MeshReplacement {
+                    renderer = mainRenderer,
+                    mesh = mainRenderer.sharedMesh
+                    }
+                };
+                defaultSkinInfo.MinionSkinReplacements = Array.Empty<SkinDef.MinionSkinReplacement>();
+                defaultSkinInfo.Name = "DEFAULT_SKIN";
+                defaultSkinInfo.NameToken = "DEFAULT_SKIN";
+                defaultSkinInfo.ProjectileGhostReplacements = Array.Empty<SkinDef.ProjectileGhostReplacement>();
+                defaultSkinInfo.RendererInfos = characterModel.baseRendererInfos;
+                defaultSkinInfo.RootObject = model;
+                defaultSkinInfo.UnlockableName = "";
+
+
+                //, ));
+
+                SkinDef defaultSkin = LoadoutAPI.CreateNewSkinDef(defaultSkinInfo);
+
+                skinController.skins = new SkinDef[1]
+                {
+                defaultSkin,
+                };
+            }
+
+            CreateSkinInfo(FixRenderInfo());
         }
 
         internal GameObject CreateModel(GameObject main)
@@ -43,13 +120,16 @@ namespace Moonstorm.Cores
             BaseUnityPlugin.Destroy(main.transform.Find("AimOrigin").gameObject);
 
             // make sure it's set up right in the unity project
-            GameObject model = AssetsCore.mainAssetBundle.LoadAsset<GameObject>("Assets/Moonstorm/Survivors/Bombardier/mdlBombardier.prefab");
-
+            GameObject model = AssetsCore.bombAssetBundle.LoadAsset<GameObject>("mdlExampleSurvivor"); //Assets/Moonstorm/Survivors/Bombardier/Flan/ExecutionerModel.prefab"); //.prefab");
+                
             return model;
         }
 
         internal  void CreatePrefab()
         {
+            //https://twitter.com/UndyingPlace814/status/1314421118917316609
+
+
             // first clone the commando prefab so we can turn that into our own survivor
             characterPrefab = PrefabAPI.InstantiateClone(Resources.Load<GameObject>("Prefabs/CharacterBodies/CommandoBody"), "ExampleSurvivorBody", true, "C:\\Users\\test\\Documents\\ror2mods\\ExampleSurvivor\\ExampleSurvivor\\ExampleSurvivor\\ExampleSurvivor.cs", "CreatePrefab", 151);
 
@@ -75,7 +155,7 @@ namespace Moonstorm.Cores
             gameObject3.transform.localPosition = new Vector3(0f, 1.4f, 0f);
             gameObject3.transform.localRotation = Quaternion.identity;
             gameObject3.transform.localScale = Vector3.one;
-
+                
             Transform transform = model.transform;
             transform.parent = gameObject.transform;
             transform.localPosition = Vector3.zero;
@@ -130,7 +210,7 @@ namespace Moonstorm.Cores
 
             // childlocator is something that must be set up in the unity project, it's used to find any child objects for things like footsteps or muzzle flashes
             // also important to set up if you want quality
-            ChildLocator childLocator = model.GetComponent<ChildLocator>();
+            //ChildLocator childLocator = model.GetComponent<ChildLocator>();
 
             // this component is used to handle all overlays and whatever on your character, without setting this up you won't get any cool effects like burning or freeze on the character
             // it goes on the model object of course
@@ -284,7 +364,7 @@ namespace Moonstorm.Cores
             desc = desc + "< ! > Rocket Blast is weak against single targets, but excels in crowds. Blast into a large crowd of enemies for maximum destruction." + Environment.NewLine + Environment.NewLine;
             desc = desc + "< ! > Use your Sticky Charges to set up bosses for huge damage potential. Keep in mind they only detonate when you use your primary, so use as many as you have." + Environment.NewLine + Environment.NewLine;
             desc = desc + "< ! > Concussive Blast is an excellent escape and mobility tool, but it also pulls enemies towards you when used. Jump away and shoot straight down to quickly dispose of a crowd" + Environment.NewLine + Environment.NewLine;
-            desc = desc + "< ! > The key to success is realizing all of the Bombardier's abilitie propel him into the air. Try to gain as much height as possible when using Grand Slam to annihilate your enemies." + Environment.NewLine + Environment.NewLine;
+            desc = desc + "< ! > The key to success is realizing all of the Bombardier's abilities propel him into the air. Try to gain as much height as possible when using Grand Slam to annihilate your enemies." + Environment.NewLine + Environment.NewLine;
 
             LanguageAPI.Add("BOMBARDIER_BASENAMETOKEN", "Bombardier");
             LanguageAPI.Add("BOMBARDIER_DESCRIPTION", desc);
@@ -335,6 +415,10 @@ namespace Moonstorm.Cores
             characterBody.levelMaxShield = 0; //Shield gained when leveling up. 
             characterBody.levelMoveSpeed = 0; //Move speed gained when leveling up. 
             characterBody.levelRegen = 0.2f; //Regen gained when leveling up. 
+
+            LanguageAPI.Add(characterBody.subtitleNameToken, "Stranded Fuse Lighter");
+            LanguageAPI.Add(characterBody.baseNameToken, "Bombardier");
+
             //fuck you moffein no credit
             //eat my ass    
             characterBody.portraitIcon = AssetsCore.mainAssetBundle.LoadAsset<Texture>("Assets/Moonstorm/Survivors/Bombardier/icon.png"); ; //The portrait icon, shows up in multiplayer and the death UI
