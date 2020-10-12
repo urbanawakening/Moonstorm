@@ -17,6 +17,7 @@ namespace Starstorm2.Cores
     {
         public static NemmandoCore instance;
         public static GameObject characterPrefab;
+        public static GameObject defaultCrosshair;
 
         public NemmandoCore() => Load();
 
@@ -68,6 +69,8 @@ namespace Starstorm2.Cores
             component.levelDamage = 4f;
             component.name = "Nemesis Commando";
             component.subtitleNameToken = "Nemesis Commando";
+
+            NemmandoCore.defaultCrosshair = component.crosshairPrefab;
 
             characterPrefab.GetComponent<CharacterBody>().preferredPodPrefab = Resources.Load<GameObject>("Prefabs/CharacterBodies/toolbotbody").GetComponent<CharacterBody>().preferredPodPrefab;
             LanguageAPI.Add("");
@@ -159,7 +162,7 @@ namespace Starstorm2.Cores
             LanguageAPI.Add("NEMMANDO_SECONDARY_CONCUSSION_DESCRIPTION", "Throw grenade above you stunning enemies on explosion.");
 
             var mySkillDef = ScriptableObject.CreateInstance<SkillDef>();
-            mySkillDef.activationState = new SerializableEntityStateType(typeof(ConcussionGrenade));
+            mySkillDef.activationState = new SerializableEntityStateType(typeof(ChargeDecisiveStrike));
             mySkillDef.activationStateMachineName = "Weapon";
             mySkillDef.baseMaxStock = 1;
             mySkillDef.baseRechargeInterval = 3f;
@@ -167,7 +170,7 @@ namespace Starstorm2.Cores
             mySkillDef.canceledFromSprinting = false;
             mySkillDef.noSprint = false;
             mySkillDef.fullRestockOnAssign = true;
-            mySkillDef.interruptPriority = InterruptPriority.Any;
+            mySkillDef.interruptPriority = InterruptPriority.Skill;
             mySkillDef.isBullets = false;
             mySkillDef.isCombatSkill = true;
             mySkillDef.mustKeyPress = true;
@@ -212,7 +215,7 @@ namespace Starstorm2.Cores
             mySkillDef.beginSkillCooldownOnSkillEnd = true;
             mySkillDef.canceledFromSprinting = false;
             mySkillDef.fullRestockOnAssign = true;
-            mySkillDef.interruptPriority = InterruptPriority.Any;
+            mySkillDef.interruptPriority = InterruptPriority.PrioritySkill;
             mySkillDef.isBullets = false;
             mySkillDef.isCombatSkill = false;
             mySkillDef.mustKeyPress = false;
@@ -258,7 +261,7 @@ namespace Starstorm2.Cores
             mySkillDef.beginSkillCooldownOnSkillEnd = false;
             mySkillDef.canceledFromSprinting = false;
             mySkillDef.fullRestockOnAssign = true;
-            mySkillDef.interruptPriority = InterruptPriority.Any;
+            mySkillDef.interruptPriority = InterruptPriority.PrioritySkill;
             mySkillDef.isBullets = false;
             mySkillDef.isCombatSkill = false;
             mySkillDef.mustKeyPress = false;

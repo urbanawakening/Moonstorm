@@ -47,7 +47,7 @@ namespace Starstorm2.Cores.States.Nemmando
 			this.hitBoxGroupName = "SwordLarge";
 			this.baseDuration = 0.5f;
 			this.hitPauseDuration = 0.01f;
-			this.damageCoefficient = 2.5f;
+			this.damageCoefficient = 1.5f;
 
 			if (this.isComboFinisher)
 			{

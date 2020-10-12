@@ -8,7 +8,6 @@ using UnityEngine.Networking;
 
 namespace Starstorm2.Cores.States.Nemmando
 {
-	// Token: 0x02000AA2 RID: 2722
 	public class DodgeState : BaseSkillState
 	{
 
@@ -65,7 +64,7 @@ namespace Starstorm2.Cores.States.Nemmando
 			this.search.sortMode = BullseyeSearch.SortMode.Distance;
 			this.search.maxDistanceFilter = this.maxDistance;
 			this.search.minAngleFilter = 0f;
-			this.search.maxAngleFilter = 15f;
+			this.search.maxAngleFilter = 30f;
 			this.search.teamMaskFilter = TeamMask.AllExcept(GetTeam());
 			base.characterBody.AddBuff(BuffIndex.ArmorBoost);
 
@@ -74,8 +73,8 @@ namespace Starstorm2.Cores.States.Nemmando
 				this.forwardDirection = ((base.inputBank.moveVector == Vector3.zero) ? base.characterDirection.forward : base.inputBank.moveVector).normalized;
 			}
 
-			if (base.isAuthority) 
-				this.Shoot();
+			//if (base.isAuthority) 
+			//	this.Shoot();
 
 			Vector3 rhs = base.characterDirection ? base.characterDirection.forward : this.forwardDirection;
 			Vector3 rhs2 = Vector3.Cross(Vector3.up, rhs);
@@ -134,28 +133,31 @@ namespace Starstorm2.Cores.States.Nemmando
 			base.FixedUpdate();
 			RecalculateRollSpeed();
 
-			if (base.isAuthority && this.bulletCount > 0 && this.fixedAge >= this.nextShotInterval)
-			{
-				this.Shoot();
-			}
+			//if (base.isAuthority && this.bulletCount > 0 && this.fixedAge >= this.nextShotInterval)
+			//{
+			//	this.Shoot();
+			//}
 
-			Vector3 normalized = (base.transform.position - this.previousPosition).normalized;
-			if (base.characterMotor && base.characterDirection && normalized != Vector3.zero)
+			if(base.isAuthority)
 			{
-				Vector3 vector = normalized * this.rollSpeed;
-				float y = vector.y;
-				vector.y = 0f;
-				float d = Mathf.Max(Vector3.Dot(vector, this.forwardDirection), 0f);
-				vector = this.forwardDirection * d;
-				vector.y += Mathf.Max(y, 0f);
-				base.characterMotor.velocity = vector;
-			}
+				Vector3 normalized = (base.transform.position - this.previousPosition).normalized;
+				if (base.characterMotor && base.characterDirection && normalized != Vector3.zero)
+				{
+					Vector3 vector = normalized * this.rollSpeed;
+					float y = vector.y;
+					vector.y = 0f;
+					float d = Mathf.Max(Vector3.Dot(vector, this.forwardDirection), 0f);
+					vector = this.forwardDirection * d;
+					vector.y += Mathf.Max(y, 0f);
+					base.characterMotor.velocity = vector;
+				}
 
-			this.previousPosition = base.transform.position;
-			if (base.fixedAge >= this.duration && base.isAuthority)
-			{
-				this.outer.SetNextStateToMain();
-				return;
+				this.previousPosition = base.transform.position;
+				if (base.fixedAge >= this.duration && base.isAuthority)
+				{
+					this.outer.SetNextStateToMain();
+					return;
+				}
 			}
 		}
 
