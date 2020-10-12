@@ -1,4 +1,5 @@
-﻿using RoR2;
+﻿using R2API.Utils;
+using RoR2;
 using System;
 
 namespace Moonstorm.Cores
@@ -10,6 +11,7 @@ namespace Moonstorm.Cores
         public static DamageTypeCore instance;
 
         public static DamageType bombardierKnockback;
+        public static DamageType antiGrav;
 
         public DamageTypeCore() {
             instance = this;
@@ -34,6 +36,7 @@ namespace Moonstorm.Cores
         private void HealthComponent_TakeDamage(On.RoR2.HealthComponent.orig_TakeDamage orig, HealthComponent self, DamageInfo damageInfo)
         {
             bool isOsp = (damageInfo.damageType & DamageTypeCore.bombardierKnockback) != DamageType.Generic;
+            bool antiGravType = (damageInfo.damageType & antiGrav) != DamageType.Generic;
             //bool isOsp2 = (damageInfo.damageType & DamageType.AOE) != DamageType.Generic;
 
 
@@ -48,18 +51,33 @@ namespace Moonstorm.Cores
                     self.body.AddTimedBuff(BuffCore.instance.bombardierForceIndex, 3);
                 }
             }
-
+            if (antiGravType && self.body) {
+                //implement alternate behavior if it's a flier
+                if (self.body.characterMotor)
+                {
+                    self.body.AddTimedBuff(BuffCore.instance.antiGravIndex, 5);
+                }
+                else {
+                    var rigid = self.body.rigidbody;
+                    if (rigid) { 
+                        rigid.AddForce(new UnityEngine.Vector3(0, -10000, 0));
+                    }
+                }
+            }
             orig(self, damageInfo);
         }
 
         protected void AddDamageTypes() {
             bombardierKnockback = AddDamageType();
-            LogCore.LogI(bombardierKnockback);
+            antiGrav = AddDamageType();
+
         }
 
         protected DamageType AddDamageType() {
             currentMax *= 2;
             var damageType = (RoR2.DamageType)currentMax;
+
+            LogCore.LogI("Added DamageType:" + damageType.ToString());
             return damageType;
         }
     }

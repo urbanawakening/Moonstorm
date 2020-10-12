@@ -18,6 +18,8 @@ namespace Moonstorm.Cores
         protected internal BuffIndex bombardierForceIndex;
         protected internal BuffIndex baboomChargeIndex;
         protected internal BuffIndex skinIndex;
+        protected internal BuffIndex antiGravIndex;
+        protected internal BuffIndex wyattCombatIndex;
 
         internal bool Loaded { get; private set; } = false;
         public BuffCore() => RegisterBuffs();
@@ -99,9 +101,39 @@ namespace Moonstorm.Cores
                 name = "SkinStack",
                 buffColor = new Color32(219, 224, 198, byte.MaxValue)
             });
+            RegisterBuff(new BuffDef()
+            {
+                buffIndex = BuffIndex.Count,
+                canStack = true,
+                isDebuff = false,
+                eliteIndex = EliteIndex.None,
+                iconPath = "Textures/BuffIcons/texBuffPulverizeIcon",
+                name = "AntiGrav",
+                buffColor = new Color(0.6784314f, 0.6117647f, 0.4117647f)
+            });
+            RegisterBuff(new BuffDef()
+            {
+                buffIndex = BuffIndex.Count,
+                canStack = true,
+                isDebuff = false,
+                eliteIndex = EliteIndex.None,
+                iconPath = "Textures/BuffIcons/texBuffTeslaIcon",
+                name = "WyattCombat",
+                buffColor = new Color(1f, 0.7882353f, 0.05490196f)
+            });
 
 
             On.RoR2.CharacterBody.RecalculateStats += CharacterBody_RecalculateStats;
+            On.RoR2.CharacterBody.RemoveBuff += CharacterBody_RemoveBuff;
+        }
+
+        private void CharacterBody_RemoveBuff(On.RoR2.CharacterBody.orig_RemoveBuff orig, CharacterBody self, BuffIndex buffType)
+        {
+            if (buffType == antiGravIndex) {
+                self.characterMotor.useGravity = true;
+            }
+
+            orig(self, buffType);
         }
 
         private void CharacterBody_RecalculateStats(On.RoR2.CharacterBody.orig_RecalculateStats orig, CharacterBody self)
@@ -134,6 +166,12 @@ namespace Moonstorm.Cores
                 if (self.HasBuff(skinIndex)) // && controller)
                 {
                     self.SetPropertyValue("armor", armor += 5f);
+                }
+                if (self.HasBuff(antiGravIndex)) {
+                    self.characterMotor.useGravity = false;
+                }
+                if (self.HasBuff(wyattCombatIndex)) {
+                    self.SetPropertyValue("moveSpeed", moveSpeed += 1f);
                 }
                 if (self.HasBuff(droneIndex)) // && controller)
                 {
@@ -179,7 +217,6 @@ namespace Moonstorm.Cores
                 case "Scrap":
                     scrapIndex = BuffAPI.Add(customBuff);
                     break;
-
                 case "BombardierForce":
                     bombardierForceIndex = BuffAPI.Add(customBuff);
                     break;
@@ -189,7 +226,12 @@ namespace Moonstorm.Cores
                 case "SkinStack":
                     skinIndex = BuffAPI.Add(customBuff);
                     break;
-
+                case "AntiGrav":
+                    antiGravIndex = BuffAPI.Add(customBuff);
+                    break;
+                case "WyattCombat":
+                    wyattCombatIndex = BuffAPI.Add(customBuff);
+                    break;
                 //throw new System.NotImplementedException("not implemented yet!");
                 default:
                     //feel my haunted lust

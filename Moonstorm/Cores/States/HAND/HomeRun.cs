@@ -18,7 +18,7 @@ namespace Moonstorm.Cores.States.HAND
         public static float radius = 3f;
         public static GameObject hitEffectPrefab;
         public static GameObject swingEffectPrefab = Resources.Load<GameObject>("prefabs/effects/HANDSlamTrail");
-        public static GameObject projectilePrefab = HAN_DCore.instance.sunder;
+        public static GameObject projectilePrefab = WyattCore.instance.sunder;
         private Transform hammerChildTransform;
         private OverlapAttack attack;
         private Animator modelAnimator;

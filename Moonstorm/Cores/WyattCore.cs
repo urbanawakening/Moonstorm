@@ -10,17 +10,19 @@ using static RoR2.DotController;
 using Moonstorm.Cores.HAND.Components;
 using Moonstorm.Cores.HAND.Skills;
 using Moonstorm.Cores.States.HAND;
+using Moonstorm.Cores.States.Wyatt;
+using Moonstorm.Cores.Components.Wyatt;
 
 namespace Moonstorm.Cores.HAND
 {
-    public class HAN_DCore
+    public class WyattCore
     {
         #region Instance and logger
-        public static HAN_DCore instance;
+        public static WyattCore instance;
         #endregion
         #region Prefabs
         public GameObject winch;
-        public GameObject HANDBody;
+        public GameObject wyattBody;
         public GameObject sunder;
         #endregion
         #region Components
@@ -29,11 +31,13 @@ namespace Moonstorm.Cores.HAND
         public DroneComponent droneComponent;
         public HANDPassiveController passiveContoller;
         public CharacterBody characterBody;
+        public WyattComboScript script;
         #endregion
 
-        public HAN_DCore() => Load();
+        public WyattCore() => Load();
 
-        public void Load() {
+        public void Load()
+        {
             LogCore.LogI("Initializing Core: " + base.ToString());
 
             if (instance == null)
@@ -62,7 +66,8 @@ namespace Moonstorm.Cores.HAND
 
         #endregion
         #region Prefab Creation
-        private void CreateSunderPrefab() {
+        private void CreateSunderPrefab()
+        {
             sunder = Resources.Load<GameObject>("prefabs/projectiles/Sunder").InstantiateClone("HANDSunder", true);
             API.RegisterNewProjectile(sunder);
             UnityEngine.Object.Destroy(sunder.GetComponent<ProjectileOverlapAttack>());
@@ -190,25 +195,24 @@ namespace Moonstorm.Cores.HAND
         }
         private void CreateHANDPrefab()
         {
-            if (!HANDBody)
+            if (!wyattBody)
             {
-                this.HANDBody = Resources.Load<GameObject>("prefabs/characterbodies/HANDBody");
+                this.wyattBody = Resources.Load<GameObject>("prefabs/characterbodies/HANDBody");
             }
         }
         #endregion
         #region Components
         private void SetComponents()
         {
-            skillLocator = HANDBody.GetComponent<SkillLocator>();
-            overclockComponent = HANDBody.AddComponent<OverclockComponent>();
-            droneComponent = HANDBody.AddComponent<DroneComponent>();
-            characterBody = HANDBody.GetComponent<CharacterBody>();
-            SfxLocator sfxLocator = HANDBody.GetComponent<SfxLocator>();
-            CharacterDeathBehavior characterDeathBehavior = HANDBody.GetComponent<CharacterDeathBehavior>();
-            HANDDroneTracker tracker = HANDBody.AddComponent<HANDDroneTracker>();
-            OverclockComboActivation combo = HANDBody.AddComponent<OverclockComboActivation>();
-            passiveContoller = HANDBody.AddComponent<HANDPassiveController>();
-
+            skillLocator = wyattBody.GetComponent<SkillLocator>();
+            overclockComponent = wyattBody.AddComponent<OverclockComponent>();
+            droneComponent = wyattBody.AddComponent<DroneComponent>();
+            characterBody = wyattBody.GetComponent<CharacterBody>();
+            SfxLocator sfxLocator = wyattBody.GetComponent<SfxLocator>();
+            CharacterDeathBehavior characterDeathBehavior = wyattBody.GetComponent<CharacterDeathBehavior>();
+            HANDDroneTracker tracker = wyattBody.AddComponent<HANDDroneTracker>();
+            script = wyattBody.AddComponent<WyattComboScript>();
+            wyattBody.AddComponent<WyattWalkmanBehavior>();
             //kil
             LoadoutAPI.AddSkill(typeof(DeathState));
             characterDeathBehavior.deathState = new SerializableEntityStateType(typeof(DeathState));
@@ -228,7 +232,7 @@ namespace Moonstorm.Cores.HAND
 
         private void FixSetStateOnHurt()
         {
-            SetStateOnHurt hurtState = HANDBody.AddOrGetComponent<SetStateOnHurt>(); //AddOrGetComponent is because 
+            SetStateOnHurt hurtState = wyattBody.AddOrGetComponent<SetStateOnHurt>(); //AddOrGetComponent is because 
 
             hurtState.canBeFrozen = true; //If this gameobject can be frozen. Set to true if this is a survivor
             hurtState.canBeHitStunned = false; //If this gameobject can be stunned by being hit. Set to false if this is a survivor.
@@ -237,7 +241,7 @@ namespace Moonstorm.Cores.HAND
 
             int i = 0;
             EntityStateMachine[] esmr = new EntityStateMachine[2];
-            foreach (EntityStateMachine esm in HANDBody.GetComponentsInChildren<EntityStateMachine>())
+            foreach (EntityStateMachine esm in wyattBody.GetComponentsInChildren<EntityStateMachine>())
             {
                 switch (esm.customName)
                 {
@@ -295,7 +299,7 @@ namespace Moonstorm.Cores.HAND
 
         private void SetSkills()
         {
-            API.CreateEmptySkills(HANDBody);
+            API.CreateEmptySkills(wyattBody);
             FixSkin();
             RegisterDamageTypes();
             CreatePassives();
@@ -308,7 +312,7 @@ namespace Moonstorm.Cores.HAND
 
         private void FixSkin()
         {
-            GameObject model = HANDBody.GetComponentInChildren<ModelLocator>().modelTransform.gameObject;
+            GameObject model = wyattBody.GetComponentInChildren<ModelLocator>().modelTransform.gameObject;
             CharacterModel characterModel = model.GetComponent<CharacterModel>();
 
             SkinnedMeshRenderer FixRenderInfo()
@@ -384,9 +388,23 @@ namespace Moonstorm.Cores.HAND
 
         private void CreatePassives()
         {
-            var passiveFamily = ScriptableObject.CreateInstance<SkillFamily>();
+            var passive = skillLocator.passiveSkill;
 
-            var skillSlot = HANDBody.AddComponent<GenericSkill>();
+            passive.enabled = true;
+            passive.skillNameToken = "WYATT_PASSIVE_NAME";
+            passive.skillDescriptionToken = "WYATT_PASSIVE_DESCRIPTION";
+            passive.keywordToken = "KEYWORD_VELOCITY";
+
+            LanguageAPI.Add(passive.skillNameToken, "Walkman");
+            LanguageAPI.Add(passive.skillDescriptionToken, "For every 3 seconds you're engaged in combat, gain a stack of <style=cIsUtility>Velocity</style>, up to 10.");
+
+            skillLocator.passiveSkill = passive;
+
+            LanguageAPI.Add(passive.keywordToken, "<style=cKeywordName>Velocity</style><style=cSub>Increases movement speed by X% and health regeneration by X; all stacks lost when out of combat.</style>");
+
+            /*var passiveFamily = ScriptableObject.CreateInstance<SkillFamily>();
+
+            var skillSlot = wyattBody.AddComponent<GenericSkill>();
 
             var armorDef = ScriptableObject.CreateInstance<SkillDef>();
             var regenDef = ScriptableObject.CreateInstance<SkillDef>();
@@ -442,7 +460,7 @@ namespace Moonstorm.Cores.HAND
                 new SkillFamily.Variant {
                     skillDef = speedDef,
                     unlockableName = ""
-                }*/
+                }
 
             };
 
@@ -456,7 +474,7 @@ namespace Moonstorm.Cores.HAND
             passiveContoller.armorDef = armorDef;
             passiveContoller.regenDef = regenDef;
             passiveContoller.speedDef = speedDef;
-            passiveContoller.passiveSkillSlot = skillSlot;
+            passiveContoller.passiveSkillSlot = skillSlot;*/
         }
 
         private void CreatePrimary()
@@ -495,9 +513,14 @@ namespace Moonstorm.Cores.HAND
             primarySkillDef.icon = AssetsCore.hurtIcon;
             primarySkillDef.keywordTokens = new string[] {
                  "KEYWORD_AGILE",
-                 "KEYWORD_STUNNING",
-                 "KEYWORD_CLOCKED"
-             };
+                 "KEYWORD_WEIGHTLESS",
+                 "KEYWORD_SPIKED",
+            };
+
+            LanguageAPI.Add(primarySkillDef.skillNameToken, "G22 Grav-Broom");
+            LanguageAPI.Add(primarySkillDef.skillDescriptionToken, "<style=cIsUtility>Agile</style>. Swing in front for X% damage. Applies <style=cIsUtility>Weightless</style>. Every 4th hit <style=cIsDamage>Spikes</style>.");
+            LanguageAPI.Add(primarySkillDef.keywordTokens[1], "<style=cKeywordName>Weightless</style><style=cSub>Slows and removes gravity from target.</style>");
+            LanguageAPI.Add(primarySkillDef.keywordTokens[2], "<style=cKeywordName>Spikes</style><style=cSub>Knocks the target directly toward the ground at dangerous speeds.</style>");
 
             LoadoutAPI.AddSkillDef(primarySkillDef);
             SkillFamily primarySkillFamily = skillLocator.primary.skillFamily;
@@ -517,8 +540,8 @@ namespace Moonstorm.Cores.HAND
             LoadoutAPI.AddSkill(typeof(HomeRun));
             LoadoutAPI.AddSkill(typeof(AnimationTest));
 
-            SkillDef secondarySkillDef = ScriptableObject.CreateInstance<SkillDef>();
-            secondarySkillDef.activationState = new SerializableEntityStateType(typeof(AnimationTest));
+            SkillDef secondarySkillDef = ScriptableObject.CreateInstance<HANDDroneSkillDef>();
+            secondarySkillDef.activationState = new SerializableEntityStateType(typeof(TrashOut));
             secondarySkillDef.activationStateMachineName = "Weapon";
             secondarySkillDef.baseMaxStock = 1;
             secondarySkillDef.baseRechargeInterval = 3f;
@@ -539,10 +562,13 @@ namespace Moonstorm.Cores.HAND
             secondarySkillDef.skillNameToken = "HAND_SECONDARY_NAME";
             secondarySkillDef.icon = AssetsCore.forcedReassemblyIcon;
             secondarySkillDef.keywordTokens = new string[] {
-                 "KEYWORD_AGILE",
-                 "KEYWORD_CHARGEABLE",
-                 "KEYWORD_CLOCKED"
+                // "KEYWORD_AGILE",
+                // "KEYWORD_CHARGEABLE",
+                // "KEYWORD_CLOCKED"
              };
+
+            LanguageAPI.Add(secondarySkillDef.skillNameToken, "Trash Out");
+            LanguageAPI.Add(secondarySkillDef.skillDescriptionToken, "<style=cIsDamage>Kick</style> toward a targeted enemy for <style=cIsDamage>X% damage</style>, knocking them back.");
 
             LoadoutAPI.AddSkillDef(secondarySkillDef);
             SkillFamily secondarySkillFamily = skillLocator.secondary.skillFamily;
@@ -563,9 +589,10 @@ namespace Moonstorm.Cores.HAND
             LoadoutAPI.AddSkill(typeof(Burst));
             LoadoutAPI.AddSkill(typeof(ChargeSlam));
             LoadoutAPI.AddSkill(typeof(Slam));
+            LoadoutAPI.AddSkill(typeof(DeepClean));
 
             SkillDef utilitySkillDef = ScriptableObject.CreateInstance<SkillDef>();
-            utilitySkillDef.activationState = new SerializableEntityStateType(typeof(ChargeSlam));
+            utilitySkillDef.activationState = new SerializableEntityStateType(typeof(DeepClean));
             utilitySkillDef.activationStateMachineName = "Weapon";
             utilitySkillDef.baseMaxStock = 1;
             utilitySkillDef.baseRechargeInterval = 5f;
@@ -586,10 +613,13 @@ namespace Moonstorm.Cores.HAND
             utilitySkillDef.skillNameToken = "HAND_UTILITY_NAME";
             utilitySkillDef.icon = AssetsCore.forcedReassemblyIcon;
             utilitySkillDef.keywordTokens = new string[] {
-                 "KEYWORD_AGILE",
-                 "KEYWORD_CHARGEABLE",
-                 "KEYWORD_CLOCKED"
+                 "KEYWORD_STUNNING",
+                 "KEYWORD_WEIGHTLESS"
              };
+
+            LanguageAPI.Add(utilitySkillDef.skillNameToken, "Deep Clean");
+            LanguageAPI.Add(utilitySkillDef.skillDescriptionToken, "<style=cIsDamage>Stunning</style>. Dash forward, rapidly attacking any enemies along your path for X% damage repeatedly. <style=cIsUtility>Applies Weightless</style>.");
+
 
             LoadoutAPI.AddSkillDef(utilitySkillDef);
             SkillFamily utilitySkillFamily = skillLocator.utility.skillFamily;
@@ -605,9 +635,10 @@ namespace Moonstorm.Cores.HAND
         private void CreateSpecial()
         {
             LoadoutAPI.AddSkill(typeof(Drone));
+            LoadoutAPI.AddSkill(typeof(TrashOut));
 
             SkillDef specialSkillDef = ScriptableObject.CreateInstance<HANDDroneSkillDef>();
-            specialSkillDef.activationState = new SerializableEntityStateType(typeof(Drone));
+            specialSkillDef.activationState = new SerializableEntityStateType(typeof(TrashOut));
             specialSkillDef.activationStateMachineName = "Weapon";
             specialSkillDef.baseMaxStock = 10;
             specialSkillDef.baseRechargeInterval = 0;
@@ -627,6 +658,11 @@ namespace Moonstorm.Cores.HAND
             specialSkillDef.skillName = "aaa";
             specialSkillDef.skillNameToken = "HAND_SPECIAL_NAME";
             specialSkillDef.icon = AssetsCore.droneIcon;
+            specialSkillDef.keywordTokens = new string[] {
+                 "KEYWORD_WEIGHTLESS"
+            };
+            LanguageAPI.Add(specialSkillDef.skillNameToken, "G22 MAID");
+            LanguageAPI.Add(specialSkillDef.skillDescriptionToken, "Deploy a floating MAID unit that generates an anti-gravity bubble that <style=cIsUtility>applies Weightless</style> to all enemies, <style=cIsUtility>while giving Survivors free movement</style>.");
 
             LoadoutAPI.AddSkillDef(specialSkillDef);
             SkillFamily specialSkillFamily = skillLocator.special.skillFamily;
@@ -713,44 +749,14 @@ namespace Moonstorm.Cores.HAND
         #region Misc
         private void CreateTokens()
         {
-            //LanguageAPI.Add("HAND_BODY_NAME", "HAN-D");
+            LanguageAPI.Add("HAND_BODY_NAME", "Wyatt");
             LanguageAPI.Add("HAND_BODY_SUBTITLE", "Lean, Mean, Cleaning Machine");
-            LanguageAPI.Add("KEYWORD_CHARGEABLE", "<style=cKeywordName>Chargeable</style><style=cSub>This skill can be held down to enhance its function.</style>");
-            LanguageAPI.Add("KEYWORD_CLOCKED", "<style=cKeywordName>Overclocked</style><style=cSub>This has a chance to become stunning when overclock is on.</style>");
-            LanguageAPI.Add("KEYWORD_CLEANS", "<style=cKeywordName>Cleaning</style><style=cSub>This skill cleans enemies, which deals damage overtime and doubles melee damage dealt to enemies.</style>");
-            //LanguageAPI.Add("HAND_DESCRIPTION", Environment.NewLine + "NO MANUAL PROVIDED FOR SELECTED HAN-D UNIT.");
 
-            LanguageAPI.Add("HAND_PASSIVE_NAME", "OVERCLOCK");
-            LanguageAPI.Add("HAND_PASSIVE_DESCRIPTION", "<style=cIsDamage>USING MELEE SKILLS AND LANDING HITS</style> IN QUICK SUCCESSION ACTIVATES <style=cIsDamage>OVERCLOCK</style>.");
-
-            //LanguageAPI.Add("HAND_PASSIVE_NAME", "SCRAP_COLLECTOR");
-            //LanguageAPI.Add("HAND_PASSIVE_DESCRIPTION", "<style=cIsUtility>GENERATE SCRAP</style> WHEN HITTING AN ENEMY. <style=cIsUtility>TEN ARMOR</style> PER DRONE. MAXIMUM TEN SCRAP");
-
-            /*LanguageAPI.Add("HAND_PASSIVE_ALT_NAME", "FLESH_COLLECTOR");
-            LanguageAPI.Add("HAND_PASSIVE_ALT_DESCRIPTION", "<style=cIsUtility>LEECH FLESH</style> AFTER HITTING AN ENEMY. GAIN <style=cIsHealing>25% REGEN</style> PER FLESH. MAXIMUM POUNDS OF FLESH");
-
-            LanguageAPI.Add("HAND_PASSIVE_ALT2_NAME", "OLI_COLLECTOR");
-            */
-            LanguageAPI.Add("HAND_PASSIVE_ALT2_DESCRIPTION", "<style=cIsUtility>GENERATE OLI</style> WHEN HITTING AN ENEMY. GAIN <style=cIsUtility>80% MOVE SPEED</style> PER PINT. MAXIMUM TEN PINTS OF OIL");
-
-            LanguageAPI.Add("HAND_PRIMARY_NAME", "HURT");
-            LanguageAPI.Add("HAND_PRIMARY_DESCRIPTION", "<style=cIsUtility>AGILE</style>. APPLY FORCE TO ALL COMBATANTS FOR <color=#E5C962>300% DAMAGE</color>. <style=cIsDamage>OVERCLOCKED</style>");
-
-            LanguageAPI.Add("HAND_UTILITY_NAME", "FORCED_REASSEMBLY");
-            LanguageAPI.Add("HAND_UTILITY_DESCRIPTION", "<style=cIsUtility>AGILE</style>. <style=cIsDamage>CHARGEABLE</style>. APPLY GREAT FORCE TO THE GROUND, DAMAGING NEARBY ENEMIES FOR <style=cIsDamage>400% DAMAGE</style>. <style=cIsDamage>OVERCLOCKED</style>");
-
-            LanguageAPI.Add("HAND_SPECIAL_NAME", "DRONE");
-            LanguageAPI.Add("HAND_SPECIAL_DESCRIPTION", "DEPLOY A <style=cIsDamage>CLEANING</style> DRONE THAT <style=cIsHealing>HEALS ON HIT</style> AND DOES <style=cIsDamage>300% DAMAGE</style>.");
-
-            //LanguageAPI.Add("HAND_UTILITY_NAME", "EXPUNGE");
-            //LanguageAPI.Add("HAND_UTILITY_DESCRIPTION", "<style=cIsUtility>AGILE</style>. EXPLUNGE HEAT SYSTEMS AND <style=cIsUtility>YOURSELF BOOST UPWARDS</style>.<style=cIsUtility> CHARGE TO BOOST YOURSELF FURTHER UPWARDS</style>");
-
-            //LanguageAPI.Add("HAND_UTILITY_NAME", "OVERCLOCK");
-            //LanguageAPI.Add("HAND_UTILITY_DESCRIPTION", "INCREASE <style=cIsDamage>ATTACK SPEED BY 100%</style> <style=cIsUtility>MOVE SPEED BY 40%</style>. <style=cIsDamage>EXTEND DURATION BY ATTACKING ENEMIES</style>.");
         }
+
         private void CreateSurvivorDef()
         {
-            GameObject HANDDisplay = this.HANDBody.GetComponent<ModelLocator>().modelTransform.gameObject;
+            GameObject HANDDisplay = this.wyattBody.GetComponent<ModelLocator>().modelTransform.gameObject;
             string desc = "HAN-D is a strong bruiser who can dish out a beating and take one.<color=#CCD3E0>" + Environment.NewLine + Environment.NewLine;
             desc = desc + "< ! > Activate OVERCLOCK and use FORCED_REASSEMBLY to gain health when in a pitch!" + Environment.NewLine + Environment.NewLine;
             desc = desc + "< ! > Target enemies you've hit with DRONE to deal double damage!" + Environment.NewLine + Environment.NewLine;
@@ -762,7 +768,7 @@ namespace Moonstorm.Cores.HAND
 
             SurvivorDef def = new SurvivorDef()
             {
-                bodyPrefab = this.HANDBody,
+                bodyPrefab = this.wyattBody,
                 descriptionToken = "HAND_DESCRIPTION",
                 displayNameToken = "HAND_BODY_NAME",
                 displayPrefab = HANDDisplay,

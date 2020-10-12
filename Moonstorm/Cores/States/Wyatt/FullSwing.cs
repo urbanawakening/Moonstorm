@@ -3,8 +3,9 @@ using Moonstorm.Cores.HAND.Components;
 using EntityStates;
 using RoR2;
 using UnityEngine;
+using Moonstorm.Cores.Components.Wyatt;
 
-namespace Moonstorm.Cores.States.HAND
+namespace Moonstorm.Cores.States.Wyatt
 {
     public class FullSwing : BaseSkillState
     {
@@ -32,6 +33,8 @@ namespace Moonstorm.Cores.States.HAND
 
         private Animator modelAnimator;
 
+        private WyattComboScript script;
+
         private OverclockComponent overclock;
         private DroneComponent droneComponent;
 
@@ -42,16 +45,22 @@ namespace Moonstorm.Cores.States.HAND
             base.OnEnter();
             droneComponent = base.gameObject.GetComponent<DroneComponent>();
             duration = baseDuration / attackSpeedStat;
-            overclock = GetComponent<OverclockComponent>(); 
+            overclock = GetComponent<OverclockComponent>();
+            script = GetComponent<WyattComboScript>();
             modelAnimator = GetModelAnimator();
+
+            var force = script.count == 4 ? 50000 : 100000;
+            var vector = isGrounded ? new Vector3(0, 5000, 0) : new Vector3(0, -5000, 0);
+
+            LogCore.LogI(vector);
             attack = new OverlapAttack()
             {
                 attacker = base.gameObject,
                 attackerFiltering = AttackerFiltering.Default,
                 damage = damageCoefficient * base.damageStat,
                 damageColorIndex = DamageColorIndex.Default,
-                damageType = DamageTypeCore.bombardierKnockback, //overclock.GetDamageType(),
-                forceVector = new Vector3(0, 0, 0),
+                damageType = DamageTypeCore.antiGrav, //overclock.GetDamageType(),
+                forceVector = new Vector3(0, force, 0),
                 hitEffectPrefab = hitEffectPrefab,
                 impactSound = RoR2.Audio.NetworkSoundEventIndex.Invalid,
                 inflictor = base.gameObject,
@@ -103,6 +112,8 @@ namespace Moonstorm.Cores.States.HAND
                     //EffectManager.SimpleMuzzleFlash(swingEffectPrefab, base.gameObject, "SwingCenter", true);
                     Util.PlaySound("Play_MULT_shift_hit", base.gameObject);
                     this.hasSwung = true;
+                    script.AddCombo(1);
+                    LogCore.LogD(script.count);
                     EffectManager.SimpleMuzzleFlash(swingEffectPrefab, base.gameObject, "SwingCenter", true);
                     //if (droneComponent && characterBody.HasBuff(Main.overclock)) {
                     //    droneComponent.ConsumeDroneStackAuthority(2);

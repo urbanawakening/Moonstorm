@@ -1,4 +1,5 @@
-﻿using R2API;
+﻿using Moonstorm.Cores.Components.Wyatt;
+using R2API;
 using RoR2;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -11,7 +12,7 @@ namespace Moonstorm.Cores
 {
     class ItemCore
     {
-        public ItemCore instance;
+        public static ItemCore instance;
 
         //TODO:
         //Give Items Models
@@ -35,6 +36,7 @@ namespace Moonstorm.Cores
         protected internal ItemIndex geigerCounterIndex;
         protected internal ItemIndex heartIndex;
         protected internal ItemIndex chipIndex;
+        protected internal ItemIndex wyattWalkmanIndex;
 
         public List<ItemIndex> bossitemList = new List<ItemIndex>{
             ItemIndex.NovaOnLowHealth,
@@ -455,6 +457,27 @@ namespace Moonstorm.Cores
                 tier = ItemTier.Tier3,
                 unlockableName = ""
             });
+            ItemTag[] walkmanTags = new ItemTag[2]
+            {
+                    ItemTag.Utility,
+                    ItemTag.WorldUnique
+            };
+            RegisterItem(new ItemDef
+            {
+                canRemove = false,
+                //descriptionToken = "ITEM_EXTENDEDENEMYBUFFDURATIOM_DESC",
+                hidden = false,
+                loreToken = "",
+                name = "WyattWalkman",
+                //nameToken = "ITEM_EXTENDEDENEMYBUFFDURATIOM_NAME",
+                //pickupIconPath = "@Cloudburst:Assets/Items/Lemdog/LemDog_TexIcon.png",
+                //pickupModelPath = "@Cloudburst:Assets/Items/Lemdog/MDLLemDog.prefab",
+                //pickupToken = "ITEM_EXTENDEDENEMYBUFFDURATIOM_PICKUP",
+                tags = walkmanTags,
+                tier = ItemTier.Tier3,
+                unlockableName = ""
+            });
+
             //chipIndex
             Hook();
         }
@@ -537,6 +560,10 @@ namespace Moonstorm.Cores
             LanguageAPI.Add("ITEM_SKIN_NAME", "Vigilante's Skin");
             LanguageAPI.Add("ITEM_SKIN_DESC", "For each enemy within an 10m radius gain <style=cIsUtility>+5 armor</style>. Maximum 25 <style=cStack>(+5 per stack)</style>");
             LanguageAPI.Add("ITEM_SKIN_PICKUP", "More enemies, more armor.");
+
+            LanguageAPI.Add("ITEM_WYATTWALKMAN_NAME", "Walkman");
+            LanguageAPI.Add("ITEM_WYATTWALKMAN_DESC", "Gain <style=cIsUtility>+x% speed</style> and <style=cIsHealing>+x% regen</style> while in combat every 3 seconds. Maximum 10 stacks <style=cStack>(+1 per stack)</style>");
+            LanguageAPI.Add("ITEM_WYATTWALKMAN_PICKUP", "Gain speed while in combat");
         }
 
         protected internal void RegisterItem(ItemDef itemDef)
@@ -616,6 +643,9 @@ namespace Moonstorm.Cores
                 case "Skin":
                     skinIndex = ItemAPI.Add(customItem);
                     break;
+                case "WyattWalkman":
+                    wyattWalkmanIndex = ItemAPI.Add(customItem);
+                    break;
                 default:
                     LogCore.LogF(itemDef.name + " is unregistered! Item will not spawn!");
                     break;
@@ -649,7 +679,11 @@ namespace Moonstorm.Cores
 
                     var counterCount = inventory.GetItemCount(geigerCounterIndex);
                     var skinCount = inventory.GetItemCount(skinIndex);
+                    var wyattCount = inventory.GetItemCount(wyattWalkmanIndex);
 
+                    if (wyattCount > 0) {
+                        self.AddItemBehavior<WyattItemWalkmanBehavior>(wyattCount);
+                    }
                     if (counterCount > 0)
                     {
                         self.AddItemBehavior<GeigerCounterBehavior>(counterCount);
@@ -1009,6 +1043,29 @@ namespace Moonstorm.Cores
                 equipmentDef.enigmaCompatible = false;
             }
             orig(equipmentIndex, equipmentDef);
+        }
+    }
+    public class WyattItemWalkmanBehavior : CharacterBody.ItemBehavior
+    {
+        //VICE VS YOU
+        //YOUUUUU
+        private float timer;
+        public void FixedUpdate()
+        {
+            if (!body.outOfCombat)
+            {
+                timer += Time.deltaTime;
+                if (timer >= 3)
+                {
+                    body.gameObject.GetComponent<WyattWalkmanBehavior>().TriggerBehaviorAuthority();
+                    timer = 0;
+                }
+            }
+            else
+            {
+                body.gameObject.GetComponent<WyattWalkmanBehavior>().UntriggerAuthority();
+                timer = 0;
+            }
         }
     }
     public class DormantFungusBehavior : CharacterBody.ItemBehavior

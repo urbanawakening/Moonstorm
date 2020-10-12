@@ -42,8 +42,10 @@ namespace Moonstorm.Cores.States.HAND
 
             //Removed because it wasn't fun.
             //AddRecoil(bonus / 3, bonus / 3, bonus / 3, bonus / 3);
-            if (!Charging() && fixedAge >= chargeDuration && isAuthority) {
-                outer.SetNextState(new Slam {
+            if (!Charging() && fixedAge >= chargeDuration && isAuthority)
+            {
+                outer.SetNextState(new Slam
+                {
                     charge = bonus
                 });
             };

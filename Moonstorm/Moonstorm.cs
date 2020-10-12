@@ -79,8 +79,9 @@ namespace Moonstorm
         //Content Cores; Can be disabled
         private ItemCore itemCore;
         private EquipmentCore equipCore;
+        private WyattCore wyattCore;
         private EliteCore eliteCore;
-        private HAN_DCore han_dCore;
+        private WyattCore han_dCore;
         private EngineerCore engineerCore;
         private QOLCore qol;
         private CommandoCore commandoCore;
@@ -209,6 +210,7 @@ namespace Moonstorm
                 {
                    // archwispCore = new ArchaicWispCore();
                 }
+                wyattCore = new WyattCore();
                 if (EnableRex.Value)
                 {
                     rexCore = new RexCore();

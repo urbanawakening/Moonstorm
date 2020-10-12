@@ -61,7 +61,8 @@ namespace Moonstorm.Cores
 
         private protected void CreateStickyGhost() {
             stickyGhost = Resources.Load<GameObject>("prefabs/projectileghosts/EngiMineGhost").InstantiateClone("BombardierStickyGhost", false);
-            foreach (Transform child in stickyGhost.transform) {
+            foreach (Transform child in stickyGhost.transform)
+            {
                 //destroy the child. 
                 BaseUnityPlugin.Destroy(child.gameObject);
             }
