@@ -169,9 +169,13 @@ namespace Moonstorm.Cores
                 }
                 if (self.HasBuff(antiGravIndex)) {
                     self.characterMotor.useGravity = false;
+                    self.SetPropertyValue("attackSpeed", attackSpeed -= .5f);
+                    self.SetPropertyValue("moveSpeed", moveSpeed -= 1f);
                 }
                 if (self.HasBuff(wyattCombatIndex)) {
-                    self.SetPropertyValue("moveSpeed", moveSpeed += 1f);
+                    for (int i = 0; i < self.GetBuffCount(wyattCombatIndex); i++) {
+                        self.SetPropertyValue("moveSpeed", moveSpeed += 1f);
+                    }
                 }
                 if (self.HasBuff(droneIndex)) // && controller)
                 {
@@ -182,6 +186,7 @@ namespace Moonstorm.Cores
                     {
                         switch (currentPassive)
                         {
+                            //space nazis
                             case HANDPassiveController.Passive.Armor:
                                 self.SetPropertyValue("armor", armor += 10f);
                                 break;

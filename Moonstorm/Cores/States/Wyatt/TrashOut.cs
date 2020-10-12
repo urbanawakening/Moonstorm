@@ -71,7 +71,7 @@ namespace Moonstorm.Cores.States.Wyatt
                         baseDamage = 5 * this.damageStat,
                         attackerFiltering = default,
                         bonusForce = new Vector3(0, -20000, 0),
-                        damageType = DamageType.Stun1s,
+                        damageType = DamageType.Stun1s | DamageTypeCore.spiked,
                         crit = RollCrit(),
                         damageColorIndex = DamageColorIndex.Default,
                         falloffModel = BlastAttack.FalloffModel.Linear,

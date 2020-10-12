@@ -21,6 +21,8 @@ namespace Moonstorm.Cores
         public static GameObject stickyProjectile;
         private GameObject stickyGhost;
 
+        public static GameObject wyattMaidBubble;
+
         public ProjectileCore() => CreateProjectiles();
 
 
@@ -31,6 +33,7 @@ namespace Moonstorm.Cores
             LogCore.LogI("Initializing Core: " + base.ToString());
 
             CreateBombardierProjectiles();
+            CreateWyattMaidBubble();
             CreateMiscProjectiles();
         }
 
@@ -137,7 +140,7 @@ namespace Moonstorm.Cores
 
                 controller.ghostPrefab = Resources.Load<GameObject>("prefabs/projectileghosts/ArchWispCannonGhost");
                 controller.procCoefficient = 0.6f;
-                
+
                 impact.impactEffect = Resources.Load<GameObject>("prefabs/effects/omnieffect/OmniExplosionVFXArchWispCannonImpact");
                 impact.blastProcCoefficient = 1f;
                 impact.blastDamageCoefficient = 1f;
@@ -145,7 +148,26 @@ namespace Moonstorm.Cores
             }
             else LogCore.LogF("FATAL ERROR:" + bombardierFireBombProjectile.name + " failed to register to the projectile catalog!");
         }
-        private protected void CreateBombardierPayloadProjectile()
+
+        private protected void CreateWyattMaidBubble()
+        {
+            wyattMaidBubble = Resources.Load<GameObject>("prefabs/projectiles/LoaderPylon").InstantiateClone("WyattMaidBubble", true);
+            var registered = API.RegisterNewProjectile(wyattMaidBubble);
+            if (registered)
+            {
+                var origTimeWard = Resources.Load<GameObject>("prefabs/networkedobjects/TimeBubbleWard");
+
+                var activatedWard = Object.Instantiate<GameObject>(origTimeWard);
+
+                activatedWard.GetComponent<BuffWard>().radius = 30;
+                activatedWard.transform.SetParent(wyattMaidBubble.transform);
+                activatedWard.transform.position = new Vector3(0, 0, 0);
+                activatedWard.transform.localScale = new Vector3(1, 1, 1);
+            }
+            else LogCore.LogF("FATAL ERROR:" + wyattMaidBubble.name + " failed to register to the projectile catalog!");
+        }
+
+    private protected void CreateBombardierPayloadProjectile()
         {
             bombardierSeekerBombProjectile = Resources.Load<GameObject>("prefabs/projectiles/MissileProjectile").InstantiateClone("BombardierSeekerRocketProjectile", true);
             var registered = API.RegisterNewProjectile(bombardierFireBombProjectile);

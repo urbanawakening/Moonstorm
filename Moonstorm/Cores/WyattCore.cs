@@ -539,6 +539,7 @@ namespace Moonstorm.Cores.HAND
             LoadoutAPI.AddSkill(typeof(ChargeHomeRun));
             LoadoutAPI.AddSkill(typeof(HomeRun));
             LoadoutAPI.AddSkill(typeof(AnimationTest));
+            LoadoutAPI.AddSkill(typeof(TrashOut));
 
             SkillDef secondarySkillDef = ScriptableObject.CreateInstance<HANDDroneSkillDef>();
             secondarySkillDef.activationState = new SerializableEntityStateType(typeof(TrashOut));
@@ -635,13 +636,13 @@ namespace Moonstorm.Cores.HAND
         private void CreateSpecial()
         {
             LoadoutAPI.AddSkill(typeof(Drone));
-            LoadoutAPI.AddSkill(typeof(TrashOut));
+            LoadoutAPI.AddSkill(typeof(DeployMaid));
 
-            SkillDef specialSkillDef = ScriptableObject.CreateInstance<HANDDroneSkillDef>();
-            specialSkillDef.activationState = new SerializableEntityStateType(typeof(TrashOut));
+            SkillDef specialSkillDef = ScriptableObject.CreateInstance<SkillDef>();
+            specialSkillDef.activationState = new SerializableEntityStateType(typeof(DeployMaid));
             specialSkillDef.activationStateMachineName = "Weapon";
-            specialSkillDef.baseMaxStock = 10;
-            specialSkillDef.baseRechargeInterval = 0;
+            specialSkillDef.baseMaxStock = 1;
+            specialSkillDef.baseRechargeInterval = 35;
             specialSkillDef.beginSkillCooldownOnSkillEnd = true;
             specialSkillDef.canceledFromSprinting = false;
             specialSkillDef.fullRestockOnAssign = true;

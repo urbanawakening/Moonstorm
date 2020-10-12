@@ -12,6 +12,7 @@ namespace Moonstorm.Cores
 
         public static DamageType bombardierKnockback;
         public static DamageType antiGrav;
+        public static DamageType spiked;
 
         public DamageTypeCore() {
             instance = this;
@@ -37,6 +38,8 @@ namespace Moonstorm.Cores
         {
             bool isOsp = (damageInfo.damageType & DamageTypeCore.bombardierKnockback) != DamageType.Generic;
             bool antiGravType = (damageInfo.damageType & antiGrav) != DamageType.Generic;
+            bool spikedType = (damageInfo.damageType & spiked) != DamageType.Generic;
+            bool falldmgType = (damageInfo.damageType & DamageType.FallDamage) != DamageType.Generic;
             //bool isOsp2 = (damageInfo.damageType & DamageType.AOE) != DamageType.Generic;
 
 
@@ -51,26 +54,38 @@ namespace Moonstorm.Cores
                     self.body.AddTimedBuff(BuffCore.instance.bombardierForceIndex, 3);
                 }
             }
+            var rigid = self.body.rigidbody;
             if (antiGravType && self.body) {
                 //implement alternate behavior if it's a flier
                 if (self.body.characterMotor)
                 {
                     self.body.AddTimedBuff(BuffCore.instance.antiGravIndex, 5);
                 }
-                else {
-                    var rigid = self.body.rigidbody;
-                    if (rigid) { 
+                else
+                {
+                    if (rigid)
+                    {
                         rigid.AddForce(new UnityEngine.Vector3(0, -10000, 0));
                     }
                 }
             }
+            if (self.body.HasBuff(BuffCore.instance.antiGravIndex) && falldmgType)
+            {
+                damageInfo.damage *= 2;
+                //real good feeling.
+            }
+            if (spikedType && rigid) {
+                //bing bing WA-FUCKING-HOO 
+                rigid.AddForce(new UnityEngine.Vector3(0, -10000, 0));
+            }
+
             orig(self, damageInfo);
         }
 
         protected void AddDamageTypes() {
             bombardierKnockback = AddDamageType();
             antiGrav = AddDamageType();
-
+            spiked = AddDamageType();
         }
 
         protected DamageType AddDamageType() {
