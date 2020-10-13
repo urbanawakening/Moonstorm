@@ -159,7 +159,13 @@ namespace Moonstorm.Cores
 
                 var activatedWard = Object.Instantiate<GameObject>(origTimeWard);
 
+                wyattMaidBubble.GetComponent<ProjectileSimple>().lifetime = 30;
+                wyattMaidBubble.GetComponent<BeginRapidlyActivatingAndDeactivating>().delayBeforeBeginningBlinking = 25;
+
+                Object.Destroy(wyattMaidBubble.GetComponent<ProjectileProximityBeamController>());
+
                 activatedWard.GetComponent<BuffWard>().radius = 30;
+                activatedWard.GetComponent<BuffWard>().buffType = BuffCore.instance.antiGravIndex;
                 activatedWard.transform.SetParent(wyattMaidBubble.transform);
                 activatedWard.transform.position = new Vector3(0, 0, 0);
                 activatedWard.transform.localScale = new Vector3(1, 1, 1);

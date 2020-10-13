@@ -205,8 +205,8 @@ namespace Moonstorm.Cores.HAND
         private void SetComponents()
         {
             skillLocator = wyattBody.GetComponent<SkillLocator>();
-            overclockComponent = wyattBody.AddComponent<OverclockComponent>();
-            droneComponent = wyattBody.AddComponent<DroneComponent>();
+            //overclockComponent = wyattBody.AddComponent<OverclockComponent>();
+            //  droneComponent = wyattBody.AddComponent<DroneComponent>();
             characterBody = wyattBody.GetComponent<CharacterBody>();
             SfxLocator sfxLocator = wyattBody.GetComponent<SfxLocator>();
             CharacterDeathBehavior characterDeathBehavior = wyattBody.GetComponent<CharacterDeathBehavior>();
@@ -648,10 +648,10 @@ namespace Moonstorm.Cores.HAND
             specialSkillDef.fullRestockOnAssign = true;
             specialSkillDef.interruptPriority = InterruptPriority.Skill;
             specialSkillDef.isBullets = false;
-            specialSkillDef.isCombatSkill = true;
+            specialSkillDef.isCombatSkill = false;
             specialSkillDef.mustKeyPress = true;
             specialSkillDef.noSprint = false;
-            specialSkillDef.rechargeStock = 0;
+            specialSkillDef.rechargeStock = 1;
             specialSkillDef.requiredStock = 1;
             specialSkillDef.shootDelay = 0.5f;
             specialSkillDef.stockToConsume = 1;
@@ -758,11 +758,22 @@ namespace Moonstorm.Cores.HAND
         private void CreateSurvivorDef()
         {
             GameObject HANDDisplay = this.wyattBody.GetComponent<ModelLocator>().modelTransform.gameObject;
-            string desc = "HAN-D is a strong bruiser who can dish out a beating and take one.<color=#CCD3E0>" + Environment.NewLine + Environment.NewLine;
-            desc = desc + "< ! > Activate OVERCLOCK and use FORCED_REASSEMBLY to gain health when in a pitch!" + Environment.NewLine + Environment.NewLine;
-            desc = desc + "< ! > Target enemies you've hit with DRONE to deal double damage!" + Environment.NewLine + Environment.NewLine;
-            desc = desc + "< ! > Use DRONE to gain health when in a pitch!" + Environment.NewLine + Environment.NewLine;
-            desc = desc + "< ! > Hold FORCED_REASSEMBLY to charge it and boost yourself upwards!" + Environment.NewLine + Environment.NewLine;
+            string desc = "YOU. ME. GAS STATION. WHAT ARE WE GETTIN' FOR DINNER? <color=#CCD3E0>" + Environment.NewLine + Environment.NewLine;
+            desc = desc + "< ! > SUSHI OF COURSE. UH OH" + Environment.NewLine + Environment.NewLine;
+            desc = desc + "< ! > THERE WAS A ROOFIE INSIDE OF GAS STATION SUSHI" + Environment.NewLine + Environment.NewLine;
+            desc = desc + "< ! > WE BLACK OUT, WAKE UP IN A SEWER" + Environment.NewLine + Environment.NewLine;
+            desc = desc + "< ! > WE'RE SURROUNDED BY FISH. HORNY FISH" + Environment.NewLine + Environment.NewLine;
+            desc = desc + "< ! > YOU KNOW WHAT THAT MEANS. FISH ORGY" + Environment.NewLine + Environment.NewLine;
+            desc = desc + "< ! > THE STENCH DRAWS IN A BEAR" + Environment.NewLine + Environment.NewLine;
+            desc = desc + "< ! > WHAT ARE WE GONNA DO?" + Environment.NewLine + Environment.NewLine;
+            desc = desc + "< ! > WE'RE GONNA FIGHT THE BEAR" + Environment.NewLine + Environment.NewLine;
+            desc = desc + "< ! > BEAR FIGHT, BEAR HANDED. BEAR NAKED?" + Environment.NewLine + Environment.NewLine;
+            desc = desc + "< ! > OH YES" + Environment.NewLine + Environment.NewLine;
+            desc = desc + "< ! > WE BEFRIEND THE BEAR AFTER BEATING IT IN A BRAWL" + Environment.NewLine + Environment.NewLine;
+            desc = desc + "< ! > THEN WE RIDE IT INTO A CHUCK E' CHEESE" + Environment.NewLine + Environment.NewLine;
+            desc = desc + "< ! > DANCE DANCE REVOLUTION. REVOLUTION?" + Environment.NewLine + Environment.NewLine;
+            desc = desc + "< ! > OVERTHROW THE GOVERNMENT?" + Environment.NewLine + Environment.NewLine;
+            desc = desc + "< ! > UH, I THINK SO" + Environment.NewLine + Environment.NewLine;
 
             LanguageAPI.Add("HAND_DESCRIPTION", desc);
             LanguageAPI.Add("HAND_FLAVORTOKEN", "And so it left, humanity growing within closed circuits...");

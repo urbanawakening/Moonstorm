@@ -43,7 +43,7 @@ namespace Moonstorm.Cores.States.Wyatt
             base.FixedUpdate();
             timer += Time.deltaTime;
 
-            base.characterMotor.rootMotion += base.inputBank.aimDirection * (this.moveSpeedStat * 25 * Time.fixedDeltaTime);
+            base.characterMotor.rootMotion += base.inputBank.aimDirection * (this.moveSpeedStat * 35 * Time.fixedDeltaTime);
             ShockEnemies();
 
             if (fixedAge >= baseDuration && isAuthority)
@@ -93,6 +93,7 @@ namespace Moonstorm.Cores.States.Wyatt
             lightningOrb2.lightningType = LightningOrb.LightningType.Ukulele;
             lightningOrb2.damageColorIndex = DamageColorIndex.Default;
             lightningOrb2.range += 10;
+            lightningOrb2.damageType = DamageTypeCore.antiGrav;
             HurtBox hurtBox2 = lightningOrb2.PickNextTarget(transform.position);
             if (hurtBox2)
             {
