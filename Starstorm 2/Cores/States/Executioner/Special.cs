@@ -95,6 +95,7 @@ namespace EntityStates.Executioner
             this.animator = base.GetModelAnimator();
             base.PlayAnimation("FullBody, Override", "SpecialSwing");
 
+            base.characterBody.bodyFlags |= CharacterBody.BodyFlags.IgnoreFallDamage;
             if (base.isAuthority)
             {
                 this.locator = base.GetModelTransform().GetComponent<ChildLocator>();
@@ -103,7 +104,6 @@ namespace EntityStates.Executioner
                 base.characterMotor.velocity.x = 0f;
                 base.characterMotor.velocity.z = 0f;
                 this.crit = RollCrit();
-                base.characterBody.bodyFlags |= CharacterBody.BodyFlags.IgnoreFallDamage;
             }
         }
 
@@ -118,6 +118,7 @@ namespace EntityStates.Executioner
             base.PlayAnimation("FullBody, Override", "SpecialImpact");
             EffectManager.SpawnEffect(slamEffect, slamEffectData, false);
 
+            base.characterBody.bodyFlags -= CharacterBody.BodyFlags.IgnoreFallDamage;
             if (base.isAuthority)
             {
                 Vector3 atkCenter = base.characterBody.footPosition;
@@ -177,7 +178,6 @@ namespace EntityStates.Executioner
 
                 base.characterMotor.velocity.y = 0f;
                 base.characterBody.RemoveBuff(BuffIndex.ArmorBoost);
-                base.characterBody.bodyFlags -= CharacterBody.BodyFlags.IgnoreFallDamage;
             }
 
             base.OnExit();
