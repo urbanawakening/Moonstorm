@@ -9,7 +9,7 @@ namespace Moonstorm.Cores.States.Wyatt
 {
     public class FullSwing : BaseSkillState
     {
-        public static float baseDuration = 1.1f;
+        public static float baseDuration = .9f;
         //0.443662
         public static float returnToIdlePercentage = EntityStates.HAND.Weapon.FullSwing.returnToIdlePercentage;
         public static float damageCoefficient = 4f;

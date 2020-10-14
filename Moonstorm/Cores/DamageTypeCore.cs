@@ -1,6 +1,7 @@
 ﻿using R2API.Utils;
 using RoR2;
 using System;
+using UnityEngine;
 
 namespace Moonstorm.Cores
 {
@@ -12,6 +13,7 @@ namespace Moonstorm.Cores
 
         public static DamageType bombardierKnockback;
         public static DamageType antiGrav;
+        public static DamageType pullEnemies;
         public static DamageType spiked;
 
         public DamageTypeCore() {
@@ -40,6 +42,7 @@ namespace Moonstorm.Cores
             bool antiGravType = (damageInfo.damageType & antiGrav) != DamageType.Generic;
             bool spikedType = (damageInfo.damageType & spiked) != DamageType.Generic;
             bool falldmgType = (damageInfo.damageType & DamageType.FallDamage) != DamageType.Generic;
+            bool pullType = (damageInfo.damageType & pullEnemies) != DamageType.Generic;
             //bool isOsp2 = (damageInfo.damageType & DamageType.AOE) != DamageType.Generic;
 
 
@@ -55,17 +58,36 @@ namespace Moonstorm.Cores
                 }
             }
             var rigid = self.body.rigidbody;
-            if (antiGravType && self.body) {
-                //implement alternate behavior if it's a flier
-                if (self.body.characterMotor)
-                {
-                    self.body.AddTimedBuff(BuffCore.instance.antiGravIndex, 5);
-                }
-                else
-                {
-                    if (rigid)
+            if (self.body) {
+                var motor = self.body.characterMotor;
+                if (antiGravType && self.body) {
+                    //implement alternate behavior if it's a flier
+                    if (self.body.characterMotor)
                     {
-                        rigid.AddForce(new UnityEngine.Vector3(0, -10000, 0));
+                        self.body.AddTimedBuff(BuffCore.instance.antiGravIndex, 5);
+
+                    }
+                    else
+                    {
+                        if (rigid)
+                        {
+                            rigid.AddForce(new UnityEngine.Vector3(0, -10000, 0));
+                        }
+                    }
+                }
+                if (damageInfo.attacker && pullType)
+                {
+                    //var distance = Vector3.Distance(damageInfo.attacker.transform.position, self.transform.position);
+                    Vector3 position2 = self.transform.position;
+                    Vector3 normalized = (damageInfo.attacker.transform.position - position2).normalized;
+
+                    if (motor)
+                    {
+                        motor.ApplyForce(normalized * 700, true);
+                    }
+                    else if (rigid)
+                    {
+                        rigid.AddForce(normalized * 700, ForceMode.Impulse);
                     }
                 }
             }
@@ -86,6 +108,7 @@ namespace Moonstorm.Cores
             bombardierKnockback = AddDamageType();
             antiGrav = AddDamageType();
             spiked = AddDamageType();
+            pullEnemies = AddDamageType();
         }
 
         protected DamageType AddDamageType() {

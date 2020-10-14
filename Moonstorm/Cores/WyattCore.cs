@@ -291,7 +291,7 @@ namespace Moonstorm.Cores.HAND
             characterBody.levelMoveSpeed = 0; //Move speed gained when leveling up. 
             characterBody.levelRegen = 0.5f; //Regen gained when leveling up. 
             //credits to moffein for the icon
-            characterBody.portraitIcon = AssetsCore.portraitIcon; //The portrait icon, shows up in multiplayer and the death UI
+            //characterBody.portraitIcon = AssetsCore.portraitIcon; //The portrait icon, shows up in multiplayer and the death UI
             characterBody.preferredPodPrefab = Resources.Load<GameObject>("prefabs/networkedobjects/robocratepod");
         }
         #endregion
@@ -591,6 +591,7 @@ namespace Moonstorm.Cores.HAND
             LoadoutAPI.AddSkill(typeof(ChargeSlam));
             LoadoutAPI.AddSkill(typeof(Slam));
             LoadoutAPI.AddSkill(typeof(DeepClean));
+            LoadoutAPI.AddSkill(typeof(DeeperClean));
 
             SkillDef utilitySkillDef = ScriptableObject.CreateInstance<SkillDef>();
             utilitySkillDef.activationState = new SerializableEntityStateType(typeof(DeepClean));
@@ -618,6 +619,31 @@ namespace Moonstorm.Cores.HAND
                  "KEYWORD_WEIGHTLESS"
              };
 
+            SkillDef utilitySkillDef2 = ScriptableObject.CreateInstance<SkillDef>();
+            utilitySkillDef2.activationState = new SerializableEntityStateType(typeof(DeeperClean));
+            utilitySkillDef2.activationStateMachineName = "Weapon";
+            utilitySkillDef2.baseMaxStock = 1;
+            utilitySkillDef2.baseRechargeInterval = 5f;
+            utilitySkillDef2.beginSkillCooldownOnSkillEnd = true;
+            utilitySkillDef2.canceledFromSprinting = false;
+            utilitySkillDef2.fullRestockOnAssign = false;
+            utilitySkillDef2.interruptPriority = InterruptPriority.Skill;
+            utilitySkillDef2.isBullets = false;
+            utilitySkillDef2.isCombatSkill = true;
+            utilitySkillDef2.mustKeyPress = false;
+            utilitySkillDef2.noSprint = false;
+            utilitySkillDef2.rechargeStock = 1;
+            utilitySkillDef2.requiredStock = 1;
+            utilitySkillDef2.shootDelay = 0.08f;
+            utilitySkillDef2.stockToConsume = 1;
+            utilitySkillDef2.skillDescriptionToken = "HAND_UTILITY_DESCRIPTION";
+            utilitySkillDef2.skillName = "aaa";
+            utilitySkillDef2.skillNameToken = "HAND_UTILITY_NAME";
+            utilitySkillDef2.icon = AssetsCore.forcedReassemblyIcon;
+            utilitySkillDef2.keywordTokens = new string[] {
+                 "KEYWORD_STUNNING",
+                 "KEYWORD_WEIGHTLESS"
+             };
             LanguageAPI.Add(utilitySkillDef.skillNameToken, "Deep Clean");
             LanguageAPI.Add(utilitySkillDef.skillDescriptionToken, "<style=cIsDamage>Stunning</style>. Dash forward, rapidly attacking any enemies along your path for X% damage repeatedly. <style=cIsUtility>Applies Weightless</style>.");
 
@@ -631,6 +657,15 @@ namespace Moonstorm.Cores.HAND
                 unlockableName = "",
                 viewableNode = new ViewablesCatalog.Node(utilitySkillDef.skillNameToken, false, null)
             };
+
+            SkillFamily.Variant variant = new SkillFamily.Variant();
+
+            variant.skillDef = utilitySkillDef2;
+            variant.unlockableName = "";
+
+            int prevLength = utilitySkillFamily.variants.Length;
+            Array.Resize<SkillFamily.Variant>(ref utilitySkillFamily.variants, prevLength + 1);
+            utilitySkillFamily.variants[prevLength] = variant;
         }
 
         private void CreateSpecial()

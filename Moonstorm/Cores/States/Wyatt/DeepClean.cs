@@ -9,7 +9,7 @@ using UnityEngine;
 namespace Moonstorm.Cores.States.Wyatt
 {
     class DeepClean : BaseSkillState
-    { 
+    {
 
         private float timer;
 
@@ -32,10 +32,9 @@ namespace Moonstorm.Cores.States.Wyatt
                 int hurtBoxesDeactivatorCounter = hurtBoxGroup.hurtBoxesDeactivatorCounter + 1;
                 hurtBoxGroup.hurtBoxesDeactivatorCounter = hurtBoxesDeactivatorCounter;
             }*/
-            if (base.characterMotor)
-            {
-                //base.characterMotor.enabled = false;
-            }
+            characterMotor.velocity = new Vector3(characterMotor.velocity.x, 0, characterMotor.velocity.z);
+
+            CreateBlinkEffect(Util.GetCorePosition(base.gameObject), characterMotor.moveDirection);
         }
 
         public override void FixedUpdate()
@@ -43,7 +42,7 @@ namespace Moonstorm.Cores.States.Wyatt
             base.FixedUpdate();
             timer += Time.deltaTime;
 
-            base.characterMotor.rootMotion += base.inputBank.aimDirection * (this.moveSpeedStat * 35 * Time.fixedDeltaTime);
+            base.characterMotor.rootMotion += base.inputBank.aimDirection * (7 * 35 * Time.fixedDeltaTime);
             ShockEnemies();
 
             if (fixedAge >= baseDuration && isAuthority)
@@ -53,11 +52,10 @@ namespace Moonstorm.Cores.States.Wyatt
         }
         public override void OnExit()
         {
-            Util.PlaySound(LoomingPresence.endSoundString, base.gameObject);
-            if (base.characterDirection)
-            {
-                base.characterDirection.forward = base.GetAimRay().direction;
-            }
+            //if (characterBody)
+            //{
+                //characterBody.bodyFlags &= CharacterBody.BodyFlags.IgnoreFallDamage;
+            //}
             /*if (this.characterModel)
             {
                 this.characterModel.invisibilityCount--;
@@ -93,13 +91,21 @@ namespace Moonstorm.Cores.States.Wyatt
             lightningOrb2.lightningType = LightningOrb.LightningType.Ukulele;
             lightningOrb2.damageColorIndex = DamageColorIndex.Default;
             lightningOrb2.range += 10;
-            lightningOrb2.damageType = DamageTypeCore.antiGrav;
+            lightningOrb2.damageType = (DamageTypeCore.pullEnemies | DamageType.Stun1s);
             HurtBox hurtBox2 = lightningOrb2.PickNextTarget(transform.position);
             if (hurtBox2)
             {
                 lightningOrb2.target = hurtBox2;
                 OrbManager.instance.AddOrb(lightningOrb2);
             }
+        }
+
+        private void CreateBlinkEffect(Vector3 origin, Vector3 direction)
+        {
+            EffectData effectData = new EffectData();
+            effectData.rotation = Util.QuaternionSafeLookRotation(direction);
+            effectData.origin = origin;
+            EffectManager.SpawnEffect(LoomingPresence.blinkPrefab, effectData, true);
         }
 
         public override InterruptPriority GetMinimumInterruptPriority()

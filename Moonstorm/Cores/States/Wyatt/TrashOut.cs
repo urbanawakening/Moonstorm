@@ -55,44 +55,52 @@ namespace Moonstorm.Cores.States.Wyatt
 
             if (stage == ActionStage.FoundTarget)
             {
-                Vector3 velocity = (target.transform.position - base.transform.position).normalized * 120f;
-                base.characterMotor.velocity = velocity;
-                base.characterDirection.forward = base.characterMotor.velocity.normalized;
-                float distance = Util.SphereVolumeToRadius(target.volume);
+                if (this.target)
+                {
+                    Vector3 velocity = (target.transform.position - base.transform.position).normalized * 120f;
+                    base.characterMotor.velocity = velocity;
+                    base.characterDirection.forward = base.characterMotor.velocity.normalized;
+                    float distance = Util.SphereVolumeToRadius(target.volume);
 
-                if (Vector3.Distance(base.transform.position, target.transform.position) < distance + 2f && target) {
-                    new BlastAttack
+                    if (Vector3.Distance(base.transform.position, target.transform.position) < distance + 5f && target)
                     {
-                        position = target.transform.position,
-                        baseForce = 3000,
-                        attacker = base.gameObject,
-                        inflictor = base.gameObject,
-                        teamIndex = base.GetTeam(),
-                        baseDamage = 5 * this.damageStat,
-                        attackerFiltering = default,
-                        bonusForce = new Vector3(0, -20000, 0),
-                        damageType = DamageType.Stun1s | DamageTypeCore.spiked,
-                        crit = RollCrit(),
-                        damageColorIndex = DamageColorIndex.Default,
-                        falloffModel = BlastAttack.FalloffModel.Linear,
-                        impactEffect = Resources.Load<GameObject>("prefabs/effects/omnieffect/omniimpactvfxlightning").GetComponent<EffectIndex>(),
-                        procCoefficient = 1f,
-                        radius = 5
-                    }.Fire();
-                    EffectData effectData = new EffectData
-                    {
-                        rotation = Quaternion.identity,
-                        scale = 1f,
-                        start = base.transform.position,
-                        origin = base.transform.position
-                    };
-                    EffectManager.SpawnEffect(Resources.Load<GameObject>("prefabs/effects/helfireigniteeffect"), effectData, true);
+                        new BlastAttack
+                        {
+                            position = target.transform.position,
+                            baseForce = 3000,
+                            attacker = base.gameObject,
+                            inflictor = base.gameObject,
+                            teamIndex = base.GetTeam(),
+                            baseDamage = 5 * this.damageStat,
+                            attackerFiltering = default,
+                            bonusForce = new Vector3(0, -20000, 0),
+                            damageType = DamageType.Stun1s | DamageTypeCore.spiked,
+                            crit = RollCrit(),
+                            damageColorIndex = DamageColorIndex.Default,
+                            falloffModel = BlastAttack.FalloffModel.Linear,
+                            impactEffect = Resources.Load<GameObject>("prefabs/effects/omnieffect/omniimpactvfxlightning").GetComponent<EffectIndex>(),
+                            procCoefficient = 1f,
+                            radius = 5
+                        }.Fire();
+                        EffectData effectData = new EffectData
+                        {
+                            rotation = Quaternion.identity,
+                            scale = 1f,
+                            start = base.transform.position,
+                            origin = base.transform.position
+                        };
+                        EffectManager.SpawnEffect(Resources.Load<GameObject>("prefabs/effects/helfireigniteeffect"), effectData, true);
 
-                    base.characterMotor.velocity = Vector3.up * 20f;
-                    stage = ActionStage.HitTarget;
-                    LogCore.LogI("Stage: " + stage.ToString());
+                        base.characterMotor.velocity = Vector3.up * 20f;
+                        stage = ActionStage.HitTarget;
+                        LogCore.LogI("Stage: " + stage.ToString());
 
-                    this.outer.SetNextStateToMain();
+                        this.outer.SetNextStateToMain();
+                    }
+                }
+                else
+                {
+                    outer.SetNextStateToMain();
                 }
             }
             else {

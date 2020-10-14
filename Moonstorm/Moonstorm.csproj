@@ -48,6 +48,7 @@
     <Compile Include="Cores\ShitpostCore.cs" />
     <Compile Include="Cores\Components\SlamController.cs" />
     <Compile Include="Cores\States\Bombardier\ThrowStickySimple.cs" />
+    <Compile Include="Cores\States\Wyatt\DeeperClean.cs" />
     <Compile Include="Cores\States\Wyatt\DeployMaid.cs" />
     <Compile Include="Cores\States\Wyatt\DeepClean.cs" />
     <Compile Include="Cores\States\Wyatt\TrashOut.cs" />

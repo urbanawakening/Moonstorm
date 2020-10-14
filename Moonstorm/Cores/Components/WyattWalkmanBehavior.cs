@@ -38,7 +38,7 @@ namespace Moonstorm.Cores.Components.Wyatt
         [Server]
         private void GiveHeadphonesInternal()
         {
-            if (characterBody && characterBody.inventory)
+            if (characterBody && characterBody.inventory && characterBody.inventory.GetItemCount(ItemCore.instance.wyattWalkmanIndex) == 0)
             {
                 characterBody.inventory.GiveItem(ItemCore.instance.wyattWalkmanIndex, 1);
             }

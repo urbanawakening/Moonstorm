@@ -157,8 +157,12 @@ namespace Moonstorm.Cores
 
         private void CharacterBody_RemoveBuff(On.RoR2.CharacterBody.orig_RemoveBuff orig, CharacterBody self, BuffIndex buffType)
         {
-            if (buffType == antiGravIndex) {
-                self.characterMotor.useGravity = true;
+            if (buffType == antiGravIndex)
+            {
+                if (self.characterMotor)
+                {
+                    self.characterMotor.useGravity = true;
+                }
             }
 
             orig(self, buffType);
