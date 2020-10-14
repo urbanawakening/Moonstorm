@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using BepInEx;
 using EntityStates;
+using KinematicCharacterController;
 using R2API;
 using R2API.AssetPlus;
 using R2API.Utils;
@@ -19,6 +20,13 @@ namespace Starstorm2.Cores
         public static GameObject characterPrefab;
         public static GameObject defaultCrosshair;
 
+        public const string charName = "Nemesis Commando";
+        public const string charSubt = "Some edgy boi";
+        public const string charDesc = @"";
+
+        public const string charOutr = "..and so he left, in search of chicken nuggets";
+        public const string charLore = @"";
+
         public NemmandoCore() => Load();
 
         public void Load()
@@ -34,14 +42,225 @@ namespace Starstorm2.Cores
 
         public void CreateNemmando()
         {
-            InitPrefab();
+            CreatePrefab();
             RegisterCharacter();
             SkillSetup();
         }
 
-        void InitPrefab()
+        internal static void CreatePrefab()
         {
-            characterPrefab = PrefabAPI.InstantiateClone(Resources.Load<GameObject>("Prefabs/CharacterBodies/MercBody"), "NemmandoBody");
+            characterPrefab = PrefabAPI.InstantiateClone(Resources.Load<GameObject>("Prefabs/CharacterBodies/CommandoBody"), "ExecutionerBody", true);
+            characterPrefab.GetComponent<NetworkIdentity>().localPlayerAuthority = true;
+
+            UnityEngine.Object.Destroy(characterPrefab.transform.Find("ModelBase").gameObject);
+            UnityEngine.Object.Destroy(characterPrefab.transform.Find("CameraPivot").gameObject);
+            UnityEngine.Object.Destroy(characterPrefab.transform.Find("AimOrigin").gameObject);
+
+            GameObject model = AssetsCore.mainAssetBundle.LoadAsset<GameObject>("NemmandoModel");
+
+            GameObject modelBase = new GameObject("ModelBase");
+            modelBase.transform.parent = characterPrefab.transform;
+            modelBase.transform.localPosition = new Vector3(0f, -0.81f, 0f);
+            modelBase.transform.localRotation = Quaternion.identity;
+            modelBase.transform.localScale = Vector3.one;
+
+            GameObject camPivot = new GameObject("CameraPivot");
+            camPivot.transform.parent = characterPrefab.transform;
+            camPivot.transform.localPosition = new Vector3(0f, -0.81f, 0f);
+            camPivot.transform.rotation = Quaternion.identity;
+            camPivot.transform.localScale = Vector3.one;
+
+            GameObject aimOrigin = new GameObject("AimOrigin");
+            aimOrigin.transform.parent = characterPrefab.transform;
+            aimOrigin.transform.localPosition = new Vector3(0f, 1.4f, 0f);
+            aimOrigin.transform.rotation = Quaternion.identity;
+            aimOrigin.transform.localScale = Vector3.one;
+
+            Transform transform = model.transform;
+            transform.parent = modelBase.transform;
+            transform.localPosition = Vector3.zero;
+            transform.localRotation = Quaternion.identity;
+
+            CharacterDirection dir = characterPrefab.GetComponent<CharacterDirection>();
+            dir.moveVector = Vector3.zero;
+            dir.targetTransform = modelBase.transform;
+            dir.overrideAnimatorForwardTransform = null;
+            dir.rootMotionAccumulator = null;
+            dir.modelAnimator = model.GetComponentInChildren<Animator>();
+            dir.driveFromRootRotation = false;
+            dir.turnSpeed = 720f;
+
+            //set up character body
+            CharacterBody body = characterPrefab.GetComponent<CharacterBody>();
+            body.name = "NemmandoBody";
+            body.baseNameToken = "NEMMANDO_NAME";
+            body.subtitleNameToken = "NEMMANDO_SUBTITLE";
+            body.portraitIcon = AssetsCore.mainAssetBundle.LoadAsset<Texture2D>("exeportrait");
+            body.bodyFlags = CharacterBody.BodyFlags.ImmuneToExecutes;
+            body.rootMotionInMainState = false;
+            body.mainRootSpeed = 0;
+            body.bodyIndex = -1;
+            body.baseDamage = 14f;
+            body.levelDamage = 3f;
+            body.baseMaxHealth = 95f;
+            body.levelMaxHealth = 28f;
+            body.baseRegen = 1f;
+            body.levelRegen = 0.2f;
+            body.baseMaxShield = 0f;
+            body.levelMaxShield = 0f;
+            body.baseArmor = 20;
+            body.aimOriginTransform = aimOrigin.transform;
+            body.hullClassification = HullClassification.Human;
+
+            LoadoutAPI.AddSkill(typeof(ExecutionerMain));
+            body.GetComponent<EntityStateMachine>().mainStateType = new EntityStates.SerializableEntityStateType(typeof(ExecutionerMain));
+
+            CharacterMotor motor = characterPrefab.GetComponent<CharacterMotor>();
+            motor.walkSpeedPenaltyCoefficient = 1f;
+            motor.characterDirection = dir;
+            motor.muteWalkMotion = false;
+            motor.mass = 100f;
+            motor.airControl = 0.25f;
+            motor.disableAirControlUntilCollision = false;
+            motor.generateParametersOnAwake = true;
+
+            CameraTargetParams camParams = characterPrefab.GetComponent<CameraTargetParams>();
+            camParams.cameraParams = Resources.Load<GameObject>("Prefabs/CharacterBodies/EngiBody").GetComponent<CameraTargetParams>().cameraParams;
+            camParams.cameraPivotTransform = null;
+            camParams.aimMode = CameraTargetParams.AimType.Standard;
+            camParams.recoil = Vector2.zero;
+            camParams.idealLocalCameraPos = Vector3.zero;
+            camParams.dontRaycastToPivot = false;
+
+            ModelLocator locator = characterPrefab.GetComponent<ModelLocator>();
+            locator.modelTransform = transform;
+            locator.modelBaseTransform = modelBase.transform;
+            locator.dontReleaseModelOnDeath = false;
+            locator.autoUpdateModelTransform = true;
+            locator.dontDetatchFromParent = false;
+            locator.noCorpse = false;
+            locator.normalizeToFloor = false;
+            locator.preserveModel = false;
+
+            ChildLocator childLoc = model.GetComponent<ChildLocator>();
+
+            CharacterModel charModel = model.AddComponent<CharacterModel>();
+            charModel.body = body;
+            charModel.baseRendererInfos = new CharacterModel.RendererInfo[]
+            {
+                new CharacterModel.RendererInfo
+                {
+                    defaultMaterial = model.GetComponentInChildren<SkinnedMeshRenderer>().material,
+                    renderer = model.GetComponentInChildren<SkinnedMeshRenderer>(),
+                    defaultShadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On,
+                    ignoreOverlays = false
+                }
+            };
+            charModel.autoPopulateLightInfos = true;
+            charModel.invisibilityCount = 0;
+            charModel.temporaryOverlays = new List<TemporaryOverlay>();
+
+            TeamComponent teamComponent = null;
+            if (characterPrefab.GetComponent<TeamComponent>() != null) teamComponent = characterPrefab.GetComponent<TeamComponent>();
+            else teamComponent = characterPrefab.GetComponent<TeamComponent>();
+            teamComponent.hideAllyCardDisplay = false;
+            teamComponent.teamIndex = TeamIndex.None;
+
+            HealthComponent health = characterPrefab.GetComponent<HealthComponent>();
+            health.health = 95f;
+            health.shield = 0f;
+            health.barrier = 0f;
+            health.magnetiCharge = 0f;
+            health.body = null;
+            health.dontShowHealthbar = false;
+            health.globalDeathEventChanceCoefficient = 1f;
+
+            characterPrefab.GetComponent<Interactor>().maxInteractionDistance = 3f;
+            characterPrefab.GetComponent<InteractionDriver>().highlightInteractor = true;
+
+            CharacterDeathBehavior deathBehavior = characterPrefab.GetComponent<CharacterDeathBehavior>();
+            deathBehavior.deathStateMachine = characterPrefab.GetComponent<EntityStateMachine>();
+            deathBehavior.deathState = new SerializableEntityStateType(typeof(GenericCharacterDeath));
+
+            //SfxLocator sfx = characterPrefab.GetComponent<SfxLocator>();
+
+            Rigidbody rigidbody = characterPrefab.GetComponent<Rigidbody>();
+            rigidbody.mass = 100f;
+            rigidbody.drag = 0f;
+            rigidbody.angularDrag = 0f;
+            rigidbody.useGravity = false;
+            rigidbody.isKinematic = true;
+            rigidbody.interpolation = RigidbodyInterpolation.None;
+            rigidbody.collisionDetectionMode = CollisionDetectionMode.Discrete;
+            rigidbody.constraints = RigidbodyConstraints.None;
+
+            CapsuleCollider collider = characterPrefab.GetComponent<CapsuleCollider>();
+            collider.isTrigger = false;
+            collider.material = null;
+            collider.center = Vector3.zero;
+            collider.radius = 0.5f;
+            collider.height = 1.82f;
+            collider.direction = 1;
+
+            KinematicCharacterMotor kMotor = characterPrefab.GetComponent<KinematicCharacterMotor>();
+            kMotor.CharacterController = motor;
+            kMotor.Capsule = collider;
+            kMotor.Rigidbody = rigidbody;
+
+            kMotor.DetectDiscreteCollisions = false;
+            kMotor.GroundDetectionExtraDistance = 0f;
+            kMotor.MaxStepHeight = 0.2f;
+            kMotor.MinRequiredStepDepth = 0.1f;
+            kMotor.MaxStableSlopeAngle = 55f;
+            kMotor.MaxStableDistanceFromLedge = 0.5f;
+            kMotor.PreventSnappingOnLedges = false;
+            kMotor.MaxStableDenivelationAngle = 55f;
+            kMotor.RigidbodyInteractionType = RigidbodyInteractionType.None;
+            kMotor.PreserveAttachedRigidbodyMomentum = true;
+            kMotor.HasPlanarConstraint = false;
+            kMotor.PlanarConstraintAxis = Vector3.up;
+            kMotor.StepHandling = StepHandlingMethod.None;
+            kMotor.LedgeHandling = true;
+            kMotor.InteractiveRigidbodyHandling = true;
+            kMotor.SafeMovement = false;
+
+            HurtBoxGroup hurtbox = model.AddComponent<HurtBoxGroup>();
+
+            CapsuleCollider coll1 = model.GetComponentInChildren<CapsuleCollider>();
+            HurtBox hb = coll1.gameObject.AddComponent<HurtBox>();
+            hb.gameObject.layer = LayerIndex.entityPrecise.intVal;
+
+            hb.healthComponent = health;
+            hb.isBullseye = true;
+            hb.damageModifier = HurtBox.DamageModifier.Normal;
+            hb.hurtBoxGroup = hurtbox;
+            hb.indexInGroup = 0;
+
+            hurtbox.hurtBoxes = new HurtBox[] { hb };
+            hurtbox.mainHurtBox = hb;
+            hurtbox.bullseyeCount = 1;
+
+            FootstepHandler footstep = model.AddComponent<FootstepHandler>();
+            footstep.baseFootstepString = "Play_player_footstep";
+            footstep.sprintFootstepOverrideString = "";
+            footstep.enableFootstepDust = true;
+            footstep.footstepDustPrefab = Resources.Load<GameObject>("Prefabs/GenericFootstepDust");
+
+            //RagdollController ragdoll = model.GetComponent<RagdollController>();
+            //TODO
+            //ragdoll.bones = null;
+            //ragdoll.componentsToDisableOnRagdoll = null;
+
+            AimAnimator aimer = model.AddComponent<AimAnimator>();
+            aimer.inputBank = characterPrefab.GetComponent<InputBankTest>();
+            aimer.directionComponent = dir;
+            aimer.pitchRangeMax = 60f;
+            aimer.pitchRangeMin = -60f;
+            aimer.yawRangeMax = 90f;
+            aimer.yawRangeMin = -90f;
+            aimer.pitchGiveupRange = 30f;
+            aimer.yawGiveupRange = 10f;
+            aimer.giveupDuration = 3f;
         }
 
         void RegisterCharacter()
@@ -135,7 +354,7 @@ namespace Starstorm2.Cores
             mySkillDef.skillName = "NEMMANDO_PRIMARY_BLADE_NAME";
             mySkillDef.skillNameToken = "NEMMANDO_PRIMARY_BLADE_NAME";
             mySkillDef.stepCount = 2;
-            mySkillDef.resetStepsOnIdle = true;
+            mySkillDef.resetStepsOnIdle = false;
            
 
             LoadoutAPI.AddSkillDef(mySkillDef);
