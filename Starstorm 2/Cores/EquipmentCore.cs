@@ -58,8 +58,8 @@ namespace Starstorm2.Cores
                 loreToken = "EQUIPMENT_GREATERWARBANNER_LORE",
                 name = "GreaterWarbanner",
                 nameToken = "EQUIPMENT_GREATERWARBANNER_NAME",
-                pickupIconPath = pickUpIconPath,
-                pickupModelPath = pickUpModelPath,
+                pickupIconPath = "@Starstorm2:Assets/Items/GreaterWarbanner/GreaterWarbanner_Icon.png",
+                pickupModelPath = "@Starstorm2:Assets/Items/GreaterWarbanner/MDLGreaterWarbanner.prefab",
                 pickupToken = "EQUIPMENT_GREATERWARBANNER_PICKUP",
                 unlockableName = "",
             });
@@ -103,7 +103,7 @@ namespace Starstorm2.Cores
         {
             LanguageAPI.Add("EQUIPMENT_GREATERWARBANNER_NAME", "Greater Warbanner");
             LanguageAPI.Add("EQUIPMENT_GREATERWARBANNER_PICKUP", "Place a greater warbanner which boosts regen, critical hit chance, and lowers cooldowns.");
-            LanguageAPI.Add("EQUIPMENT_GREATERWARBANNER_DESC", "Place a greater warbanner which grants 20% health regeneration, 10% critical hit chance, and 50% cooldown reduction.");
+            LanguageAPI.Add("EQUIPMENT_GREATERWARBANNER_DESC", "Place a greater warbanner which grants <style=cIsHealing>20% health regeneration</style>, <style=cIsDamage>10% critical hit chance</style>, and <style=cIsUtility>50% cooldown reduction</style>.");
             LanguageAPI.Add("EQUIPMENT_GREATERWARBANNER_LORE", "Order: \u201CGreater Warbanner\u201D\r\nTracking Number: 72******\r\nEstimated Delivery: 08\\25\\2057\\\r\nShipping Method: High Priority\r\nShipping Address: 836 Lane, Lab [42], Mars\r\nShipping Details:\r\n\r\nI got this thing off of my dead grandmother, it's a relic from the great war of 2019. It  gives this aura of energy and motivation to do whatever someone desires! Anyways -- I'm passing it onto you, since I am dying to this cancer and I'd like you to have it before I go six feet under. Much love, Uncle Abe.\n");
             //LanguageAPI.Add("EQUIPMENT_PRINTER_LORE", "Order: \u201CGreater Warbanner\u201D\r\nTracking Number: 72******\r\nEstimated Delivery: 08\\25\\2057\\\r\nShipping Method: High Priority\r\nShipping Address: 836 Lane, Lab [42], Mars\r\nShipping Details:\r\n\r\nI got this thing off of my dead grandmother, it's a relic from the great war of 2019. It  gives this aura of energy and motivation to do whatever someone desires! Anyways -- I'm passing it onto you, since I am dying to this cancer and I'd like you to have it before I go six feet under. Much love, Uncle Abe.\n");
         }

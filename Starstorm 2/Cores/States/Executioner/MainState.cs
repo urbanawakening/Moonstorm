@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
 using Starstorm2.Cores;
+using UnityEngine.Networking;
 
 //TODO: should check that secondary is ion gun before attempting to store/load charges
 
@@ -52,8 +53,7 @@ namespace EntityStates.Executioner
             {
                 if (report.attacker == base.gameObject)
                 {
-                    if (ionGunSkill.stock < ionGunSkill.maxStock)
-                        ionGunSkill.AddOneStock();
+                    storedChargeComp.RpcAddIonCharge();
                 }
             }
         }
