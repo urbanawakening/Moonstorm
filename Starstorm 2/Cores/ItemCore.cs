@@ -578,7 +578,7 @@ namespace Starstorm2.Cores
 
         public void GlobalEventManager_OnHitEnemy(On.RoR2.GlobalEventManager.orig_OnHitEnemy orig, GlobalEventManager self, DamageInfo damageInfo, GameObject victim)
         {
-            if (self)
+            if (self && damageInfo.attacker)
             {
                 var inventory = damageInfo.attacker.GetComponent<CharacterBody>().inventory;
                 if (inventory)
