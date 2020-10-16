@@ -13,8 +13,6 @@ namespace Starstorm2.Cores.States.Nemmando
         public static float baseMaxChargeTime = 1F;
         private static GameObject chargeupVfxPrefab = ChargeCaptainShotgun.chargeupVfxPrefab;
 
-        private Transform muzzleTransform;
-        private GameObject chargeupVfxGameObject;
         private float speedCoef;
         private float initialSpeedCoefficient = 2.5f;
         private float finalSpeedCoefficient = 7.5f;
@@ -46,7 +44,7 @@ namespace Starstorm2.Cores.States.Nemmando
             Transform modelTransform = base.GetModelTransform();
             if (modelTransform)
             {
-                hitBoxGroup = Array.Find<HitBoxGroup>(modelTransform.GetComponents<HitBoxGroup>(), (HitBoxGroup element) => element.groupName == "SwordHitboxWide");
+                hitBoxGroup = Array.Find<HitBoxGroup>(modelTransform.GetComponents<HitBoxGroup>(), (HitBoxGroup element) => element.groupName == "SwordHitboxLarge");
             }
 
             this.attack = new OverlapAttack();
@@ -102,46 +100,21 @@ namespace Starstorm2.Cores.States.Nemmando
                     {
                         if (this.fixedAge <= this.buttonReleaseTime + this.baseDashTime)
                         {
-                            if (base.fixedAge <= this.buttonReleaseTime + this.baseDashTime)
+                            if (base.characterMotor && base.characterDirection)
                             {
-                                if (base.characterMotor && base.characterDirection)
+                                if (this.attack.Fire(this.victimsStruck))
                                 {
-                                    if (this.attack.Fire(this.victimsStruck))
+                                    this.outer.SetNextState(new FireDecisiveStrike
                                     {
-                                        for (int i = 0; i < this.victimsStruck.Count; i++)
-                                        {
-                                            float num = 0f;
-                                            HealthComponent healthComponent = this.victimsStruck[i];
-                                            CharacterMotor component = healthComponent.GetComponent<CharacterMotor>();
-                                            if (component)
-                                            {
-                                                num = component.mass;
-                                            }
-                                            else
-                                            {
-                                                Rigidbody component2 = healthComponent.GetComponent<Rigidbody>();
-                                                if (component2)
-                                                {
-                                                    num = component2.mass;
-                                                }
-                                            }
-                                            Chat.AddMessage(num.ToString());
-                                            if (num >= this.massThresholdForKnockback)
-                                            {
-                                                this.outer.SetNextState(new FireDecisiveStrike
-                                                {
-                                                    charge = this.charge,
-                                                    damageMultiplier = 2
-                                                });
-                                                return;
-                                            }
-                                        }
-                                    }
-                                    
-                                    base.characterMotor.velocity = Vector3.zero;
-                                    base.characterMotor.rootMotion += this.dashDirection * (this.characterBody.baseMoveSpeed * this.speedCoef * Time.fixedDeltaTime);
-                                    base.characterBody.isSprinting = true;
+                                        charge = this.charge,
+                                        damageMultiplier = 2
+                                    });
+                                    return;
                                 }
+
+                                base.characterMotor.velocity = Vector3.zero;
+                                base.characterMotor.rootMotion += this.dashDirection * (this.characterBody.baseMoveSpeed * this.speedCoef * Time.fixedDeltaTime);
+                                base.characterBody.isSprinting = true;
                             }
                         }
                         else
