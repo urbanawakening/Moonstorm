@@ -17,10 +17,9 @@ namespace Starstorm2.Cores.States.Nemmando
 		
 		private string animationStateName;
 
-		public float damageMultiplier = 1;
 		private float durationBeforeInterruptable;
-		private float minDamageCoef = 1.5f;
-		private float maxDamageCoef = 2.5f;
+		private float minDamageCoef = 2f;
+		private float maxDamageCoef = 4f;
 
 		public override bool allowExitFire
 		{
@@ -35,7 +34,7 @@ namespace Starstorm2.Cores.States.Nemmando
 			this.hitBoxGroupName = "SwordHitboxWide";
 			this.baseDuration = 0.5f;
 			this.hitPauseDuration = 0.01f;
-			this.damageCoefficient = Mathf.Lerp(this.minDamageCoef, this.maxDamageCoef, this.charge) * damageMultiplier;
+			this.damageCoefficient = Mathf.Lerp(this.minDamageCoef, this.maxDamageCoef, this.charge);
 			base.OnEnter();
 			base.characterDirection.forward = base.GetAimRay().direction;
 			this.durationBeforeInterruptable = BladeOfCessation.baseDurationBeforeInterruptable / this.attackSpeedStat;
