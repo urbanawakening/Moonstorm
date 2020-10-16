@@ -794,25 +794,31 @@ namespace Moonstorm.Cores.HAND
         private void CreateSurvivorDef()
         {
             GameObject HANDDisplay = this.wyattBody.GetComponent<ModelLocator>().modelTransform.gameObject;
-            string desc = "YOU. ME. GAS STATION. WHAT ARE WE GETTIN' FOR DINNER? <color=#CCD3E0>" + Environment.NewLine + Environment.NewLine;
-            desc = desc + "< ! > SUSHI OF COURSE. UH OH" + Environment.NewLine + Environment.NewLine;
-            desc = desc + "< ! > THERE WAS A ROOFIE INSIDE OF GAS STATION SUSHI" + Environment.NewLine + Environment.NewLine;
-            desc = desc + "< ! > WE BLACK OUT, WAKE UP IN A SEWER" + Environment.NewLine + Environment.NewLine;
-            desc = desc + "< ! > WE'RE SURROUNDED BY FISH. HORNY FISH" + Environment.NewLine + Environment.NewLine;
-            desc = desc + "< ! > YOU KNOW WHAT THAT MEANS. FISH ORGY" + Environment.NewLine + Environment.NewLine;
-            desc = desc + "< ! > THE STENCH DRAWS IN A BEAR" + Environment.NewLine + Environment.NewLine;
-            desc = desc + "< ! > WHAT ARE WE GONNA DO?" + Environment.NewLine + Environment.NewLine;
-            desc = desc + "< ! > WE'RE GONNA FIGHT THE BEAR" + Environment.NewLine + Environment.NewLine;
-            desc = desc + "< ! > BEAR FIGHT, BEAR HANDED. BEAR NAKED?" + Environment.NewLine + Environment.NewLine;
-            desc = desc + "< ! > OH YES" + Environment.NewLine + Environment.NewLine;
-            desc = desc + "< ! > WE BEFRIEND THE BEAR AFTER BEATING IT IN A BRAWL" + Environment.NewLine + Environment.NewLine;
-            desc = desc + "< ! > THEN WE RIDE IT INTO A CHUCK E' CHEESE" + Environment.NewLine + Environment.NewLine;
-            desc = desc + "< ! > DANCE DANCE REVOLUTION. REVOLUTION?" + Environment.NewLine + Environment.NewLine;
-            desc = desc + "< ! > OVERTHROW THE GOVERNMENT?" + Environment.NewLine + Environment.NewLine;
-            desc = desc + "< ! > UH, I THINK SO" + Environment.NewLine + Environment.NewLine;
+            string desc = "AYO HOL' UP <color=#CCD3E0>" + Environment.NewLine + Environment.NewLine;
+            desc = desc + "< ! > *SMACKS LIPS*" + Environment.NewLine + Environment.NewLine;
+            desc = desc + "< ! > SO WHAT YOU BE SAYIN' IS" + Environment.NewLine + Environment.NewLine;
+            desc = desc + "< ! > *WRITES FANFICTION-TIER DESCRIPTIONS*" + Environment.NewLine + Environment.NewLine;
+            desc = desc + "< ! > HOL' UP" + Environment.NewLine + Environment.NewLine;
+            desc = desc + "< ! > *DOESN'T PLAY STARSTORM*" + Environment.NewLine + Environment.NewLine;
+            desc = desc + "< ! > SO WHAT YOU BE SAYIN' IS....." + Environment.NewLine + Environment.NewLine;
+            desc = desc + "< ! > *RIPS OFF POPULAR 1 MOD*" + Environment.NewLine + Environment.NewLine;
+            desc = desc + "< ! > AYO" + Environment.NewLine + Environment.NewLine;
+            desc = desc + "< ! > *MAKES THEIR DOG A DEV*" + Environment.NewLine + Environment.NewLine;
+            desc = desc + "< ! > FINNA REALLY" + Environment.NewLine + Environment.NewLine;
+            desc = desc + "< ! > *RUNS A SHIT COMPETITION FOR BUILD ACCESS*" + Environment.NewLine + Environment.NewLine;
+            desc = desc + "< ! > WE GONNA FINNA" + Environment.NewLine + Environment.NewLine;
+            desc = desc + "< ! > *BRINGS DISCORDFAGS INTO THE THREAD*" + Environment.NewLine + Environment.NewLine;
+            desc = desc + "< ! > SO WHATCHOO SAYIN' IS" + Environment.NewLine + Environment.NewLine;
+            desc = desc + "< ! > *AIRS SHITSTAINED DIRTY LAUNDRY IN THREAD*" + Environment.NewLine + Environment.NewLine;
+            desc = desc + "< ! > WE GONNA" + Environment.NewLine + Environment.NewLine;
+            desc = desc + "< ! > *DAMAGE CONTROLS*" + Environment.NewLine + Environment.NewLine;
+            desc = desc + "< ! > FINNA" + Environment.NewLine + Environment.NewLine;
+            desc = desc + "< ! > *NAMEDROPS*" + Environment.NewLine + Environment.NewLine;
+            desc = desc + "< ! > MAKE A MOD? SHIEEEEEEEEETTTTTTTTT" + Environment.NewLine + Environment.NewLine;
+            desc = desc + "< ! > *LEAKS UNFINISHED BUILD*" + Environment.NewLine + Environment.NewLine;
 
             LanguageAPI.Add("HAND_DESCRIPTION", desc);
-            LanguageAPI.Add("HAND_FLAVORTOKEN", "And so it left, humanity growing within closed circuits...");
+            LanguageAPI.Add("WYATT_OUTRO_FLAVOR", "...and so it left, unsure of his next task.");
 
             SurvivorDef def = new SurvivorDef()
             {
