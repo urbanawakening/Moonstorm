@@ -116,7 +116,7 @@ namespace EntityStates.Executioner
             };
 
             base.PlayAnimation("FullBody, Override", "SpecialImpact");
-            EffectManager.SpawnEffect(slamEffect, slamEffectData, false);
+            EffectManager.SpawnEffect(slamEffect, slamEffectData, true);
 
             base.characterBody.bodyFlags -= CharacterBody.BodyFlags.IgnoreFallDamage;
             if (base.isAuthority)
@@ -138,7 +138,7 @@ namespace EntityStates.Executioner
                 }
                 int hitcount = hits.Count;
                 if (hitcount < 1) hitcount = 1;
-                else if (hitcount > 10) hitcount = 1;
+                else if (hitcount > 10) hitcount = 10;
 
                 BlastAttack blast = new BlastAttack()
                 {

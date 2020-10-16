@@ -113,7 +113,6 @@ The two privates sat in complete silence.
 #endif
             CreatePrefab();
             RegisterBuffs();
-            RegisterProjectiles();
             RegisterStates();
             RegisterCharacter();
             RegisterSkins();
@@ -354,59 +353,6 @@ The two privates sat in complete silence.
 
             CustomBuff fear = new CustomBuff(fearDef);
             ExecutionerCore.fearDebuff = BuffAPI.Add(fear);
-        }
-
-        private void RegisterProjectiles()
-        {
-            //unused, to delete
-            dashProjectile = Resources.Load<GameObject>("Prefabs/Projectiles/CommandoGrenadeProjectile").InstantiateClone("ExecutionerDash");
-
-            ProjectileController dashController = dashProjectile.GetComponent<ProjectileController>();
-            ProjectileImpactExplosion dashExplosion = dashProjectile.GetComponent<ProjectileImpactExplosion>();
-            ProjectileSimple dashSimple = dashProjectile.GetComponent<ProjectileSimple>();
-            ProjectileDamage dashDamage = dashProjectile.GetComponent<ProjectileDamage>();
-            TeamFilter dashFilter = dashProjectile.GetComponent<TeamFilter>();
-            BuffWard dashBuff = dashProjectile.AddComponent<BuffWard>();
-            //DebuffZone dashDebuff = dashProjectile.AddComponent<DebuffZone>();
-
-            //dashDebuff.buffDuration = ExecutionerDash.debuffDuration;
-            //dashDebuff.buffType = fearDebuff;
-
-            //effect behavior
-            dashController.ghostPrefab = null;
-            dashController.shouldPlaySounds = false;
-            dashExplosion.blastRadius = 14f; //hardcoding :puke:
-            dashExplosion.falloffModel = BlastAttack.FalloffModel.None;
-            dashExplosion.lifetime = 0.1f;
-            dashExplosion.fireChildren = false;
-            dashExplosion.blastProcCoefficient = 0f;
-            //probably doesn't do anything
-            dashExplosion.bonusBlastForce = Vector3.up * 20f;
-            dashSimple.velocity = 0f;
-            dashSimple.enableVelocityOverLifetime = false;
-            dashDamage.crit = false;
-            dashDamage.damage = 0f;
-            dashDamage.damageColorIndex = DamageColorIndex.Default;
-            dashDamage.damageType = DamageType.Generic;
-            dashDamage.force = 30f;
-
-            dashFilter.teamIndex = TeamIndex.Player;
-
-            dashBuff.animateRadius = false;
-            dashBuff.buffDuration = 20.0f;
-            dashBuff.buffType = fearDebuff;
-            dashBuff.expires = false;
-            dashBuff.floorWard = true;
-            dashBuff.interval = 1f;
-            dashBuff.invertTeamFilter = true;
-            dashBuff.radius = 14f;
-
-            ProjectileCatalog.getAdditionalEntries += delegate (List<GameObject> l)
-            {
-                l.Add(dashProjectile);
-            };
-
-            EffectAPI.AddEffect(dashProjectile);
         }
 
         private void RegisterStates()

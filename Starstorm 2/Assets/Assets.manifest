@@ -1,0 +1,7 @@
+ManifestFileVersion: 0
+CRC: 61023477
+AssetBundleManifest:
+  AssetBundleInfos:
+    Info_0:
+      Name: assetstorm
+      Dependencies: {}
