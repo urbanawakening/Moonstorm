@@ -197,7 +197,8 @@ namespace Moonstorm.Cores.HAND
         {
             if (!wyattBody)
             {
-                this.wyattBody = Resources.Load<GameObject>("prefabs/characterbodies/HANDBody");
+                this.wyattBody = Resources.Load<GameObject>("prefabs/characterbodies/HANDBody").InstantiateClone("WyattBody", true);
+                API.RegisterNewBody(wyattBody);
             }
         }
         #endregion

@@ -18,6 +18,8 @@ namespace Moonstorm.Cores.States.Wyatt
         private HANDDroneTracker tracker;
         private HurtBox target;
 
+        private float stopwatch;
+
         public override void OnEnter()
         {
             base.OnEnter();
@@ -51,7 +53,8 @@ namespace Moonstorm.Cores.States.Wyatt
         public override void FixedUpdate()
         {
             base.FixedUpdate();
-            LogCore.LogI("Stage: " + stage.ToString());
+            //LogCore.LogI("Stage: " + stage.ToString());
+            stopwatch += Time.deltaTime;
 
             if (stage == ActionStage.FoundTarget)
             {
@@ -61,6 +64,15 @@ namespace Moonstorm.Cores.States.Wyatt
                     base.characterMotor.velocity = velocity;
                     base.characterDirection.forward = base.characterMotor.velocity.normalized;
                     float distance = Util.SphereVolumeToRadius(target.volume);
+
+                    if (stopwatch > 5)
+                    {
+                        LogCore.LogI(stopwatch);
+                        this.activatorSkillSlot.AddOneStock();
+                        LogCore.LogI("Can't reach target, skill refunded!");
+                        this.outer.SetNextStateToMain();
+                    }
+
 
                     if (Vector3.Distance(base.transform.position, target.transform.position) < distance + 5f && target)
                     {
@@ -93,6 +105,8 @@ namespace Moonstorm.Cores.States.Wyatt
 
                         base.characterMotor.velocity = Vector3.up * 20f;
                         stage = ActionStage.HitTarget;
+
+
                         LogCore.LogI("Stage: " + stage.ToString());
 
                         this.outer.SetNextStateToMain();
