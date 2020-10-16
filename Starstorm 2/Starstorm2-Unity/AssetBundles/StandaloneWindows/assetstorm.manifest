@@ -1,12 +1,12 @@
 ManifestFileVersion: 0
-CRC: 8601706
+CRC: 774973941
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: db3e614bee9b8c11b219e3c48c7e02e6
+    Hash: 5e4955a60688cf5c2fc46f7f6882502f
   TypeTreeHash:
     serializedVersion: 2
-    Hash: e2bdfcc9e91c780b368e748dee5ff1cc
+    Hash: abb26531b43fb42a5bf5223f293efb59
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -25,6 +25,8 @@ ClassTypes:
   Script: {instanceID: 0}
 - Class: 48
   Script: {instanceID: 0}
+- Class: 65
+  Script: {instanceID: 0}
 - Class: 74
   Script: {instanceID: 0}
 - Class: 90
@@ -37,15 +39,20 @@ ClassTypes:
   Script: {fileID: 11500000, guid: 10276f4c15347d549a11822bba5cf3ce, type: 3}
 - Class: 115
   Script: {instanceID: 0}
+- Class: 135
+  Script: {instanceID: 0}
 - Class: 136
   Script: {instanceID: 0}
 - Class: 137
   Script: {instanceID: 0}
 - Class: 213
   Script: {instanceID: 0}
+- Class: 319
+  Script: {instanceID: 0}
 Assets:
 - Assets/Executioner/ExecAnimator.controller
 - Assets/Items/DetritiveTrematode/DetritiveTrematode_Icon.png
+- Assets/Items/ErraticGadget/MDLErraticGadget.prefab
 - Assets/Executioner/exeportrait.png
 - Assets/Executioner/ExecAnimatorMenu.controller
 - Assets/Items/BloodTester/BloodTester_Icon.png
@@ -59,18 +66,29 @@ Assets:
 - Assets/Items/BloodTester/MDLBloodTester.prefab
 - Assets/Items/Diary/Diary_Icon.png
 - Assets/Items/StrangeCan/MDLStrangeCan.prefab
+- Assets/Nemmando/NemmandoFlinchMask.mask
+- Assets/Items/HottestSauce/HottestSauce_Icon.png
 - Assets/Executioner/skill2icon.png
 - Assets/Executioner/skill3icon.png
 - Assets/Items/DormantFungus/MDLDormantFungus.prefab
+- Assets/Nemmando/NemmandoAnimator.controller
+- Assets/Nemmando/NemmandoBodyUpper.mask
 - Assets/Executioner/surprised-skull.png
 - Assets/Items/MoltenCoin/MDLMoltenCoin.prefab
+- Assets/Nemmando/Materials/NemmandoTex.mat
 - Assets/Items/MoltenCoin/MoltenCoin_Icon.png
-- Assets/TyphoonIcon.png
 - Assets/Executioner/skill4icon.png
 - Assets/Executioner/skill1icon.png
+- Assets/Nemmando/NemmandoModel.prefab
+- Assets/Items/ErraticGadget/ErraticGadget_Icon.png
 - Assets/Items/NkotasHeritage/MDLNkotasHeritage.prefab
+- Assets/Nemmando/NemmandoIcon.png
+- Assets/Nemmando/NemmandoTex.png
 - Assets/Items/JetBoots/JetBoots_Icon.png
 - Assets/Items/JetBoots/MDLJetBoots.prefab
+- Assets/Nemmando/NemmandoAltTex.png
 - Assets/Items/GreaterWarbanner/MDLGreaterWarbanner.prefab
+- Assets/Nemmando/NemmandoAnims.fbx
 - Assets/Executioner/ExecutionerModel.prefab
+- Assets/Items/HottestSauce/MDLHottestSauce.prefab
 Dependencies: []

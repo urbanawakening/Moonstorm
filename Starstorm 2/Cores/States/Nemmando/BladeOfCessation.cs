@@ -44,16 +44,17 @@ namespace Starstorm2.Cores.States.Nemmando
 
 		public override void OnEnter()
 		{
-			this.hitBoxGroupName = "SwordLarge";
+			this.hitBoxGroupName = "SwordHitbox";
 			this.baseDuration = 0.5f;
+			this.duration = this.baseDuration / base.attackSpeedStat;
 			this.hitPauseDuration = 0.01f;
-			this.damageCoefficient = 2.5f;
+			this.damageCoefficient = 1.5f;
 
 			if (this.isComboFinisher)
 			{
 				this.hitPauseDuration = BladeOfCessation.comboFinisherhitPauseDuration;
 				this.bloom = BladeOfCessation.comboFinisherBloom;
-				this.hitBoxGroupName = "SwordLarge";
+				this.hitBoxGroupName = "SwordHitboxLarge";
 				this.baseDuration = BladeOfCessation.comboFinisherBaseDuration;
 			}
 
@@ -70,15 +71,13 @@ namespace Starstorm2.Cores.States.Nemmando
 		public override void AuthorityModifyOverlapAttack(OverlapAttack overlapAttack)
 		{
 			base.AuthorityModifyOverlapAttack(overlapAttack);
-			if(base.characterBody.HasBuff(BuffCore.instance.awarenessIndex))
+			if(this.isComboFinisher)
             {
 				overlapAttack.damageType = DamageTypeCore.gougeOnHit | DamageType.Generic;
 			}
 			else
             {
-				overlapAttack.damageType = Util.CheckRoll(25) ? 
-					DamageTypeCore.gougeOnHit | DamageType.Generic : 
-					DamageType.Generic;
+				overlapAttack.damageType = DamageType.Generic;
 			}
 		}
 
@@ -88,26 +87,25 @@ namespace Starstorm2.Cores.States.Nemmando
 			switch (this.step)
 			{
 				case 0:
-					this.animationStateName = "GroundLight1";
+					this.animationStateName = "Primary1";
 					break;
 				case 1:
-					this.animationStateName = "GroundLight2";
+					this.animationStateName = "Primary2";
 					break;
 				case 2:
-					this.animationStateName = "GroundLight3";
+					this.animationStateName = "Primary3";
 					break;
 			}
 			bool @bool = this.animator.GetBool("isMoving");
 			bool bool2 = this.animator.GetBool("isGrounded");
-
+			
 			if (!@bool && bool2)
 			{
-				base.PlayCrossfade("FullBody, Override", this.animationStateName, "GroundLight.playbackRate", this.duration, 0.05f);
+				base.PlayCrossfade("FullBody, Override", this.animationStateName, "Primary.rate", this.duration, 0.05f);
 			}
 			else
 			{
-				base.PlayCrossfade("Gesture, Additive", this.animationStateName, "GroundLight.playbackRate", this.duration, 0.05f);
-				base.PlayCrossfade("Gesture, Override", this.animationStateName, "GroundLight.playbackRate", this.duration, 0.05f);
+				base.PlayCrossfade("UpperBody, Override", this.animationStateName, "Primary.rate", this.duration, 0.05f);
 			}
 		}
 

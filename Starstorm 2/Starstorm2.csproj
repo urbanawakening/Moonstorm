@@ -219,6 +219,8 @@
     <Compile Include="Cores\DotCore.cs" />
     <Compile Include="Cores\EquipmentCore.cs" />
     <Compile Include="Cores\BuffCore.cs" />
+    <Compile Include="Cores\States\Nemmando\FireDecisiveStrike.cs" />
+    <Compile Include="Cores\States\Nemmando\ChargeDecisiveStrike.cs" />
     <Compile Include="Cores\States\Nemmando\Submission.cs" />
     <Compile Include="Cores\States\Nemmando\DodgeState.cs" />
     <Compile Include="Cores\States\Nemmando\MainState.cs" />

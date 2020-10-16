@@ -22,6 +22,8 @@ namespace Starstorm2.Cores.States.Nemmando
 		private float nextShotInterval = 0f;
 		private List<HurtBox> enemiesFound;
 		private BullseyeSearch search;
+		private Animator animator;
+		private Transform muzzle;
 
 		public static float baseMaxDuration = 2f;
 		public static float baseDuration = 0.5f;
@@ -30,10 +32,11 @@ namespace Starstorm2.Cores.States.Nemmando
 		public override void OnEnter()
 		{
 			base.OnEnter();
+			this.animator = base.GetModelAnimator();
 			var aimRay = this.GetAimRay();
 			this.nextShotInterval = this.preparationTime;
 			this.bulletCount = this.maxBullets;
-
+			
 			this.search = new BullseyeSearch();
 			this.search.filterByLoS = true;
 			this.search.searchOrigin = aimRay.origin;
@@ -41,7 +44,7 @@ namespace Starstorm2.Cores.States.Nemmando
 			this.search.sortMode = BullseyeSearch.SortMode.Angle;
 			this.search.maxDistanceFilter = this.maxDistance;
 			this.search.minAngleFilter = 0f;
-			this.search.maxAngleFilter = 75f;
+			this.search.maxAngleFilter = 10f;
 			this.search.RefreshCandidates();
 			this.search.FilterOutGameObject(base.gameObject);
 			this.search.teamMaskFilter = TeamMask.AllExcept(GetTeam());
@@ -79,39 +82,49 @@ namespace Starstorm2.Cores.States.Nemmando
 
 		private void Shoot()
         {
-			if (base.isAuthority && this.enemiesFound.Count > 0)
+			if (base.isAuthority)
 			{
-				HurtBox enemy = this.enemiesFound.First();
-				if (enemy)
+				bool @bool = this.animator.GetBool("isMoving");
+				bool bool2 = this.animator.GetBool("isGrounded");
+				var interval = this.duration / (float)this.maxBullets;
+				if (!@bool && bool2)
 				{
-					Vector3 toOther = enemy.transform.position - this.characterBody.transform.position;
-					var aimRay = base.GetAimRay();
-					new BulletAttack
-					{
-						owner = base.gameObject,
-						weapon = base.gameObject,
-						origin = aimRay.origin,
-						aimVector = toOther,
-						minSpread = 0f,
-						maxSpread = 0f,
-						bulletCount = 1,
-						procCoefficient = 0.25f,
-						damage = Submission.damageCoefficient * this.damageStat,
-						force = 0f,
-						falloffModel = BulletAttack.FalloffModel.None,
-						tracerEffectPrefab = Submission.tracerEffectPrefab,
-						muzzleName = "AimOrigin",
-						hitEffectPrefab = Submission.hitEffectPrefab,
-						isCrit = Util.CheckRoll(this.critStat, base.characterBody.master),
-						HitEffectNormal = false,
-						radius = 1f,
-						damageType = DamageType.Generic
-					}.Fire();
+					base.PlayCrossfade("FullBody, Override", "Special", "Primary.rate", interval, 0.05f);
 				}
-				this.enemiesFound.RemoveAt(0);					
-			}
-			this.bulletCount--;
-			this.nextShotInterval += this.duration / (float)this.maxBullets;			
+				else
+				{
+					base.PlayCrossfade("UpperBody, Override", "Special", "Primary.rate", interval, 0.05f);
+				}
+				var aimRay = base.GetAimRay();
+				HurtBox enemy = this.enemiesFound.FirstOrDefault();
+				Vector3 toOther = enemy ? enemy.transform.position - this.characterBody.transform.position : aimRay.direction;
+				new BulletAttack
+				{
+					owner = base.gameObject,
+					weapon = base.gameObject,
+					origin = aimRay.origin,
+					aimVector = toOther,
+					minSpread = 0f,
+					maxSpread = 0f,
+					bulletCount = 1,
+					procCoefficient = 1f,
+					damage = Submission.damageCoefficient * this.damageStat,
+					force = 0f,
+					falloffModel = BulletAttack.FalloffModel.None,
+					tracerEffectPrefab = Submission.tracerEffectPrefab,
+					muzzleName = "Muzzle",
+					hitEffectPrefab = Submission.hitEffectPrefab,
+					isCrit = Util.CheckRoll(this.critStat, base.characterBody.master),
+					HitEffectNormal = false,
+					radius = 1f,
+					damageType = DamageType.Generic
+				}.Fire();
+
+				if(enemy)
+					this.enemiesFound.RemoveAt(0);
+				this.bulletCount--;
+				this.nextShotInterval += interval;
+			}		
 				
 		}
 
