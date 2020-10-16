@@ -2,6 +2,8 @@
 using EntityStates.Captain.Weapon;
 using RoR2;
 using RoR2.UI;
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Starstorm2.Cores.States.Nemmando
@@ -21,49 +23,42 @@ namespace Starstorm2.Cores.States.Nemmando
         private float damageCoef = 1.5f;
         private bool buttonReleased = false;
         public float baseDashTime = 0.35f;
+        private bool chargeAnimationPlayed = false;
+        private bool jumpAnimationPlayed = false;
+        private OverlapAttack attack;
+        private float massThresholdForKnockback = 300f;
+
+        private List<HealthComponent> victimsStruck = new List<HealthComponent>();
         private Vector3 dashDirection;
+        private Animator animator;
 
         public float charge;
         public float lastCharge;
         public float maxChargeTime;
 
-        private bool isCrosshairInitialized = false;
-
         public override void OnEnter()
         {
             base.OnEnter();
+            this.animator = base.GetModelAnimator();
             this.maxChargeTime = ChargeDecisiveStrike.baseMaxChargeTime / this.attackSpeedStat;
-            this.characterBody.crosshairPrefab = NucleatorCore.chargeCrosshair;
 
-            if(!isCrosshairInitialized)
-            {
-                foreach (Transform child in NucleatorCore.chargeCrosshair.transform)
-                {
-                    if (child.name == "Zoom Amount") Destroy(child.gameObject);
-                }
-                isCrosshairInitialized = true;
-            }
+            HitBoxGroup hitBoxGroup = null;
             Transform modelTransform = base.GetModelTransform();
-
             if (modelTransform)
             {
-                this.muzzleTransform = base.FindModelChild("MuzzleCenter");
-                if (this.muzzleTransform)
-                {
-                    this.chargeupVfxGameObject = UnityEngine.Object.Instantiate<GameObject>(ChargeDecisiveStrike.chargeupVfxPrefab, this.muzzleTransform);
-                    this.chargeupVfxGameObject.GetComponent<ScaleParticleSystemDuration>().newDuration = this.maxChargeTime;
-                }
-            }
-        }
-        public override void OnExit()
-        {
-            if (this.chargeupVfxGameObject)
-            {
-                EntityState.Destroy(this.chargeupVfxGameObject);
-                this.chargeupVfxGameObject = null;
+                hitBoxGroup = Array.Find<HitBoxGroup>(modelTransform.GetComponents<HitBoxGroup>(), (HitBoxGroup element) => element.groupName == "SwordHitboxWide");
             }
 
-            this.characterBody.crosshairPrefab = NemmandoCore.defaultCrosshair;
+            this.attack = new OverlapAttack();
+            this.attack.attacker = base.gameObject;
+            this.attack.inflictor = base.gameObject;
+            this.attack.teamIndex = base.GetTeam();
+            this.attack.damage = 0;
+            this.attack.hitBoxGroup = hitBoxGroup;
+        }
+
+        public override void OnExit()
+        {
             base.OnExit();
         }
 
@@ -74,7 +69,34 @@ namespace Starstorm2.Cores.States.Nemmando
 
             if(base.isAuthority)
             {
-                if(this.buttonReleased)
+                if ((base.fixedAge >= this.maxChargeTime || !base.inputBank || !base.inputBank.skill2.down))
+                {
+                    if (!this.buttonReleased)
+                    {
+                        if (!jumpAnimationPlayed && base.fixedAge >= this.minChargeTime)
+                        {
+                            base.PlayAnimation("FullBody, Override", "Secondary3", "Secondary.rate", 0.05f);
+                            jumpAnimationPlayed = true;
+                        }
+
+                        this.buttonReleased = true;
+                        this.buttonReleaseTime = base.fixedAge;
+                        this.dashDirection = base.GetAimRay().direction;
+                        RecalculateDashSpeed();
+                    }
+                }
+                else
+                {
+                    this.lastCharge = this.charge;
+                    this.charge = base.fixedAge / this.maxChargeTime;
+                    if (!chargeAnimationPlayed && base.fixedAge >= this.minChargeTime)
+                    {
+                        base.PlayAnimation("UpperBody, Override", "Secondary1", "Secondary.rate", 0.05f);
+                        chargeAnimationPlayed = true;
+                    }
+                }
+
+                if (this.buttonReleased)
                 {
                     if (this.charge > minChargeTime)
                     {
@@ -84,8 +106,40 @@ namespace Starstorm2.Cores.States.Nemmando
                             {
                                 if (base.characterMotor && base.characterDirection)
                                 {
+                                    if (this.attack.Fire(this.victimsStruck))
+                                    {
+                                        for (int i = 0; i < this.victimsStruck.Count; i++)
+                                        {
+                                            float num = 0f;
+                                            HealthComponent healthComponent = this.victimsStruck[i];
+                                            CharacterMotor component = healthComponent.GetComponent<CharacterMotor>();
+                                            if (component)
+                                            {
+                                                num = component.mass;
+                                            }
+                                            else
+                                            {
+                                                Rigidbody component2 = healthComponent.GetComponent<Rigidbody>();
+                                                if (component2)
+                                                {
+                                                    num = component2.mass;
+                                                }
+                                            }
+                                            Chat.AddMessage(num.ToString());
+                                            if (num >= this.massThresholdForKnockback)
+                                            {
+                                                this.outer.SetNextState(new FireDecisiveStrike
+                                                {
+                                                    charge = this.charge,
+                                                    damageMultiplier = 2
+                                                });
+                                                return;
+                                            }
+                                        }
+                                    }
+                                    
                                     base.characterMotor.velocity = Vector3.zero;
-                                    base.characterMotor.rootMotion += this.dashDirection * (this.moveSpeedStat * this.speedCoef * Time.fixedDeltaTime);
+                                    base.characterMotor.rootMotion += this.dashDirection * (this.characterBody.baseMoveSpeed * this.speedCoef * Time.fixedDeltaTime);
                                     base.characterBody.isSprinting = true;
                                 }
                             }
@@ -101,6 +155,17 @@ namespace Starstorm2.Cores.States.Nemmando
                     }
                     else
                     {
+                        bool @bool = this.animator.GetBool("isMoving");
+                        bool bool2 = this.animator.GetBool("isGrounded");
+                        if (!@bool && bool2)
+                        {
+                            base.PlayCrossfade("FullBody, Override", "Special", "Secondary.rate", minChargeTime / this.attackSpeedStat, 0.05f);
+                        }
+                        else
+                        {
+                            base.PlayCrossfade("UpperBody, Override", "Special", "Secondary.rate", minChargeTime / this.attackSpeedStat, 0.05f);
+                        }
+
                         var aimRay = this.GetAimRay();
                         new BulletAttack
                         {
@@ -126,22 +191,6 @@ namespace Starstorm2.Cores.States.Nemmando
                         this.outer.SetNextStateToMain();
                         return;
                     }
-                }
-
-                if ((base.fixedAge >= this.maxChargeTime || !base.inputBank || !base.inputBank.skill2.down))
-                {
-                    if (!this.buttonReleased)
-                    {
-                        this.buttonReleased = true;
-                        this.buttonReleaseTime = base.fixedAge;
-                        this.dashDirection = base.GetAimRay().direction;
-                        RecalculateDashSpeed();
-                    }
-                }
-                else
-                {
-                    this.lastCharge = this.charge;
-                    this.charge = base.fixedAge / this.maxChargeTime;
                 }
             }
         }

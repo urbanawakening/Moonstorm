@@ -22,6 +22,8 @@ namespace Starstorm2.Cores.States.Nemmando
 		private float nextShotInterval = 0f;
 		private List<HurtBox> enemiesFound;
 		private BullseyeSearch search;
+		private Animator animator;
+		private Transform muzzle;
 
 		public static float baseMaxDuration = 2f;
 		public static float baseDuration = 0.5f;
@@ -30,10 +32,11 @@ namespace Starstorm2.Cores.States.Nemmando
 		public override void OnEnter()
 		{
 			base.OnEnter();
+			this.animator = base.GetModelAnimator();
 			var aimRay = this.GetAimRay();
 			this.nextShotInterval = this.preparationTime;
 			this.bulletCount = this.maxBullets;
-
+			
 			this.search = new BullseyeSearch();
 			this.search.filterByLoS = true;
 			this.search.searchOrigin = aimRay.origin;
@@ -81,6 +84,17 @@ namespace Starstorm2.Cores.States.Nemmando
         {
 			if (base.isAuthority)
 			{
+				bool @bool = this.animator.GetBool("isMoving");
+				bool bool2 = this.animator.GetBool("isGrounded");
+				var interval = this.duration / (float)this.maxBullets;
+				if (!@bool && bool2)
+				{
+					base.PlayCrossfade("FullBody, Override", "Special", "Primary.rate", interval, 0.05f);
+				}
+				else
+				{
+					base.PlayCrossfade("UpperBody, Override", "Special", "Primary.rate", interval, 0.05f);
+				}
 				var aimRay = base.GetAimRay();
 				HurtBox enemy = this.enemiesFound.FirstOrDefault();
 				Vector3 toOther = enemy ? enemy.transform.position - this.characterBody.transform.position : aimRay.direction;
@@ -93,12 +107,12 @@ namespace Starstorm2.Cores.States.Nemmando
 					minSpread = 0f,
 					maxSpread = 0f,
 					bulletCount = 1,
-					procCoefficient = 0.25f,
+					procCoefficient = 1f,
 					damage = Submission.damageCoefficient * this.damageStat,
 					force = 0f,
 					falloffModel = BulletAttack.FalloffModel.None,
 					tracerEffectPrefab = Submission.tracerEffectPrefab,
-					muzzleName = "AimOrigin",
+					muzzleName = "Muzzle",
 					hitEffectPrefab = Submission.hitEffectPrefab,
 					isCrit = Util.CheckRoll(this.critStat, base.characterBody.master),
 					HitEffectNormal = false,
@@ -109,7 +123,7 @@ namespace Starstorm2.Cores.States.Nemmando
 				if(enemy)
 					this.enemiesFound.RemoveAt(0);
 				this.bulletCount--;
-				this.nextShotInterval += this.duration / (float)this.maxBullets;
+				this.nextShotInterval += interval;
 			}		
 				
 		}

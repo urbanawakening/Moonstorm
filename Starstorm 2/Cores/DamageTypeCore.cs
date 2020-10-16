@@ -60,6 +60,7 @@ namespace Starstorm2.Cores
             burnOnHit = AddDamageType();
             gougeOnHit = AddDamageType();
             LogCore.LogI(burnOnHit);
+            LogCore.LogI(gougeOnHit);
         }
 
         protected DamageType AddDamageType()

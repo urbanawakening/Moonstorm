@@ -10,15 +10,14 @@ namespace Starstorm2.Cores.States.Nemmando
 {
     class FireDecisiveStrike : BasicMeleeAttack
 	{
-
-		public int step = 0;
 		public float charge = 0f;
 		public static float recoilAmplitude = 0.5f;
 		public static float baseDurationBeforeInterruptable = 0.5f;
 		public float bloom = 1f;
 		
 		private string animationStateName;
-		
+
+		public float damageMultiplier = 1;
 		private float durationBeforeInterruptable;
 		private float minDamageCoef = 1.5f;
 		private float maxDamageCoef = 2.5f;
@@ -33,13 +32,28 @@ namespace Starstorm2.Cores.States.Nemmando
 
 		public override void OnEnter()
 		{
-			this.hitBoxGroupName = "SwordLarge";
+			this.hitBoxGroupName = "SwordHitboxWide";
 			this.baseDuration = 0.5f;
 			this.hitPauseDuration = 0.01f;
-			this.damageCoefficient = Mathf.Lerp(this.minDamageCoef, this.maxDamageCoef, this.charge);
+			this.damageCoefficient = Mathf.Lerp(this.minDamageCoef, this.maxDamageCoef, this.charge) * damageMultiplier;
 			base.OnEnter();
 			base.characterDirection.forward = base.GetAimRay().direction;
 			this.durationBeforeInterruptable = BladeOfCessation.baseDurationBeforeInterruptable / this.attackSpeedStat;
+
+
+			Vector3 quat = Quaternion.LookRotation(characterDirection.forward).eulerAngles;
+
+			GameObject slashEffect = NemmandoCore.effect;
+			
+			slashEffect.transform.parent = base.characterMotor.transform;
+			EffectData slashEffectData = new EffectData()
+			{
+				scale = 1,
+				origin = base.characterBody.transform.position,
+				rotation = Quaternion.Euler(quat.x + 90, quat.y, quat.z)				
+			};
+
+			EffectManager.SpawnEffect(slashEffect, slashEffectData, false);
 		}
 
 		public override void OnExit()
@@ -55,19 +69,8 @@ namespace Starstorm2.Cores.States.Nemmando
 
 		public override void PlayAnimation()
 		{
-			this.animationStateName = "GroundLight3";
-			bool @bool = this.animator.GetBool("isMoving");
-			bool bool2 = this.animator.GetBool("isGrounded");
-
-			if (!@bool && bool2)
-			{
-				base.PlayCrossfade("FullBody, Override", this.animationStateName, "GroundLight.playbackRate", this.duration, 0.05f);
-			}
-			else
-			{
-				base.PlayCrossfade("Gesture, Additive", this.animationStateName, "GroundLight.playbackRate", this.duration, 0.05f);
-				base.PlayCrossfade("Gesture, Override", this.animationStateName, "GroundLight.playbackRate", this.duration, 0.05f);
-			}
+			this.animationStateName = "Secondary5";
+			base.PlayAnimation("FullBody, Override", this.animationStateName, "GroundLight.playbackRate", this.duration);// ; (, this.animationStateName, , this.duration, 0.05f);
 		}
 
 		public override void OnMeleeHitAuthority()
@@ -86,13 +89,11 @@ namespace Starstorm2.Cores.States.Nemmando
 		public override void OnSerialize(NetworkWriter writer)
 		{
 			base.OnSerialize(writer);
-			writer.Write((byte)this.step);
 		}
 
 		public override void OnDeserialize(NetworkReader reader)
 		{
 			base.OnDeserialize(reader);
-			this.step = (int)reader.ReadByte();
 		}
 
 		public override InterruptPriority GetMinimumInterruptPriority()

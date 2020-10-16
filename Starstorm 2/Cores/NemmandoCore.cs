@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
 using BepInEx;
 using EntityStates;
 using KinematicCharacterController;
@@ -11,6 +13,7 @@ using RoR2.Skills;
 using Starstorm2.Cores.States.Nemmando;
 using UnityEngine;
 using UnityEngine.Networking;
+using UnityEngine.Networking.NetworkSystem;
 
 namespace Starstorm2.Cores
 {
@@ -19,6 +22,7 @@ namespace Starstorm2.Cores
         public static NemmandoCore instance;
         public static GameObject characterPrefab;
         public static GameObject defaultCrosshair;
+        public static GameObject effect;
 
         public const string charName = "Nemesis Commando";
         public const string charSubt = "Some edgy boi";
@@ -44,12 +48,25 @@ namespace Starstorm2.Cores
         {
             CreatePrefab();
             RegisterCharacter();
+            RegisterSkins();
             SkillSetup();
+            CreateEffects();
+        }
+
+        private static void CreateEffects()
+        {
+            var effect = AssetsCore.mainAssetBundle.LoadAsset<GameObject>("SwordVfx");
+            var component = effect.AddComponent<EffectComponent>();
+            var attributes = effect.AddComponent<VFXAttributes>();
+            effect.AddComponent<DestroyOnParticleEnd>();
+
+            EffectAPI.AddEffect(effect);
+            NemmandoCore.effect = effect;
         }
 
         internal static void CreatePrefab()
         {
-            characterPrefab = PrefabAPI.InstantiateClone(Resources.Load<GameObject>("Prefabs/CharacterBodies/CommandoBody"), "ExecutionerBody", true);
+            characterPrefab = PrefabAPI.InstantiateClone(Resources.Load<GameObject>("Prefabs/CharacterBodies/CommandoBody"), "NemmandoBody", true);
             characterPrefab.GetComponent<NetworkIdentity>().localPlayerAuthority = true;
 
             UnityEngine.Object.Destroy(characterPrefab.transform.Find("ModelBase").gameObject);
@@ -95,7 +112,7 @@ namespace Starstorm2.Cores
             body.name = "NemmandoBody";
             body.baseNameToken = "NEMMANDO_NAME";
             body.subtitleNameToken = "NEMMANDO_SUBTITLE";
-            body.portraitIcon = AssetsCore.mainAssetBundle.LoadAsset<Texture2D>("exeportrait");
+            body.portraitIcon = AssetsCore.mainAssetBundle.LoadAsset<Texture2D>("NemmandoIcon");
             body.bodyFlags = CharacterBody.BodyFlags.ImmuneToExecutes;
             body.rootMotionInMainState = false;
             body.mainRootSpeed = 0;
@@ -226,8 +243,9 @@ namespace Starstorm2.Cores
 
             HurtBoxGroup hurtbox = model.AddComponent<HurtBoxGroup>();
 
-            CapsuleCollider coll1 = model.GetComponentInChildren<CapsuleCollider>();
-            HurtBox hb = coll1.gameObject.AddComponent<HurtBox>();
+            CapsuleCollider[] coll1 = model.GetComponentsInChildren<CapsuleCollider>();
+            CapsuleCollider coll2 = coll1.ToList().Where(x => x.name == "TempHurtbox").FirstOrDefault();
+            HurtBox hb = coll2.gameObject.AddComponent<HurtBox>();
             hb.gameObject.layer = LayerIndex.entityPrecise.intVal;
 
             hb.healthComponent = health;
@@ -261,6 +279,21 @@ namespace Starstorm2.Cores
             aimer.pitchGiveupRange = 30f;
             aimer.yawGiveupRange = 10f;
             aimer.giveupDuration = 3f;
+
+            foreach (Transform child in transform)
+            {
+                if(child.name == "SwordHitbox" || child.name == "SwordHitboxLarge" || child.name == "SwordHitboxWide")
+                {
+                    var hitBoxGroup = model.AddComponent<HitBoxGroup>();
+                    var hitBox = child.AddComponent<HitBox>();
+                    hitBoxGroup.groupName = child.name;
+                    hitBoxGroup.hitBoxes = new HitBox[] { hitBox };
+                }
+                else if(child.name == "Hurtbox")
+                { 
+                }
+            }
+            
         }
 
         void RegisterCharacter()
@@ -311,6 +344,37 @@ namespace Starstorm2.Cores
             SurvivorAPI.AddSurvivor(mySurvivorDef);
         }
 
+        private void RegisterSkins()
+        {
+            LanguageAPI.Add("NEMMANDO_DEFAULT_SKIN_NAME", "Default");
+
+            GameObject obj = characterPrefab.GetComponentInChildren<ModelLocator>().modelTransform.gameObject;
+            CharacterModel mdl = obj.GetComponent<CharacterModel>();
+            ModelSkinController skinController = obj.AddComponent<ModelSkinController>();
+
+            LoadoutAPI.SkinDefInfo skinDefInfo = new LoadoutAPI.SkinDefInfo
+            {
+                Name = "NEMMANDO_DEFAULT_SKIN_NAME",
+                NameToken = "NEMMANDO_DEFAULT_SKIN_NAME",
+                Icon = LoadoutAPI.CreateSkinIcon(new Color(0.71f, 0.48f, 0.54f), new Color(1.0f, 0.97f, 0.94f), new Color(0.53f, 0.32f, 0.38f), new Color(0.14f, 0.14f, 0.14f)),
+                RootObject = obj,
+                RendererInfos = mdl.baseRendererInfos,
+                BaseSkins = Array.Empty<SkinDef>(),
+                MinionSkinReplacements = new SkinDef.MinionSkinReplacement[0],
+                ProjectileGhostReplacements = new SkinDef.ProjectileGhostReplacement[0],
+                UnlockableName = ""
+            };
+
+            SkinDef skinDefault = LoadoutAPI.CreateNewSkinDef(skinDefInfo);
+
+            List<SkinDef> skinDefs = new List<SkinDef>()
+            {
+                skinDefault
+            };
+
+            skinController.skins = skinDefs.ToArray();
+        }
+
         void SkillSetup()
         {
             foreach (GenericSkill obj in characterPrefab.GetComponentsInChildren<GenericSkill>())
@@ -336,7 +400,7 @@ namespace Starstorm2.Cores
             mySkillDef.activationState = new SerializableEntityStateType(typeof(BladeOfCessation));
             mySkillDef.activationStateMachineName = "Weapon";
             mySkillDef.baseMaxStock = 1;
-            mySkillDef.baseRechargeInterval = 0.1f;
+            mySkillDef.baseRechargeInterval = 0f;
             mySkillDef.beginSkillCooldownOnSkillEnd = true;
             mySkillDef.canceledFromSprinting = false;
             mySkillDef.fullRestockOnAssign = true;
@@ -353,7 +417,7 @@ namespace Starstorm2.Cores
             mySkillDef.skillDescriptionToken = "NEMMANDO_PRIMARY_BLADE_DESCRIPTION";
             mySkillDef.skillName = "NEMMANDO_PRIMARY_BLADE_NAME";
             mySkillDef.skillNameToken = "NEMMANDO_PRIMARY_BLADE_NAME";
-            mySkillDef.stepCount = 2;
+            mySkillDef.stepCount = 3;
             mySkillDef.resetStepsOnIdle = false;
            
 
