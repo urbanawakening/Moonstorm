@@ -1,4 +1,5 @@
-﻿using Moonstorm.Cores.Components;
+﻿using EntityStates.Destructible;
+using Moonstorm.Cores.Components;
 using R2API;
 using R2API.Utils;
 using RoR2;
@@ -64,7 +65,7 @@ namespace Moonstorm.Cores
                 {
                     //"hey what if i made an enemy that had 1000% move speed?"
                     //"wait. oh, no"
-                    self.SetPropertyValue("moveSpeed", moveSpeed += 5);
+                    self.SetPropertyValue("moveSpeed", moveSpeed += 3);
                 };
                 if (self.HasBuff(warIndex))
                 {
