@@ -143,7 +143,7 @@ namespace Moonstorm.Cores
             bool shouldOrigSelf = true;
             if (self)
             {
-                if (buffType == this.antiGravIndex && self.baseNameToken == "HAND_BODY_NAME")
+                if (buffType == this.antiGravIndex && self.baseNameToken == "WYATT_BODY_NAME")
                 {
                     shouldOrigSelf = false;
                     //self.AddTimedBuff(this.antiGravFriendlyIndex, 10);
@@ -162,6 +162,19 @@ namespace Moonstorm.Cores
                 if (self.characterMotor)
                 {
                     self.characterMotor.useGravity = true;
+                }
+            }
+            if (buffType == antiGravFriendlyIndex)
+            {
+                if (self.characterMotor)
+                {
+                    var gParams = self.characterMotor.gravityParameters;
+                    gParams.environmentalAntiGravityGranterCount--;
+                    self.characterMotor.gravityParameters = gParams;
+
+                    var fParams = self.characterMotor.flightParameters;
+                    fParams.channeledFlightGranterCount--;
+                    self.characterMotor.flightParameters = fParams;
                 }
             }
 
@@ -208,7 +221,17 @@ namespace Moonstorm.Cores
                     self.SetPropertyValue("attackSpeed", attackSpeed -= .5f);
                     self.SetPropertyValue("moveSpeed", moveSpeed -= 1f);
                 }
+                if (self.HasBuff(antiGravFriendlyIndex)) {
+                    if (self.characterMotor) {
+                        var gParams = self.characterMotor.gravityParameters;
+                        gParams.environmentalAntiGravityGranterCount++;
+                        self.characterMotor.gravityParameters = gParams;
 
+                        var fParams = self.characterMotor.flightParameters;
+                        fParams.channeledFlightGranterCount++;
+                        self.characterMotor.flightParameters = fParams;
+                    }
+                }
                 if (self.HasBuff(wyattCombatIndex)) {
                     for (int i = 0; i < self.GetBuffCount(wyattCombatIndex); i++) {
                         self.SetPropertyValue("moveSpeed", moveSpeed += 1f);

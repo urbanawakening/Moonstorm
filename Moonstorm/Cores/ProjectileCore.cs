@@ -169,6 +169,9 @@ namespace Moonstorm.Cores
                 activatedWard.transform.SetParent(wyattMaidBubble.transform);
                 activatedWard.transform.position = new Vector3(0, 0, 0);
                 activatedWard.transform.localScale = new Vector3(1, 1, 1);
+                activatedWard.transform.Find("Visuals+Collider").gameObject.layer = 0;
+                //activatedWard.transform.Find("Visuals+Collider").gameObject.AddComponent<BoxCollider>();
+                activatedWard.transform.Find("Visuals+Collider").gameObject.AddComponent<FliteredNoGravZone>();
             }
             else LogCore.LogF("FATAL ERROR:" + wyattMaidBubble.name + " failed to register to the projectile catalog!");
         }

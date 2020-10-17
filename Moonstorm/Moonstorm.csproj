@@ -43,6 +43,7 @@
     <Compile Include="API\LogCore.cs" />
     <Compile Include="Achivements\GrabOrDie.cs" />
     <Compile Include="Cores\Components\BombardierStickySkillDef.cs" />
+    <Compile Include="Cores\Components\FliteredNoGravZone.cs" />
     <Compile Include="Cores\Components\WyattWalkmanBehavior.cs" />
     <Compile Include="Cores\Components\WyattComboScript.cs" />
     <Compile Include="Cores\ShitpostCore.cs" />

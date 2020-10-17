@@ -44,17 +44,17 @@ namespace Moonstorm.Cores.HAND
             {
                 instance = this;
             }
-            CreateHAND();
+            CreateWYATT();
 #if RELEASE
             LogW("You're on a debug build. If you see this after downloading from the thunderstore, panic!");
             
             On.RoR2.Networking.GameNetworkManager.OnClientConnect += (self, user, t) => { };
 #endif
         }
-        private void CreateHAND()
+        private void CreateWYATT()
         {
             CreateTokens();
-            CreateHANDPrefab();
+            CreateWYATTPrefab();
             CreateSunderPrefab();
             //CreateWinchPrefab();
             SetComponents();
@@ -68,7 +68,7 @@ namespace Moonstorm.Cores.HAND
         #region Prefab Creation
         private void CreateSunderPrefab()
         {
-            sunder = Resources.Load<GameObject>("prefabs/projectiles/Sunder").InstantiateClone("HANDSunder", true);
+            sunder = Resources.Load<GameObject>("prefabs/projectiles/Sunder").InstantiateClone("WYATTSunder", true);
             API.RegisterNewProjectile(sunder);
             UnityEngine.Object.Destroy(sunder.GetComponent<ProjectileOverlapAttack>());
 
@@ -84,7 +84,7 @@ namespace Moonstorm.Cores.HAND
 
         private void CreateWinchPrefab()
         {
-            //this.winch = Resources.Load<GameObject>("prefabs/projectiles/EngiHarpoon").InstantiateClone("HANDWinch", true);
+            //this.winch = Resources.Load<GameObject>("prefabs/projectiles/EngiHarpoon").InstantiateClone("WYATTWinch", true);
             GameObject groveWinch = Resources.Load<GameObject>("prefabs/projectiles/GravekeeperHookProjectileSimple");
 
             this.winch.GetComponent<ProjectileController>().ghostPrefab = groveWinch.GetComponent<ProjectileController>().ghostPrefab;
@@ -118,7 +118,7 @@ namespace Moonstorm.Cores.HAND
 
             API.RegisterNewProjectile(winch);
             #region Old
-            /*this.winch = Resources.Load<GameObject>("prefabs/projectiles/SyringeProjectile").InstantiateClone("HANDWinch", true);
+            /*this.winch = Resources.Load<GameObject>("prefabs/projectiles/SyringeProjectile").InstantiateClone("WYATTWinch", true);
 
             GameObject groveWinch = Resources.Load<GameObject>("prefabs/projectiles/GravekeeperHookProjectileSimple");
 
@@ -193,7 +193,7 @@ namespace Moonstorm.Cores.HAND
             pid.targetQuat = pid2.targetQuat;*/
             #endregion
         }
-        private void CreateHANDPrefab()
+        private void CreateWYATTPrefab()
         {
             if (!wyattBody)
             {
@@ -273,8 +273,8 @@ namespace Moonstorm.Cores.HAND
             characterBody.baseMaxHealth = 150; //Base health, basically the health you have when you start a new run
             characterBody.baseMaxShield = 0; //Base shield, basically the same as baseMaxHealth but with shields
             characterBody.baseMoveSpeed = 7; //Base move speed, this is usual 7
-            characterBody.baseNameToken = "HAND_BODY_NAME"; //The base name token. 
-            characterBody.subtitleNameToken = "HAND_BODY_SUBTITLE"; //Set this if its a boss
+            characterBody.baseNameToken = "WYATT_BODY_NAME"; //The base name token. 
+            characterBody.subtitleNameToken = "WYATT_BODY_SUBTITLE"; //Set this if its a boss
             characterBody.baseRegen = 1.5f; //Base health regen.
             characterBody.bodyFlags = (CharacterBody.BodyFlags.ImmuneToExecutes | CharacterBody.BodyFlags.Mechanical); ///Base body flags, should be self explanatory 
             characterBody.crosshairPrefab = characterBody.crosshairPrefab = Resources.Load<GameObject>("Prefabs/CharacterBodies/HuntressBody").GetComponent<CharacterBody>().crosshairPrefab; //The crosshair prefab.
@@ -427,27 +427,27 @@ namespace Moonstorm.Cores.HAND
             armorDef.requiredStock = 1;
             armorDef.shootDelay = 0.1f;
             armorDef.stockToConsume = 0;
-            armorDef.skillDescriptionToken = "HAND_PASSIVE_DESCRIPTION";
+            armorDef.skillDescriptionToken = "WYATT_PASSIVE_DESCRIPTION";
             armorDef.skillName = "Armor";
-            armorDef.skillNameToken = "HAND_PASSIVE_NAME";
+            armorDef.skillNameToken = "WYATT_PASSIVE_NAME";
             armorDef.icon = AssetsCore.overclockIcon;
             armorDef.keywordTokens = Array.Empty<string>();
-            armorDef.skillDescriptionToken = "HAND_PASSIVE_DESCRIPTION";
+            armorDef.skillDescriptionToken = "WYATT_PASSIVE_DESCRIPTION";
             armorDef.icon = AssetsCore.overclockIcon;
-            armorDef.skillNameToken = "HAND_PASSIVE_NAME";
+            armorDef.skillNameToken = "WYATT_PASSIVE_NAME";
 
             API.CopySkillDefSettings(armorDef, regenDef);
             API.CopySkillDefSettings(armorDef, speedDef);
 
             regenDef.skillName = "Regen";
             regenDef.icon = null;
-            regenDef.skillNameToken = "HAND_PASSIVE_ALT_NAME";
-            regenDef.skillDescriptionToken = "HAND_PASSIVE_ALT_DESCRIPTION";
+            regenDef.skillNameToken = "WYATT_PASSIVE_ALT_NAME";
+            regenDef.skillDescriptionToken = "WYATT_PASSIVE_ALT_DESCRIPTION";
 
             speedDef.skillName = "Speed";
             speedDef.icon = null;
-            speedDef.skillNameToken = "HAND_PASSIVE_ALT2_NAME";
-            speedDef.skillDescriptionToken = "HAND_PASSIVE_ALT2_DESCRIPTION";
+            speedDef.skillNameToken = "WYATT_PASSIVE_ALT2_NAME";
+            speedDef.skillDescriptionToken = "WYATT_PASSIVE_ALT2_DESCRIPTION";
 
             passiveFamily.variants = new SkillFamily.Variant[1] {
                 new SkillFamily.Variant {
@@ -508,9 +508,9 @@ namespace Moonstorm.Cores.HAND
             primarySkillDef.requiredStock = 1;
             primarySkillDef.shootDelay = 0.1f;
             primarySkillDef.stockToConsume = 0;
-            primarySkillDef.skillDescriptionToken = "HAND_PRIMARY_DESCRIPTION";
-            primarySkillDef.skillName = "HAND_PRIMARY_NAME";
-            primarySkillDef.skillNameToken = "HAND_PRIMARY_NAME";
+            primarySkillDef.skillDescriptionToken = "WYATT_PRIMARY_DESCRIPTION";
+            primarySkillDef.skillName = "WYATT_PRIMARY_NAME";
+            primarySkillDef.skillNameToken = "WYATT_PRIMARY_NAME";
             primarySkillDef.icon = AssetsCore.hurtIcon;
             primarySkillDef.keywordTokens = new string[] {
                  "KEYWORD_AGILE",
@@ -559,9 +559,9 @@ namespace Moonstorm.Cores.HAND
             secondarySkillDef.requiredStock = 1;
             secondarySkillDef.shootDelay = 0.08f;
             secondarySkillDef.stockToConsume = 1;
-            secondarySkillDef.skillDescriptionToken = "HAND_SECONDARY_DESCRIPTION";
+            secondarySkillDef.skillDescriptionToken = "WYATT_SECONDARY_DESCRIPTION";
             secondarySkillDef.skillName = "aaa";
-            secondarySkillDef.skillNameToken = "HAND_SECONDARY_NAME";
+            secondarySkillDef.skillNameToken = "WYATT_SECONDARY_NAME";
             secondarySkillDef.icon = AssetsCore.forcedReassemblyIcon;
             secondarySkillDef.keywordTokens = new string[] {
                 // "KEYWORD_AGILE",
@@ -611,9 +611,9 @@ namespace Moonstorm.Cores.HAND
             utilitySkillDef.requiredStock = 1;
             utilitySkillDef.shootDelay = 0.08f;
             utilitySkillDef.stockToConsume = 1;
-            utilitySkillDef.skillDescriptionToken = "HAND_UTILITY_DESCRIPTION";
+            utilitySkillDef.skillDescriptionToken = "WYATT_UTILITY_DESCRIPTION";
             utilitySkillDef.skillName = "aaa";
-            utilitySkillDef.skillNameToken = "HAND_UTILITY_NAME";
+            utilitySkillDef.skillNameToken = "WYATT_UTILITY_NAME";
             utilitySkillDef.icon = AssetsCore.forcedReassemblyIcon;
             utilitySkillDef.keywordTokens = new string[] {
                  "KEYWORD_STUNNING",
@@ -637,9 +637,9 @@ namespace Moonstorm.Cores.HAND
             utilitySkillDef2.requiredStock = 1;
             utilitySkillDef2.shootDelay = 0.08f;
             utilitySkillDef2.stockToConsume = 1;
-            utilitySkillDef2.skillDescriptionToken = "HAND_UTILITY_DESCRIPTION";
+            utilitySkillDef2.skillDescriptionToken = "WYATT_UTILITY_DESCRIPTION";
             utilitySkillDef2.skillName = "aaa";
-            utilitySkillDef2.skillNameToken = "HAND_UTILITY_NAME";
+            utilitySkillDef2.skillNameToken = "WYATT_UTILITY_NAME";
             utilitySkillDef2.icon = AssetsCore.forcedReassemblyIcon;
             utilitySkillDef2.keywordTokens = new string[] {
                  "KEYWORD_STUNNING",
@@ -691,9 +691,9 @@ namespace Moonstorm.Cores.HAND
             specialSkillDef.requiredStock = 1;
             specialSkillDef.shootDelay = 0.5f;
             specialSkillDef.stockToConsume = 1;
-            specialSkillDef.skillDescriptionToken = "HAND_SPECIAL_DESCRIPTION";
+            specialSkillDef.skillDescriptionToken = "WYATT_SPECIAL_DESCRIPTION";
             specialSkillDef.skillName = "aaa";
-            specialSkillDef.skillNameToken = "HAND_SPECIAL_NAME";
+            specialSkillDef.skillNameToken = "WYATT_SPECIAL_NAME";
             specialSkillDef.icon = AssetsCore.droneIcon;
             specialSkillDef.keywordTokens = new string[] {
                  "KEYWORD_WEIGHTLESS"
@@ -759,7 +759,7 @@ namespace Moonstorm.Cores.HAND
                 LogM("custom dmg type working!!");
             }*/
             if (self.body.HasBuff(BuffCore.instance.cleanIndex) && damageInfo.attacker && damageInfo.dotIndex == DotIndex.None)
-            { //damageInfo.attacker.GetComponent<CharacterBody>().baseNameToken == "HAND_BODY_NAME") {
+            { //damageInfo.attacker.GetComponent<CharacterBody>().baseNameToken == "WYATT_BODY_NAME") {
                 damageInfo.damage *= 1.5f;
                 EffectManager.SpawnEffect(Resources.Load<GameObject>("prefabs/effects/omnieffect/omniexplosionvfx"), new EffectData
                 {
@@ -786,14 +786,14 @@ namespace Moonstorm.Cores.HAND
         #region Misc
         private void CreateTokens()
         {
-            LanguageAPI.Add("HAND_BODY_NAME", "Wyatt");
-            LanguageAPI.Add("HAND_BODY_SUBTITLE", "Lean, Mean, Cleaning Machine");
+            LanguageAPI.Add("WYATT_BODY_NAME", "Wyatt");
+            LanguageAPI.Add("WYATT_BODY_SUBTITLE", "Lean, Mean, Cleaning Machine");
 
         }
 
         private void CreateSurvivorDef()
         {
-            GameObject HANDDisplay = this.wyattBody.GetComponent<ModelLocator>().modelTransform.gameObject;
+            GameObject WYATTDisplay = this.wyattBody.GetComponent<ModelLocator>().modelTransform.gameObject;
             string desc = "AYO HOL' UP <color=#CCD3E0>" + Environment.NewLine + Environment.NewLine;
             desc = desc + "< ! > *SMACKS LIPS*" + Environment.NewLine + Environment.NewLine;
             desc = desc + "< ! > SO WHAT YOU BE SAYIN' IS" + Environment.NewLine + Environment.NewLine;
@@ -817,17 +817,17 @@ namespace Moonstorm.Cores.HAND
             desc = desc + "< ! > MAKE A MOD? SHIEEEEEEEEETTTTTTTTT" + Environment.NewLine + Environment.NewLine;
             desc = desc + "< ! > *LEAKS UNFINISHED BUILD*" + Environment.NewLine + Environment.NewLine;
 
-            LanguageAPI.Add("HAND_DESCRIPTION", desc);
+            LanguageAPI.Add("WYATT_DESCRIPTION", desc);
             LanguageAPI.Add("WYATT_OUTRO_FLAVOR", "...and so it left, unsure of his next task.");
 
             SurvivorDef def = new SurvivorDef()
             {
                 bodyPrefab = this.wyattBody,
-                descriptionToken = "HAND_DESCRIPTION",
-                displayNameToken = "HAND_BODY_NAME",
-                displayPrefab = HANDDisplay,
+                descriptionToken = "WYATT_DESCRIPTION",
+                displayNameToken = "WYATT_BODY_NAME",
+                displayPrefab = WYATTDisplay,
                 name = "AAAAAAAAA",
-                outroFlavorToken = "HAND_FLAVORTOKEN",
+                outroFlavorToken = "WYATT_FLAVORTOKEN",
                 primaryColor = new Color(0.4862745098f, 0.94901960784f, 0.71764705882f),
                 unlockableName = "",
             };
