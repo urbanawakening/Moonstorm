@@ -2,14 +2,18 @@
 using System.Collections.Generic;
 using BepInEx;
 using EntityStates;
+using EntityStates.Engi.EngiWeapon;
 using R2API;
 using R2API.AssetPlus;
 using R2API.Utils;
 using RoR2;
+using RoR2.Projectile;
 using RoR2.Skills;
+using RoR2.UI;
 using Starstorm2.Cores.States.Nucleator;
 using UnityEngine;
 using UnityEngine.Networking;
+using UnityEngine.UI;
 
 namespace Starstorm2.Cores
 {
@@ -17,8 +21,14 @@ namespace Starstorm2.Cores
     {
         public static NucleatorCore instance;
         public static GameObject characterPrefab;
-        public static BuffIndex radionuclideSurgeBuffIndex;
+        public static GameObject defaultCrosshair;
+        public static GameObject chargeCrosshair;
 
+        public static BuffIndex radionuclideSurgeBuffIndex;
+        public static BuffIndex radiationBuffIndex;
+        public static DotController.DotIndex radiationDotIndex;
+
+        public GameObject primaryProjectile;
         public NucleatorCore() => Load();
 
         public void Load()
@@ -38,6 +48,84 @@ namespace Starstorm2.Cores
             BuffSetup();
             RegisterCharacter();
             SkillSetup();
+            CreatePrimaryProjectile();   
+        }
+
+        void CreateUiChargeWidget(GameObject crosshairPrefab)
+        {
+            NucleatorCore.defaultCrosshair = crosshairPrefab;
+            var chargeCrosshair = Resources.Load<GameObject>("prefabs/crosshair/SniperCrosshair");
+
+            UnityEngine.Object.Destroy(chargeCrosshair.GetComponent<RawImage>());
+            UnityEngine.Object.Destroy(chargeCrosshair.GetComponent<SniperScopeChargeIndicatorController>());
+            UnityEngine.Object.Destroy(chargeCrosshair.GetComponent<SniperRangeIndicator>());
+            UnityEngine.Object.Destroy(chargeCrosshair.GetComponent<DisplayStock>());
+            var chargeController = chargeCrosshair.AddComponent<ChargeController>();
+
+            foreach (Transform child in chargeCrosshair.transform)
+            {
+                if (child.name == "ChargeIndicator")
+                    chargeController.image = child.GetComponent<Image>();
+                else if (child.name != "Image")
+                {
+                    Debug.Log("Destroying :" + child.name);
+                    child.SetParent(null);
+                    UnityEngine.Object.Destroy(child.gameObject);
+                }
+            }
+
+
+            NucleatorCore.chargeCrosshair = chargeCrosshair;
+        }
+
+        void RegisterDot()
+        {
+            NucleatorCore.radiationDotIndex = DotAPI.RegisterDotDef(1, 1, DamageColorIndex.Poison, radiationBuffIndex);
+        }
+
+        void CreatePrimaryProjectile()
+        {
+            this.primaryProjectile = PrefabAPI.InstantiateClone(Resources.Load<GameObject>("prefabs/projectiles/DaggerProjectile"), "NucleatorProjectile");
+
+            UnityEngine.Object.Destroy(this.primaryProjectile.GetComponent<ProjectileSingleTargetImpact>());
+            UnityEngine.Object.Destroy(this.primaryProjectile.GetComponent<DelayedEvent>());
+            UnityEngine.Object.Destroy(this.primaryProjectile.GetComponent<AwakeEvent>());
+            UnityEngine.Object.Destroy(this.primaryProjectile.GetComponent<DaggerController>());
+            UnityEngine.Object.Destroy(this.primaryProjectile.GetComponent<DelayedEvent>());
+            UnityEngine.Object.Destroy(this.primaryProjectile.GetComponent<AwakeEvent>());
+            this.primaryProjectile.AddComponent<NucleatorProjectile>();
+
+            var impact = this.primaryProjectile.AddComponent<ProjectileImpactExplosion>();
+            impact.blastAttackerFiltering = RoR2.AttackerFiltering.Default;
+            impact.blastDamageCoefficient = 1f;
+            impact.blastProcCoefficient = 1;
+            impact.blastRadius = 0f;
+            impact.childrenCount = 0;
+            impact.childrenDamageCoefficient = 0;
+            impact.childrenProjectilePrefab = null;
+            impact.destroyOnEnemy = true;
+            impact.destroyOnWorld = true;
+            impact.falloffModel = RoR2.BlastAttack.FalloffModel.None;
+            impact.fireChildren = false;
+            impact.impactEffect = Resources.Load<GameObject>("prefabs/effects/LightningStakeNova");
+            impact.lifetime = 10;
+            impact.lifetimeAfterImpact = 0;
+            impact.lifetimeRandomOffset = 0;
+
+            var targetFinder = this.primaryProjectile.GetComponent<ProjectileDirectionalTargetFinder>();
+            targetFinder.lookCone = 90;
+            targetFinder.lookRange = 45f;
+            targetFinder.allowTargetLoss = true;
+            targetFinder.enabled = false;
+
+            var targetTracker = this.primaryProjectile.GetComponent<ProjectileSteerTowardTarget>();
+            targetTracker.rotationSpeed = 45f;
+            targetTracker.enabled = false;
+
+            if (this.primaryProjectile.HasComponent<ProjectileController>())
+            {
+                ProjectileCatalog.getAdditionalEntries += list => list.Add(this.primaryProjectile);
+            }
         }
 
         void InitPrefab()
@@ -70,6 +158,7 @@ namespace Starstorm2.Cores
             component.name = "Nucleator";
             component.subtitleNameToken = "Nucleator";
 
+
             characterPrefab.GetComponent<CharacterBody>().preferredPodPrefab = Resources.Load<GameObject>("Prefabs/CharacterBodies/toolbotbody").GetComponent<CharacterBody>().preferredPodPrefab;
             LanguageAPI.Add("NUCLEATOR_DESCRIPTION"
             , @"The Nucleator is a radioactive juggernaut with rad-proof armor,
@@ -92,6 +181,7 @@ namespace Starstorm2.Cores
             };
 
             SurvivorAPI.AddSurvivor(mySurvivorDef);
+            CreateUiChargeWidget(component.crosshairPrefab);
         }
 
         void BuffSetup()
@@ -103,6 +193,14 @@ namespace Starstorm2.Cores
                 buffColor = new Color(0, 130, 0),
                 canStack = false,
                 isDebuff = false
+            }));
+            NucleatorCore.radiationBuffIndex = BuffAPI.Add(new CustomBuff(new BuffDef()
+            {
+                name = "Radiation",
+                iconPath = "",
+                buffColor = new Color(0, 130, 0),
+                canStack = false,
+                isDebuff = true
             }));
         }
         void SkillSetup()

@@ -116,6 +116,7 @@ The two privates sat in complete silence.
             RegisterProjectiles();
             RegisterStates();
             RegisterCharacter();
+            RegisterSkins();
             RegisterHooks();
         }
 
@@ -197,7 +198,7 @@ The two privates sat in complete silence.
             motor.generateParametersOnAwake = true;
 
             CameraTargetParams camParams = execPrefab.GetComponent<CameraTargetParams>();
-            camParams.cameraParams = Resources.Load<GameObject>("Prefabs/CharacterBodies/CommandoBody").GetComponent<CameraTargetParams>().cameraParams;
+            camParams.cameraParams = Resources.Load<GameObject>("Prefabs/CharacterBodies/EngiBody").GetComponent<CameraTargetParams>().cameraParams;
             camParams.cameraPivotTransform = null;
             camParams.aimMode = CameraTargetParams.AimType.Standard;
             camParams.recoil = Vector2.zero;
@@ -446,6 +447,37 @@ The two privates sat in complete silence.
             {
                 list.Add(execPrefab);
             };
+        }
+
+        private void RegisterSkins()
+        {
+            LanguageAPI.Add("EXECUTIONER_DEFAULT_SKIN_NAME", "Default");
+
+            GameObject obj = execPrefab.GetComponentInChildren<ModelLocator>().modelTransform.gameObject;
+            CharacterModel mdl = obj.GetComponent<CharacterModel>();
+            ModelSkinController skinController = obj.AddComponent<ModelSkinController>();
+
+            LoadoutAPI.SkinDefInfo skinDefInfo = new LoadoutAPI.SkinDefInfo
+            {
+                Name = "EXECUTIONER_DEFAULT_SKIN_NAME",
+                NameToken = "EXECUTIONER_DEFAULT_SKIN_NAME",
+                Icon = LoadoutAPI.CreateSkinIcon(new Color(0.71f, 0.48f, 0.54f), new Color(1.0f, 0.97f, 0.94f), new Color(0.53f, 0.32f, 0.38f), new Color(0.14f, 0.14f, 0.14f)),
+                RootObject = obj,
+                RendererInfos = mdl.baseRendererInfos,
+                BaseSkins = Array.Empty<SkinDef>(),
+                MinionSkinReplacements = new SkinDef.MinionSkinReplacement[0],
+                ProjectileGhostReplacements = new SkinDef.ProjectileGhostReplacement[0],
+                UnlockableName = ""
+            };
+
+            SkinDef skinDefault = LoadoutAPI.CreateNewSkinDef(skinDefInfo);
+
+            List<SkinDef> skinDefs = new List<SkinDef>()
+            {
+                skinDefault
+            };
+
+            skinController.skins = skinDefs.ToArray();
         }
 
         private void RegisterHooks()
@@ -703,6 +735,15 @@ The two privates sat in complete silence.
     public class IonGunChargeComponent : NetworkBehaviour
     {
         public int storedCharges = 0;
+
+        [ClientRpc]
+        public void RpcAddIonCharge()
+        {
+            SkillLocator skillLoc = this.gameObject.GetComponent<SkillLocator>();
+            GenericSkill ionGunSkill = skillLoc?.secondary;
+            if (this.hasAuthority && ionGunSkill && ionGunSkill.stock < ionGunSkill.maxStock)
+                ionGunSkill.AddOneStock();
+        }
     }
 }
 

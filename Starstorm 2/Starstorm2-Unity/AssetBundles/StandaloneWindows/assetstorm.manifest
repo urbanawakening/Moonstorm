@@ -1,19 +1,17 @@
 ManifestFileVersion: 0
-CRC: 2810382276
+CRC: 3670800631
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: a7240f747d2cbcf164d05310adaf7e4f
+    Hash: b603210f57dae9cbdb2e4cd7374110c6
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 9ca72c2331eceffe3b2d8c129a87631a
+    Hash: e2bdfcc9e91c780b368e748dee5ff1cc
 HashAppended: 0
 ClassTypes:
 - Class: 1
   Script: {instanceID: 0}
 - Class: 4
-  Script: {instanceID: 0}
-- Class: 20
   Script: {instanceID: 0}
 - Class: 21
   Script: {instanceID: 0}
@@ -35,7 +33,9 @@ ClassTypes:
   Script: {instanceID: 0}
 - Class: 95
   Script: {instanceID: 0}
-- Class: 108
+- Class: 114
+  Script: {fileID: 11500000, guid: 10276f4c15347d549a11822bba5cf3ce, type: 3}
+- Class: 115
   Script: {instanceID: 0}
 - Class: 136
   Script: {instanceID: 0}
@@ -46,18 +46,35 @@ ClassTypes:
 Assets:
 - Assets/Executioner/ExecAnimator.controller
 - Assets/Items/DetritiveTrematode/DetritiveTrematode_Icon.png
-- Assets/Executioner/ExecutionerModelMenu.prefab
+- Assets/Items/ErraticGadget/MDLErraticGadget.prefab
 - Assets/Executioner/exeportrait.png
 - Assets/Executioner/ExecAnimatorMenu.controller
+- Assets/Items/BloodTester/BloodTester_Icon.png
 - Assets/Items/Diary/MDLDiary.prefab
+- Assets/Items/StrangeCan/StrangeCan_Icon.png
+- Assets/Items/GreaterWarbanner/GreaterWarbanner_Icon.png
+- Assets/Executioner/ExecutionerModelMenu.prefab
+- Assets/Items/DormantFungus/DormantFungus_Icon.png
 - Assets/Items/DetritiveTrematode/MDLDetritiveTrematode.prefab
+- Assets/Items/NkotasHeritage/NkotasHeritage_Icon.png
+- Assets/Items/BloodTester/MDLBloodTester.prefab
 - Assets/Items/Diary/Diary_Icon.png
+- Assets/Items/StrangeCan/MDLStrangeCan.prefab
+- Assets/Items/HottestSauce/HottestSauce_Icon.png
 - Assets/Executioner/skill2icon.png
 - Assets/Executioner/skill3icon.png
-- Assets/Executioner/ExecutionerModel.prefab
 - Assets/Items/DormantFungus/MDLDormantFungus.prefab
 - Assets/Executioner/surprised-skull.png
-- Assets/Items/MoltenCoin/Molten_Coin.blend
+- Assets/Items/MoltenCoin/MDLMoltenCoin.prefab
+- Assets/Items/MoltenCoin/MoltenCoin_Icon.png
+- Assets/TyphoonIcon.png
 - Assets/Executioner/skill4icon.png
 - Assets/Executioner/skill1icon.png
+- Assets/Items/ErraticGadget/ErraticGadget_Icon.png
+- Assets/Items/NkotasHeritage/MDLNkotasHeritage.prefab
+- Assets/Items/JetBoots/JetBoots_Icon.png
+- Assets/Items/JetBoots/MDLJetBoots.prefab
+- Assets/Items/GreaterWarbanner/MDLGreaterWarbanner.prefab
+- Assets/Executioner/ExecutionerModel.prefab
+- Assets/Items/HottestSauce/MDLHottestSauce.prefab
 Dependencies: []
