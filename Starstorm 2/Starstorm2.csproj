@@ -204,6 +204,8 @@
     <Compile Include="API\ComponentHelpers.cs" />
     <Compile Include="API\LogCore.cs" />
     <Compile Include="Cores\AssetsCore.cs" />
+    <Compile Include="Cores\DamageTypeCore.cs" />
+    <Compile Include="Cores\Starstorm2ItemManager.cs" />
     <Compile Include="Cores\States\Executioner\MainState.cs" />
     <Compile Include="Cores\States\Executioner\Primary.cs" />
     <Compile Include="Cores\States\Executioner\Secondary.cs" />
@@ -241,6 +243,7 @@
   <PropertyGroup>
     <PostBuildEvent>if "$(Username)" == "Flan" copy /Y "$(TargetPath)" "F:\SteamLibrary\steamapps\common\Risk of Rain 2\BepInEx\plugins"
 if "$(Username)" == "kurog" copy /Y "$(TargetPath)" "E:\Steam\steamapps\common\Risk of Rain 2\BepInEx\plugins\"
+if "$(Username)" == "pmble" copy /Y "$(TargetPath)" "D:\Steam\steamapps\common\Risk of Rain 2\BepInEx\plugins"
 if "$(Username)" == "test" copy /Y "$(TargetPath)" "C:\Program Files (x86)\Steam\steamapps\common\Risk of Rain 2\BepInEx\plugins"</PostBuildEvent>
   </PropertyGroup>
 </Project>
