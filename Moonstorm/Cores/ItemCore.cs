@@ -62,9 +62,9 @@ namespace Moonstorm.Cores
         };
         public List<BuffIndex> lemdogList = new List<BuffIndex>{
             BuffIndex.Warbanner,
-            BuffIndex.Cloak,
+            //BuffIndex.Cloak,
             BuffIndex.CloakSpeed,
-            BuffIndex.EngiShield,
+            //BuffIndex.EngiShield,
             BuffIndex.MeatRegenBoost,
             BuffIndex.WhipBoost,
             BuffIndex.TeamWarCry,
@@ -631,12 +631,32 @@ namespace Moonstorm.Cores
             On.RoR2.GlobalEventManager.OnTeamLevelUp += GlobalEventManager_OnTeamLevelUp;
             TeleporterInteraction.onTeleporterBeginChargingGlobal += TeleporterInteractionOnTeleporterBeginChargingGlobal;
             On.RoR2.GenericPickupController.GrantItem += GrantItem;
-            On.RoR2.CharacterBody.AddBuff += CharacterBody_AddBuff;
+            On.RoR2.CharacterBody.AddTimedBuff += CharacterBody_AddTimedBuff1;
             On.RoR2.CharacterBody.AddTimedBuff += CharacterBody_AddTimedBuff;
             On.RoR2.CharacterBody.OnInventoryChanged += CharacterBody_OnInventoryChanged;
             On.RoR2.HealthComponent.TakeDamage += HealthComponent_TakeDamage;
         }
 
+        private void CharacterBody_AddTimedBuff1(On.RoR2.CharacterBody.orig_AddTimedBuff orig, CharacterBody self, BuffIndex buffType, float duration)
+        {
+            if (self)
+            {
+                if (self.inventory)
+                {
+                    if (self.inventory.GetItemCount(lemdogIndex) > 0)
+                    {
+                        var def = BuffCatalog.GetBuffDef(buffType);
+                        if (def.isDebuff && Util.CheckRoll(25 + (self.inventory.GetItemCount(lemdogIndex) * 2.5f), self.master))
+                        {
+                            var random = Random.Range(0, lemdogList.Count);
+                            var buff = lemdogList[random];
+                            buffType = buff;
+                        }
+                    }
+                }
+            }
+            orig(self, buffType, duration);
+        }
 
         private void CharacterBody_OnInventoryChanged(On.RoR2.CharacterBody.orig_OnInventoryChanged orig, CharacterBody self)
         {
@@ -682,27 +702,7 @@ namespace Moonstorm.Cores
         }
 
 
-        private void CharacterBody_AddBuff(On.RoR2.CharacterBody.orig_AddBuff orig, CharacterBody self, BuffIndex buffType)
-        {
-            if (self)
-            {
-                if (self.inventory)
-                {
-                    if (self.inventory.GetItemCount(lemdogIndex) > 0)
-                    {
-                        var def = BuffCatalog.GetBuffDef(buffType);
-                        if (def.isDebuff && Util.CheckRoll(25 + (self.inventory.GetItemCount(lemdogIndex) * 2.5f), self.master))
-                        {
-                            var random = Random.Range(0, lemdogList.Count);
-                            var buff = lemdogList[random];
-                            buffType = buff;
-                        }
-                    }
-                }
-            }
-            orig(self, buffType);
 
-        }
 
         public void GrantItem(On.RoR2.GenericPickupController.orig_GrantItem orig, GenericPickupController self, CharacterBody body, Inventory inventory)
         {
