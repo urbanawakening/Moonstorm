@@ -818,7 +818,7 @@ namespace Moonstorm.Cores.HAND
             desc = desc + "< ! > *LEAKS UNFINISHED BUILD*" + Environment.NewLine + Environment.NewLine;
 
             LanguageAPI.Add("WYATT_DESCRIPTION", desc);
-            LanguageAPI.Add("WYATT_OUTRO_FLAVOR", "...and so it left, unsure of his next task.");
+            LanguageAPI.Add("WYATT_OUTRO_FLAVOR", "...and so he left, unsure of his next task.");
 
             SurvivorDef def = new SurvivorDef()
             {
