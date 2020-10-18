@@ -1,9 +1,11 @@
 ﻿using RoR2;
+using Starstorm2.Cores;
 using System.Collections.Generic;
 using UnityEngine;
 
 //FIXME: axe drop damage doesn't show damage numbers
 //FIXME: make exe no-collide during axe jump?
+//FIXME: cooldown reduction on kill doesn't apply to non-hosts in multiplayer
 
 namespace EntityStates.Executioner
 {
@@ -23,6 +25,10 @@ namespace EntityStates.Executioner
 
             this.duration = baseDuration / this.attackSpeedStat;
             base.PlayAnimation("FullBody, Override", "SpecialUp", "SpecialUp.rate", duration);
+            var effectData = new EffectData()
+            {
+                color = new Color32(186, 226, 255, 220),
+            };
             if (base.isAuthority)
             {
                 base.characterMotor.rootMotion.y += 0.5f;
@@ -110,13 +116,14 @@ namespace EntityStates.Executioner
         public override void OnExit()
         {
             slamEffectData = new EffectData() {
-                color = new Color32(0, 255, 0, 255),
+                color = new Color32(255, 255, 255, 255),
                 scale = slamRadius,
                 origin = base.characterBody.footPosition
             };
 
             base.PlayAnimation("FullBody, Override", "SpecialImpact");
             EffectManager.SpawnEffect(slamEffect, slamEffectData, true);
+            EffectManager.SpawnEffect(ExecutionerCore.axeSlamEffect, slamEffectData, true);
 
             base.characterBody.bodyFlags -= CharacterBody.BodyFlags.IgnoreFallDamage;
             if (base.isAuthority)

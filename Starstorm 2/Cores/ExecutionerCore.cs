@@ -94,8 +94,11 @@ The two privates sat in complete silence.
         public static GameObject execDisplay;
         public static GameObject doppelganger;
 
-        public static GameObject dashProjectile;
         public static BuffIndex fearDebuff;
+
+        public static GameObject ionEffect;
+        public static GameObject dashEffect;
+        public static GameObject axeSlamEffect;
 
         public ExecutionerCore() => Setup();
 
@@ -116,6 +119,7 @@ The two privates sat in complete silence.
             RegisterStates();
             RegisterCharacter();
             RegisterSkins();
+            RegisterEffects();
             RegisterHooks();
         }
 
@@ -424,6 +428,32 @@ The two privates sat in complete silence.
             };
 
             skinController.skins = skinDefs.ToArray();
+        }
+
+        private void RegisterEffects()
+        {
+            EffectComponent comp;
+            VFXAttributes attrib;
+
+            ionEffect = AssetsCore.mainAssetBundle.LoadAsset<GameObject>("IonEffect");
+            comp = ionEffect.AddComponent<EffectComponent>();
+            attrib = ionEffect.AddComponent<VFXAttributes>();
+            ionEffect.AddComponent<DestroyOnParticleEnd>();
+
+            dashEffect = AssetsCore.mainAssetBundle.LoadAsset<GameObject>("DashEffect");
+            comp = dashEffect.AddComponent<EffectComponent>();
+            comp.applyScale = true;
+            attrib = dashEffect.AddComponent<VFXAttributes>();
+            dashEffect.AddComponent<DestroyOnParticleEnd>();
+
+            axeSlamEffect = AssetsCore.mainAssetBundle.LoadAsset<GameObject>("AxeSlamEffect");
+            comp = axeSlamEffect.AddComponent<EffectComponent>();
+            attrib = axeSlamEffect.AddComponent<VFXAttributes>();
+            axeSlamEffect.AddComponent<DestroyOnParticleEnd>();
+
+            EffectAPI.AddEffect(ionEffect);
+            EffectAPI.AddEffect(dashEffect);
+            EffectAPI.AddEffect(axeSlamEffect);
         }
 
         private void RegisterHooks()

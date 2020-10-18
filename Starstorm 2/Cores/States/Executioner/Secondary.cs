@@ -1,4 +1,5 @@
 ﻿using RoR2;
+using Starstorm2.Cores;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -22,6 +23,7 @@ namespace EntityStates.Executioner
         private int shotsToFire;
         private GenericSkill skill;
         private Animator animator;
+        private EffectData ionEffectData;
 
         public override void OnEnter()
         {
@@ -74,6 +76,12 @@ namespace EntityStates.Executioner
             base.AddRecoil(-2f * recoil, -3f * recoil, -1f * recoil, 1f * recoil);
             //base.characterBody.AddSpreadBloom(Commando.CommandoWeapon.FirePistol2.spreadBloomValue * 1.0f);
             EffectManager.SimpleMuzzleFlash(Commando.CommandoWeapon.FireBarrage.effectPrefab, base.gameObject, this.muzzleString, false);
+            ionEffectData = new EffectData()
+            {
+                origin = base.GetModelChildLocator().FindChild(this.muzzleString).position,
+                rotation = Quaternion.LookRotation(base.GetAimRay().direction)
+            };
+            EffectManager.SpawnEffect(ExecutionerCore.ionEffect, ionEffectData, true);
             base.PlayAnimation("UpperBody, Override", "Secondary", "Secondary.rate", this.duration);
 
             if (base.isAuthority)

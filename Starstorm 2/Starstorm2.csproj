@@ -236,9 +236,6 @@
   <ItemGroup>
     <EmbeddedResource Include="Assets\assetstorm" />
   </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Assets\executionerassets" />
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>if "$(Username)" == "Flan" copy /Y "$(TargetPath)" "F:\SteamLibrary\steamapps\common\Risk of Rain 2\BepInEx\plugins"

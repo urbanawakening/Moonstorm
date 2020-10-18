@@ -24,6 +24,20 @@ namespace EntityStates.Executioner
             Util.PlayScaledSound(Huntress.BeginArrowSnipe.blinkSoundString, base.gameObject, 1.0f);
             base.PlayAnimation("FullBody, Override", "Utility", "Utility.rate", this.duration);
 
+            ChildLocator loc = base.GetModelChildLocator();
+            //attach effect to exec
+            Transform fxTransform = Object.Instantiate(ExecutionerCore.dashEffect, base.characterBody.transform).transform;
+            fxTransform.forward = base.characterDirection.forward;
+            /*
+            EffectData effectData = new EffectData()
+            {
+                scale = debuffRadius,
+                origin = characterBody.corePosition,
+                start = base.characterDirection.forward,
+            };
+            EffectManager.SpawnEffect(ExecutionerCore.dashFollowEffect, effectData, true);
+            */
+
             //create dash aoe
             Vector3 orig = base.characterBody.corePosition;
             BlastAttack b = new BlastAttack()
