@@ -407,6 +407,7 @@ The two privates sat in complete silence.
             GameObject obj = execPrefab.GetComponentInChildren<ModelLocator>().modelTransform.gameObject;
             CharacterModel mdl = obj.GetComponent<CharacterModel>();
             ModelSkinController skinController = obj.AddComponent<ModelSkinController>();
+            SkinnedMeshRenderer renderer = Reflection.GetFieldValue<SkinnedMeshRenderer>(mdl, "mainSkinnedMeshRenderer");
 
             LoadoutAPI.SkinDefInfo skinDefInfo = new LoadoutAPI.SkinDefInfo
             {
@@ -418,7 +419,27 @@ The two privates sat in complete silence.
                 BaseSkins = Array.Empty<SkinDef>(),
                 MinionSkinReplacements = new SkinDef.MinionSkinReplacement[0],
                 ProjectileGhostReplacements = new SkinDef.ProjectileGhostReplacement[0],
-                UnlockableName = ""
+                UnlockableName = "",
+                GameObjectActivations = new SkinDef.GameObjectActivation[]
+                {
+                    /*
+                    new SkinDef.GameObjectActivation
+                    {
+                        gameObject = obj,
+                        shouldActivate = true
+                    }
+                    */
+                },
+                MeshReplacements = new SkinDef.MeshReplacement[]
+                {
+                    /*
+                    new SkinDef.MeshReplacement
+                    {
+                        renderer = renderer,
+                        mesh = renderer.sharedMesh
+                    }
+                    */
+                }
             };
 
             SkinDef skinDefault = LoadoutAPI.CreateNewSkinDef(skinDefInfo);
@@ -467,8 +488,6 @@ The two privates sat in complete silence.
 
         private void RegisterHooks()
         {
-            //On.RoR2.CharacterBody.RecalculateStats += HandleFearDebuff;
-
             IL.EntityStates.AI.Walker.Combat.UpdateAI += (il) =>
             {
                 ILCursor curs = new ILCursor(il);

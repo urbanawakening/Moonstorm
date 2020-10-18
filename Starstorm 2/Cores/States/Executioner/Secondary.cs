@@ -36,7 +36,6 @@ namespace EntityStates.Executioner
             this.shotsToFire = skill.stock;
             this.duration = baseDuration / this.attackSpeedStat;
             base.characterBody.SetAimTimer(2f);
-            //this.anim = base.GetModelAnimator();
             this.muzzleString = "Muzzle";
 
             Shoot();
@@ -120,7 +119,6 @@ namespace EntityStates.Executioner
                     falloffModel = BulletAttack.FalloffModel.None,
                     maxDistance = range,
                     force = Commando.CommandoWeapon.FireBarrage.force,
-                    //hitMask = LayerIndex.CommonMasks.bullet,
                     isCrit = isCrit,
                     owner = base.gameObject,
                     muzzleName = muzzleString,
@@ -128,7 +126,6 @@ namespace EntityStates.Executioner
                     procChainMask = default(ProcChainMask),
                     procCoefficient = procCoefficient,
                     radius = 0.5f,
-                    //stopperMask = LayerIndex.world.collisionMask,
                     weapon = base.gameObject,
                     tracerEffectPrefab = tracerPrefab,
                     hitEffectPrefab = hitPrefab
