@@ -98,6 +98,7 @@ The two privates sat in complete silence.
 
         public static GameObject ionEffect;
         public static GameObject dashEffect;
+        public static GameObject axeSpawnEffect;
         public static GameObject axeSlamEffect;
 
         public ExecutionerCore() => Setup();
@@ -443,8 +444,15 @@ The two privates sat in complete silence.
             dashEffect = AssetsCore.mainAssetBundle.LoadAsset<GameObject>("DashEffect");
             comp = dashEffect.AddComponent<EffectComponent>();
             comp.applyScale = true;
+            comp.parentToReferencedTransform = true;
             attrib = dashEffect.AddComponent<VFXAttributes>();
             dashEffect.AddComponent<DestroyOnParticleEnd>();
+
+            axeSpawnEffect = AssetsCore.mainAssetBundle.LoadAsset<GameObject>("AxeSpawnEffect");
+            comp = axeSpawnEffect.AddComponent<EffectComponent>();
+            comp.parentToReferencedTransform = true;
+            attrib = axeSpawnEffect.AddComponent<VFXAttributes>();
+            axeSpawnEffect.AddComponent<DestroyOnParticleEnd>();
 
             axeSlamEffect = AssetsCore.mainAssetBundle.LoadAsset<GameObject>("AxeSlamEffect");
             comp = axeSlamEffect.AddComponent<EffectComponent>();
@@ -453,6 +461,7 @@ The two privates sat in complete silence.
 
             EffectAPI.AddEffect(ionEffect);
             EffectAPI.AddEffect(dashEffect);
+            EffectAPI.AddEffect(axeSpawnEffect);
             EffectAPI.AddEffect(axeSlamEffect);
         }
 

@@ -15,6 +15,8 @@ namespace EntityStates.Executioner
         public static float baseDuration = 0.1f;
         public static float recoil = 0.2f;
         public static float range = 200f; //copied from default range
+        public static GameObject tracerPrefab = Resources.Load<GameObject>("prefabs/effects/tracers/TracerCommandoShotgun");
+        public static GameObject hitPrefab = Commando.CommandoWeapon.FireBarrage.hitEffectPrefab;
 
         private float duration;
         private BulletAttack bullet;
@@ -75,7 +77,7 @@ namespace EntityStates.Executioner
             Util.PlayScaledSound(Commando.CommandoWeapon.FireBarrage.fireBarrageSoundString, base.gameObject, this.attackSpeedStat);
             base.AddRecoil(-2f * recoil, -3f * recoil, -1f * recoil, 1f * recoil);
             //base.characterBody.AddSpreadBloom(Commando.CommandoWeapon.FirePistol2.spreadBloomValue * 1.0f);
-            EffectManager.SimpleMuzzleFlash(Commando.CommandoWeapon.FireBarrage.effectPrefab, base.gameObject, this.muzzleString, false);
+            EffectManager.SimpleMuzzleFlash(Commando.CommandoWeapon.FireShotgun.effectPrefab, base.gameObject, this.muzzleString, false);
             ionEffectData = new EffectData()
             {
                 origin = base.GetModelChildLocator().FindChild(this.muzzleString).position,
@@ -128,8 +130,8 @@ namespace EntityStates.Executioner
                     radius = 0.5f,
                     //stopperMask = LayerIndex.world.collisionMask,
                     weapon = base.gameObject,
-                    tracerEffectPrefab = Commando.CommandoWeapon.FireBarrage.tracerEffectPrefab,
-                    hitEffectPrefab = Commando.CommandoWeapon.FireBarrage.hitEffectPrefab
+                    tracerEffectPrefab = tracerPrefab,
+                    hitEffectPrefab = hitPrefab
                     //HitEffectNormal = ClayBruiser.Weapon.MinigunFire.bulletHitEffectNormal
                 };
                 bullet.Fire();

@@ -25,10 +25,16 @@ namespace EntityStates.Executioner
 
             this.duration = baseDuration / this.attackSpeedStat;
             base.PlayAnimation("FullBody, Override", "SpecialUp", "SpecialUp.rate", duration);
+            //Util.PlayScaledSound(ScavMonster.PrepEnergyCannon.sound, base.gameObject, base.attackSpeedStat);
+            var locator = base.GetModelChildLocator();
             var effectData = new EffectData()
             {
-                color = new Color32(186, 226, 255, 220),
+                scale = 1.0f,
+                rootObject = base.gameObject,
+                origin = locator.FindChild("Index3Left").position
             };
+            EffectManager.SpawnEffect(ExecutionerCore.axeSpawnEffect, effectData, true);
+
             if (base.isAuthority)
             {
                 base.characterMotor.rootMotion.y += 0.5f;
@@ -86,7 +92,6 @@ namespace EntityStates.Executioner
         public static float dropAttackRadius = 4f;
         public static float slamRadius = 14f;
 
-        private ChildLocator locator;
         private GameObject slamEffect = Resources.Load<GameObject>("prefabs/effects/omnieffect/OmniExplosionVFX");
         private EffectData slamEffectData;
         private Animator animator;
@@ -104,7 +109,6 @@ namespace EntityStates.Executioner
             base.characterBody.bodyFlags |= CharacterBody.BodyFlags.IgnoreFallDamage;
             if (base.isAuthority)
             {
-                this.locator = base.GetModelTransform().GetComponent<ChildLocator>();
                 base.characterMotor.velocity.y = -120f;
                 base.characterMotor.rootMotion.y -= 0.5f;
                 base.characterMotor.velocity.x = 0f;
@@ -122,6 +126,8 @@ namespace EntityStates.Executioner
             };
 
             base.PlayAnimation("FullBody, Override", "SpecialImpact");
+            Util.PlayScaledSound(ScavMonster.FireEnergyCannon.sound, base.gameObject, this.attackSpeedStat);
+            Util.PlayScaledSound(Engi.EngiWeapon.FireGrenades.attackSoundString, base.gameObject, this.attackSpeedStat);
             EffectManager.SpawnEffect(slamEffect, slamEffectData, true);
             EffectManager.SpawnEffect(ExecutionerCore.axeSlamEffect, slamEffectData, true);
 
@@ -168,15 +174,15 @@ namespace EntityStates.Executioner
                 {
                     if (!hp.alive)
                     {
-                        var locator = base.characterBody.skillLocator;
-                        if (locator)
+                        var skillLoc = base.characterBody.skillLocator;
+                        if (skillLoc)
                         {
                             //if (locator.secondary && locator.secondary.stock < locator.secondary.maxStock)
                                 //locator.secondary.rechargeStopwatch += 1f;
-                            if (locator.utility && locator.utility.cooldownRemaining > 0)
-                                locator.utility.rechargeStopwatch += 1f;
-                            if (locator.special && locator.special.cooldownRemaining > 0)
-                                locator.special.rechargeStopwatch += 1f;
+                            if (skillLoc.utility && skillLoc.utility.cooldownRemaining > 0)
+                                skillLoc.utility.rechargeStopwatch += 1f;
+                            if (skillLoc.special && skillLoc.special.cooldownRemaining > 0)
+                                skillLoc.special.rechargeStopwatch += 1f;
                         }
                         //should cdr apply once per kill or once per attack? if once per attack uncomment the following
                         //break;
