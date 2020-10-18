@@ -19,7 +19,7 @@ namespace Moonstorm.Cores
         protected void Hook()
         {
             instance = this;
-            On.RoR2.GlobalEventManager.OnTeamLevelUp += GlobalEventManager_OnTeamLevelUp;
+            //On.RoR2.GlobalEventManager.OnTeamLevelUp += GlobalEventManager_OnTeamLevelUp;
         }
 
         private void GlobalEventManager_OnTeamLevelUp(On.RoR2.GlobalEventManager.orig_OnTeamLevelUp orig, TeamIndex teamIndex) {
@@ -27,7 +27,7 @@ namespace Moonstorm.Cores
             for (int i = 0; i < teamMembers.Count; i++)
             {
                 TeamComponent teamComponent = teamMembers[i];
-                if (teamComponent)
+                if (teamComponent)  
                 {
                     CharacterBody characterBody = teamComponent.GetComponent<CharacterBody>();
                     if (characterBody)
