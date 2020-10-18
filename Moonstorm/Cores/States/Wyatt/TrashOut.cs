@@ -85,7 +85,7 @@ namespace Moonstorm.Cores.States.Wyatt
                             teamIndex = base.GetTeam(),
                             baseDamage = 5 * this.damageStat,
                             attackerFiltering = default,
-                            bonusForce = new Vector3(0, -2000, 0),
+                            bonusForce = new Vector3(0, -6000, 0),
                             damageType = DamageType.Stun1s | DamageTypeCore.spiked,
                             crit = RollCrit(),
                             damageColorIndex = DamageColorIndex.Default,

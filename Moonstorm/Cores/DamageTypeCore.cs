@@ -98,7 +98,7 @@ namespace Moonstorm.Cores
             }
             if (spikedType && rigid) {
                 //bing bing WA-FUCKING-HOO 
-                rigid.AddForce(new UnityEngine.Vector3(0, -10000, 0));
+                rigid.AddForce(new UnityEngine.Vector3(0, -15000, 0));
             }
 
             orig(self, damageInfo);

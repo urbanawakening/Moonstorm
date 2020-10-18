@@ -52,7 +52,7 @@ namespace Moonstorm.Cores.States.Wyatt
             var force = script.count == 4 ? 50000 : 100000;
             var vector = isGrounded ? new Vector3(0, 5000, 0) : new Vector3(0, -5000, 0);
 
-            LogCore.LogI(vector);
+            //LogCore.LogI(vector);
             attack = new OverlapAttack()
             {
                 attacker = base.gameObject,

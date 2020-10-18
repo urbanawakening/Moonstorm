@@ -223,7 +223,7 @@ namespace Moonstorm.Cores.HAND
             sfxLocator.landingSound = "play_char_land";
 
             tracker.maxTrackingAngle = 20;
-            tracker.maxTrackingDistance = 100;
+            tracker.maxTrackingDistance = 80;
             tracker.trackerUpdateFrequency = 5;
             tracker.indicatorPrefab = Resources.Load<GameObject>("Prefabs/EngiShieldRetractIndicator");
 
@@ -292,6 +292,9 @@ namespace Moonstorm.Cores.HAND
             characterBody.levelMoveSpeed = 0; //Move speed gained when leveling up. 
             characterBody.levelRegen = 0.5f; //Regen gained when leveling up. 
             //credits to moffein for the icon
+            //no 
+            //credit
+            //fuck you moffein
             //characterBody.portraitIcon = AssetsCore.portraitIcon; //The portrait icon, shows up in multiplayer and the death UI
             characterBody.preferredPodPrefab = Resources.Load<GameObject>("prefabs/networkedobjects/robocratepod");
         }

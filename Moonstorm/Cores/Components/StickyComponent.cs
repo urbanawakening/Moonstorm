@@ -31,6 +31,9 @@ namespace Moonstorm.Cores.Components
             {
                 hasSwung = true;
 
+                var body = controller.owner.GetComponent<CharacterBody>();
+                var motor = body.characterMotor;
+
                 BlastAttack attack = new BlastAttack()
                 {
                     attacker = controller.owner,
@@ -51,7 +54,28 @@ namespace Moonstorm.Cores.Components
                     radius = 15,
                     teamIndex = controller.owner.GetComponent<CharacterBody>().teamComponent.teamIndex,
                 };
-                attack.Fire();
+
+                /*BlastAttack backBlast = new BlastAttack()
+                {
+                    attacker = controller.owner,
+                    attackerFiltering = AttackerFiltering.Default,
+                    baseDamage = 0,
+                    baseForce = 1,
+                    bonusForce = new Vector3(0, 5000, 0),
+                    crit = false,
+                    damageColorIndex = DamageColorIndex.Default,
+                    damageType = DamageType.Generic,
+                    falloffModel = BlastAttack.FalloffModel.None,
+                    impactEffect = EffectIndex.Invalid,
+                    inflictor = base.gameObject,
+                    losType = BlastAttack.LoSType.NearestHit,
+                    position = base.transform.position,
+                    procChainMask = default,
+                    procCoefficient = 0f,
+                    radius = 15,
+                    teamIndex = TeamIndex.None
+                };
+                backBlast.Fire();*/
                 EffectManager.SpawnEffect(Resources.Load<GameObject>("prefabs/effects/omnieffect/OmniExplosionVFX"), new EffectData
                 {
                     origin = transform.position,
@@ -65,6 +89,7 @@ namespace Moonstorm.Cores.Components
                 var cb = body.gameObject.GetComponentInParent<CharacterBody>();
                 if (cb) {
                     if (cb.Equals(controller.owner.GetComponent<CharacterBody>())) {
+                        //cb.rigidbody.AddExplosionForce(500000, base.transform.position, 50000000000, 10000, ForceMode.Impulse);
                         //LogCore.LogI("hello");
                         var aim = cb.inputBank.GetAimRay();
                         cb.characterMotor.ApplyForce(-(aim.direction * 1000), true, false);

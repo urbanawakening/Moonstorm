@@ -360,7 +360,7 @@ namespace Moonstorm.Cores
         protected void AddToSurvivorSelect() {
             GameObject display = characterPrefab.GetComponent<ModelLocator>().modelTransform.gameObject;
 
-            string desc = "Bombardier is a master of unconventional warfare who can use his explosives to control the battle field" + Environment.NewLine + Environment.NewLine;
+            string desc = "Bombardier is a master of unconventional warfare who can use his explosives to control the battle field<color=#CCD3E0>" + Environment.NewLine + Environment.NewLine;
             desc = desc + "< ! > Rocket Blast is weak against single targets, but excels in crowds. Blast into a large crowd of enemies for maximum destruction." + Environment.NewLine + Environment.NewLine;
             desc = desc + "< ! > Use your Sticky Charges to set up bosses for huge damage potential. Keep in mind they only detonate when you use your primary, so use as many as you have." + Environment.NewLine + Environment.NewLine;
             desc = desc + "< ! > Concussive Blast is an excellent escape and mobility tool, but it also pulls enemies towards you when used. Jump away and shoot straight down to quickly dispose of a crowd" + Environment.NewLine + Environment.NewLine;
