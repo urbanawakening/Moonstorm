@@ -50,11 +50,11 @@ namespace Moonstorm.Cores.Components
                     losType = BlastAttack.LoSType.NearestHit,
                     position = base.transform.position,
                     procChainMask = default,
-                    procCoefficient = 0.5f,
+                    procCoefficient = 1f,
                     radius = 15,
-                    teamIndex = controller.owner.GetComponent<CharacterBody>().teamComponent.teamIndex,
+                    teamIndex = body.teamComponent.teamIndex,
                 };
-
+                attack.Fire();
                 /*BlastAttack backBlast = new BlastAttack()
                 {
                     attacker = controller.owner,
