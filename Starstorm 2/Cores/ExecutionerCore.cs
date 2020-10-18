@@ -442,15 +442,15 @@ The two privates sat in complete silence.
             ionEffect.AddComponent<DestroyOnParticleEnd>();
 
             dashEffect = AssetsCore.mainAssetBundle.LoadAsset<GameObject>("DashEffect");
-            comp = dashEffect.AddComponent<EffectComponent>();
-            comp.applyScale = true;
-            comp.parentToReferencedTransform = true;
+            //comp = dashEffect.AddComponent<EffectComponent>();
+            //comp.applyScale = true;
+            //comp.parentToReferencedTransform = true;
             attrib = dashEffect.AddComponent<VFXAttributes>();
             dashEffect.AddComponent<DestroyOnParticleEnd>();
 
             axeSpawnEffect = AssetsCore.mainAssetBundle.LoadAsset<GameObject>("AxeSpawnEffect");
-            comp = axeSpawnEffect.AddComponent<EffectComponent>();
-            comp.parentToReferencedTransform = true;
+            //comp = axeSpawnEffect.AddComponent<EffectComponent>();
+            //comp.parentToReferencedTransform = true;
             attrib = axeSpawnEffect.AddComponent<VFXAttributes>();
             axeSpawnEffect.AddComponent<DestroyOnParticleEnd>();
 
@@ -460,8 +460,8 @@ The two privates sat in complete silence.
             axeSlamEffect.AddComponent<DestroyOnParticleEnd>();
 
             EffectAPI.AddEffect(ionEffect);
-            EffectAPI.AddEffect(dashEffect);
-            EffectAPI.AddEffect(axeSpawnEffect);
+            //EffectAPI.AddEffect(dashEffect);
+            //EffectAPI.AddEffect(axeSpawnEffect);
             EffectAPI.AddEffect(axeSlamEffect);
         }
 
@@ -518,7 +518,6 @@ The two privates sat in complete silence.
             SetUpSecondaries();
             SetUpUtilities();
             SetUpSpecials();
-            //SetUpPassive();
         }
 
         private void SetUpPrimaries()

@@ -27,6 +27,8 @@ namespace EntityStates.Executioner
             base.PlayAnimation("FullBody, Override", "SpecialUp", "SpecialUp.rate", duration);
             //Util.PlayScaledSound(ScavMonster.PrepEnergyCannon.sound, base.gameObject, base.attackSpeedStat);
             var locator = base.GetModelChildLocator();
+            Transform fxTransform = Object.Instantiate(ExecutionerCore.axeSpawnEffect, locator.FindChild("Index3Left")).transform;
+            fxTransform.localScale *= 0.02f;
             var effectData = new EffectData()
             {
                 scale = 1.0f,
