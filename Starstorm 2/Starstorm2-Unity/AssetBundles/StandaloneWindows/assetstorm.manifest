@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 8601706
+CRC: 3670800631
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: db3e614bee9b8c11b219e3c48c7e02e6
+    Hash: b603210f57dae9cbdb2e4cd7374110c6
   TypeTreeHash:
     serializedVersion: 2
     Hash: e2bdfcc9e91c780b368e748dee5ff1cc
@@ -46,6 +46,7 @@ ClassTypes:
 Assets:
 - Assets/Executioner/ExecAnimator.controller
 - Assets/Items/DetritiveTrematode/DetritiveTrematode_Icon.png
+- Assets/Items/ErraticGadget/MDLErraticGadget.prefab
 - Assets/Executioner/exeportrait.png
 - Assets/Executioner/ExecAnimatorMenu.controller
 - Assets/Items/BloodTester/BloodTester_Icon.png
@@ -59,6 +60,7 @@ Assets:
 - Assets/Items/BloodTester/MDLBloodTester.prefab
 - Assets/Items/Diary/Diary_Icon.png
 - Assets/Items/StrangeCan/MDLStrangeCan.prefab
+- Assets/Items/HottestSauce/HottestSauce_Icon.png
 - Assets/Executioner/skill2icon.png
 - Assets/Executioner/skill3icon.png
 - Assets/Items/DormantFungus/MDLDormantFungus.prefab
@@ -68,9 +70,11 @@ Assets:
 - Assets/TyphoonIcon.png
 - Assets/Executioner/skill4icon.png
 - Assets/Executioner/skill1icon.png
+- Assets/Items/ErraticGadget/ErraticGadget_Icon.png
 - Assets/Items/NkotasHeritage/MDLNkotasHeritage.prefab
 - Assets/Items/JetBoots/JetBoots_Icon.png
 - Assets/Items/JetBoots/MDLJetBoots.prefab
 - Assets/Items/GreaterWarbanner/MDLGreaterWarbanner.prefab
 - Assets/Executioner/ExecutionerModel.prefab
+- Assets/Items/HottestSauce/MDLHottestSauce.prefab
 Dependencies: []

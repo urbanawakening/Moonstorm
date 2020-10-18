@@ -57,8 +57,8 @@ namespace Moonstorm.Cores
             medkit.itemString = "Medkit";
 
             ItemInfo bloodTester = new ItemInfo();
-            bloodTester.count = 10;
-            bloodTester.itemString = "BloodTester";
+            bloodTester.count = 2;
+            bloodTester.itemString = "RegenOnKill";
 
             ItemInfo[] array = new ItemInfo[] {
                 ghor,

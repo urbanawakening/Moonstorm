@@ -188,8 +188,8 @@ namespace Starstorm2.Cores
                 loreToken = "",
                 name = "Sauce",
                 nameToken = "ITEM_FIREONEQUIPMENTUSE_NAME",
-                //pickupIconPath = "@Cloudburst:Assets/Items/Lemdog/LemDog_TexIcon.png",
-                //pickupModelPath = "@Starstorm2:Assets/Starstorm 2/Items/DormantFungus/MDLDormantFungus.prefab",
+                pickupIconPath = prefabPath + "HottestSauce/HottestSauce_Icon.png",
+                pickupModelPath = prefabPath + "HottestSauce/MDLHottestSauce.prefab",
                 pickupToken = "ITEM_FIREONEQUIPMENTUSE_PICKUP",
                 tags = fireOnEquipmentUseTags,
                 tier = ItemTier.Tier2,
@@ -227,8 +227,8 @@ namespace Starstorm2.Cores
                 loreToken = "",
                 name = "ErraticGadget",
                 nameToken = "ITEM_ERRATICGADGET_NAME",
-                //pickupIconPath = "@Cloudburst:Assets/Items/Lemdog/LemDog_TexIcon.png",
-                //pickupModelPath = "@Starstorm2:Assets/Starstorm 2/Items/DormantFungus/MDLDormantFungus.prefab",
+                pickupIconPath = prefabPath + "ErraticGadget/ErraticGadget_Icon.png",
+                pickupModelPath = prefabPath + "ErraticGadget/MDLErraticGadget.prefab",
                 pickupToken = "ITEM_ERRATICGADGET_PICKUP",
                 tags = erraticGadgetTags,
                 tier = ItemTier.Tier3,
@@ -578,7 +578,7 @@ namespace Starstorm2.Cores
 
         public void GlobalEventManager_OnHitEnemy(On.RoR2.GlobalEventManager.orig_OnHitEnemy orig, GlobalEventManager self, DamageInfo damageInfo, GameObject victim)
         {
-            if (self)
+            if (self && damageInfo.attacker)
             {
                 var inventory = damageInfo.attacker.GetComponent<CharacterBody>().inventory;
                 if (inventory)
