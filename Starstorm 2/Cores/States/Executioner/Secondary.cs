@@ -1,4 +1,5 @@
 ﻿using RoR2;
+using Starstorm2.Cores;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -14,6 +15,8 @@ namespace EntityStates.Executioner
         public static float baseDuration = 0.1f;
         public static float recoil = 0.2f;
         public static float range = 200f; //copied from default range
+        public static GameObject tracerPrefab = Resources.Load<GameObject>("prefabs/effects/tracers/TracerCommandoShotgun");
+        public static GameObject hitPrefab = Commando.CommandoWeapon.FireBarrage.hitEffectPrefab;
 
         private float duration;
         private BulletAttack bullet;
@@ -22,6 +25,7 @@ namespace EntityStates.Executioner
         private int shotsToFire;
         private GenericSkill skill;
         private Animator animator;
+        private EffectData ionEffectData;
 
         public override void OnEnter()
         {
@@ -32,7 +36,6 @@ namespace EntityStates.Executioner
             this.shotsToFire = skill.stock;
             this.duration = baseDuration / this.attackSpeedStat;
             base.characterBody.SetAimTimer(2f);
-            //this.anim = base.GetModelAnimator();
             this.muzzleString = "Muzzle";
 
             Shoot();
@@ -73,7 +76,13 @@ namespace EntityStates.Executioner
             Util.PlayScaledSound(Commando.CommandoWeapon.FireBarrage.fireBarrageSoundString, base.gameObject, this.attackSpeedStat);
             base.AddRecoil(-2f * recoil, -3f * recoil, -1f * recoil, 1f * recoil);
             //base.characterBody.AddSpreadBloom(Commando.CommandoWeapon.FirePistol2.spreadBloomValue * 1.0f);
-            EffectManager.SimpleMuzzleFlash(Commando.CommandoWeapon.FireBarrage.effectPrefab, base.gameObject, this.muzzleString, false);
+            EffectManager.SimpleMuzzleFlash(Commando.CommandoWeapon.FireShotgun.effectPrefab, base.gameObject, this.muzzleString, false);
+            ionEffectData = new EffectData()
+            {
+                origin = base.GetModelChildLocator().FindChild(this.muzzleString).position,
+                rotation = Quaternion.LookRotation(base.GetAimRay().direction)
+            };
+            EffectManager.SpawnEffect(ExecutionerCore.ionEffect, ionEffectData, true);
             base.PlayAnimation("UpperBody, Override", "Secondary", "Secondary.rate", this.duration);
 
             if (base.isAuthority)
@@ -110,7 +119,6 @@ namespace EntityStates.Executioner
                     falloffModel = BulletAttack.FalloffModel.None,
                     maxDistance = range,
                     force = Commando.CommandoWeapon.FireBarrage.force,
-                    //hitMask = LayerIndex.CommonMasks.bullet,
                     isCrit = isCrit,
                     owner = base.gameObject,
                     muzzleName = muzzleString,
@@ -118,10 +126,9 @@ namespace EntityStates.Executioner
                     procChainMask = default(ProcChainMask),
                     procCoefficient = procCoefficient,
                     radius = 0.5f,
-                    //stopperMask = LayerIndex.world.collisionMask,
                     weapon = base.gameObject,
-                    tracerEffectPrefab = Commando.CommandoWeapon.FireBarrage.tracerEffectPrefab,
-                    hitEffectPrefab = Commando.CommandoWeapon.FireBarrage.hitEffectPrefab
+                    tracerEffectPrefab = tracerPrefab,
+                    hitEffectPrefab = hitPrefab
                     //HitEffectNormal = ClayBruiser.Weapon.MinigunFire.bulletHitEffectNormal
                 };
                 bullet.Fire();

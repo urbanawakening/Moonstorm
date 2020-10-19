@@ -94,8 +94,12 @@ The two privates sat in complete silence.
         public static GameObject execDisplay;
         public static GameObject doppelganger;
 
-        public static GameObject dashProjectile;
         public static BuffIndex fearDebuff;
+
+        public static GameObject ionEffect;
+        public static GameObject dashEffect;
+        public static GameObject axeSpawnEffect;
+        public static GameObject axeSlamEffect;
 
         public ExecutionerCore() => Setup();
 
@@ -113,10 +117,10 @@ The two privates sat in complete silence.
 #endif
             CreatePrefab();
             RegisterBuffs();
-            RegisterProjectiles();
             RegisterStates();
             RegisterCharacter();
             RegisterSkins();
+            RegisterEffects();
             RegisterHooks();
         }
 
@@ -356,59 +360,6 @@ The two privates sat in complete silence.
             ExecutionerCore.fearDebuff = BuffAPI.Add(fear);
         }
 
-        private void RegisterProjectiles()
-        {
-            //unused, to delete
-            dashProjectile = Resources.Load<GameObject>("Prefabs/Projectiles/CommandoGrenadeProjectile").InstantiateClone("ExecutionerDash");
-
-            ProjectileController dashController = dashProjectile.GetComponent<ProjectileController>();
-            ProjectileImpactExplosion dashExplosion = dashProjectile.GetComponent<ProjectileImpactExplosion>();
-            ProjectileSimple dashSimple = dashProjectile.GetComponent<ProjectileSimple>();
-            ProjectileDamage dashDamage = dashProjectile.GetComponent<ProjectileDamage>();
-            TeamFilter dashFilter = dashProjectile.GetComponent<TeamFilter>();
-            BuffWard dashBuff = dashProjectile.AddComponent<BuffWard>();
-            //DebuffZone dashDebuff = dashProjectile.AddComponent<DebuffZone>();
-
-            //dashDebuff.buffDuration = ExecutionerDash.debuffDuration;
-            //dashDebuff.buffType = fearDebuff;
-
-            //effect behavior
-            dashController.ghostPrefab = null;
-            dashController.shouldPlaySounds = false;
-            dashExplosion.blastRadius = 14f; //hardcoding :puke:
-            dashExplosion.falloffModel = BlastAttack.FalloffModel.None;
-            dashExplosion.lifetime = 0.1f;
-            dashExplosion.fireChildren = false;
-            dashExplosion.blastProcCoefficient = 0f;
-            //probably doesn't do anything
-            dashExplosion.bonusBlastForce = Vector3.up * 20f;
-            dashSimple.velocity = 0f;
-            dashSimple.enableVelocityOverLifetime = false;
-            dashDamage.crit = false;
-            dashDamage.damage = 0f;
-            dashDamage.damageColorIndex = DamageColorIndex.Default;
-            dashDamage.damageType = DamageType.Generic;
-            dashDamage.force = 30f;
-
-            dashFilter.teamIndex = TeamIndex.Player;
-
-            dashBuff.animateRadius = false;
-            dashBuff.buffDuration = 20.0f;
-            dashBuff.buffType = fearDebuff;
-            dashBuff.expires = false;
-            dashBuff.floorWard = true;
-            dashBuff.interval = 1f;
-            dashBuff.invertTeamFilter = true;
-            dashBuff.radius = 14f;
-
-            ProjectileCatalog.getAdditionalEntries += delegate (List<GameObject> l)
-            {
-                l.Add(dashProjectile);
-            };
-
-            EffectAPI.AddEffect(dashProjectile);
-        }
-
         private void RegisterStates()
         {
             LoadoutAPI.AddSkill(typeof(ExecutionerPistol));
@@ -456,6 +407,7 @@ The two privates sat in complete silence.
             GameObject obj = execPrefab.GetComponentInChildren<ModelLocator>().modelTransform.gameObject;
             CharacterModel mdl = obj.GetComponent<CharacterModel>();
             ModelSkinController skinController = obj.AddComponent<ModelSkinController>();
+            SkinnedMeshRenderer renderer = Reflection.GetFieldValue<SkinnedMeshRenderer>(mdl, "mainSkinnedMeshRenderer");
 
             LoadoutAPI.SkinDefInfo skinDefInfo = new LoadoutAPI.SkinDefInfo
             {
@@ -467,7 +419,27 @@ The two privates sat in complete silence.
                 BaseSkins = Array.Empty<SkinDef>(),
                 MinionSkinReplacements = new SkinDef.MinionSkinReplacement[0],
                 ProjectileGhostReplacements = new SkinDef.ProjectileGhostReplacement[0],
-                UnlockableName = ""
+                UnlockableName = "",
+                GameObjectActivations = new SkinDef.GameObjectActivation[]
+                {
+                    /*
+                    new SkinDef.GameObjectActivation
+                    {
+                        gameObject = obj,
+                        shouldActivate = true
+                    }
+                    */
+                },
+                MeshReplacements = new SkinDef.MeshReplacement[]
+                {
+                    /*
+                    new SkinDef.MeshReplacement
+                    {
+                        renderer = renderer,
+                        mesh = renderer.sharedMesh
+                    }
+                    */
+                }
             };
 
             SkinDef skinDefault = LoadoutAPI.CreateNewSkinDef(skinDefInfo);
@@ -480,10 +452,42 @@ The two privates sat in complete silence.
             skinController.skins = skinDefs.ToArray();
         }
 
+        private void RegisterEffects()
+        {
+            EffectComponent comp;
+            VFXAttributes attrib;
+
+            ionEffect = AssetsCore.mainAssetBundle.LoadAsset<GameObject>("IonEffect");
+            comp = ionEffect.AddComponent<EffectComponent>();
+            attrib = ionEffect.AddComponent<VFXAttributes>();
+            ionEffect.AddComponent<DestroyOnParticleEnd>();
+
+            dashEffect = AssetsCore.mainAssetBundle.LoadAsset<GameObject>("DashEffect");
+            //comp = dashEffect.AddComponent<EffectComponent>();
+            //comp.applyScale = true;
+            //comp.parentToReferencedTransform = true;
+            attrib = dashEffect.AddComponent<VFXAttributes>();
+            dashEffect.AddComponent<DestroyOnParticleEnd>();
+
+            axeSpawnEffect = AssetsCore.mainAssetBundle.LoadAsset<GameObject>("AxeSpawnEffect");
+            //comp = axeSpawnEffect.AddComponent<EffectComponent>();
+            //comp.parentToReferencedTransform = true;
+            attrib = axeSpawnEffect.AddComponent<VFXAttributes>();
+            axeSpawnEffect.AddComponent<DestroyOnParticleEnd>();
+
+            axeSlamEffect = AssetsCore.mainAssetBundle.LoadAsset<GameObject>("AxeSlamEffect");
+            comp = axeSlamEffect.AddComponent<EffectComponent>();
+            attrib = axeSlamEffect.AddComponent<VFXAttributes>();
+            axeSlamEffect.AddComponent<DestroyOnParticleEnd>();
+
+            EffectAPI.AddEffect(ionEffect);
+            //EffectAPI.AddEffect(dashEffect);
+            //EffectAPI.AddEffect(axeSpawnEffect);
+            EffectAPI.AddEffect(axeSlamEffect);
+        }
+
         private void RegisterHooks()
         {
-            //On.RoR2.CharacterBody.RecalculateStats += HandleFearDebuff;
-
             IL.EntityStates.AI.Walker.Combat.UpdateAI += (il) =>
             {
                 ILCursor curs = new ILCursor(il);
@@ -533,7 +537,6 @@ The two privates sat in complete silence.
             SetUpSecondaries();
             SetUpUtilities();
             SetUpSpecials();
-            //SetUpPassive();
         }
 
         private void SetUpPrimaries()

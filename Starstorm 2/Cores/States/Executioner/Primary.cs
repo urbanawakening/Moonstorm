@@ -9,8 +9,9 @@ namespace EntityStates.Executioner
         public static float procCoefficient = 1f;
         public static float baseDuration = 0.25f;
         public static float recoil = 1f;
-        public static float spreadBloom = EntityStates.Commando.CommandoWeapon.FirePistol2.spreadBloomValue;
-        public static GameObject tracerPrefab = Commando.CommandoWeapon.FirePistol.tracerEffectPrefab;
+        public static float spreadBloom = Commando.CommandoWeapon.FirePistol2.spreadBloomValue;
+        public static GameObject tracerPrefab = Resources.Load<GameObject>("prefabs/effects/tracers/TracerCommandoDefault");
+        public static GameObject hitPrefab = Commando.CommandoWeapon.FirePistol.hitEffectPrefab;
 
         private float duration;
         private float fireDuration;
@@ -75,7 +76,6 @@ namespace EntityStates.Executioner
                         maxSpread = base.characterBody.spreadBloomAngle * 0.5f,
                         falloffModel = BulletAttack.FalloffModel.DefaultBullet,
                         force = Commando.CommandoWeapon.FirePistol.force,
-                        //hitMask = LayerIndex.CommonMasks.bullet,
                         isCrit = isCrit,
                         owner = base.gameObject,
                         muzzleName = muzzleString,
@@ -83,11 +83,9 @@ namespace EntityStates.Executioner
                         procChainMask = default(ProcChainMask),
                         procCoefficient = procCoefficient,
                         radius = 0.2f,
-                        //stopperMask = LayerIndex.world.collisionMask,
                         weapon = base.gameObject,
-                        tracerEffectPrefab = Commando.CommandoWeapon.FirePistol.tracerEffectPrefab,
-                        hitEffectPrefab = Commando.CommandoWeapon.FirePistol.hitEffectPrefab
-                        //HitEffectNormal = ClayBruiser.Weapon.MinigunFire.bulletHitEffectNormal
+                        tracerEffectPrefab = tracerPrefab,
+                        hitEffectPrefab = hitPrefab
                     };
                     bullet.Fire();
                 }
