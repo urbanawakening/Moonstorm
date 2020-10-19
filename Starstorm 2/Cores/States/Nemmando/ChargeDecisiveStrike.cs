@@ -18,7 +18,7 @@ namespace Starstorm2.Cores.States.Nemmando
         private float finalSpeedCoefficient = 7.5f;
         private float buttonReleaseTime = 0f;
         private float minChargeTime = 0.35f;
-        private float damageCoef = 1.5f;
+        private float damageCoef = 2.5f;
         private bool buttonReleased = false;
         public float baseDashTime = 0.35f;
         private bool chargeAnimationPlayed = false;
@@ -106,8 +106,7 @@ namespace Starstorm2.Cores.States.Nemmando
                                 {
                                     this.outer.SetNextState(new FireDecisiveStrike
                                     {
-                                        charge = this.charge,
-                                        damageMultiplier = 2
+                                        charge = this.charge
                                     });
                                     return;
                                 }
@@ -160,6 +159,7 @@ namespace Starstorm2.Cores.States.Nemmando
                             HitEffectNormal = false,
                             radius = 1f,
                             damageType = DamageType.Generic,
+                            stopperMask = LayerIndex.world.mask,
                         }.Fire();
                         this.outer.SetNextStateToMain();
                         return;
