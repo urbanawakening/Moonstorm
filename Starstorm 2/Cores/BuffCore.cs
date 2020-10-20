@@ -13,6 +13,8 @@ namespace Starstorm2.Cores
         protected internal BuffIndex greaterBannerIndex;
         protected internal BuffIndex detritiveIndex;
         protected internal BuffIndex strangeCanPoisonIndex;
+        protected internal BuffIndex awarenessIndex;
+        protected internal BuffIndex gougeIndex;
 
         public BuffCore() => RegisterBuffs();
 
@@ -65,6 +67,30 @@ namespace Starstorm2.Cores
                 buffColor = Color.green
             });
 
+            #region Nemmando
+
+            RegisterBuff(new BuffDef
+            {
+                buffIndex = BuffIndex.Count,
+                canStack = true,
+                eliteIndex = EliteIndex.None,
+                iconPath = "Textures/BuffIcons/texBuffBleedingIcon",
+                name = "Gouge",
+                isDebuff = true,
+                buffColor = Color.red
+            });
+
+            RegisterBuff(new BuffDef
+            {
+                buffIndex = BuffIndex.Count,
+                canStack = true,
+                eliteIndex = EliteIndex.None,
+                iconPath = "Textures/BuffIcons/texBuffBleedingIcon",
+                name = "Awareness",
+                isDebuff = false,
+                buffColor = Color.green
+            });
+            #endregion
 
             On.RoR2.CharacterBody.RecalculateStats += CharacterBody_RecalculateStats;
         }
@@ -134,6 +160,12 @@ namespace Starstorm2.Cores
                     break;
                 case "StrangeCanPoison":
                     strangeCanPoisonIndex = BuffAPI.Add(customBuff);
+                    break;
+                case "Gouge":
+                    gougeIndex = BuffAPI.Add(customBuff);
+                    break;
+                case "Awareness":
+                    awarenessIndex = BuffAPI.Add(customBuff);
                     break;
                 default:
                     LogCore.LogF(string.Format("{0} doesn't have a case!", buffDef));

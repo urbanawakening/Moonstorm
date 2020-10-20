@@ -204,6 +204,7 @@
     <Compile Include="API\ComponentHelpers.cs" />
     <Compile Include="API\LogCore.cs" />
     <Compile Include="Cores\AssetsCore.cs" />
+    <Compile Include="Cores\NemmandoCore.cs" />
     <Compile Include="Cores\DamageTypeCore.cs" />
     <Compile Include="Cores\Starstorm2ItemManager.cs" />
     <Compile Include="Cores\States\Executioner\MainState.cs" />
@@ -218,6 +219,13 @@
     <Compile Include="Cores\DotCore.cs" />
     <Compile Include="Cores\EquipmentCore.cs" />
     <Compile Include="Cores\BuffCore.cs" />
+    <Compile Include="Cores\States\Nemmando\FireDecisiveStrike.cs" />
+    <Compile Include="Cores\States\Nemmando\ChargeDecisiveStrike.cs" />
+    <Compile Include="Cores\States\Nemmando\Submission.cs" />
+    <Compile Include="Cores\States\Nemmando\DodgeState.cs" />
+    <Compile Include="Cores\States\Nemmando\MainState.cs" />
+    <Compile Include="Cores\States\Nemmando\ConcussionGrenade.cs" />
+    <Compile Include="Cores\States\Nemmando\BladeOfCessation.cs" />
     <Compile Include="Cores\States\Nucleator\ChargeController.cs" />
     <Compile Include="Cores\States\Nucleator\NucleatorProjectile.cs" />
     <Compile Include="Cores\States\Nucleator\ApplyRadionuclideSurge.cs" />

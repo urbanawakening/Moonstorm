@@ -10,6 +10,7 @@ namespace Starstorm2.Cores
 
         protected internal DotIndex detritive;
         protected internal DotIndex strangeCanPoison;
+        protected internal DotIndex gougeIndex;
 
         public DoTCore() => RegisterDoTs();
 
@@ -21,6 +22,7 @@ namespace Starstorm2.Cores
 
             detritive = RegisterDoT(1, 0.5f, DamageColorIndex.Item, BuffCore.instance.detritiveIndex);
             strangeCanPoison = RegisterDoT(.5f, 0.5f, DamageColorIndex.Item, BuffCore.instance.strangeCanPoisonIndex);
+            gougeIndex = RegisterDoT(0.5f, 0.33f, DamageColorIndex.Bleed, BuffCore.instance.gougeIndex);
         }
 
         protected internal DotIndex RegisterDoT(float interval, float damageCoeff, DamageColorIndex colorIndex, BuffIndex associatedBuff)
