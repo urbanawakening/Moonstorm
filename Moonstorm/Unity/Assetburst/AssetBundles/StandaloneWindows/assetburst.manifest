@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 2637665764
+CRC: 2025539251
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 0161dadb1325bdc3454c2de0397b6f30
+    Hash: dd4d2c053ac69708b6f4f5d8cd7c2dc0
   TypeTreeHash:
     serializedVersion: 2
     Hash: 87095a85d917a02675d1b927900810c1
@@ -58,6 +58,7 @@ Assets:
 - Assets/Moonstorm/Teaser/tex/Materials/Ice_Tool_Tex.mat
 - Assets/Moonstorm/Items/Earrings/magicicon.png
 - Assets/Moonstorm/Items/Lemdog/LemDog_TexIcon.png
+- Assets/Moonstorm/Survivors/Wyatt/specialicon.png
 - Assets/Moonstorm/Items/Icon.mat
 - Assets/Moonstorm/Teaser/tex/Materials/T_Executor_V2_Color.mat
 - Assets/Moonstorm/Survivors/Bombardier/Animations/Utility.anim
@@ -77,6 +78,7 @@ Assets:
 - Assets/Moonstorm/Items/Cloak/Japes_cloak.fbx
 - Assets/Moonstorm/Items/MortarChip/Mortar_chip.fbx
 - Assets/Moonstorm/Items/Lemdog/LemDog_Tex.png
+- Assets/Moonstorm/Survivors/Wyatt/Materials/texHandDiffuse.mat
 - Assets/Moonstorm/Materials/LampBoss.mat
 - Assets/Moonstorm/Items/Lemdog/MDLLemDog.prefab
 - Assets/Moonstorm/EliteIcons/rallyingIcon.png
@@ -86,6 +88,7 @@ Assets:
 - Assets/Moonstorm/Survivors/Bombardier/Flan/ExecAnimatorMenu.controller
 - Assets/Moonstorm/Survivors/Bombardier/satchel.blend
 - Assets/Moonstorm/Items/Earrings/MDLEarrings.prefab
+- Assets/Moonstorm/Survivors/Wyatt/primaryicon.png
 - Assets/Moonstorm/Items/GeigerCounter/Geiger.png
 - Assets/Moonstorm/Survivors/Bombardier/animExampleSurvivor.controller
 - Assets/Moonstorm/Items/FabinhoruDagger/Materials/Cloaking_M.mat
@@ -127,6 +130,7 @@ Assets:
 - Assets/Moonstorm/Survivors/ExampleSurvivorGestureMask.mask
 - Assets/Moonstorm/Items/Grinder/textures/Long_BUMP.png
 - Assets/Moonstorm/Items/FabinhoruDagger/New Animator Controller.controller
+- Assets/Moonstorm/Survivors/Wyatt/utilityicon2.png
 - Assets/Moonstorm/Items/FabinhoruDagger/textures/Cloaking_M.jpg
 - Assets/Moonstorm/Survivors/Bombardier/ExecAnimsupdate(Updated)2.blend
 - Assets/Moonstorm/Items/Grinder/Materials/Handle_BUMP.mat
@@ -141,6 +145,7 @@ Assets:
 - Assets/Moonstorm/Survivors/Bombardier/T_BombardierM2_color.png
 - Assets/Moonstorm/Items/FabinhoruDagger/textures/Cloaking_n.jpg
 - Assets/Moonstorm/Items/UESKeycard/MDLKeycard.prefab
+- Assets/Moonstorm/Survivors/Wyatt/texHandDiffuse.png
 - Assets/Moonstorm/Survivors/Bombardier/Flan/Materials/T_Executor_V2_Color.mat
 - Assets/Moonstorm/Items/RedSkull/Materials/redskulltex.mat
 - Assets/Moonstorm/Items/GeigerCounter/MDLGeigerCounter.prefab
@@ -148,6 +153,7 @@ Assets:
 - Assets/Moonstorm/Items/RedSkull/MDLRedskull.prefab
 - Assets/Moonstorm/Items/FabinhoruDagger/Materials/Cloaking_r.mat
 - Assets/Moonstorm/Teaser/tex/Materials/texTrimSheetMetalNormal.mat
+- Assets/Moonstorm/Survivors/Wyatt/mdlHANDWinch (1).fbx
 - Assets/Moonstorm/Survivors/Bombardier/Animations/Idle.anim
 - Assets/Moonstorm/Items/Cloak/Materials/japes_cloak.mat
 - Assets/Moonstorm/Items/UESKeycard/textures/keycard_transparency.png
@@ -155,6 +161,7 @@ Assets:
 - Assets/Moonstorm/Teaser/tex/Materials/Materials/texMetalTrimDiffuse.mat
 - Assets/Moonstorm/logo.png
 - Assets/Moonstorm/Survivors/Bombardier/Materials/T_Bombardier_Emissive2.png
+- Assets/Moonstorm/Survivors/Wyatt/WinchMesh.asset
 - Assets/Moonstorm/Enemies/Boss/LampBoss.prefab
 - Assets/Moonstorm/Survivors/Bombardier/Flan/Materials/Executioner_Emissive.mat
 - Assets/Moonstorm/Items/Grinder/Materials/Long_COL.mat
@@ -165,6 +172,7 @@ Assets:
 - Assets/Moonstorm/Items/UESKeycard/keycard.fbx
 - Assets/Moonstorm/Survivors/Bombardier/Animations/Special1.anim
 - Assets/Moonstorm/Teaser/tex/Detritive_Trematode_Tex.png
+- Assets/Moonstorm/Survivors/Wyatt/utilityicon.png
 - Assets/Moonstorm/Items/UESKeycard/Materials/keycard_texture_red.mat
 - Assets/Moonstorm/Items/FabinhoruDagger/MDLDagger.prefab
 - Assets/Moonstorm/Survivors/Bombardier/Animations/Primary.anim
@@ -175,6 +183,7 @@ Assets:
 - Assets/Moonstorm/Items/Grinder/Materials/bump-map-concrete-with-damaged-paint-0.mat
 - Assets/Moonstorm/Items/Grinder/textures/Long_COL.png
 - Assets/Moonstorm/Items/Cloak/japes_cloak.png
+- Assets/Moonstorm/Survivors/Wyatt/mdlHANDWinchAvatar.asset
 - Assets/Moonstorm/Materials/Ice_Tool_Tex.mat
 - Assets/Moonstorm/Enemies/Boss/LampBossEmis.png
 - Assets/Moonstorm/Survivors/Bombardier/Animations/WalkBWD.anim
@@ -193,6 +202,7 @@ Assets:
 - Assets/Moonstorm/Items/UESKeycard/textures/keycard_gloss.png
 - Assets/Moonstorm/Survivors/Bombardier/Materials/T_Bombardier_Emissive2.mat
 - Assets/Moonstorm/Survivors/Bombardier/Flan/Executioner_Emissive.png
+- Assets/Moonstorm/Survivors/Wyatt/WinchGhost.prefab
 - Assets/Moonstorm/Survivors/Bombardier/Flan/ExecAnimsupdate(Updated)2.blend
 - Assets/Moonstorm/Teaser/tex/Materials/Detritive_Trematode_Tex.mat
 - Assets/Moonstorm/Survivors/Bombardier/Flan/Materials/axetexture.mat
@@ -214,6 +224,7 @@ Assets:
 - Assets/Moonstorm/Items/Grinder/MDLGrinder.prefab
 - Assets/Moonstorm/Survivors/Bombardier/mdlBombardier.prefab
 - Assets/Moonstorm/Icons/Engineer/TR75_Immolator_Turret_2.png
+- Assets/Moonstorm/Survivors/Wyatt/secondaryicon.png
 - Assets/Moonstorm/Items/UESKeycard/Materials/keycard_normals.mat
 - Assets/Moonstorm/Icons/REX/texTreebotHarvester.png
 - Assets/Moonstorm/Survivors/Bombardier/Flan/BROJUSTFUCKINGWORK.prefab

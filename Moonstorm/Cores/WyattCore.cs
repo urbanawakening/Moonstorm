@@ -12,6 +12,8 @@ using Moonstorm.Cores.HAND.Skills;
 using Moonstorm.Cores.States.HAND;
 using Moonstorm.Cores.States.Wyatt;
 using Moonstorm.Cores.Components.Wyatt;
+using UnityEngine.Networking;
+using Moonstorm.Cores.Components;
 
 namespace Moonstorm.Cores.HAND
 {
@@ -56,11 +58,26 @@ namespace Moonstorm.Cores.HAND
             CreateTokens();
             CreateWYATTPrefab();
             CreateSunderPrefab();
-            //CreateWinchPrefab();
+            CreateWinchPrefab();
             SetComponents();
             SetSkills();
             CreateSurvivorDef();
             Hook();
+
+            On.RoR2.Projectile.SlowDownProjectiles.OnTriggerEnter += SlowDownProjectiles_OnTriggerEnter;
+        }
+
+        private void SlowDownProjectiles_OnTriggerEnter(On.RoR2.Projectile.SlowDownProjectiles.orig_OnTriggerEnter orig, SlowDownProjectiles self, Collider other)
+        {   
+            bool shouldOrigSelf = true;
+            LogCore.LogI(other.gameObject.name);
+            //var sphere = other as SphereCollider;
+            if (other.gameObject.name == "WyattWinch(Clone)") {
+                shouldOrigSelf = false;
+            }
+            if (shouldOrigSelf) {
+                orig(self, other);
+            }
         }
         #region Orbs
 
@@ -84,54 +101,33 @@ namespace Moonstorm.Cores.HAND
 
         private void CreateWinchPrefab()
         {
-            //this.winch = Resources.Load<GameObject>("prefabs/projectiles/EngiHarpoon").InstantiateClone("WYATTWinch", true);
             GameObject groveWinch = Resources.Load<GameObject>("prefabs/projectiles/GravekeeperHookProjectileSimple");
 
-            this.winch.GetComponent<ProjectileController>().ghostPrefab = groveWinch.GetComponent<ProjectileController>().ghostPrefab;
+            this.winch = Resources.Load<GameObject>("prefabs/projectiles/SyringeProjectile").InstantiateClone("WYATTWinch", true);
 
-            ProjectileProximityBeamController beamController = winch.AddComponent<ProjectileProximityBeamController>();
+            var ghost = UnityEngine.Object.Instantiate<GameObject>(AssetsCore.mainAssetBundle.LoadAsset<GameObject>("mdlSatchel"));
 
-            ProjectileDamage damage = winch.GetComponent<ProjectileDamage>();
+            var controller = ghost.AddComponent<ProjectileGhostController>();
+            var attributes = ghost.AddComponent<VFXAttributes>();
 
-            MissileController missile = winch.GetComponent<MissileController>();
+            attributes.vfxPriority = VFXAttributes.VFXPriority.Always;
+            attributes.vfxIntensity = VFXAttributes.VFXIntensity.Low;
+            //attributes.optionalLights = Array.Empty<Light>();
+            //attributes.secondaryParticleSystem = Array.Empty<ParticleSystem>();
 
-            winch.GetComponent<ProjectileSingleTargetImpact>().impactEffect = Resources.Load<GameObject>("prefabs/effects/omnieffects/omniimpactvfxslash");
 
-            beamController.attackFireCount = 1;
-            beamController.attackInterval = 0.01f;
-            beamController.listClearInterval = 0.33f;
-            beamController.attackRange = 5;
-            beamController.minAngleFilter = 0;
-            beamController.maxAngleFilter = 180;
-            beamController.procCoefficient = 0;
-            beamController.damageCoefficient = 0.3f;
-            beamController.bounces = 0;
-            beamController.inheritDamageType = false;
-            beamController.lightningType = RoR2.Orbs.LightningOrb.LightningType.Ukulele;
-
-            damage.damageType = DamageType.Stun1s;
-            damage.force = -5000;
-
-            missile.deathTimer = 4;
-            missile.giveupTimer = 4;
-            missile.giveupTimer = 25;
-
-            API.RegisterNewProjectile(winch);
-            #region Old
-            /*this.winch = Resources.Load<GameObject>("prefabs/projectiles/SyringeProjectile").InstantiateClone("WYATTWinch", true);
-
-            GameObject groveWinch = Resources.Load<GameObject>("prefabs/projectiles/GravekeeperHookProjectileSimple");
+            this.winch.GetComponent<ProjectileController>().ghostPrefab = ghost;
 
             //this is retarded
-            DestroyImmediate(winch.GetComponent<ProjectileSingleTargetImpact>());
-            DestroyImmediate(winch.GetComponent<ProjectileDamage>());
-            DestroyImmediate(winch.GetComponent<ProjectileSimple>());
-            DestroyImmediate(winch.GetComponent<ProjectileController>());
-            DestroyImmediate(winch.GetComponent<TeamFilter>());
-            DestroyImmediate(winch.GetComponent<ProjectileNetworkTransform>());
-            DestroyImmediate(winch.GetComponent<NetworkIdentity>());
+            UnityEngine.Object.DestroyImmediate(winch.GetComponent<ProjectileSingleTargetImpact>());
+            UnityEngine.Object.DestroyImmediate(winch.GetComponent<ProjectileDamage>());
+            UnityEngine.Object.DestroyImmediate(winch.GetComponent<ProjectileSimple>());
+            UnityEngine.Object.DestroyImmediate(winch.GetComponent<ProjectileController>());
+            UnityEngine.Object.DestroyImmediate(winch.GetComponent<TeamFilter>());
+            UnityEngine.Object.DestroyImmediate(winch.GetComponent<ProjectileNetworkTransform>());
+            UnityEngine.Object.DestroyImmediate(winch.GetComponent<NetworkIdentity>());
 
-            gameObject.layer = LayerIndex.projectile.intVal;
+            winch.layer = LayerIndex.projectile.intVal;
 
             NetworkIdentity networkIdentity = winch.AddComponent<NetworkIdentity>();
             ProjectileController projectileController = winch.AddComponent<ProjectileController>();
@@ -141,16 +137,11 @@ namespace Moonstorm.Cores.HAND
             ProjectileSingleTargetImpact projectileSingleTargetImpact = winch.AddComponent<ProjectileSingleTargetImpact>();
             ProjectileDamage projectileDamage = winch.AddComponent<ProjectileDamage>();
             SphereCollider sphereCollider = winch.GetComponent<SphereCollider>();
-            ProjectileTargetComponent targetComp = winch.AddComponent<ProjectileTargetComponent>();
-            MissileController missileController = winch.AddComponent<MissileController>();
-            QuaternionPID pid = winch.AddComponent<QuaternionPID>();
-            QuaternionPID pid2 = Resources.Load<GameObject>("prefabs/projectiles/EngiHarpoon").GetComponent<QuaternionPID>();
-
 
             networkIdentity.localPlayerAuthority = true;
             networkIdentity.serverOnly = false;
 
-            projectileController.ghostPrefab = groveWinch.GetComponent<ProjectileController>().ghostPrefab;
+            projectileController.ghostPrefab = ghost;
             projectileController.isPrediction = false;
             projectileController.allowPrediction = true;
             projectileController.predictionId = 0;
@@ -177,20 +168,36 @@ namespace Moonstorm.Cores.HAND
             projectileDamage.damageColorIndex = DamageColorIndex.Default;
             projectileDamage.damageType = DamageType.BypassArmor | DamageType.Stun1s;
 
-            missileController.maxVelocity = 25;
-            missileController.rollVelocity = 0;
-            missileController.acceleration = 3;
-            missileController.delayTimer = 0.3f;
-            missileController.giveupTimer = 8;
-            missileController.deathTimer = 8;
-            missileController.turbulence = 0;
-            missileController.maxSeekDistance = 100;
+            API.RegisterNewProjectile(winch);
+            /*ProjectileProximityBeamController beamController = winch.AddComponent<ProjectileProximityBeamController>();
 
-            pid.customName = pid2.customName;
-            pid.gain = pid2.gain;
-            pid.inputQuat = pid2.inputQuat;
-            pid.outputVector = pid2.outputVector;
-            pid.targetQuat = pid2.targetQuat;*/
+            ProjectileDamage damage = winch.GetComponent<ProjectileDamage>();
+
+            MissileController missile = winch.GetComponent<MissileController>();
+
+            winch.GetComponent<ProjectileSingleTargetImpact>().impactEffect = Resources.Load<GameObject>("prefabs/effects/omnieffects/omniimpactvfxslash");
+
+            beamController.attackFireCount = 1;
+            beamController.attackInterval = 0.01f;
+            beamController.listClearInterval = 0.33f;
+            beamController.attackRange = 5;
+            beamController.minAngleFilter = 0;
+            beamController.maxAngleFilter = 180;
+            beamController.procCoefficient = 0;
+            beamController.damageCoefficient = 0.3f;
+            beamController.bounces = 0;
+            beamController.inheritDamageType = false;
+            beamController.lightningType = RoR2.Orbs.LightningOrb.LightningType.Ukulele;
+
+            damage.damageType = DamageType.Stun1s;
+            damage.force = -5000;
+
+            missile.deathTimer = 4;
+            missile.giveupTimer = 4;
+            missile.giveupTimer = 25;
+
+            API.RegisterNewProjectile(this.winch);*/
+            #region Old
             #endregion
         }
         private void CreateWYATTPrefab()
@@ -209,6 +216,7 @@ namespace Moonstorm.Cores.HAND
             //overclockComponent = wyattBody.AddComponent<OverclockComponent>();
             //  droneComponent = wyattBody.AddComponent<DroneComponent>();
             characterBody = wyattBody.GetComponent<CharacterBody>();
+            MAIDManager janniePower = wyattBody.AddComponent<MAIDManager>();
             SfxLocator sfxLocator = wyattBody.GetComponent<SfxLocator>();
             CharacterDeathBehavior characterDeathBehavior = wyattBody.GetComponent<CharacterDeathBehavior>();
             HANDDroneTracker tracker = wyattBody.AddComponent<HANDDroneTracker>();
@@ -594,11 +602,13 @@ namespace Moonstorm.Cores.HAND
             LoadoutAPI.AddSkill(typeof(Burst));
             LoadoutAPI.AddSkill(typeof(ChargeSlam));
             LoadoutAPI.AddSkill(typeof(Slam));
+            LoadoutAPI.AddSkill(typeof(Winch));
+            LoadoutAPI.AddSkill(typeof(FireWinch));
             LoadoutAPI.AddSkill(typeof(DeepClean));
             LoadoutAPI.AddSkill(typeof(DeeperClean));
 
             SkillDef utilitySkillDef = ScriptableObject.CreateInstance<SkillDef>();
-            utilitySkillDef.activationState = new SerializableEntityStateType(typeof(DeepClean));
+            utilitySkillDef.activationState = new SerializableEntityStateType(typeof(FireWinch));
             utilitySkillDef.activationStateMachineName = "Weapon";
             utilitySkillDef.baseMaxStock = 1;
             utilitySkillDef.baseRechargeInterval = 5f;
@@ -624,7 +634,7 @@ namespace Moonstorm.Cores.HAND
              };
 
             SkillDef utilitySkillDef2 = ScriptableObject.CreateInstance<SkillDef>();
-            utilitySkillDef2.activationState = new SerializableEntityStateType(typeof(DeeperClean));
+            utilitySkillDef2.activationState = new SerializableEntityStateType(typeof(DeepClean));
             utilitySkillDef2.activationStateMachineName = "Weapon";
             utilitySkillDef2.baseMaxStock = 1;
             utilitySkillDef2.baseRechargeInterval = 5f;

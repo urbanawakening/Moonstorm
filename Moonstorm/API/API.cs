@@ -24,8 +24,10 @@ public static class API
         if (projectileObject.HasComponent<ProjectileController>())
         {
             ProjectileCatalog.getAdditionalEntries += list => list.Add(projectileObject);
+            LogCore.LogD("Registered projectile " + projectileObject.name + " to the projectile catalog!");
             return true;
         }
+        LogCore.LogF("FATAL ERROR:" + projectileObject.name + " failed to register to the projectile catalog!");
         return false;
     }
     /// <summary>
@@ -40,8 +42,10 @@ public static class API
         if (bodyObject)
         {
             BodyCatalog.getAdditionalEntries += list => list.Add(bodyObject);
+            LogCore.LogD("Registered body " + bodyObject.name + " to the body catalog!");
             return true;
         }
+        LogCore.LogF("FATAL ERROR:" + bodyObject.name + " failed to register to the body catalog!");
         return false;
     }
     /// <summary>
@@ -56,8 +60,10 @@ public static class API
         if (master && master.HasComponent<CharacterMaster>())
         {
             MasterCatalog.getAdditionalEntries += list => list.Add(master);
+            LogCore.LogD("Registered master " + master.name + " to the master catalog!");
             return true;
         }
+        LogCore.LogF("FATAL ERROR: " + master.name + " failed to register to the master catalog!");
         return false;
     }
     /// <summary>

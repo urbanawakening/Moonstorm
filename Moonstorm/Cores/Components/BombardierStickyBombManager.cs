@@ -71,8 +71,5 @@ namespace Moonstorm.Cores.Components
             bombs.Clear();
         }
 
-        public void FixedUpdate() {
-
-        }
     }
 }

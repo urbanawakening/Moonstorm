@@ -43,12 +43,17 @@
     <Compile Include="API\LogCore.cs" />
     <Compile Include="Achivements\GrabOrDie.cs" />
     <Compile Include="Cores\Components\BombardierStickySkillDef.cs" />
+    <Compile Include="Cores\Components\MAIDManager.cs" />
+    <Compile Include="Cores\Components\MAID.cs" />
+    <Compile Include="Cores\Components\HookProjectileImpact.cs" />
+    <Compile Include="Cores\Components\WinchControl.cs" />
     <Compile Include="Cores\Components\FliteredNoGravZone.cs" />
     <Compile Include="Cores\Components\WyattWalkmanBehavior.cs" />
     <Compile Include="Cores\Components\WyattComboScript.cs" />
     <Compile Include="Cores\ShitpostCore.cs" />
     <Compile Include="Cores\Components\SlamController.cs" />
     <Compile Include="Cores\States\Bombardier\ThrowStickySimple.cs" />
+    <Compile Include="Cores\States\Wyatt\FireWinch.cs" />
     <Compile Include="Cores\States\Wyatt\DeeperClean.cs" />
     <Compile Include="Cores\States\Wyatt\DeployMaid.cs" />
     <Compile Include="Cores\States\Wyatt\DeepClean.cs" />

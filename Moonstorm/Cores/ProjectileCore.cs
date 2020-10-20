@@ -21,6 +21,10 @@ namespace Moonstorm.Cores
         public static GameObject stickyProjectile;
         private GameObject stickyGhost;
 
+        private GameObject winchGhost;
+        public static GameObject winch;
+
+
         public static GameObject wyattMaidBubble;
 
         public ProjectileCore() => CreateProjectiles();
@@ -34,6 +38,8 @@ namespace Moonstorm.Cores
 
             CreateBombardierProjectiles();
             CreateWyattMaidBubble();
+            CreateWinchGhost();
+            CreateWinchProjectile();
             CreateMiscProjectiles();
         }
 
@@ -74,6 +80,24 @@ namespace Moonstorm.Cores
 
             var newGhost = BaseUnityPlugin.Instantiate<GameObject>(AssetsCore.mainAssetBundle.LoadAsset<GameObject>("mdlSatchel"));
             newGhost.transform.SetParent(stickyGhost.transform);
+        }
+
+        private protected void CreateWinchGhost()
+        {
+            winchGhost = Resources.Load<GameObject>("prefabs/projectileghosts/SolarFlareGhost").InstantiateClone("BombardierStickyGhost", false);
+            foreach (Transform child in winchGhost.transform)
+            {
+                //destroy the child. 
+                BaseUnityPlugin.Destroy(child.gameObject);
+            }
+            //BaseUnityPlugin.Destroy(stickyGhost.GetComponent<EngiMineAnimator>());
+            //BaseUnityPlugin.Destroy(stickyGhost.GetComponent<EngiMineGhostController>());
+
+            var newGhost = BaseUnityPlugin.Instantiate<GameObject>(AssetsCore.mainAssetBundle.LoadAsset<GameObject>("WinchGhost"));
+            var winchController = newGhost.AddComponent<Components.WinchControl>();
+            winchController.tailTransform = newGhost.transform.Find("Model/mdlHANDWinch/WinchArmature/WinchTail");
+            newGhost.transform.SetParent(winchGhost.transform);
+            
         }
 
         protected private void CreateStickyProjectile()
@@ -118,10 +142,29 @@ namespace Moonstorm.Cores
                 var impact = bombardierBombProjectile.GetComponent<ProjectileImpactExplosion>();
                 impact.blastProcCoefficient = 0.3f;
                 impact.blastDamageCoefficient = 1.1f;
+                //Object.Destroy(impact);
+
+                //bombardierBombProjectile.AddComponent<Components.HookProjectileImpact>();
+                //bombardierBombProjectile.GetComponent<ProjectileController>().ghostPrefab = winchGhost;
             }
             else LogCore.LogF("FATAL ERROR:" + bombardierBombProjectile.name + " failed to register to the projectile catalog!");
         }
 
+        protected private void CreateWinchProjectile()
+        {
+            winch = Resources.Load<GameObject>("prefabs/projectiles/PaladinRocket").InstantiateClone("WyattWinch", true);
+            var registered = API.RegisterNewProjectile(winch);
+            if (registered)
+            {
+                var impact = winch.GetComponent<ProjectileImpactExplosion>();
+
+                Object.Destroy(impact);
+
+                winch.AddComponent<Components.HookProjectileImpact>();
+                winch.GetComponent<ProjectileController>().ghostPrefab = winchGhost;
+            }
+            else LogCore.LogF("FATAL ERROR:" + winch.name + " failed to register to the projectile catalog!");
+        }
 
         protected private void CreateBombardierBetterRocketProjectile()
         {
@@ -158,17 +201,31 @@ namespace Moonstorm.Cores
                 var origTimeWard = Resources.Load<GameObject>("prefabs/networkedobjects/TimeBubbleWard");
 
                 var activatedWard = Object.Instantiate<GameObject>(origTimeWard);
+                HurtBoxGroup hurtBoxGroup = wyattMaidBubble.AddComponent<HurtBoxGroup>();
+
+                HurtBox componentInChildren = wyattMaidBubble.AddComponent<HurtBox>();
+                componentInChildren.gameObject.layer = LayerIndex.entityPrecise.intVal;
+                componentInChildren.healthComponent = null;
+                componentInChildren.isBullseye = true;
+                componentInChildren.damageModifier = HurtBox.DamageModifier.Normal;
+                componentInChildren.hurtBoxGroup = hurtBoxGroup;
+                componentInChildren.indexInGroup = 0;
+                //hurtbox.indexInGroup = //lovecraft's cat.
 
                 wyattMaidBubble.GetComponent<ProjectileSimple>().lifetime = 30;
                 wyattMaidBubble.GetComponent<BeginRapidlyActivatingAndDeactivating>().delayBeforeBeginningBlinking = 25;
 
                 Object.Destroy(wyattMaidBubble.GetComponent<ProjectileProximityBeamController>());
 
-                activatedWard.GetComponent<BuffWard>().radius = 30;
+                wyattMaidBubble.AddComponent<MAID>();
+                wyattMaidBubble.GetComponent<SphereCollider>().isTrigger = true;
+                wyattMaidBubble.GetComponent<AntiGravityForce>().antiGravityCoefficient = 2;
+
+                activatedWard.GetComponent<BuffWard>().radius = 15;
                 activatedWard.GetComponent<BuffWard>().buffType = BuffCore.instance.antiGravIndex;
                 activatedWard.transform.SetParent(wyattMaidBubble.transform);
                 activatedWard.transform.position = new Vector3(0, 0, 0);
-                activatedWard.transform.localScale = new Vector3(1, 1, 1);
+                activatedWard.transform.localScale = new Vector3(1f, 1f, 1f);
                 //activatedWard.transform.Find("Visuals+Collider").gameObject.layer = 0;
                 //activatedWard.transform.Find("Visuals+Collider").gameObject.AddComponent<BoxCollider>();
                 //activatedWard.transform.Find("Visuals+Collider").gameObject.AddComponent<FliteredNoGravZone>();

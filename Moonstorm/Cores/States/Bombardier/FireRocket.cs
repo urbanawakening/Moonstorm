@@ -76,7 +76,7 @@ namespace Moonstorm.Cores.States.Bombardier
                 target = null,
                 useFuseOverride = false,
                 useSpeedOverride = true,
-                _speedOverride = 150
+                speedOverride = 150
             };
             return info;
         }
