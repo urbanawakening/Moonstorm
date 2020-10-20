@@ -9,7 +9,7 @@ namespace Starstorm2.Cores
 
         public void Awake()
         {
-            gameObject.GetComponent<HealthComponent>();
+            health = gameObject.GetComponent<HealthComponent>();
         }
 
         #region Dungus
@@ -50,7 +50,7 @@ namespace Starstorm2.Cores
             }
             else
             {
-                Chat.AddMessage("AddExperienceAuthority broke");
+                //Chat.AddMessage("AddExperienceAuthority broke");
             }
             CmdAddExperienceInternal(experience);
         }

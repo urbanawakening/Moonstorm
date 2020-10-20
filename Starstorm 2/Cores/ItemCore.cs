@@ -280,7 +280,7 @@ namespace Starstorm2.Cores
             LanguageAPI.Add("ITEM_COIN_DESC", "<style=cIsHealing>4%</style> <style=cStack>(+3% per stack)</style> chance to <style=cIsDamage>ignite</style> enemies on hit for <style=cIsUtility>+$5</style>."); //by 2<style=cStack>(+1 per stack)</style> seconds.");
             LanguageAPI.Add("ITEM_COIN_PICKUP", "Chance to ignite enemies on hit.");
 
-            LanguageAPI.Add("ITEM_ITEMONLEVELUP_NAME", "N'khato's Heritage");
+            LanguageAPI.Add("ITEM_ITEMONLEVELUP_NAME", "Nkota's Heritage");
             LanguageAPI.Add("ITEM_ITEMONLEVELUP_DESC", "Gain an item on level up."); //by 2<style=cStack>(+1 per stack)</style> seconds.");
             LanguageAPI.Add("ITEM_ITEMONLEVELUP_PICKUP", "Gain an item on level up.");
 
@@ -439,6 +439,7 @@ namespace Starstorm2.Cores
             orig(self);
         }
 
+        static float healAccum = 0f;
         private float HealthComponent_Heal(On.RoR2.HealthComponent.orig_Heal orig, HealthComponent self, float amount, ProcChainMask procChainMask, bool nonRegen)
         {
             if (self)
@@ -451,9 +452,24 @@ namespace Starstorm2.Cores
                     {
                         var bloodTesters = inventory.GetItemCount(moneyOnHealIndex);
                         var amountToGift = bloodTesters * 5;
-                        if (bloodTesters > 0 && body.teamComponent && body.isPlayerControlled && nonRegen == true)
+                        if (bloodTesters > 0)
                         {
-                            TeamManager.instance.GiveTeamMoney(body.teamComponent.teamIndex, (uint)amountToGift);
+                            var tele = TeleporterInteraction.instance;
+                            //stop giving money if we're waiting to teleport (prevents a softlock)
+                            if (!tele || tele.activationState != TeleporterInteraction.ActivationState.Finished)
+                            {
+                                if (body.teamComponent && body.isPlayerControlled && self.health < self.fullHealth && nonRegen == true)
+                                {
+                                    healAccum += amount;
+                                    Debug.Log(healAccum);
+                                }
+                            }
+                            if (healAccum >= 15f)
+                            {
+                                healAccum -= 15f;
+                                //sound/vfx here
+                                TeamManager.instance.GiveTeamMoney(body.teamComponent.teamIndex, (uint)amountToGift);
+                            }
                         }
                     }
                 }
@@ -669,22 +685,25 @@ namespace Starstorm2.Cores
 
         public void FixedUpdate()
         {
-            timer += Time.deltaTime;
-            if (timer >= 3)
+            if (Run.instance && !Run.instance.isRunStopwatchPaused)
             {
-                if (body.teamComponent)
+                timer += Time.deltaTime;
+                if (timer >= 3)
                 {
-                    manager.AddExperienceAuthority((uint)(3 * stack));
-                }
-                else
-                {
-                    if (!fatalLogged)
+                    if (body.teamComponent)
                     {
-                        fatalLogged = true;
-                        LogCore.LogF(Language.GetString(body.baseNameToken) + " doesn't have a team component!");
+                        manager.AddExperienceAuthority((uint)(3 * stack));
                     }
+                    else
+                    {
+                        if (!fatalLogged)
+                        {
+                            fatalLogged = true;
+                            LogCore.LogF(Language.GetString(body.baseNameToken) + " doesn't have a team component!");
+                        }
+                    }
+                    timer = 0;
                 }
-                timer = 0;
             }
         }
     }
