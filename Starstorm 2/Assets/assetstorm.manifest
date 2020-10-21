@@ -1,12 +1,12 @@
 ManifestFileVersion: 0
-CRC: 2427728358
+CRC: 1627390901
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 30ea0cdd038352dcb6bfa2606b71b740
+    Hash: a7c74cf39df11404e1a6d51069cea830
   TypeTreeHash:
     serializedVersion: 2
-    Hash: d58cd0a5b2ccd97b5e5d4a70b6c05607
+    Hash: 79c31612da9a127847ca328e3d297aed
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -25,6 +25,8 @@ ClassTypes:
   Script: {instanceID: 0}
 - Class: 48
   Script: {instanceID: 0}
+- Class: 65
+  Script: {instanceID: 0}
 - Class: 74
   Script: {instanceID: 0}
 - Class: 90
@@ -37,6 +39,8 @@ ClassTypes:
   Script: {fileID: 11500000, guid: 10276f4c15347d549a11822bba5cf3ce, type: 3}
 - Class: 115
   Script: {instanceID: 0}
+- Class: 135
+  Script: {instanceID: 0}
 - Class: 136
   Script: {instanceID: 0}
 - Class: 137
@@ -46,6 +50,8 @@ ClassTypes:
 - Class: 199
   Script: {instanceID: 0}
 - Class: 213
+  Script: {instanceID: 0}
+- Class: 319
   Script: {instanceID: 0}
 Assets:
 - Assets/Executioner/ExecAnimator.controller
@@ -60,29 +66,43 @@ Assets:
 - Assets/Items/GreaterWarbanner/GreaterWarbanner_Icon.png
 - Assets/Items/DormantFungus/DormantFungus_Icon.png
 - Assets/Items/DetritiveTrematode/MDLDetritiveTrematode.prefab
+- Assets/Nemmando/VFX/SlashShadow.tga
 - Assets/Executioner/VFX/DashEffect.prefab
 - Assets/Executioner/VFX/IonEffect.prefab
 - Assets/Items/NkotasHeritage/NkotasHeritage_Icon.png
 - Assets/Items/BloodTester/MDLBloodTester.prefab
 - Assets/Items/Diary/Diary_Icon.png
 - Assets/Items/StrangeCan/MDLStrangeCan.prefab
+- Assets/Nemmando/NemmandoFlinchMask.mask
 - Assets/Items/HottestSauce/HottestSauce_Icon.png
 - Assets/Executioner/skill2icon.png
 - Assets/Executioner/skill3icon.png
 - Assets/Items/DormantFungus/MDLDormantFungus.prefab
 - Assets/Executioner/VFX/AxeSpawnEffect.prefab
+- Assets/Nemmando/VFX/Slash.tga
+- Assets/Nemmando/NemmandoAnimator.controller
+- Assets/Nemmando/NemmandoBodyUpper.mask
+- Assets/Nemmando/VFX/Materials/SlashShadow.mat
 - Assets/Executioner/surprised-skull.png
 - Assets/Items/MoltenCoin/MDLMoltenCoin.prefab
+- Assets/Nemmando/Materials/NemmandoTex.mat
 - Assets/Items/MoltenCoin/MoltenCoin_Icon.png
 - Assets/TyphoonIcon.png
+- Assets/Nemmando/VFX/SwordSwipe.asset
 - Assets/Executioner/skill4icon.png
 - Assets/Executioner/skill1icon.png
+- Assets/Nemmando/NemmandoModel.prefab
 - Assets/Items/ErraticGadget/ErraticGadget_Icon.png
 - Assets/Items/NkotasHeritage/MDLNkotasHeritage.prefab
+- Assets/Nemmando/NemmandoIcon.png
+- Assets/Nemmando/NemmandoTex.png
 - Assets/Items/JetBoots/JetBoots_Icon.png
 - Assets/Executioner/ExecutionerModelMenu.prefab
 - Assets/Items/JetBoots/MDLJetBoots.prefab
+- Assets/Nemmando/NemmandoAltTex.png
 - Assets/Items/GreaterWarbanner/MDLGreaterWarbanner.prefab
 - Assets/Executioner/VFX/AxeSlamEffect.prefab
+- Assets/Nemmando/NemmandoAnims.fbx
+- Assets/Nemmando/VFX/SwordVfx.prefab
 - Assets/Items/HottestSauce/MDLHottestSauce.prefab
 Dependencies: []

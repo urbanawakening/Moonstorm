@@ -45,6 +45,8 @@ namespace EntityStates.Executioner
                 base.characterMotor.disableAirControlUntilCollision = true;
                 //iframes during and shortly after (prevents fall damage from slamming into ground)
                 base.characterBody.AddBuff(BuffIndex.ArmorBoost);
+                base.characterMotor.Motor.ForceUnground();
+                base.characterMotor.jumpCount = base.characterBody.maxJumpCount;
 
                 //SetCollisions(false);
             }
@@ -93,6 +95,7 @@ namespace EntityStates.Executioner
         public static float baseDuration = 10f;
         public static float dropAttackRadius = 4f;
         public static float slamRadius = 14f;
+        public static float rechargePerKill = 1.0f;
 
         private GameObject slamEffect = Resources.Load<GameObject>("prefabs/effects/omnieffect/OmniExplosionVFX");
         private EffectData slamEffectData;
@@ -179,12 +182,9 @@ namespace EntityStates.Executioner
                         var skillLoc = base.characterBody.skillLocator;
                         if (skillLoc)
                         {
-                            //if (locator.secondary && locator.secondary.stock < locator.secondary.maxStock)
-                                //locator.secondary.rechargeStopwatch += 1f;
-                            if (skillLoc.utility && skillLoc.utility.cooldownRemaining > 0)
-                                skillLoc.utility.rechargeStopwatch += 1f;
-                            if (skillLoc.special && skillLoc.special.cooldownRemaining > 0)
-                                skillLoc.special.rechargeStopwatch += 1f;
+                            //skillLoc.secondary.RunRecharge(rechargePerKill);
+                            skillLoc.utility.RunRecharge(rechargePerKill);
+                            skillLoc.special.RunRecharge(rechargePerKill);
                         }
                         //should cdr apply once per kill or once per attack? if once per attack uncomment the following
                         //break;
@@ -202,6 +202,7 @@ namespace EntityStates.Executioner
         {
             base.FixedUpdate();
 
+            //FIXME: this is atrocious, use an overlap attack
             if (base.isAuthority)
             {
                 DamageInfo dropDamage = new DamageInfo();
