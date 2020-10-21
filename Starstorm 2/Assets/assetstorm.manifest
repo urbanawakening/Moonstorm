@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 1627390901
+CRC: 369588176
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: a7c74cf39df11404e1a6d51069cea830
+    Hash: 1bcb7fd1220d03db8d1b4963a2464fab
   TypeTreeHash:
     serializedVersion: 2
     Hash: 79c31612da9a127847ca328e3d297aed
@@ -63,7 +63,6 @@ Assets:
 - Assets/Items/BloodTester/BloodTester_Icon.png
 - Assets/Items/Diary/MDLDiary.prefab
 - Assets/Items/StrangeCan/StrangeCan_Icon.png
-- Assets/Items/GreaterWarbanner/GreaterWarbanner_Icon.png
 - Assets/Items/DormantFungus/DormantFungus_Icon.png
 - Assets/Items/DetritiveTrematode/MDLDetritiveTrematode.prefab
 - Assets/Nemmando/VFX/SlashShadow.tga
@@ -90,6 +89,7 @@ Assets:
 - Assets/TyphoonIcon.png
 - Assets/Nemmando/VFX/SwordSwipe.asset
 - Assets/Executioner/skill4icon.png
+- Assets/Items/GreaterWarbanner/GreaterWarbanner_Icon.png
 - Assets/Executioner/skill1icon.png
 - Assets/Nemmando/NemmandoModel.prefab
 - Assets/Items/ErraticGadget/ErraticGadget_Icon.png
