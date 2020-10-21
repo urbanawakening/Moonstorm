@@ -36,6 +36,8 @@ namespace Moonstorm.Cores.HAND
         public WyattComboScript script;
         #endregion
 
+        public SkillDef throwPrimary;
+        public SkillDef retrievePrimary;
         public WyattCore() => Load();
 
         public void Load()
@@ -70,7 +72,7 @@ namespace Moonstorm.Cores.HAND
         private void SlowDownProjectiles_OnTriggerEnter(On.RoR2.Projectile.SlowDownProjectiles.orig_OnTriggerEnter orig, SlowDownProjectiles self, Collider other)
         {   
             bool shouldOrigSelf = true;
-            LogCore.LogI(other.gameObject.name);
+            //LogCore.LogI(other.gameObject.name);
             //var sphere = other as SphereCollider;
             if (other.gameObject.name == "WyattWinch(Clone)") {
                 shouldOrigSelf = false;
@@ -231,7 +233,7 @@ namespace Moonstorm.Cores.HAND
             sfxLocator.landingSound = "play_char_land";
 
             tracker.maxTrackingAngle = 20;
-            tracker.maxTrackingDistance = 80;
+            tracker.maxTrackingDistance = 55;
             tracker.trackerUpdateFrequency = 5;
             tracker.indicatorPrefab = Resources.Load<GameObject>("Prefabs/EngiShieldRetractIndicator");
 
@@ -406,6 +408,7 @@ namespace Moonstorm.Cores.HAND
             passive.skillNameToken = "WYATT_PASSIVE_NAME";
             passive.skillDescriptionToken = "WYATT_PASSIVE_DESCRIPTION";
             passive.keywordToken = "KEYWORD_VELOCITY";
+            passive.icon = AssetsCore.wyattPassive;
 
             LanguageAPI.Add(passive.skillNameToken, "Walkman");
             LanguageAPI.Add(passive.skillDescriptionToken, "For every 3 seconds you're engaged in combat, gain a stack of <style=cIsUtility>Velocity</style>, up to 10.");
@@ -522,7 +525,7 @@ namespace Moonstorm.Cores.HAND
             primarySkillDef.skillDescriptionToken = "WYATT_PRIMARY_DESCRIPTION";
             primarySkillDef.skillName = "WYATT_PRIMARY_NAME";
             primarySkillDef.skillNameToken = "WYATT_PRIMARY_NAME";
-            primarySkillDef.icon = AssetsCore.hurtIcon;
+            primarySkillDef.icon = AssetsCore.wyattPrimary;
             primarySkillDef.keywordTokens = new string[] {
                  "KEYWORD_AGILE",
                  "KEYWORD_WEIGHTLESS",
@@ -573,7 +576,7 @@ namespace Moonstorm.Cores.HAND
             secondarySkillDef.skillDescriptionToken = "WYATT_SECONDARY_DESCRIPTION";
             secondarySkillDef.skillName = "aaa";
             secondarySkillDef.skillNameToken = "WYATT_SECONDARY_NAME";
-            secondarySkillDef.icon = AssetsCore.forcedReassemblyIcon;
+            secondarySkillDef.icon = AssetsCore.wyattSecondary;
             secondarySkillDef.keywordTokens = new string[] {
                 // "KEYWORD_AGILE",
                 // "KEYWORD_CHARGEABLE",
@@ -608,7 +611,7 @@ namespace Moonstorm.Cores.HAND
             LoadoutAPI.AddSkill(typeof(DeeperClean));
 
             SkillDef utilitySkillDef = ScriptableObject.CreateInstance<SkillDef>();
-            utilitySkillDef.activationState = new SerializableEntityStateType(typeof(FireWinch));
+            utilitySkillDef.activationState = new SerializableEntityStateType(typeof(DeepClean));
             utilitySkillDef.activationStateMachineName = "Weapon";
             utilitySkillDef.baseMaxStock = 1;
             utilitySkillDef.baseRechargeInterval = 5f;
@@ -627,17 +630,17 @@ namespace Moonstorm.Cores.HAND
             utilitySkillDef.skillDescriptionToken = "WYATT_UTILITY_DESCRIPTION";
             utilitySkillDef.skillName = "aaa";
             utilitySkillDef.skillNameToken = "WYATT_UTILITY_NAME";
-            utilitySkillDef.icon = AssetsCore.forcedReassemblyIcon;
+            utilitySkillDef.icon = AssetsCore.wyattUtility;
             utilitySkillDef.keywordTokens = new string[] {
                  "KEYWORD_STUNNING",
                  "KEYWORD_WEIGHTLESS"
              };
 
             SkillDef utilitySkillDef2 = ScriptableObject.CreateInstance<SkillDef>();
-            utilitySkillDef2.activationState = new SerializableEntityStateType(typeof(DeepClean));
+            utilitySkillDef2.activationState = new SerializableEntityStateType(typeof(FireWinch));
             utilitySkillDef2.activationStateMachineName = "Weapon";
             utilitySkillDef2.baseMaxStock = 1;
-            utilitySkillDef2.baseRechargeInterval = 5f;
+            utilitySkillDef2.baseRechargeInterval = 4f;
             utilitySkillDef2.beginSkillCooldownOnSkillEnd = true;
             utilitySkillDef2.canceledFromSprinting = false;
             utilitySkillDef2.fullRestockOnAssign = false;
@@ -650,17 +653,17 @@ namespace Moonstorm.Cores.HAND
             utilitySkillDef2.requiredStock = 1;
             utilitySkillDef2.shootDelay = 0.08f;
             utilitySkillDef2.stockToConsume = 1;
-            utilitySkillDef2.skillDescriptionToken = "WYATT_UTILITY_DESCRIPTION";
+            utilitySkillDef2.skillDescriptionToken = "WYATT_UTILITY2_DESCRIPTION";
             utilitySkillDef2.skillName = "aaa";
-            utilitySkillDef2.skillNameToken = "WYATT_UTILITY_NAME";
-            utilitySkillDef2.icon = AssetsCore.forcedReassemblyIcon;
-            utilitySkillDef2.keywordTokens = new string[] {
-                 "KEYWORD_STUNNING",
-                 "KEYWORD_WEIGHTLESS"
-             };
+            utilitySkillDef2.skillNameToken = "WYATT_UTILITY2_NAME";
+            utilitySkillDef2.icon = AssetsCore.wyattUtilityAlt;
+            utilitySkillDef2.keywordTokens = Array.Empty<string>();
+
             LanguageAPI.Add(utilitySkillDef.skillNameToken, "Deep Clean");
             LanguageAPI.Add(utilitySkillDef.skillDescriptionToken, "<style=cIsDamage>Stunning</style>. Dash forward, rapidly attacking any enemies along your path for X% damage repeatedly. <style=cIsUtility>Applies Weightless</style>.");
 
+            LanguageAPI.Add(utilitySkillDef2.skillNameToken, "G22 WINCH");
+            LanguageAPI.Add(utilitySkillDef2.skillDescriptionToken, "Fire a winch that deals <style=cIsDamage>500%</style> damage and <style=cIsUtility>pulls you</style> towards the target.");
 
             LoadoutAPI.AddSkillDef(utilitySkillDef);
             SkillFamily utilitySkillFamily = skillLocator.utility.skillFamily;
@@ -686,12 +689,13 @@ namespace Moonstorm.Cores.HAND
         {
             LoadoutAPI.AddSkill(typeof(Drone));
             LoadoutAPI.AddSkill(typeof(DeployMaid));
+            LoadoutAPI.AddSkill(typeof(RetrieveMaid));
 
             SkillDef specialSkillDef = ScriptableObject.CreateInstance<SkillDef>();
             specialSkillDef.activationState = new SerializableEntityStateType(typeof(DeployMaid));
             specialSkillDef.activationStateMachineName = "Weapon";
             specialSkillDef.baseMaxStock = 1;
-            specialSkillDef.baseRechargeInterval = 35;
+            specialSkillDef.baseRechargeInterval = 1;
             specialSkillDef.beginSkillCooldownOnSkillEnd = true;
             specialSkillDef.canceledFromSprinting = false;
             specialSkillDef.fullRestockOnAssign = true;
@@ -707,14 +711,49 @@ namespace Moonstorm.Cores.HAND
             specialSkillDef.skillDescriptionToken = "WYATT_SPECIAL_DESCRIPTION";
             specialSkillDef.skillName = "aaa";
             specialSkillDef.skillNameToken = "WYATT_SPECIAL_NAME";
-            specialSkillDef.icon = AssetsCore.droneIcon;
+            specialSkillDef.icon = AssetsCore.wyattSpecial;
             specialSkillDef.keywordTokens = new string[] {
                  "KEYWORD_WEIGHTLESS"
             };
+
+            throwPrimary = specialSkillDef;
+
+            SkillDef specialSkillDef2 = ScriptableObject.CreateInstance<SkillDef>();
+            specialSkillDef2.activationState = new SerializableEntityStateType(typeof(RetrieveMaid));
+            specialSkillDef2.activationStateMachineName = "Weapon";
+            specialSkillDef2.baseMaxStock = 1;
+            specialSkillDef2.baseRechargeInterval = 1;
+            specialSkillDef2.beginSkillCooldownOnSkillEnd = true;
+            specialSkillDef2.canceledFromSprinting = false;
+            specialSkillDef2.fullRestockOnAssign = true;
+            specialSkillDef2.interruptPriority = InterruptPriority.Skill;
+            specialSkillDef2.isBullets = false;
+            specialSkillDef2.isCombatSkill = false;
+            specialSkillDef2.mustKeyPress = true;
+            specialSkillDef2.noSprint = false;
+            specialSkillDef2.rechargeStock = 1;
+            specialSkillDef2.requiredStock = 1;
+            specialSkillDef2.shootDelay = 0.5f;
+            specialSkillDef2.stockToConsume = 1;
+            specialSkillDef2.skillDescriptionToken = "WYATT_SPECIAL2_DESCRIPTION";
+            specialSkillDef2.skillName = "aaa";
+            specialSkillDef2.skillNameToken = "WYATT_SPECIAL2_NAME";
+            specialSkillDef2.icon = AssetsCore.wyattSpecial2;
+            specialSkillDef2.keywordTokens = new string[] {
+                 "KEYWORD_WEIGHTLESS"
+            };
+
+            retrievePrimary = specialSkillDef2;
+
             LanguageAPI.Add(specialSkillDef.skillNameToken, "G22 MAID");
             LanguageAPI.Add(specialSkillDef.skillDescriptionToken, "Deploy a floating MAID unit that generates an anti-gravity bubble that <style=cIsUtility>applies Weightless</style> to all enemies, <style=cIsUtility>while giving Survivors free movement</style>.");
 
+            LanguageAPI.Add(specialSkillDef2.skillNameToken, "Retrival");
+            LanguageAPI.Add(specialSkillDef2.skillDescriptionToken, "Throw a winch towards the deployed MAID unit, bringing her back.");
+
+
             LoadoutAPI.AddSkillDef(specialSkillDef);
+            LoadoutAPI.AddSkillDef(specialSkillDef2);
             SkillFamily specialSkillFamily = skillLocator.special.skillFamily;
 
             specialSkillFamily.variants[0] = new SkillFamily.Variant
@@ -755,6 +794,16 @@ namespace Moonstorm.Cores.HAND
         {
             On.RoR2.CameraRigController.OnEnable += FixFadingInLobby;
             On.RoR2.HealthComponent.TakeDamage += HealthComponent_TakeDamage;
+            On.Spinner.Start += Spinner_Start;
+        }
+
+        private void Spinner_Start(On.Spinner.orig_Start orig, Spinner self)
+        {
+            orig(self);
+            if (self.gameObject.name == "WyattMaid(Clone)")
+            {
+                self.randRotationSpeed = 50;
+            }
         }
 
         private void FixFadingInLobby(On.RoR2.CameraRigController.orig_OnEnable orig, CameraRigController rig)
@@ -810,25 +859,25 @@ namespace Moonstorm.Cores.HAND
             string desc = "AYO HOL' UP <color=#CCD3E0>" + Environment.NewLine + Environment.NewLine;
             desc = desc + "< ! > *SMACKS LIPS*" + Environment.NewLine + Environment.NewLine;
             desc = desc + "< ! > SO WHAT YOU BE SAYIN' IS" + Environment.NewLine + Environment.NewLine;
-            desc = desc + "< ! > *WRITES FANFICTION-TIER DESCRIPTIONS*" + Environment.NewLine + Environment.NewLine;
+            desc = desc + "< ! > *HANDICAPS MOONFALL*" + Environment.NewLine + Environment.NewLine;
             desc = desc + "< ! > HOL' UP" + Environment.NewLine + Environment.NewLine;
-            desc = desc + "< ! > *DOESN'T PLAY STARSTORM*" + Environment.NewLine + Environment.NewLine;
+            desc = desc + "< ! > *DIVERTS ALL RESOURCES TO STARSTORM 2*" + Environment.NewLine + Environment.NewLine;
             desc = desc + "< ! > SO WHAT YOU BE SAYIN' IS....." + Environment.NewLine + Environment.NewLine;
-            desc = desc + "< ! > *RIPS OFF POPULAR 1 MOD*" + Environment.NewLine + Environment.NewLine;
+            desc = desc + "< ! > *ONLY HAS ONE CODER ON MOONFALL*" + Environment.NewLine + Environment.NewLine;
             desc = desc + "< ! > AYO" + Environment.NewLine + Environment.NewLine;
-            desc = desc + "< ! > *MAKES THEIR DOG A DEV*" + Environment.NewLine + Environment.NewLine;
+            desc = desc + "< ! > *SCOPE CREEP*" + Environment.NewLine + Environment.NewLine;
             desc = desc + "< ! > FINNA REALLY" + Environment.NewLine + Environment.NewLine;
-            desc = desc + "< ! > *RUNS A SHIT COMPETITION FOR BUILD ACCESS*" + Environment.NewLine + Environment.NewLine;
+            desc = desc + "< ! > *DEVELOPMENT MOVES AT THE PACE OF A DYING SNAIL*" + Environment.NewLine + Environment.NewLine;
             desc = desc + "< ! > WE GONNA FINNA" + Environment.NewLine + Environment.NewLine;
-            desc = desc + "< ! > *BRINGS DISCORDFAGS INTO THE THREAD*" + Environment.NewLine + Environment.NewLine;
+            desc = desc + "< ! > *ONLY HAS TWO MODELERS ON MOONFALL*" + Environment.NewLine + Environment.NewLine;
             desc = desc + "< ! > SO WHATCHOO SAYIN' IS" + Environment.NewLine + Environment.NewLine;
-            desc = desc + "< ! > *AIRS SHITSTAINED DIRTY LAUNDRY IN THREAD*" + Environment.NewLine + Environment.NewLine;
+            desc = desc + "< ! > *FINISHES NO CONTENT*" + Environment.NewLine + Environment.NewLine;
             desc = desc + "< ! > WE GONNA" + Environment.NewLine + Environment.NewLine;
-            desc = desc + "< ! > *DAMAGE CONTROLS*" + Environment.NewLine + Environment.NewLine;
+            desc = desc + "< ! > *LETS MODS BACK INTO DEV CHAT*" + Environment.NewLine + Environment.NewLine;
             desc = desc + "< ! > FINNA" + Environment.NewLine + Environment.NewLine;
             desc = desc + "< ! > *NAMEDROPS*" + Environment.NewLine + Environment.NewLine;
             desc = desc + "< ! > MAKE A MOD? SHIEEEEEEEEETTTTTTTTT" + Environment.NewLine + Environment.NewLine;
-            desc = desc + "< ! > *LEAKS UNFINISHED BUILD*" + Environment.NewLine + Environment.NewLine;
+            desc = desc + "< ! > *NEVER RELEASES*" + Environment.NewLine + Environment.NewLine;
 
             LanguageAPI.Add("WYATT_DESCRIPTION", desc);
             LanguageAPI.Add("WYATT_OUTRO_FLAVOR", "...and so he left, unsure of his next task.");

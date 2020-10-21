@@ -6,8 +6,7 @@ using RoR2.Projectile;
 using RoR2.Skills;
 using System.Collections.Generic;
 using UnityEngine;
-
-
+using UnityEngine.Networking;
 
 public static class API
 {
@@ -81,6 +80,47 @@ public static class API
 
     #endregion
     #region R2API Expanded
+    #endregion
+    #region Projectiles
+    /// <summary>
+    /// Creates a valid projectile from a GameObject 
+    /// </summary>
+    /// <param name="projectile"></param>
+    public static void CreateValidProjectile(GameObject projectile, float lifeTime, float velocity, bool updateAfterFiring) {
+        var networkIdentity = projectile.AddComponent<NetworkIdentity>();
+        var teamFilter = projectile.AddComponent<TeamFilter>();
+        var projectileController = projectile.AddComponent<ProjectileController>();
+        var networkTransform = projectile.AddComponent<ProjectileNetworkTransform>();
+        var projectileSimple = projectile.AddComponent<ProjectileSimple>();
+        var projectileDamage = projectile.AddComponent<ProjectileDamage>();
+
+        //setup the projectile controller
+        projectileController.allowPrediction = false;
+        projectileController.predictionId = 0;
+        projectileController.procCoefficient = 1;
+        projectileController.owner = null;
+
+        //setup the network transform
+        networkTransform.allowClientsideCollision = false;
+        networkTransform.interpolationFactor = 1;
+        networkTransform.positionTransmitInterval = 0.03333334f;
+
+        //setup the projectile simple
+        projectileSimple.velocity = velocity;
+        projectileSimple.lifetime = lifeTime;
+        projectileSimple.updateAfterFiring = updateAfterFiring;
+        projectileSimple.enableVelocityOverLifetime = false;
+        //projectileSimple.velocityOverLifetime = UnityEngine.AnimationCurve.;
+        projectileSimple.oscillate = false;
+        projectileSimple.oscillateMagnitude = 20;
+        projectileSimple.oscillateSpeed = 0;
+
+        projectileDamage.damage = 0;
+        projectileDamage.crit = false;
+        projectileDamage.force = 0;
+        projectileDamage.damageColorIndex = DamageColorIndex.Default;
+        projectileDamage.damageType = DamageType.Shock5s;
+    }
     #endregion
     #region AI
     /// <summary>

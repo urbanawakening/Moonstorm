@@ -164,20 +164,6 @@ namespace Moonstorm.Cores
                     self.characterMotor.useGravity = true;
                 }
             }
-            if (buffType == antiGravFriendlyIndex)
-            {
-                if (self.characterMotor)
-                {
-                    var gParams = self.characterMotor.gravityParameters;
-                    gParams.environmentalAntiGravityGranterCount--;
-                    self.characterMotor.gravityParameters = gParams;
-
-                    var fParams = self.characterMotor.flightParameters;
-                    fParams.channeledFlightGranterCount--;
-                    self.characterMotor.flightParameters = fParams;
-                }
-            }
-
             orig(self, buffType);
         }
 
@@ -222,15 +208,7 @@ namespace Moonstorm.Cores
                     self.SetPropertyValue("moveSpeed", moveSpeed -= 1f);
                 }
                 if (self.HasBuff(antiGravFriendlyIndex)) {
-                    if (self.characterMotor) {
-                        var gParams = self.characterMotor.gravityParameters;
-                        gParams.environmentalAntiGravityGranterCount++;
-                        self.characterMotor.gravityParameters = gParams;
-
-                        var fParams = self.characterMotor.flightParameters;
-                        fParams.channeledFlightGranterCount++;
-                        self.characterMotor.flightParameters = fParams;
-                    }
+                    self.SetPropertyValue("moveSpeed", moveSpeed += 6f);
                 }
                 if (self.HasBuff(wyattCombatIndex)) {
                     for (int i = 0; i < self.GetBuffCount(wyattCombatIndex); i++) {

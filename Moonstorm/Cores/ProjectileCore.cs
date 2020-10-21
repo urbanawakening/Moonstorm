@@ -194,46 +194,112 @@ namespace Moonstorm.Cores
 
         private protected void CreateWyattMaidBubble()
         {
-            wyattMaidBubble = Resources.Load<GameObject>("prefabs/projectiles/LoaderPylon").InstantiateClone("WyattMaidBubble", true);
-            var registered = API.RegisterNewProjectile(wyattMaidBubble);
-            if (registered)
-            {
-                var origTimeWard = Resources.Load<GameObject>("prefabs/networkedobjects/TimeBubbleWard");
+            wyattMaidBubble = AssetsCore.mainAssetBundle.LoadAsset<GameObject>("WyattMaid");
 
-                var activatedWard = Object.Instantiate<GameObject>(origTimeWard);
-                HurtBoxGroup hurtBoxGroup = wyattMaidBubble.AddComponent<HurtBoxGroup>();
+            API.CreateValidProjectile(wyattMaidBubble, float.MaxValue, 0, true);
 
-                HurtBox componentInChildren = wyattMaidBubble.AddComponent<HurtBox>();
-                componentInChildren.gameObject.layer = LayerIndex.entityPrecise.intVal;
-                componentInChildren.healthComponent = null;
-                componentInChildren.isBullseye = true;
-                componentInChildren.damageModifier = HurtBox.DamageModifier.Normal;
-                componentInChildren.hurtBoxGroup = hurtBoxGroup;
-                componentInChildren.indexInGroup = 0;
-                //hurtbox.indexInGroup = //lovecraft's cat.
+            //game objects
+            var activatedWard = Resources.Load<GameObject>("prefabs/networkedobjects/TimeBubbleWard");
 
-                wyattMaidBubble.GetComponent<ProjectileSimple>().lifetime = 30;
-                wyattMaidBubble.GetComponent<BeginRapidlyActivatingAndDeactivating>().delayBeforeBeginningBlinking = 25;
+            var origVisuals = activatedWard.transform.Find("Visuals+Collider/Sphere");
+            var origRenderer = origVisuals.GetComponent<Renderer>();
 
-                Object.Destroy(wyattMaidBubble.GetComponent<ProjectileProximityBeamController>());
+            var mdl = wyattMaidBubble.transform.Find("mdlWyattMaid");
+            var antiGravDummy = wyattMaidBubble.transform.Find("TimeBubble/BuffWard/ScaleWithRadius/PlayerAntiGrav");
+            var buffWardObject = wyattMaidBubble.transform.Find("TimeBubble/BuffWard");
+            var projectileSlowObject = wyattMaidBubble.transform.Find("TimeBubble/BuffWard/ScaleWithRadius/SlowDownProjectiles");
+            var visualsObject = wyattMaidBubble.transform.Find("TimeBubble/BuffWard/ScaleWithRadius/Visuals"); //visuals
+            var scaleWithRadius = wyattMaidBubble.transform.Find("TimeBubble/BuffWard/ScaleWithRadius");
 
-                wyattMaidBubble.AddComponent<MAID>();
-                wyattMaidBubble.GetComponent<SphereCollider>().isTrigger = true;
-                wyattMaidBubble.GetComponent<AntiGravityForce>().antiGravityCoefficient = 2;
+            var visualsRenderer = visualsObject.GetComponent<Renderer>();
 
-                activatedWard.GetComponent<BuffWard>().radius = 15;
-                activatedWard.GetComponent<BuffWard>().buffType = BuffCore.instance.antiGravIndex;
-                activatedWard.transform.SetParent(wyattMaidBubble.transform);
-                activatedWard.transform.position = new Vector3(0, 0, 0);
-                activatedWard.transform.localScale = new Vector3(1f, 1f, 1f);
-                //activatedWard.transform.Find("Visuals+Collider").gameObject.layer = 0;
-                //activatedWard.transform.Find("Visuals+Collider").gameObject.AddComponent<BoxCollider>();
-                //activatedWard.transform.Find("Visuals+Collider").gameObject.AddComponent<FliteredNoGravZone>();
+            wyattMaidBubble.AddComponent<MAID>();
+
+            var speen = mdl.AddComponent<Spinner>();
+
+            //removed cause it did nothing useful lmao
+            //var noGravForce = wyattMaidBubble.AddComponent<AntiGravityForce>();
+            //noGravForce.antiGravityCoefficient = 0.1f;
+            //noGravForce.rb = wyattMaidBubble.GetComponent<Rigidbody>();
+
+            SetupBuffward();
+            SetupSlowProjectiles();
+            SetupVisuals();
+
+            //projectileSlowObject.gameObject.SetActive(false);
+
+            var noGravZone = antiGravDummy.AddComponent<FliteredNoGravZone>();
+            
+            void SetupBuffward() {
+                TeamFilter();
+                BuffWard();
+
+                void TeamFilter() {
+                    var teamFilter = buffWardObject.AddComponent<TeamFilter>();
+                    teamFilter.SetTeamServer("Player");
+                }
+                void BuffWard() {
+                    //buffward
+                    var buffWard = buffWardObject.AddComponent<BuffWard>();
+                    buffWard.radius = 45;
+                    buffWard.interval = 0.2f;
+                    buffWard.rangeIndicator = scaleWithRadius;
+                    buffWard.buffType = BuffCore.instance.antiGravIndex;
+                    buffWard.buffDuration = 2;
+                    buffWard.floorWard = false;
+                    buffWard.expires = false;
+                    buffWard.invertTeamFilter = true;
+                    buffWard.expireDuration = 15;
+                    buffWard.animateRadius = false;
+                    buffWard.radiusCoefficientCurve = activatedWard.GetComponent<BuffWard>().radiusCoefficientCurve;
+                    buffWard.removalTime = 0;
+                    //buffWard.removalSoundString =
+                    //buffWard.onRemoval = UnityEngine.Events.UnityEvent UnityEngine.Events.UnityEvent
+                }
             }
-            else LogCore.LogF("FATAL ERROR:" + wyattMaidBubble.name + " failed to register to the projectile catalog!");
+            void SetupSlowProjectiles() {
+                projectileSlowObject.gameObject.layer = 12;
+
+                var projectileSlow = projectileSlowObject.AddComponent<SlowDownProjectiles>();
+                projectileSlow.maxVelocityMagnitude = 3;
+                projectileSlow.antiGravity = -0.5f;
+            }
+            void SetupVisuals() {
+                //you're flesh and blood - but what's underneath?
+                visualsRenderer.materials = origRenderer.materials;
+                //var rotate = visualsObject.AddComponent<Rewired.ComponentControls.Effects.RotateAroundAxis>
+            }
+
+            API.RegisterNewProjectile(wyattMaidBubble);
+            //var registered = API.RegisterNewProjectile(wyattMaidBubble);
+            //if (registered)
+            //{
+            /*var origTimeWard = Resources.Load<GameObject>("prefabs/networkedobjects/TimeBubbleWard");
+
+            var activatedWard = Object.Instantiate<GameObject>(origTimeWard);
+
+            wyattMaidBubble.GetComponent<ProjectileSimple>().lifetime = 30;
+            wyattMaidBubble.GetComponent<BeginRapidlyActivatingAndDeactivating>().delayBeforeBeginningBlinking = 25;
+
+            Object.Destroy(wyattMaidBubble.GetComponent<ProjectileProximityBeamController>());
+
+            wyattMaidBubble.AddComponent<MAID>();
+            wyattMaidBubble.GetComponent<SphereCollider>().isTrigger = true;
+            wyattMaidBubble.GetComponent<AntiGravityForce>().antiGravityCoefficient = 2;
+
+            activatedWard.GetComponent<BuffWard>().radius = 15;
+            activatedWard.GetComponent<BuffWard>().buffType = BuffCore.instance.antiGravIndex;
+            activatedWard.transform.SetParent(wyattMaidBubble.transform);
+            activatedWard.transform.position = new Vector3(0, 0, 0);
+            activatedWard.transform.localScale = new Vector3(1f, 1f, 1f);
+            //activatedWard.transform.Find("Visuals+Collider").gameObject.layer = 0;
+            //activatedWard.transform.Find("Visuals+Collider").gameObject.AddComponent<BoxCollider>();
+            //activatedWard.transform.Find("Visuals+Collider").gameObject.AddComponent<FliteredNoGravZone>();*/
+            //}
+            //else LogCore.LogF("FATAL ERROR:" + wyattMaidBubble.name + " failed to register to the projectile catalog!");
         }
 
-    private protected void CreateBombardierPayloadProjectile()
+        private protected void CreateBombardierPayloadProjectile()
         {
             bombardierSeekerBombProjectile = Resources.Load<GameObject>("prefabs/projectiles/MissileProjectile").InstantiateClone("BombardierSeekerRocketProjectile", true);
             var registered = API.RegisterNewProjectile(bombardierFireBombProjectile);

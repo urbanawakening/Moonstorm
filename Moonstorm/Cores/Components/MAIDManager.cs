@@ -27,6 +27,7 @@ namespace Moonstorm.Cores.Components
         [Server]
         private void DeployMAIDInternal(GameObject maid)
         {
+            LogCore.LogI("Deployed maid!");
             this.maid = maid;
         }
 
@@ -41,6 +42,7 @@ namespace Moonstorm.Cores.Components
         [Server]
         private void RetrieveMAIDInternal()
         {
+            LogCore.LogI("Retrieved maid!");
             Destroy(maid);
         }
 

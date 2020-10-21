@@ -89,8 +89,8 @@ namespace Moonstorm.Cores.States.Wyatt
                             damageType = DamageType.Stun1s | DamageTypeCore.spiked,
                             crit = RollCrit(),
                             damageColorIndex = DamageColorIndex.Default,
-                            falloffModel = BlastAttack.FalloffModel.Linear,
-                            impactEffect = Resources.Load<GameObject>("prefabs/effects/omnieffect/omniimpactvfxlightning").GetComponent<EffectIndex>(),
+                            falloffModel = BlastAttack.FalloffModel.None,
+                            impactEffect = Resources.Load<GameObject>("prefabs/effects/impacteffects/ImpactLightning").GetComponent<EffectIndex>(),
                             procCoefficient = 1f,
                             radius = 5
                         }.Fire();
@@ -101,7 +101,7 @@ namespace Moonstorm.Cores.States.Wyatt
                             start = base.transform.position,
                             origin = base.transform.position
                         };
-                        EffectManager.SpawnEffect(Resources.Load<GameObject>("prefabs/effects/helfireigniteeffect"), effectData, true);
+                        EffectManager.SpawnEffect(Resources.Load<GameObject>("prefabs/effects/MaulingRockImpact.prefab"), effectData, true);
 
                         base.characterMotor.velocity = Vector3.up * 20f;
                         stage = ActionStage.HitTarget;

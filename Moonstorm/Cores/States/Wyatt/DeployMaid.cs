@@ -1,4 +1,5 @@
 ﻿using EntityStates;
+using Moonstorm.Cores.HAND;
 using RoR2;
 using RoR2.Projectile;
 using UnityEngine;
@@ -13,29 +14,39 @@ namespace Moonstorm.Cores.States.Wyatt
         {
             base.OnEnter();
             Ray aimRay = base.GetAimRay();
-            FireProjectileInfo fireProjectileInfo = new FireProjectileInfo
+            if (base.isAuthority)
             {
-                crit = base.RollCrit(),
-                damage = this.damageStat * 2,
-                damageColorIndex = DamageColorIndex.Default,
-                force = 0f,
-                owner = base.gameObject,
-                position = aimRay.origin,
-                procChainMask = default(ProcChainMask),
-                projectilePrefab = ProjectileCore.wyattMaidBubble,
-                rotation = Util.QuaternionSafeLookRotation(aimRay.direction),
-                target = null
-            };
-            ProjectileManager.instance.FireProjectile(fireProjectileInfo);
+                FireProjectileInfo info = new FireProjectileInfo()
+                {
+                    crit = RollCrit(),
+                    damage = 3 * damageStat,
+                    damageColorIndex = RoR2.DamageColorIndex.Default,
+                    damageTypeOverride = DamageType.Shock5s,
+                    force = 2500,
+                    owner = gameObject,
+                    position = transform.position,
+                    procChainMask = default,
+                    projectilePrefab = ProjectileCore.wyattMaidBubble,
+                    rotation = Util.QuaternionSafeLookRotation(aimRay.direction),
+                    target = null,
+                    useFuseOverride = false,
+                    useSpeedOverride = false
+                };
+                ProjectileManager.instance.FireProjectile(info);
+            }
         }
-
         public override void FixedUpdate()
         {
             base.FixedUpdate();
             if (fixedAge >= baseDuration && isAuthority)
             {
+                skillLocator.special.SetBaseSkill(WyattCore.instance.retrievePrimary);
                 outer.SetNextStateToMain();
             };
+        }
+        public override InterruptPriority GetMinimumInterruptPriority()
+        {
+            return InterruptPriority.PrioritySkill;
         }
     }
 }

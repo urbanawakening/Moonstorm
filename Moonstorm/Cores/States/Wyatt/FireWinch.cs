@@ -16,7 +16,7 @@ namespace Moonstorm.Cores.States.Wyatt
             FireProjectileInfo fireProjectileInfo = new FireProjectileInfo
             {
                 crit = base.RollCrit(),
-                damage = this.damageStat * 2,
+                damage = this.damageStat * 5,
                 damageColorIndex = DamageColorIndex.Default,
                 force = 0f,
                 owner = base.gameObject,

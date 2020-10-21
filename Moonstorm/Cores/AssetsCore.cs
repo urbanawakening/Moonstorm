@@ -38,6 +38,14 @@ namespace Moonstorm.Cores
         public static Sprite engiImpact;
         public static Sprite engiFlameTurrets;
 
+        public static Sprite wyattPassive;
+        public static Sprite wyattPrimary;
+        public static Sprite wyattSecondary;
+        public static Sprite wyattUtility;
+        public static Sprite wyattUtilityAlt;
+        public static Sprite wyattSpecial;
+        public static Sprite wyattSpecial2;
+
         public static Material brickWall;
         public AssetsCore()
         {
@@ -81,6 +89,15 @@ namespace Moonstorm.Cores
             engiFlameTurrets = mainAssetBundle.LoadAsset<Sprite>("Assets/Moonstorm/Icons/Engineer/TR75_Immolator_Turret_2.png");
 
             brickWall = mainAssetBundle.LoadAsset<Material>("Assets/Moonstorm/Materials/brickwall.mat");
+
+            wyattPassive = mainAssetBundle.LoadAsset<Sprite>("Assets/Moonstorm/Survivors/Wyatt/passive.png");
+            wyattPrimary = mainAssetBundle.LoadAsset<Sprite>("Assets/Moonstorm/Survivors/Wyatt/primaryicon.png");
+            wyattSecondary = mainAssetBundle.LoadAsset<Sprite>("Assets/Moonstorm/Survivors/Wyatt/secondaryicon.png");
+            wyattUtility = mainAssetBundle.LoadAsset<Sprite>("Assets/Moonstorm/Survivors/Wyatt/utilityicon.png");
+            wyattUtilityAlt = mainAssetBundle.LoadAsset<Sprite>("Assets/Moonstorm/Survivors/Wyatt/utilityicon2.png");
+            wyattSpecial = mainAssetBundle.LoadAsset<Sprite>("Assets/Moonstorm/Survivors/Wyatt/specialicon.png");
+            wyattSpecial2 = mainAssetBundle.LoadAsset<Sprite>("Assets/Moonstorm/Survivors/Wyatt/specialicon2.png");
+
 
             //HAN-D
             winchIcon = HANDAssetBundle.LoadAsset<Sprite>("Assets/Import/HAND_ICONS/Winch.png");
