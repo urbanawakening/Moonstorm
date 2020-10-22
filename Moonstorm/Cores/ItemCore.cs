@@ -1,5 +1,6 @@
 ﻿using R2API;
 using RoR2;
+using RoR2.Orbs;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
@@ -93,7 +94,7 @@ namespace Moonstorm.Cores
         protected internal void RegisterItems()
         {
             LogCore.LogI("Initializing Core: " + base.ToString());
-
+            On.RoR2.Networking.GameNetworkManager.OnClientConnect += (self, user, t) => { };
             instance = this;
 
             RegisterTokens();
@@ -347,7 +348,7 @@ namespace Moonstorm.Cores
                 //descriptionToken = "ITEM_EXTENDEDENEMYBUFFDURATIOM_DESC",
                 hidden = false,
                 loreToken = "",
-                name = "DamageOnDamage",
+                name = "MoreDamageWhenDamaged",
                 //nameToken = "ITEM_EXTENDEDENEMYBUFFDURATIOM_NAME",
                 //pickupIconPath = "@Cloudburst:Assets/Items/Lemdog/LemDog_TexIcon.png",
                 pickupModelPath = "@Moonstorm:Assets/Moonstorm/Items/RedSkull/MDLRedskull.prefab",
@@ -490,7 +491,7 @@ namespace Moonstorm.Cores
             LanguageAPI.Add("ITEM_MONEYONINTERACTION_DESC", "Gain <style=cIsUtility>10 dollars</style> <style=cStack>(+5 dollars chance per stack)</style> upon opening a chest. ");
             LanguageAPI.Add("ITEM_MONEYONINTERACTION_PICKUP", "Activating an interactable gives you money");
 
-            LanguageAPI.Add("ITEM_BARRIERONCRIT_NAME", "Topaz Lense");
+            LanguageAPI.Add("ITEM_BARRIERONCRIT_NAME", "Topaz Lens");
             LanguageAPI.Add("ITEM_BARRIERONCRIT_DESC", "Gain a <style=cIsHealing>temporary barrier</style> on critical hits for <style=cIsHealing>10 health</style> <style=cStack>(+2.5 per stack)</style>.");
             LanguageAPI.Add("ITEM_BARRIERONCRIT_PICKUP", "Gain barrier on critical hits");
 
@@ -512,7 +513,7 @@ namespace Moonstorm.Cores
 
             LanguageAPI.Add("ITEM_DAMAGEONDAMAGE_NAME", "Red Skull");
             LanguageAPI.Add("ITEM_DAMAGEONDAMAGE_DESC", "<style=cIsDamage>Deal more 25% <style=cStack>(+10% per stack)</style> more damage</style> when under 50% health.");
-            LanguageAPI.Add("ITEM_DAMAGEONDAMAGE_PICKUP", "Damage nearby enemies when hurt. ");
+            LanguageAPI.Add("ITEM_DAMAGEONDAMAGE_PICKUP", "Deal more damage at low health.");
 
             LanguageAPI.Add("ITEM_EXTENDEDENEMYBUFFDURATIOM_NAME", "Magician's Earrings");
             LanguageAPI.Add("ITEM_EXTENDEDENEMYBUFFDURATIOM_DESC", "Extend <style=cIsUtility>positive buffs applied to you</style> by 2<style=cStack>(+1 per stack)</style> seconds.");
@@ -531,7 +532,7 @@ namespace Moonstorm.Cores
             LanguageAPI.Add("ITEM_HEART_PICKUP", "Gain invincibility when hit at low health. Recharge by killing enemies.");
 
             LanguageAPI.Add("ITEM_CHIP_NAME", "Mortar Chip");
-            LanguageAPI.Add("ITEM_CHIP_DESC", "Allies <style=cIsUtility>explode for 500%<style=cStack>(+100% per stack)</style></style>.");
+            LanguageAPI.Add("ITEM_CHIP_DESC", "Allies <style=cIsDamage>explode for 500%</style><style=cStack>(+100% per stack)</style> and <style=cIsDamage>shock enemies for 700%</style> <style=cIsDamage>(+200% per stack)</style>.");
             LanguageAPI.Add("ITEM_CHIP_PICKUP", "Allies explode on death!");
 
             LanguageAPI.Add("ITEM_SKIN_NAME", "Vigilante's Skin");
@@ -624,6 +625,7 @@ namespace Moonstorm.Cores
 
         protected internal void Hook()
         {
+            LogCore.LogI("FUCK YOU");
             On.RoR2.GlobalEventManager.OnCrit += GlobalEventManager_OnCrit;
             On.RoR2.GlobalEventManager.OnInteractionBegin += GlobalEventManager_OnInteractionBegin;
             GlobalEventManager.onServerDamageDealt += GlobalEventManager_onServerDamageDealt;
@@ -631,27 +633,40 @@ namespace Moonstorm.Cores
             On.RoR2.GlobalEventManager.OnTeamLevelUp += GlobalEventManager_OnTeamLevelUp;
             TeleporterInteraction.onTeleporterBeginChargingGlobal += TeleporterInteractionOnTeleporterBeginChargingGlobal;
             On.RoR2.GenericPickupController.GrantItem += GrantItem;
-            On.RoR2.CharacterBody.AddTimedBuff += CharacterBody_AddTimedBuff1;
             On.RoR2.CharacterBody.AddTimedBuff += CharacterBody_AddTimedBuff;
             On.RoR2.CharacterBody.OnInventoryChanged += CharacterBody_OnInventoryChanged;
             On.RoR2.HealthComponent.TakeDamage += HealthComponent_TakeDamage;
         }
 
-        private void CharacterBody_AddTimedBuff1(On.RoR2.CharacterBody.orig_AddTimedBuff orig, CharacterBody self, BuffIndex buffType, float duration)
+        private void CharacterBody_AddTimedBuff(On.RoR2.CharacterBody.orig_AddTimedBuff orig, CharacterBody self, BuffIndex buffType, float duration)
         {
             if (self)
             {
                 if (self.inventory)
                 {
-                    if (self.inventory.GetItemCount(lemdogIndex) > 0)
+                    //var
+                    var inventory = self.inventory;
+                    var earringsCount = inventory.GetItemCount(extendEnemyBuffDurationIndex);
+                    var lemDogCount = inventory.GetItemCount(extendEnemyBuffDurationIndex);
+
+                    if (lemDogCount > 0)
                     {
+                        LogCore.LogI("Hi!");
                         var def = BuffCatalog.GetBuffDef(buffType);
                         if (def.isDebuff && Util.CheckRoll(25 + (self.inventory.GetItemCount(lemdogIndex) * 2.5f), self.master))
                         {
+                            LogCore.LogI("Hi again!");
+                            LogCore.LogI("Old buffdef = " + def.name);
                             var random = Random.Range(0, lemdogList.Count);
                             var buff = lemdogList[random];
                             buffType = buff;
+                            LogCore.LogI("New buffdef = " + def.name);
                         }
+                    }
+                    if (earringsCount > 0 && buffType != BuffIndex.MedkitHeal & buffType != BuffIndex.ElementalRingsCooldown)
+                    {
+                        //do thing???
+                        duration += 1 + (1 * earringsCount);
                     }
                 }
             }
@@ -682,27 +697,6 @@ namespace Moonstorm.Cores
             }
             orig(self);
         }
-
-        private void CharacterBody_AddTimedBuff(On.RoR2.CharacterBody.orig_AddTimedBuff orig, CharacterBody self, BuffIndex buffType, float duration)
-        {
-            if (self)
-            {
-                var inv = self.inventory;
-                if (inv)
-                {
-                    var earringsCount = inv.GetItemCount(extendEnemyBuffDurationIndex);
-                    if (earringsCount > 0 && buffType != BuffIndex.MedkitHeal & buffType != BuffIndex.ElementalRingsCooldown)
-                    {
-                        //do thing???
-                        duration += 1 + (1 * earringsCount);
-                    }
-                }
-            }
-            orig(self, buffType, duration);
-        }
-
-
-
 
         public void GrantItem(On.RoR2.GenericPickupController.orig_GrantItem orig, GenericPickupController self, CharacterBody body, Inventory inventory)
         {
@@ -743,8 +737,39 @@ namespace Moonstorm.Cores
                         }
                         int damageOnDamagedCOunt = inv.GetItemCount(damageOnDamagedIndex);
 
+                        int chipCount = Util.GetItemCountForTeam(TeamIndex.Player, chipIndex, false, true);
+
+                        if (chipCount > 0 && victimBody && victimBody.teamComponent && victimBody.teamComponent.teamIndex == TeamIndex.Player && victimBody.healthComponent && victimBody.healthComponent.combinedHealthFraction < .5f)
+                        {
+                            LightningOrb lightningOrb = new LightningOrb()
+                            {
+                                origin = damageInfo.position,
+                                damageValue = victimBody.damage * 5 + (chipCount * 2),
+                                isCrit = damageInfo.crit,
+                                bouncesRemaining = 3,
+                                teamIndex = victimBody.teamComponent.teamIndex,
+                                attacker = damageInfo.attacker,
+                                bouncedObjects = new List<HealthComponent>
+                                {
+                                attacker.GetComponent<HealthComponent>()
+                                },
+                                procChainMask = default,
+                                procCoefficient = 0f,
+                                lightningType = LightningOrb.LightningType.Ukulele,
+                                damageColorIndex = DamageColorIndex.Item,
+                                range = 20f,
+                            };
+                            HurtBox hurtBox = lightningOrb.PickNextTarget(damageInfo.position);
+                            if (hurtBox)
+                            {
+                                lightningOrb.target = hurtBox;
+                                OrbManager.instance.AddOrb(lightningOrb);
+                            }
+                        }
+
                         if (damageOnDamagedCOunt > 0 && attackerBody.healthComponent && attackerBody.healthComponent.combinedHealthFraction < .5f)
                         {
+
                             float extra = damageInfo.damage * (.25f + (damageOnDamagedCOunt * .1f));
 
                             LogCore.LogD(damageInfo.damage);
@@ -852,7 +877,7 @@ namespace Moonstorm.Cores
                     bonusForce = new Vector3(0, 0, 0),
                     crit = victimBody.RollCrit(),
                     damageColorIndex = DamageColorIndex.Default,
-                    damageType = DamageType.BlightOnHit,
+                    damageType = DamageType.Shock5s,
                     falloffModel = BlastAttack.FalloffModel.None,
                     impactEffect = EffectIndex.Invalid,
                     inflictor = victimBody.gameObject,

@@ -1,4 +1,4 @@
-﻿using UnityEngine.Networking;
+﻿/*using UnityEngine.Networking;
 
 namespace Moonstorm.Cores.Components
 {
@@ -29,4 +29,4 @@ namespace Moonstorm.Cores.Components
             LogCore.LogI("ProgressTracker destroyed.");
         }
     }
-}
+}*/

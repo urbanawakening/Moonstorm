@@ -116,11 +116,11 @@ namespace Moonstorm
             DefineConfig();
             InitializeCores();
 
-            if (!gameObject.HasComponent<ProgressTracker>() || !ProgressTracker.instance)
-            {
-                LogCore.LogI("Bepinex object does not have a progress tracker or there is no instance of the progress tracker. Attaching now.");
-                gameObject.AddComponent<ProgressTracker>();
-            }
+            //if (!gameObject.HasComponent<ProgressTracker>() || !ProgressTracker.instance)
+            //{
+            //    LogCore.LogI("Bepinex object does not have a progress tracker or there is no instance of the progress tracker. Attaching now.");
+            //    gameObject.AddComponent<ProgressTracker>();
+            //}
 
 
             
