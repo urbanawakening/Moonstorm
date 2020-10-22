@@ -695,7 +695,7 @@ namespace Moonstorm.Cores.HAND
             specialSkillDef.activationState = new SerializableEntityStateType(typeof(DeployMaid));
             specialSkillDef.activationStateMachineName = "Weapon";
             specialSkillDef.baseMaxStock = 1;
-            specialSkillDef.baseRechargeInterval = 1;
+            specialSkillDef.baseRechargeInterval = 3;
             specialSkillDef.beginSkillCooldownOnSkillEnd = true;
             specialSkillDef.canceledFromSprinting = false;
             specialSkillDef.fullRestockOnAssign = true;
@@ -722,7 +722,7 @@ namespace Moonstorm.Cores.HAND
             specialSkillDef2.activationState = new SerializableEntityStateType(typeof(RetrieveMaid));
             specialSkillDef2.activationStateMachineName = "Weapon";
             specialSkillDef2.baseMaxStock = 1;
-            specialSkillDef2.baseRechargeInterval = 1;
+            specialSkillDef2.baseRechargeInterval = 3;
             specialSkillDef2.beginSkillCooldownOnSkillEnd = true;
             specialSkillDef2.canceledFromSprinting = false;
             specialSkillDef2.fullRestockOnAssign = true;

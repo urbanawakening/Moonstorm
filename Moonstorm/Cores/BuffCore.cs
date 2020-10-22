@@ -143,7 +143,7 @@ namespace Moonstorm.Cores
             bool shouldOrigSelf = true;
             if (self)
             {
-                if (buffType == this.antiGravIndex && self.baseNameToken == "WYATT_BODY_NAME")
+                if (buffType == this.antiGravIndex && self.teamComponent && self.teamComponent.teamIndex == TeamIndex.Player)
                 {
                     shouldOrigSelf = false;
                     //self.AddTimedBuff(this.antiGravFriendlyIndex, 10);
