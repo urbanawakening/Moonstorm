@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 1205447304
+CRC: 1728106007
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 290a86b21ea64dc437c05b5c65050f91
+    Hash: 2d4cdc30f4807f3366a6ff1f59a3384f
   TypeTreeHash:
     serializedVersion: 2
     Hash: 79c31612da9a127847ca328e3d297aed
@@ -62,6 +62,7 @@ Assets:
 - Assets/Executioner/exeportrait.png
 - Assets/Executioner/ExecAnimatorMenu.controller
 - Assets/Items/BloodTester/BloodTester_Icon.png
+- Assets/Items/CoffeeBag/CoffeeBag_Icon.png
 - Assets/Items/Diary/MDLDiary.prefab
 - Assets/Items/StrangeCan/StrangeCan_Icon.png
 - Assets/Items/DormantFungus/DormantFungus_Icon.png
@@ -92,6 +93,7 @@ Assets:
 - Assets/Nemmando/VFX/SwordSwipe.asset
 - Assets/Executioner/skill4icon.png
 - Assets/Items/GreaterWarbanner/GreaterWarbanner_Icon.png
+- Assets/Items/Fork/Fork_Icon.png
 - Assets/Executioner/skill1icon.png
 - Assets/Nemmando/NemmandoModel.prefab
 - Assets/Items/ErraticGadget/ErraticGadget_Icon.png

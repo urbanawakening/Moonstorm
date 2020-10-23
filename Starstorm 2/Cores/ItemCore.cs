@@ -30,6 +30,8 @@ namespace Starstorm2.Cores
         protected internal ItemIndex erraticGadgetIndex;
         protected internal ItemIndex explodeOnJumpIndex;
         protected internal ItemIndex aoeOnHitIndex;
+        protected internal ItemIndex forkIndex;
+        protected internal ItemIndex coffeeIndex;
 
         private const string modPrefix = "@Starstorm2:";
         private const string prefabPath = modPrefix + "Assets/Items/";
@@ -262,6 +264,45 @@ namespace Starstorm2.Cores
                 tier = ItemTier.Tier1,
                 unlockableName = ""
             });
+            ItemTag[] forkTags = new ItemTag[]
+            {
+                ItemTag.Damage
+            };
+            forkIndex = RegisterItem(new ItemDef
+            {
+                canRemove = true,
+                descriptionToken = "ITEM_FORK_DESC",
+                hidden = false,
+                loreToken = "",
+                name = "Fork",
+                nameToken = "ITEM_FORK_NAME",
+                pickupIconPath = prefabPath + "Fork/Fork_Icon.png",
+
+                pickupToken = "ITEM_FORK_PICKUP",
+                tags = forkTags,
+                tier = ItemTier.Tier1,
+                unlockableName = ""
+            });
+            ItemTag[] coffeeTags = new ItemTag[]
+            {
+                ItemTag.Damage,
+                ItemTag.Utility
+            };
+            coffeeIndex = RegisterItem(new ItemDef
+            {
+                canRemove = true,
+                descriptionToken = "ITEM_COFFEE_DESC",
+                hidden = false,
+                loreToken = "",
+                name = "CoffeeBag",
+                nameToken = "ITEM_COFFEE_NAME",
+                pickupIconPath = prefabPath + "CoffeeBag/CoffeeBag_Icon.png",
+
+                pickupToken = "ITEM_COFFEE_PICKUP",
+                tags = coffeeTags,
+                tier = ItemTier.Tier1,
+                unlockableName = ""
+            });
 
             Hook();
         }
@@ -315,6 +356,14 @@ namespace Starstorm2.Cores
             LanguageAPI.Add("ITEM_AOEONHIT_NAME", "Malice");
             LanguageAPI.Add("ITEM_AOEONHIT_DESC", "On damaging an enemy, up to <style=cIsDamage>1</style> other enemy <style=cStack>(+1 per stack)</style> within 5m of that enemy <style=cStack>(+1m per stack)</style> receives <style=cIsDamage>55%</style> damage.");
             LanguageAPI.Add("ITEM_AOEONHIT_PICKUP", "Damage dealt spreads to nearby enemies.");
+
+            LanguageAPI.Add("ITEM_FORK_NAME", "Fork");
+            LanguageAPI.Add("ITEM_FORK_DESC", "Increase your base damage by <style=cIsDamage>25%</style> <style=cStack>(+25% per stack)</style>.");
+            LanguageAPI.Add("ITEM_FORK_PICKUP", "Deal more damage.");
+
+            LanguageAPI.Add("ITEM_COFFEE_NAME", "Coffee Bag");
+            LanguageAPI.Add("ITEM_COFFEE_DESC", "Increase your base movement speed by <style=cIsUtility>10%</style> <style=cStack>(+10% per stack)</style> and your base attack speed by <style=cIsDamage>7%</style> <style=cStack>(+7% per stack)</style>.");
+            LanguageAPI.Add("ITEM_COFFEE_PICKUP", "Move and attack faster.");
         }
 
         protected internal ItemIndex RegisterItem(ItemDef itemDef)
@@ -350,6 +399,7 @@ namespace Starstorm2.Cores
             On.RoR2.EquipmentSlot.PerformEquipmentAction += EquipmentSlot_PerformEquipmentAction;
             On.RoR2.GlobalEventManager.OnHitEnemy += GlobalEventManager_OnHitEnemy;
             On.RoR2.CharacterMotor.OnLeaveStableGround += CharacterMotor_OnLeaveStableGround;
+            On.RoR2.CharacterBody.RecalculateStats += CharacterBody_RecalculateStats;
         }
 
         private void CharacterMotor_OnLeaveStableGround(On.RoR2.CharacterMotor.orig_OnLeaveStableGround orig, CharacterMotor self)
@@ -656,6 +706,22 @@ namespace Starstorm2.Cores
             orig(self, damageInfo, victim);
         }
 
+        private void CharacterBody_RecalculateStats(On.RoR2.CharacterBody.orig_RecalculateStats orig, CharacterBody self)
+        {
+            orig(self);
+            Inventory inv = self.inventory;
+            if (inv)
+            {
+                int forkCount = inv.GetItemCount(forkIndex);
+                if (forkCount > 0)
+                    self.damage += self.damage * 0.25f * forkCount;
+
+                int coffeeCount = inv.GetItemCount(coffeeIndex);
+                self.moveSpeed += self.baseMoveSpeed * 0.1f * coffeeCount;
+                self.attackSpeed += self.baseAttackSpeed * 0.07f * coffeeCount;
+            }
+        }
+
         public void DropShipCall(Transform transform, int itemCount)
         {
             List<PickupIndex> list = Util.CheckRoll((5 * itemCount)) ? Run.instance.availableTier2DropList : Run.instance.availableTier1DropList;
@@ -737,6 +803,14 @@ namespace Starstorm2.Cores
                     timer = 0;
                 }
             }
+        }
+    }
+
+    public class ForkBehavior : CharacterBody.ItemBehavior
+    {
+        public void Awake()
+        {
+            body = gameObject.GetComponent<CharacterBody>();
         }
     }
 }
