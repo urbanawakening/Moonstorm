@@ -225,6 +225,7 @@ namespace EntityStates.Executioner
                         {
                             if (hp.GetComponent<TeamComponent>().teamIndex != TeamComponent.GetObjectTeam(base.gameObject))
                             {
+                                dropDamage.position = hp.transform.position;
                                 hp.TakeDamage(dropDamage);
                                 hitTargets.Add(hp);
                             }

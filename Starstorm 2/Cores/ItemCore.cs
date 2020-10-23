@@ -442,7 +442,6 @@ namespace Starstorm2.Cores
                                 if (body.teamComponent && body.isPlayerControlled && self.health < self.fullHealth && nonRegen == true)
                                 {
                                     healAccum += amount;
-                                    Debug.Log(healAccum);
                                 }
                             }
                             if (healAccum >= 15f)
@@ -499,7 +498,6 @@ namespace Starstorm2.Cores
             }
             var combinedHealthb4Damage = self.combinedHealth;
             orig(self, damageInfo);
-
         }
 
         #region GlobalEventManager
@@ -581,7 +579,8 @@ namespace Starstorm2.Cores
             GameObject attacker = damageInfo.attacker;
             if (self && attacker)
             {
-                var inventory = attacker.GetComponent<CharacterBody>().inventory;
+                var attackerBody = attacker.GetComponent<CharacterBody>();
+                var inventory = attackerBody.inventory;
                 if (inventory)
                 {
                     var master = attacker.GetComponent<CharacterMaster>();
@@ -608,7 +607,7 @@ namespace Starstorm2.Cores
                                 EffectData effectData = new EffectData
                                 {
                                     origin = victim.GetComponent<CharacterBody>().corePosition,
-                                    start = attacker.GetComponent<CharacterBody>().corePosition
+                                    start = attackerBody.corePosition
                                 };
                                 EffectManager.SpawnEffect(erraticGadgetEffectPrefab, effectData, true);
                             }
@@ -620,7 +619,6 @@ namespace Starstorm2.Cores
                     }
 
                     //malice
-                    var attackerBody = attacker.GetComponent<CharacterBody>();
                     int maliceCount = inventory.GetItemCount(aoeOnHitIndex); 
                     if (maliceCount > 0)
                     {
@@ -645,8 +643,9 @@ namespace Starstorm2.Cores
                         for (int i = 0; hits < maliceCount && i < aoe.Length; i++)
                         {
                             HealthComponent hp = aoe[i].GetComponent<HealthComponent>();
-                            if (hp && hp.GetComponent<TeamComponent>().teamIndex != TeamComponent.GetObjectTeam(attacker))
+                            if (hp && hp.GetComponent<TeamComponent>().teamIndex != TeamComponent.GetObjectTeam(attacker) && hp.body != victim.GetComponent<CharacterBody>())
                             {
+                                di.position = aoe[i].transform.position;
                                 hp.TakeDamage(di);
                                 hits++;
                             }
