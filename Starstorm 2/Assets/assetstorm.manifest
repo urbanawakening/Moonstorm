@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 369588176
+CRC: 41908575
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 1bcb7fd1220d03db8d1b4963a2464fab
+    Hash: 4eb3c04f6e121d20825ab4b66ca35174
   TypeTreeHash:
     serializedVersion: 2
     Hash: 79c31612da9a127847ca328e3d297aed
@@ -56,6 +56,7 @@ ClassTypes:
 Assets:
 - Assets/Executioner/ExecAnimator.controller
 - Assets/Executioner/ExecutionerModel.prefab
+- Assets/Items/Malice/Malice_Icon.png
 - Assets/Items/DetritiveTrematode/DetritiveTrematode_Icon.png
 - Assets/Items/ErraticGadget/MDLErraticGadget.prefab
 - Assets/Executioner/exeportrait.png
@@ -64,6 +65,7 @@ Assets:
 - Assets/Items/Diary/MDLDiary.prefab
 - Assets/Items/StrangeCan/StrangeCan_Icon.png
 - Assets/Items/DormantFungus/DormantFungus_Icon.png
+- Assets/Items/Malice/MaliceEffect.prefab
 - Assets/Items/DetritiveTrematode/MDLDetritiveTrematode.prefab
 - Assets/Nemmando/VFX/SlashShadow.tga
 - Assets/Executioner/VFX/DashEffect.prefab

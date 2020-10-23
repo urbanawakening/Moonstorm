@@ -34,6 +34,8 @@ namespace Starstorm2.Cores
         private const string modPrefix = "@Starstorm2:";
         private const string prefabPath = modPrefix + "Assets/Items/";
 
+        public static GameObject maliceEffect = AssetsCore.mainAssetBundle.LoadAsset<GameObject>("MaliceEffect");
+
         public ItemCore() => RegisterItems();
 
         protected internal void RegisterItems()
@@ -253,6 +255,7 @@ namespace Starstorm2.Cores
                 loreToken = "",
                 name = "Malice",
                 nameToken = "ITEM_AOEONHIT_NAME",
+                pickupIconPath = prefabPath + "Malice/Malice_Icon.png",
 
                 pickupToken = "ITEM_AOEONHIT_PICKUP",
                 tags = aoeOnHitTags,
@@ -491,38 +494,6 @@ namespace Starstorm2.Cores
                             DotController.InflictDot(self.gameObject, attacker, DoTCore.instance.detritive, 3 * lightningOnCritCOunt, 1);
                         }
 
-                        //malice
-                        int maliceCount = inv.GetItemCount(aoeOnHitIndex);
-                        if (maliceCount > 0)
-                        {
-                            int hits = 0;
-                            float maliceDmg = 0.55f;
-                            float maliceRadius = 7.0f + (maliceCount - 1.0f);
-                            EffectData maliceVis = new EffectData();
-                            maliceVis.origin = damageInfo.position;
-                            maliceVis.scale = maliceRadius;
-                            EffectManager.SpawnEffect(EntityStates.Mage.Weapon.FireIceOrb.effectPrefab, maliceVis, true);
-                            DamageInfo di = new DamageInfo();
-                            di.attacker = attacker;
-                            di.crit = attackerBody.RollCrit();
-                            di.damage = attackerBody.damage * maliceDmg;
-                            di.damageColorIndex = DamageColorIndex.Default;
-                            di.damageType = DamageType.AOE;
-                            di.dotIndex = DotController.DotIndex.None;
-                            di.inflictor = attacker;
-                            di.procChainMask = default(ProcChainMask);
-                            di.procCoefficient = 0f;
-                            Collider[] aoe = Physics.OverlapSphere(damageInfo.position, maliceRadius);
-                            for (int i = 0; hits < maliceCount && i < aoe.Length; i++)
-                            {
-                                HealthComponent hp = aoe[i].GetComponent<HealthComponent>();
-                                if (hp && hp.GetComponent<TeamComponent>().teamIndex != TeamComponent.GetObjectTeam(attacker))
-                                {
-                                    hp.TakeDamage(di);
-                                    hits++;
-                                }
-                            }
-                        }
                     }
                 }
             }
@@ -607,17 +578,18 @@ namespace Starstorm2.Cores
 
         public void GlobalEventManager_OnHitEnemy(On.RoR2.GlobalEventManager.orig_OnHitEnemy orig, GlobalEventManager self, DamageInfo damageInfo, GameObject victim)
         {
-            if (self && damageInfo.attacker)
+            GameObject attacker = damageInfo.attacker;
+            if (self && attacker)
             {
-                var inventory = damageInfo.attacker.GetComponent<CharacterBody>().inventory;
+                var inventory = attacker.GetComponent<CharacterBody>().inventory;
                 if (inventory)
                 {
-                    var master = damageInfo.attacker.GetComponent<CharacterMaster>();
+                    var master = attacker.GetComponent<CharacterMaster>();
                     int itemCount = inventory.GetItemCount(poisonOnHitIndex);
                     int itemCount2 = inventory.GetItemCount(erraticGadgetIndex);
                     if (itemCount > 0)
                     {
-                        GameObject chad = damageInfo.attacker;
+                        GameObject chad = attacker;
                         bool flag = (damageInfo.damageType & DamageType.PoisonOnHit) > DamageType.Generic;
                         if ((itemCount > 0 || flag) && (flag || Util.CheckRoll((8.5f + (5f * (float)itemCount)) * damageInfo.procCoefficient, master)))
                         {
@@ -636,7 +608,7 @@ namespace Starstorm2.Cores
                                 EffectData effectData = new EffectData
                                 {
                                     origin = victim.GetComponent<CharacterBody>().corePosition,
-                                    start = damageInfo.attacker.GetComponent<CharacterBody>().corePosition
+                                    start = attacker.GetComponent<CharacterBody>().corePosition
                                 };
                                 EffectManager.SpawnEffect(erraticGadgetEffectPrefab, effectData, true);
                             }
@@ -644,6 +616,40 @@ namespace Starstorm2.Cores
                             newDamageInfo.damage = damageInfo.damage * (.5f * itemCount2);
                             victim.GetComponent<HealthComponent>().TakeDamage(newDamageInfo);
                             //This needs to be edited so that the effect actually originates from a body attachment
+                        }
+                    }
+
+                    //malice
+                    var attackerBody = attacker.GetComponent<CharacterBody>();
+                    int maliceCount = inventory.GetItemCount(aoeOnHitIndex); 
+                    if (maliceCount > 0)
+                    {
+                        int hits = 0;
+                        float maliceDmg = 0.55f;
+                        float maliceRadius = 7.0f + (maliceCount - 1.0f);
+                        EffectData maliceData = new EffectData();
+                        maliceData.origin = damageInfo.position;
+                        maliceData.scale = maliceRadius;
+                        EffectManager.SpawnEffect(maliceEffect, maliceData, true);
+                        DamageInfo di = new DamageInfo();
+                        di.attacker = attacker;
+                        di.crit = attackerBody.RollCrit();
+                        di.damage = attackerBody.damage * maliceDmg;
+                        di.damageColorIndex = DamageColorIndex.Default;
+                        di.damageType = DamageType.AOE;
+                        di.dotIndex = DotController.DotIndex.None;
+                        di.inflictor = attacker;
+                        di.procChainMask = default(ProcChainMask);
+                        di.procCoefficient = 0f;
+                        Collider[] aoe = Physics.OverlapSphere(damageInfo.position, maliceRadius);
+                        for (int i = 0; hits < maliceCount && i < aoe.Length; i++)
+                        {
+                            HealthComponent hp = aoe[i].GetComponent<HealthComponent>();
+                            if (hp && hp.GetComponent<TeamComponent>().teamIndex != TeamComponent.GetObjectTeam(attacker))
+                            {
+                                hp.TakeDamage(di);
+                                hits++;
+                            }
                         }
                     }
                 }
