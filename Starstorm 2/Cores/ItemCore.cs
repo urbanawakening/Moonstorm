@@ -29,23 +29,11 @@ namespace Starstorm2.Cores
         protected internal ItemIndex poisonOnHitIndex;
         protected internal ItemIndex erraticGadgetIndex;
         protected internal ItemIndex explodeOnJumpIndex;
+        protected internal ItemIndex aoeOnHitIndex;
 
         private const string modPrefix = "@Starstorm2:";
         private const string prefabPath = modPrefix + "Assets/Items/";
 
-        public void DropShipCall(Transform transform, int itemCount)
-        {
-            List<PickupIndex> list = Util.CheckRoll((5 * itemCount)) ? Run.instance.availableTier2DropList : Run.instance.availableTier1DropList;
-            int item = Run.instance.treasureRng.RangeInt(0, list.Count);
-
-            PickupDropletController.CreatePickupDroplet(list[item], transform.position, new Vector3(0, 0, 0));
-
-            EffectManager.SpawnEffect(Resources.Load<GameObject>("prefabs/effects/impacteffects/PodGroundImpact"), new EffectData
-            {
-                origin = transform.position,
-                scale = 15
-            }, true);
-        }
         public ItemCore() => RegisterItems();
 
         protected internal void RegisterItems()
@@ -61,7 +49,7 @@ namespace Starstorm2.Cores
                 ItemTag.AIBlacklist,
                 ItemTag.Utility
             };
-            RegisterItem(new ItemDef
+            itemOnLevelUpIndex = RegisterItem(new ItemDef
             {
                 canRemove = true,
                 descriptionToken = "ITEM_ITEMONLEVELUP_DESC",
@@ -81,7 +69,7 @@ namespace Starstorm2.Cores
                     ItemTag.Utility,
                     ItemTag.Damage
             };
-            RegisterItem(new ItemDef
+            damageOverTimeToLowHealthIndex = RegisterItem(new ItemDef
             {
                 canRemove = true,
                 descriptionToken = "ITEM_LIGHTNINGONCRIT_DESC",
@@ -101,7 +89,7 @@ namespace Starstorm2.Cores
                     ItemTag.Utility,
                     ItemTag.AIBlacklist
             };
-            RegisterItem(new ItemDef
+            moneyOnHealIndex = RegisterItem(new ItemDef
             {
                 canRemove = true,
                 descriptionToken = "ITEM_BLOODTESTER_DESC",
@@ -121,7 +109,7 @@ namespace Starstorm2.Cores
                     ItemTag.Healing,
                     ItemTag.AIBlacklist
 };
-            RegisterItem(new ItemDef
+            dormantFungusIndex = RegisterItem(new ItemDef
             {
                 canRemove = true,
                 //descriptionToken = "ITEM_EXTENDEDENEMYBUFFDURATIOM_DESC",
@@ -141,7 +129,7 @@ namespace Starstorm2.Cores
                     ItemTag.Utility,
                     ItemTag.AIBlacklist
 };
-            RegisterItem(new ItemDef
+            diaryIndex = RegisterItem(new ItemDef
             {
                 canRemove = true,
                 //descriptionToken = "ITEM_EXTENDEDENEMYBUFFDURATIOM_DESC",
@@ -160,7 +148,7 @@ namespace Starstorm2.Cores
             {
                     ItemTag.Damage
             };
-            RegisterItem(new ItemDef
+            coinIndex = RegisterItem(new ItemDef
             {
                 canRemove = true,
                 //descriptionToken = "ITEM_EXTENDEDENEMYBUFFDURATIOM_DESC",
@@ -180,7 +168,7 @@ namespace Starstorm2.Cores
                     ItemTag.Damage,
                     ItemTag.AIBlacklist
             };
-            RegisterItem(new ItemDef
+            fireOnEquipmentUseIndex = RegisterItem(new ItemDef
             {
                 canRemove = true,
                 descriptionToken = "ITEM_FIREONEQUIPMENTUSE_DESC",
@@ -199,7 +187,7 @@ namespace Starstorm2.Cores
             {
                     ItemTag.Damage
             };
-            RegisterItem(new ItemDef
+            poisonOnHitIndex = RegisterItem(new ItemDef
             {
                 canRemove = true,
                 descriptionToken = "ITEM_POISONONHIT_DESC",
@@ -219,7 +207,7 @@ namespace Starstorm2.Cores
                     ItemTag.Damage,
                     ItemTag.AIBlacklist
             };
-            RegisterItem(new ItemDef
+            erraticGadgetIndex = RegisterItem(new ItemDef
             {
                 canRemove = true,
                 descriptionToken = "ITEM_ERRATICGADGET_DESC",
@@ -238,7 +226,7 @@ namespace Starstorm2.Cores
             {
                     ItemTag.Damage
             };
-            RegisterItem(new ItemDef
+            explodeOnJumpIndex = RegisterItem(new ItemDef
             {
                 canRemove = true,
                 descriptionToken = "ITEM_EXPLODEONJUMP_DESC",
@@ -253,6 +241,25 @@ namespace Starstorm2.Cores
                 tier = ItemTier.Tier2,
                 unlockableName = ""
             });
+            ItemTag[] aoeOnHitTags = new ItemTag[]
+            {
+                ItemTag.Damage
+            };
+            aoeOnHitIndex = RegisterItem(new ItemDef
+            {
+                canRemove = true,
+                descriptionToken = "ITEM_AOEONHIT_DESC",
+                hidden = false,
+                loreToken = "",
+                name = "Malice",
+                nameToken = "ITEM_AOEONHIT_NAME",
+
+                pickupToken = "ITEM_AOEONHIT_PICKUP",
+                tags = aoeOnHitTags,
+                tier = ItemTier.Tier1,
+                unlockableName = ""
+            });
+
             Hook();
         }
 
@@ -299,9 +306,15 @@ namespace Starstorm2.Cores
             LanguageAPI.Add("ITEM_EXPLODEONJUMP_NAME", "Prototype Jet Boots");
             LanguageAPI.Add("ITEM_EXPLODEONJUMP_DESC", "Create an <style=cIsDamage>explosion</style> in a small area around you whenever you jump for <style=cIsDamage>150%</style> <style=cStack>(+100% per stack)</style> damage.");
             LanguageAPI.Add("ITEM_EXPLODEONJUMP_PICKUP", "Detonate on jump!");
+
+            LanguageAPI.Add("ITEM_AOEONHIT_NAME", "Malice");
+
+            LanguageAPI.Add("ITEM_AOEONHIT_NAME", "Malice");
+            LanguageAPI.Add("ITEM_AOEONHIT_DESC", "On damaging an enemy, up to <style=cIsDamage>1</style> other enemy <style=cStack>(+1 per stack)</style> within 5m of that enemy <style=cStack>(+1m per stack)</style> receives <style=cIsDamage>55%</style> damage.");
+            LanguageAPI.Add("ITEM_AOEONHIT_PICKUP", "Damage dealt spreads to nearby enemies.");
         }
 
-        protected internal void RegisterItem(ItemDef itemDef)
+        protected internal ItemIndex RegisterItem(ItemDef itemDef)
         {
             var internalName = itemDef.name;
             var upperName = internalName.ToUpper(CultureInfo.InvariantCulture);
@@ -322,42 +335,7 @@ namespace Starstorm2.Cores
                 itemDef.loreToken = string.Format(CultureInfo.InvariantCulture, "ITEM_{0}_LORE", upperName);
             }
             var customItem = new CustomItem(itemDef, new ItemDisplayRule[0]);
-            switch (itemDef.name)
-            {
-                case "LightningOnCrit":
-                    damageOverTimeToLowHealthIndex = ItemAPI.Add(customItem);
-                    break;
-                case "BloodTester":
-                    moneyOnHealIndex = ItemAPI.Add(customItem);
-                    break;
-                case "DormantFungus":
-                    dormantFungusIndex = ItemAPI.Add(customItem);
-                    break;
-                case "Diary":
-                    diaryIndex = ItemAPI.Add(customItem);
-                    break;
-                case "Coin":
-                    coinIndex = ItemAPI.Add(customItem);
-                    break;
-                case "ItemOnLevelUp":
-                    itemOnLevelUpIndex = ItemAPI.Add(customItem);
-                    break;
-                case "Sauce":
-                    fireOnEquipmentUseIndex = ItemAPI.Add(customItem);
-                    break;
-                case "StrangeCan":
-                    poisonOnHitIndex = ItemAPI.Add(customItem);
-                    break;
-                case "ErraticGadget":
-                    erraticGadgetIndex = ItemAPI.Add(customItem);
-                    break;
-                case "PrototypeJetBoots":
-                    explodeOnJumpIndex = ItemAPI.Add(customItem);
-                    break;
-                default:
-                    LogCore.LogF(itemDef.name + " is unregistered! Item will not spawn!");
-                    break;
-            }
+            return ItemAPI.Add(customItem);
         }
 
         protected internal void Hook()
@@ -485,18 +463,20 @@ namespace Starstorm2.Cores
                 if (damageInfo.attacker.HasComponent<CharacterBody>())
                 {
                     CharacterBody attackerBody = attacker.GetComponent<CharacterBody>();
-                    if (attackerBody.inventory)
+                    Inventory inv = attackerBody.inventory;
+                    if (inv)
                     {
+                        // ????
+                        /*
                         var victimBody = self.body;
-
-                        Inventory inv = attackerBody.inventory;
                         Inventory inv2 = null;
-
                         if (self.body && self.body.inventory)
                         {
                             inv2 = self.body.inventory;
                         }
+                        */
 
+                        //trematode
                         int lightningOnCritCOunt = inv.GetItemCount(damageOverTimeToLowHealthIndex);
 
                         var dotController = DotController.FindDotController(self.gameObject);
@@ -509,6 +489,39 @@ namespace Starstorm2.Cores
                         if (self.combinedHealthFraction < .4f && lightningOnCritCOunt > 0 && !hasDot)
                         {
                             DotController.InflictDot(self.gameObject, attacker, DoTCore.instance.detritive, 3 * lightningOnCritCOunt, 1);
+                        }
+
+                        //malice
+                        int maliceCount = inv.GetItemCount(aoeOnHitIndex);
+                        if (maliceCount > 0)
+                        {
+                            int hits = 0;
+                            float maliceDmg = 0.55f;
+                            float maliceRadius = 7.0f + (maliceCount - 1.0f);
+                            EffectData maliceVis = new EffectData();
+                            maliceVis.origin = damageInfo.position;
+                            maliceVis.scale = maliceRadius;
+                            EffectManager.SpawnEffect(EntityStates.Mage.Weapon.FireIceOrb.effectPrefab, maliceVis, true);
+                            DamageInfo di = new DamageInfo();
+                            di.attacker = attacker;
+                            di.crit = attackerBody.RollCrit();
+                            di.damage = attackerBody.damage * maliceDmg;
+                            di.damageColorIndex = DamageColorIndex.Default;
+                            di.damageType = DamageType.AOE;
+                            di.dotIndex = DotController.DotIndex.None;
+                            di.inflictor = attacker;
+                            di.procChainMask = default(ProcChainMask);
+                            di.procCoefficient = 0f;
+                            Collider[] aoe = Physics.OverlapSphere(damageInfo.position, maliceRadius);
+                            for (int i = 0; hits < maliceCount && i < aoe.Length; i++)
+                            {
+                                HealthComponent hp = aoe[i].GetComponent<HealthComponent>();
+                                if (hp && hp.GetComponent<TeamComponent>().teamIndex != TeamComponent.GetObjectTeam(attacker))
+                                {
+                                    hp.TakeDamage(di);
+                                    hits++;
+                                }
+                            }
                         }
                     }
                 }
@@ -636,6 +649,20 @@ namespace Starstorm2.Cores
                 }
             }
             orig(self, damageInfo, victim);
+        }
+
+        public void DropShipCall(Transform transform, int itemCount)
+        {
+            List<PickupIndex> list = Util.CheckRoll((5 * itemCount)) ? Run.instance.availableTier2DropList : Run.instance.availableTier1DropList;
+            int item = Run.instance.treasureRng.RangeInt(0, list.Count);
+
+            PickupDropletController.CreatePickupDroplet(list[item], transform.position, new Vector3(0, 0, 0));
+
+            EffectManager.SpawnEffect(Resources.Load<GameObject>("prefabs/effects/impacteffects/PodGroundImpact"), new EffectData
+            {
+                origin = transform.position,
+                scale = 15
+            }, true);
         }
     }
 
