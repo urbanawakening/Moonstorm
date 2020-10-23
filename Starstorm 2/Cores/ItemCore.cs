@@ -714,7 +714,7 @@ namespace Starstorm2.Cores
             {
                 int forkCount = inv.GetItemCount(forkIndex);
                 if (forkCount > 0)
-                    self.damage += self.damage * 0.25f * forkCount;
+                    self.damage += (self.baseDamage + self.levelDamage * (self.level - 1)) * 0.25f * forkCount;
 
                 int coffeeCount = inv.GetItemCount(coffeeIndex);
                 self.moveSpeed += self.baseMoveSpeed * 0.1f * coffeeCount;
@@ -803,14 +803,6 @@ namespace Starstorm2.Cores
                     timer = 0;
                 }
             }
-        }
-    }
-
-    public class ForkBehavior : CharacterBody.ItemBehavior
-    {
-        public void Awake()
-        {
-            body = gameObject.GetComponent<CharacterBody>();
         }
     }
 }
