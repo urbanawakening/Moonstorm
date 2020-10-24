@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 2733909466
+CRC: 584500211
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 35094a7d531c567a51032aa0053dbeef
+    Hash: 52b083c96899205f0e4aaa0060a145a5
   TypeTreeHash:
     serializedVersion: 2
     Hash: 79c31612da9a127847ca328e3d297aed
@@ -105,6 +105,7 @@ Assets:
 - Assets/Items/JetBoots/JetBoots_Icon.png
 - Assets/Executioner/ExecutionerModelMenu.prefab
 - Assets/Items/JetBoots/MDLJetBoots.prefab
+- Assets/Items/PressurizedCanister/PressurizedCanister_Icon.png
 - Assets/Nemmando/NemmandoAltTex.png
 - Assets/Items/GreaterWarbanner/MDLGreaterWarbanner.prefab
 - Assets/Executioner/VFX/AxeSlamEffect.prefab

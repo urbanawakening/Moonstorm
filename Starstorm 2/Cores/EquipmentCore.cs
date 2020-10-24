@@ -20,6 +20,7 @@ namespace Starstorm2.Cores
 
         protected internal EquipmentIndex greaterWarbannerIndex;
         protected internal EquipmentIndex cloakIndex;
+        protected internal EquipmentIndex canisterIndex;
 
         private const string modPrefix = "@Starstorm2:";
         private const string prefabPath = modPrefix + "Assets/Items/";
@@ -87,6 +88,26 @@ namespace Starstorm2.Cores
                 pickupToken = "EQUIPMENT_CLOAK_PICKUP",
                 unlockableName = "",
             });
+            canisterIndex = RegisterNewEquip(new EquipmentDef()
+            {
+                addressToken = "",
+                appearsInMultiPlayer = true,
+                appearsInSinglePlayer = true,
+                canDrop = true,
+                colorIndex = ColorCatalog.ColorIndex.Equipment,
+                cooldown = 15f,
+                descriptionToken = "EQUIPMENT_CANISTER_DESC",
+                enigmaCompatible = true,
+                isBoss = false,
+                isLunar = false,
+                //loreToken = "EQUIPMENT_CLOAK_LORE",
+                name = "PressurizedCanister",
+                nameToken = "EQUIPMENT_CANIESTER_NAME",
+                pickupIconPath = prefabPath + "PressurizedCanister/PressurizedCanister_Icon.png",
+                //pickupModelPath = prefabPath + "GreaterWarbanner/MDLGreaterWarbanner.prefab",
+                pickupToken = "EQUIPMENT_CANISTER_PICKUP",
+                unlockableName = "",
+            });
 
             On.RoR2.EquipmentSlot.PerformEquipmentAction += EquipmentSlot_PerformEquipmentAction;
 
@@ -123,6 +144,12 @@ namespace Starstorm2.Cores
             if (equipmentIndex == cloakIndex)
             {
                 self.characterBody.AddTimedBuff(BuffIndex.Cloak, 8f);
+                return true;
+            }
+            if (equipmentIndex == canisterIndex)
+            {
+                CanisterBehavior canister = self.gameObject.AddComponent<CanisterBehavior>();
+                canister.body = self.characterBody;
                 return true;
             }
             return orig(self, equipmentIndex);
@@ -162,6 +189,59 @@ namespace Starstorm2.Cores
             }
             var customEquip = new CustomEquipment(equipmentDef, new ItemDisplayRule[0]);
             return ItemAPI.Add(customEquip);
+        }
+    }
+
+    public class CanisterBehavior : NetworkBehaviour
+    {
+        public CharacterBody body;
+        private const float duration = 1.0f;
+        private const float thrustForce = 110f;
+        private float timer;
+        private static GameObject thrustStartEffect = Resources.Load<GameObject>("prefabs/effects/SmokescreenEffect");
+        private static GameObject thrustEffect = Resources.Load<GameObject>("prefabs/effects/impacteffects/CharacterLandImpact");
+
+        private void Awake()
+        {
+            this.timer = 0f;
+        }
+
+        private void FixedUpdate()
+        {
+            if (!body) return;
+
+            if (this.timer == 0f)
+            {
+                body.characterMotor.Motor.ForceUnground();
+
+                EffectData effectData = new EffectData();
+                effectData.origin = body.footPosition;
+                EffectManager.SpawnEffect(thrustStartEffect, effectData, true);
+            }
+            this.timer += Time.fixedDeltaTime;
+            if (this.timer < duration && body)
+            {
+                var motor = body.characterMotor;
+                if (motor)
+                {
+                    if (base.hasAuthority)
+                    {
+                        motor.ApplyForce(Vector3.up * thrustForce);
+                    }
+                    EffectData effectData = new EffectData();
+                    effectData.origin = body.footPosition;
+                    effectData.scale = 0.5f;
+                    EffectManager.SpawnEffect(thrustEffect, effectData, true);
+                }
+            }
+            else
+            {
+                Object.Destroy(this);
+            }
+        }
+
+        private void OnDestroy()
+        {
         }
     }
 }
