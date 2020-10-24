@@ -13,6 +13,13 @@ namespace Starstorm2.Cores
     {
         public ItemCore instance;
 
+        /* To add an item:
+         * 1. define its ItemIndex at top
+         * 2. register it in RegisterItems
+         * 3. add its language tokens in RegisterTokens
+         * 4. implement its behavior using existing or new hooks (called by Hook)
+         */
+
         //TODO:
         //Give Items Models
         //Give items icons
@@ -32,6 +39,7 @@ namespace Starstorm2.Cores
         protected internal ItemIndex aoeOnHitIndex;
         protected internal ItemIndex forkIndex;
         protected internal ItemIndex coffeeIndex;
+        protected internal ItemIndex metronomeIndex;
 
         private const string modPrefix = "@Starstorm2:";
         private const string prefabPath = modPrefix + "Assets/Items/";
@@ -303,6 +311,25 @@ namespace Starstorm2.Cores
                 tier = ItemTier.Tier1,
                 unlockableName = ""
             });
+            ItemTag[] metronomeTags = new ItemTag[]
+            {
+                ItemTag.Utility
+            };
+            metronomeIndex = RegisterItem(new ItemDef
+            {
+                canRemove = true,
+                descriptionToken = "ITEM_METRONOME_DESC",
+                hidden = false,
+                loreToken = "",
+                name = "WatchMetronome",
+                nameToken = "ITEM_METRONOME_NAME",
+                pickupIconPath = prefabPath + "WatchMetronome/WatchMetronome_Icon.png",
+
+                pickupToken = "ITEM_METRONOME_PICKUP",
+                tags = metronomeTags,
+                tier = ItemTier.Tier2,
+                unlockableName = ""
+            });
 
             Hook();
         }
@@ -352,8 +379,6 @@ namespace Starstorm2.Cores
             LanguageAPI.Add("ITEM_EXPLODEONJUMP_PICKUP", "Detonate on jump!");
 
             LanguageAPI.Add("ITEM_AOEONHIT_NAME", "Malice");
-
-            LanguageAPI.Add("ITEM_AOEONHIT_NAME", "Malice");
             LanguageAPI.Add("ITEM_AOEONHIT_DESC", "On damaging an enemy, up to <style=cIsDamage>1</style> other enemy <style=cStack>(+1 per stack)</style> within 5m of that enemy <style=cStack>(+1m per stack)</style> receives <style=cIsDamage>55%</style> damage.");
             LanguageAPI.Add("ITEM_AOEONHIT_PICKUP", "Damage dealt spreads to nearby enemies.");
 
@@ -364,6 +389,10 @@ namespace Starstorm2.Cores
             LanguageAPI.Add("ITEM_COFFEE_NAME", "Coffee Bag");
             LanguageAPI.Add("ITEM_COFFEE_DESC", "Increase your base movement speed by <style=cIsUtility>10%</style> <style=cStack>(+10% per stack)</style> and your base attack speed by <style=cIsDamage>7%</style> <style=cStack>(+7% per stack)</style>.");
             LanguageAPI.Add("ITEM_COFFEE_PICKUP", "Move and attack faster.");
+
+            LanguageAPI.Add("ITEM_METRONOME_NAME", "Watch Metronome");
+            LanguageAPI.Add("ITEM_METRONOME_DESC", "<style=cIsUtility>Standing still</style> for up to 4 seconds gradually increases your <style=cIsUtility>movement speed</style> by up to <style=cIsUtility>50%</style>. Increased movement speed decays linearly over <style=cIsUtility>2</style> seconds of movement <style=cStack>(+2 seconds per stack)</style>.");
+            LanguageAPI.Add("ITEM_METRONOME_PICKUP", "Standing still charges speed for your next movement.");
         }
 
         protected internal ItemIndex RegisterItem(ItemDef itemDef)
@@ -444,14 +473,13 @@ namespace Starstorm2.Cores
             //lol
             if (self)
             {
-                if (self.inventory)
+                Inventory inventory = self.inventory;
+                if (inventory)
                 {
-                    var inventory = self.inventory;
-
                     var fungusCount = inventory.GetItemCount(dormantFungusIndex);
                     var diaryCount = inventory.GetItemCount(diaryIndex);
                     var erraticGadgetCount = inventory.GetItemCount(erraticGadgetIndex);
-
+                    var metronomeCount = inventory.GetItemCount(metronomeIndex);
 
                     if (fungusCount > 0)
                     {
@@ -464,6 +492,10 @@ namespace Starstorm2.Cores
                     if (erraticGadgetCount > 0)
                     {
                         //This is where you add the actual model of the item as a body attachment... I think
+                    }
+                    if (metronomeCount > 0)
+                    {
+                        self.AddItemBehavior<MetronomeBehavior>(metronomeCount);
                     }
                 }
             }
@@ -720,6 +752,11 @@ namespace Starstorm2.Cores
                 self.moveSpeed += self.baseMoveSpeed * 0.1f * coffeeCount;
                 self.attackSpeed += self.baseAttackSpeed * 0.07f * coffeeCount;
             }
+            var metronome = self.GetComponent<MetronomeBehavior>();
+            if (metronome)
+            {
+                self.moveSpeed += (self.baseMoveSpeed * metronome.metroCharge);
+            }
         }
 
         public void DropShipCall(Transform transform, int itemCount)
@@ -803,6 +840,34 @@ namespace Starstorm2.Cores
                     timer = 0;
                 }
             }
+        }
+    }
+    public class MetronomeBehavior : CharacterBody.ItemBehavior
+    {
+        public float metroCharge;
+
+        public void Awake()
+        {
+            body = gameObject.GetComponent<CharacterBody>();
+            metroCharge = 0f;
+        }
+
+        public void FixedUpdate()
+        {
+            if (body.notMovingStopwatch > 0f)
+            {
+                if (metroCharge < 1.0f)
+                {
+                    metroCharge += Time.fixedDeltaTime / 4.0f;
+                    metroCharge = Math.Min(metroCharge, 1.0f);
+                }
+            }
+            else if (metroCharge > 0f)
+            {
+                metroCharge -= Time.fixedDeltaTime / (2.0f * stack);
+                metroCharge = Math.Max(metroCharge, 0f);
+            }
+            body.RecalculateStats();
         }
     }
 }
