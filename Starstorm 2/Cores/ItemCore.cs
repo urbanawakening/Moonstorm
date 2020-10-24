@@ -391,7 +391,7 @@ namespace Starstorm2.Cores
             LanguageAPI.Add("ITEM_COFFEE_PICKUP", "Move and attack faster.");
 
             LanguageAPI.Add("ITEM_METRONOME_NAME", "Watch Metronome");
-            LanguageAPI.Add("ITEM_METRONOME_DESC", "<style=cIsUtility>Standing still</style> for up to 4 seconds gradually increases your <style=cIsUtility>movement speed</style> by up to <style=cIsUtility>50%</style>. Increased movement speed decays linearly over <style=cIsUtility>2</style> seconds of movement <style=cStack>(+2 seconds per stack)</style>.");
+            LanguageAPI.Add("ITEM_METRONOME_DESC", "<style=cIsUtility>Standing still</style> for up to 4 seconds gradually increases your <style=cIsUtility>movement speed</style> by up to <style=cIsUtility>100%</style>. Increased movement speed decays linearly over <style=cIsUtility>2</style> seconds of movement <style=cStack>(+2 seconds per stack)</style>.");
             LanguageAPI.Add("ITEM_METRONOME_PICKUP", "Standing still charges speed for your next movement.");
         }
 
@@ -476,27 +476,9 @@ namespace Starstorm2.Cores
                 Inventory inventory = self.inventory;
                 if (inventory)
                 {
-                    var fungusCount = inventory.GetItemCount(dormantFungusIndex);
-                    var diaryCount = inventory.GetItemCount(diaryIndex);
-                    var erraticGadgetCount = inventory.GetItemCount(erraticGadgetIndex);
-                    var metronomeCount = inventory.GetItemCount(metronomeIndex);
-
-                    if (fungusCount > 0)
-                    {
-                        self.AddItemBehavior<DormantFungusBehavior>(fungusCount);
-                    }
-                    if (diaryCount > 0)
-                    {
-                        self.AddItemBehavior<DairyBehavior>(diaryCount);
-                    }
-                    if (erraticGadgetCount > 0)
-                    {
-                        //This is where you add the actual model of the item as a body attachment... I think
-                    }
-                    if (metronomeCount > 0)
-                    {
-                        self.AddItemBehavior<MetronomeBehavior>(metronomeCount);
-                    }
+                    self.AddItemBehavior<DormantFungusBehavior>(inventory.GetItemCount(dormantFungusIndex));
+                    self.AddItemBehavior<DairyBehavior>(inventory.GetItemCount(diaryIndex));
+                    self.AddItemBehavior<MetronomeBehavior>(inventory.GetItemCount(metronomeIndex));
                 }
             }
             orig(self);
@@ -860,14 +842,15 @@ namespace Starstorm2.Cores
                 {
                     metroCharge += Time.fixedDeltaTime / 4.0f;
                     metroCharge = Math.Min(metroCharge, 1.0f);
+                    body.RecalculateStats();
                 }
             }
             else if (metroCharge > 0f)
             {
                 metroCharge -= Time.fixedDeltaTime / (2.0f * stack);
                 metroCharge = Math.Max(metroCharge, 0f);
+                body.RecalculateStats();
             }
-            body.RecalculateStats();
         }
     }
 }
