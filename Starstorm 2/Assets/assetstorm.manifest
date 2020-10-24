@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 1728106007
+CRC: 389544777
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 2d4cdc30f4807f3366a6ff1f59a3384f
+    Hash: 36da0986f90a46cafc9ee685af22e8c4
   TypeTreeHash:
     serializedVersion: 2
     Hash: 79c31612da9a127847ca328e3d297aed
@@ -60,6 +60,7 @@ Assets:
 - Assets/Items/DetritiveTrematode/DetritiveTrematode_Icon.png
 - Assets/Items/ErraticGadget/MDLErraticGadget.prefab
 - Assets/Executioner/exeportrait.png
+- Assets/Items/CloakingHeadband/CloakingHeadband_Icon.png
 - Assets/Executioner/ExecAnimatorMenu.controller
 - Assets/Items/BloodTester/BloodTester_Icon.png
 - Assets/Items/CoffeeBag/CoffeeBag_Icon.png

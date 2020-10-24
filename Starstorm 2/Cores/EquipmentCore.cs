@@ -18,7 +18,11 @@ namespace Starstorm2.Cores
         //(Post 1.0): Give them display rules.
 
 
-        protected EquipmentIndex greaterWarbannerIndex;
+        protected internal EquipmentIndex greaterWarbannerIndex;
+        protected internal EquipmentIndex cloakIndex;
+
+        private const string modPrefix = "@Starstorm2:";
+        private const string prefabPath = modPrefix + "Assets/Items/";
 
         private GameObject greaterWarbanner;
 
@@ -41,9 +45,9 @@ namespace Starstorm2.Cores
             };
             string pickUpIconPath = "Textures/MiscIcons/texMysteryIcon";
             string pickUpModelPath = "Prefabs/PickupModels/PickupMystery";
-            #endregion 
+            #endregion
 
-            RegisterNewEquip(new EquipmentDef()
+            greaterWarbannerIndex = RegisterNewEquip(new EquipmentDef()
             {
                 addressToken = "",
                 appearsInMultiPlayer = true,
@@ -58,9 +62,29 @@ namespace Starstorm2.Cores
                 loreToken = "EQUIPMENT_GREATERWARBANNER_LORE",
                 name = "GreaterWarbanner",
                 nameToken = "EQUIPMENT_GREATERWARBANNER_NAME",
-                pickupIconPath = "@Starstorm2:Assets/Items/GreaterWarbanner/GreaterWarbanner_Icon.png",
-                pickupModelPath = "@Starstorm2:Assets/Items/GreaterWarbanner/MDLGreaterWarbanner.prefab",
+                pickupIconPath = prefabPath + "GreaterWarbanner/GreaterWarbanner_Icon.png",
+                pickupModelPath = prefabPath + "GreaterWarbanner/MDLGreaterWarbanner.prefab",
                 pickupToken = "EQUIPMENT_GREATERWARBANNER_PICKUP",
+                unlockableName = "",
+            });
+            cloakIndex = RegisterNewEquip(new EquipmentDef()
+            {
+                addressToken = "",
+                appearsInMultiPlayer = true,
+                appearsInSinglePlayer = true,
+                canDrop = true,
+                colorIndex = ColorCatalog.ColorIndex.Equipment,
+                cooldown = 45f,
+                descriptionToken = "EQUIPMENT_CLOAK_DESC",
+                enigmaCompatible = true,
+                isBoss = false,
+                isLunar = false,
+                //loreToken = "EQUIPMENT_CLOAK_LORE",
+                name = "Cloak",
+                nameToken = "EQUIPMENT_CLOAK_NAME",
+                pickupIconPath = prefabPath + "CloakingHeadband/CloakingHeadband_Icon.png",
+                //pickupModelPath = prefabPath + "GreaterWarbanner/MDLGreaterWarbanner.prefab",
+                pickupToken = "EQUIPMENT_CLOAK_PICKUP",
                 unlockableName = "",
             });
 
@@ -96,6 +120,11 @@ namespace Starstorm2.Cores
                 NetworkServer.Spawn(gameObject);
                 return true;
             }
+            if (equipmentIndex == cloakIndex)
+            {
+                self.characterBody.AddTimedBuff(BuffIndex.Cloak, 8f);
+                return true;
+            }
             return orig(self, equipmentIndex);
         }
 
@@ -105,10 +134,13 @@ namespace Starstorm2.Cores
             LanguageAPI.Add("EQUIPMENT_GREATERWARBANNER_PICKUP", "Place a greater warbanner which boosts regen, critical hit chance, and lowers cooldowns.");
             LanguageAPI.Add("EQUIPMENT_GREATERWARBANNER_DESC", "Place a greater warbanner which grants <style=cIsHealing>20% health regeneration</style>, <style=cIsDamage>10% critical hit chance</style>, and <style=cIsUtility>50% cooldown reduction</style>.");
             LanguageAPI.Add("EQUIPMENT_GREATERWARBANNER_LORE", "Order: \u201CGreater Warbanner\u201D\r\nTracking Number: 72******\r\nEstimated Delivery: 08\\25\\2057\\\r\nShipping Method: High Priority\r\nShipping Address: 836 Lane, Lab [42], Mars\r\nShipping Details:\r\n\r\nI got this thing off of my dead grandmother, it's a relic from the great war of 2019. It  gives this aura of energy and motivation to do whatever someone desires! Anyways -- I'm passing it onto you, since I am dying to this cancer and I'd like you to have it before I go six feet under. Much love, Uncle Abe.\n");
-            //LanguageAPI.Add("EQUIPMENT_PRINTER_LORE", "Order: \u201CGreater Warbanner\u201D\r\nTracking Number: 72******\r\nEstimated Delivery: 08\\25\\2057\\\r\nShipping Method: High Priority\r\nShipping Address: 836 Lane, Lab [42], Mars\r\nShipping Details:\r\n\r\nI got this thing off of my dead grandmother, it's a relic from the great war of 2019. It  gives this aura of energy and motivation to do whatever someone desires! Anyways -- I'm passing it onto you, since I am dying to this cancer and I'd like you to have it before I go six feet under. Much love, Uncle Abe.\n");
+
+            LanguageAPI.Add("EQUIPMENT_CLOAK_NAME", "Cloaking Headband");
+            LanguageAPI.Add("EQUIPMENT_CLOAK_PICKUP", "Becompe temporarily invisible.");
+            LanguageAPI.Add("EQUIPMENT_CLOAK_DESC", "Become <style=cIsUtility>invisible</style> for 8 seconds.");
         }
 
-        protected internal void RegisterNewEquip(EquipmentDef equipmentDef)
+        protected internal EquipmentIndex RegisterNewEquip(EquipmentDef equipmentDef)
         {
             var internalName = equipmentDef.name;
             var upperName = internalName.ToUpper(CultureInfo.InvariantCulture);
@@ -129,16 +161,7 @@ namespace Starstorm2.Cores
                 equipmentDef.loreToken = string.Format(CultureInfo.InvariantCulture, "ITEM_{0}_LORE", upperName);
             }
             var customEquip = new CustomEquipment(equipmentDef, new ItemDisplayRule[0]);
-            switch (equipmentDef.name)
-            {
-                case "GreaterWarbanner":
-                    greaterWarbannerIndex = ItemAPI.Add(customEquip);
-                    break;
-                default:
-
-                    LogCore.LogF(equipmentDef.name + " :: EquipmentDef.Name not found!");
-                    break;
-            }
+            return ItemAPI.Add(customEquip);
         }
     }
 }
