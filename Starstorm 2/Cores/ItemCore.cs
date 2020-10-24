@@ -40,6 +40,7 @@ namespace Starstorm2.Cores
         protected internal ItemIndex forkIndex;
         protected internal ItemIndex coffeeIndex;
         protected internal ItemIndex metronomeIndex;
+        protected internal ItemIndex huntersSigilIndex;
 
         private const string modPrefix = "@Starstorm2:";
         private const string prefabPath = modPrefix + "Assets/Items/";
@@ -330,6 +331,26 @@ namespace Starstorm2.Cores
                 tier = ItemTier.Tier2,
                 unlockableName = ""
             });
+            ItemTag[] sigilTags = new ItemTag[]
+            {
+                ItemTag.Damage,
+                ItemTag.Utility
+            };
+            huntersSigilIndex = RegisterItem(new ItemDef
+            {
+                canRemove = true,
+                descriptionToken = "ITEM_SIGIL_DESC",
+                hidden = false,
+                loreToken = "",
+                name = "HuntersSigil",
+                nameToken = "ITEM_SIGIL_NAME",
+                pickupIconPath = prefabPath + "HuntersSigil/HuntersSigil_Icon.png",
+
+                pickupToken = "ITEM_SIGIL_PICKUP",
+                tags = sigilTags,
+                tier = ItemTier.Tier2,
+                unlockableName = ""
+            });
 
             Hook();
         }
@@ -393,6 +414,10 @@ namespace Starstorm2.Cores
             LanguageAPI.Add("ITEM_METRONOME_NAME", "Watch Metronome");
             LanguageAPI.Add("ITEM_METRONOME_DESC", "<style=cIsUtility>Standing still</style> for up to 4 seconds gradually increases your <style=cIsUtility>movement speed</style> by up to <style=cIsUtility>100%</style>. Increased movement speed decays linearly over <style=cIsUtility>2</style> seconds of movement <style=cStack>(+2 seconds per stack)</style>.");
             LanguageAPI.Add("ITEM_METRONOME_PICKUP", "Standing still charges speed for your next movement.");
+
+            LanguageAPI.Add("ITEM_SIGIL_NAME", "Hunter's Sigil");
+            LanguageAPI.Add("ITEM_SIGIL_DESC", "While <style=cIsUtility>standing still</style>, gain <style=cIsUtility>15</style> armor <style=cStack>(+10 armor per stack)</style> and <style=cIsDamage>25%</style> critical chance <style=cStack>(+20% per stack)</style>.");
+            LanguageAPI.Add("ITEM_SIGIL_PICKUP", "Standing still grants bonus armor and critical strike chance.");
         }
 
         protected internal ItemIndex RegisterItem(ItemDef itemDef)
@@ -429,6 +454,18 @@ namespace Starstorm2.Cores
             On.RoR2.GlobalEventManager.OnHitEnemy += GlobalEventManager_OnHitEnemy;
             On.RoR2.CharacterMotor.OnLeaveStableGround += CharacterMotor_OnLeaveStableGround;
             On.RoR2.CharacterBody.RecalculateStats += CharacterBody_RecalculateStats;
+            On.RoR2.CharacterBody.FixedUpdate += CharacterBody_FixedUpdate;
+        }
+
+        private void CharacterBody_FixedUpdate(On.RoR2.CharacterBody.orig_FixedUpdate orig, CharacterBody self)
+        {
+            Inventory inv = self.inventory;
+            if (inv)
+            {
+                if (inv.GetItemCount(huntersSigilIndex) > 0)
+                    self.RecalculateStats();
+            }
+            orig(self);
         }
 
         private void CharacterMotor_OnLeaveStableGround(On.RoR2.CharacterMotor.orig_OnLeaveStableGround orig, CharacterMotor self)
@@ -726,14 +763,26 @@ namespace Starstorm2.Cores
             Inventory inv = self.inventory;
             if (inv)
             {
+                //fork
                 int forkCount = inv.GetItemCount(forkIndex);
                 if (forkCount > 0)
                     self.damage += (self.baseDamage + self.levelDamage * (self.level - 1)) * 0.25f * forkCount;
 
+                //coffee
                 int coffeeCount = inv.GetItemCount(coffeeIndex);
                 self.moveSpeed += self.baseMoveSpeed * 0.1f * coffeeCount;
                 self.attackSpeed += self.baseAttackSpeed * 0.07f * coffeeCount;
+
+                //sigil
+                int sigilCount = inv.GetItemCount(huntersSigilIndex);
+                if (sigilCount > 0 && self.notMovingStopwatch > 0)
+                {
+                    self.armor += 15 + 10 * (sigilCount - 1);
+                    self.crit += 25 + 20 * (sigilCount - 1);
+                }
             }
+
+            //metronome
             var metronome = self.GetComponent<MetronomeBehavior>();
             if (metronome)
             {

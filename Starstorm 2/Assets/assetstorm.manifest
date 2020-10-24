@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 584500211
+CRC: 476092882
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 52b083c96899205f0e4aaa0060a145a5
+    Hash: ec3588c93cd180d51a7812c09785dfdc
   TypeTreeHash:
     serializedVersion: 2
     Hash: 79c31612da9a127847ca328e3d297aed
@@ -81,6 +81,7 @@ Assets:
 - Assets/Executioner/skill2icon.png
 - Assets/Executioner/skill3icon.png
 - Assets/Items/DormantFungus/MDLDormantFungus.prefab
+- Assets/Items/HuntersSigil/HuntersSigil_Icon.png
 - Assets/Executioner/VFX/AxeSpawnEffect.prefab
 - Assets/Nemmando/VFX/Slash.tga
 - Assets/Nemmando/NemmandoAnimator.controller
