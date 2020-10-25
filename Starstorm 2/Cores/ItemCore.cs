@@ -732,8 +732,8 @@ namespace Starstorm2.Cores
                         EffectManager.SpawnEffect(maliceEffect, maliceData, true);
                         DamageInfo di = new DamageInfo();
                         di.attacker = attacker;
-                        di.crit = attackerBody.RollCrit();
-                        di.damage = attackerBody.damage * maliceDmg;
+                        di.crit = damageInfo.crit;
+                        di.damage = damageInfo.damage * maliceDmg;
                         di.damageColorIndex = DamageColorIndex.Default;
                         di.damageType = DamageType.AOE;
                         di.dotIndex = DotController.DotIndex.None;
@@ -747,6 +747,8 @@ namespace Starstorm2.Cores
                             if (hp && hp.GetComponent<TeamComponent>().teamIndex != TeamComponent.GetObjectTeam(attacker) && hp.body != victim.GetComponent<CharacterBody>())
                             {
                                 di.position = aoe[i].transform.position;
+                                //diminishing scaling per stack (remove multiplier from di.damage above)
+                                //di.damage *= 0.55f;
                                 hp.TakeDamage(di);
                                 hits++;
                             }
