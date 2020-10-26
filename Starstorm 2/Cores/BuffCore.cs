@@ -10,11 +10,13 @@ namespace Starstorm2.Cores
         public static BuffCore instance;
 
         protected internal BuffIndex lightBringerIndex;
-        protected internal BuffIndex greaterBannerIndex;
         protected internal BuffIndex detritiveIndex;
+        protected internal BuffIndex greaterBannerIndex;
         protected internal BuffIndex strangeCanPoisonIndex;
-        protected internal BuffIndex awarenessIndex;
+        protected internal BuffIndex sigilBuffIndex;
+
         protected internal BuffIndex gougeIndex;
+        protected internal BuffIndex awarenessIndex;
 
         public BuffCore() => RegisterBuffs();
 
@@ -24,9 +26,9 @@ namespace Starstorm2.Cores
 
             instance = this;
 
-            RegisterBuff(new BuffDef
+            lightBringerIndex = RegisterBuff(new BuffDef
             {
-                buffIndex = BuffIndex.Count,
+                //buffIndex = BuffIndex.Count,
                 buffColor = Color.yellow,
                 canStack = true,
                 eliteIndex = EliteIndex.None,
@@ -35,10 +37,10 @@ namespace Starstorm2.Cores
                 name = "LightBringer"
             });
 
-            RegisterBuff(new BuffDef
+            detritiveIndex = RegisterBuff(new BuffDef
             {
                 buffColor = new Color(0.3764706f, 0.84313726f, 0.8980392f),
-                buffIndex = BuffIndex.Count,
+                //buffIndex = BuffIndex.Count,
                 canStack = false,
                 eliteIndex = EliteIndex.None,
                 iconPath = "Textures/BuffIcons/texBuffFullCritIcon",
@@ -46,9 +48,9 @@ namespace Starstorm2.Cores
                 name = "Infested"
             });
 
-            RegisterBuff(new BuffDef
+            greaterBannerIndex = RegisterBuff(new BuffDef
             {
-                buffIndex = BuffIndex.Count,
+                //buffIndex = BuffIndex.Count,
                 canStack = false,
                 eliteIndex = EliteIndex.None,
                 iconPath = "Textures/BuffIcons/texBuffWarbannerIcon",
@@ -56,9 +58,9 @@ namespace Starstorm2.Cores
                 buffColor = new Color(0.8392157f, 0.7882353f, 0.22745098f)
             });
 
-            RegisterBuff(new BuffDef
+            strangeCanPoisonIndex = RegisterBuff(new BuffDef
             {
-                buffIndex = BuffIndex.Count,
+                //buffIndex = BuffIndex.Count,
                 canStack = false,
                 eliteIndex = EliteIndex.None,
                 iconPath = "Textures/BuffIcons/texBuffBleedingIcon",
@@ -67,9 +69,18 @@ namespace Starstorm2.Cores
                 buffColor = Color.green
             });
 
+            sigilBuffIndex = RegisterBuff(new BuffDef
+            {
+                canStack = false,
+                iconPath = "@Starstorm2:Assets/Items/HuntersSigil/HuntersSigil_Icon.png",
+                name = "SigilCritDefBoost",
+                isDebuff = false,
+                buffColor = Color.white
+            });
+
             #region Nemmando
 
-            RegisterBuff(new BuffDef
+            gougeIndex = RegisterBuff(new BuffDef
             {
                 buffIndex = BuffIndex.Count,
                 canStack = true,
@@ -80,7 +91,7 @@ namespace Starstorm2.Cores
                 buffColor = Color.red
             });
 
-            RegisterBuff(new BuffDef
+            awarenessIndex = RegisterBuff(new BuffDef
             {
                 buffIndex = BuffIndex.Count,
                 canStack = true,
@@ -144,33 +155,10 @@ namespace Starstorm2.Cores
             }
         }
 
-        protected internal void RegisterBuff(BuffDef buffDef)
+        protected internal BuffIndex RegisterBuff(BuffDef buffDef)
         {
             var customBuff = new CustomBuff(buffDef);
-            switch (buffDef.name)
-            {
-                case "LightBringer":
-                    lightBringerIndex = BuffAPI.Add(customBuff);
-                    break;
-                case "Infested":
-                    detritiveIndex = BuffAPI.Add(customBuff);
-                    break;
-                case "GreaterWarbanner":
-                    greaterBannerIndex = BuffAPI.Add(customBuff);
-                    break;
-                case "StrangeCanPoison":
-                    strangeCanPoisonIndex = BuffAPI.Add(customBuff);
-                    break;
-                case "Gouge":
-                    gougeIndex = BuffAPI.Add(customBuff);
-                    break;
-                case "Awareness":
-                    awarenessIndex = BuffAPI.Add(customBuff);
-                    break;
-                default:
-                    LogCore.LogF(string.Format("{0} doesn't have a case!", buffDef));
-                    break;
-            }
+            return BuffAPI.Add(customBuff);
         }
     }
 }

@@ -454,7 +454,7 @@ namespace Starstorm2.Cores
             On.RoR2.GlobalEventManager.OnHitEnemy += GlobalEventManager_OnHitEnemy;
             On.RoR2.CharacterMotor.OnLeaveStableGround += CharacterMotor_OnLeaveStableGround;
             On.RoR2.CharacterBody.RecalculateStats += CharacterBody_RecalculateStats;
-            On.RoR2.CharacterBody.FixedUpdate += CharacterBody_FixedUpdate;
+            //On.RoR2.CharacterBody.FixedUpdate += CharacterBody_FixedUpdate;
         }
 
         private void CharacterBody_FixedUpdate(On.RoR2.CharacterBody.orig_FixedUpdate orig, CharacterBody self)
@@ -516,6 +516,7 @@ namespace Starstorm2.Cores
                     self.AddItemBehavior<DormantFungusBehavior>(inventory.GetItemCount(dormantFungusIndex));
                     self.AddItemBehavior<DairyBehavior>(inventory.GetItemCount(diaryIndex));
                     self.AddItemBehavior<MetronomeBehavior>(inventory.GetItemCount(metronomeIndex));
+                    self.AddItemBehavior<SigilBehavior>(inventory.GetItemCount(huntersSigilIndex));
                 }
             }
             orig(self);
@@ -777,7 +778,7 @@ namespace Starstorm2.Cores
 
                 //sigil
                 int sigilCount = inv.GetItemCount(huntersSigilIndex);
-                if (sigilCount > 0 && self.notMovingStopwatch > 0)
+                if (sigilCount > 0 && self.HasBuff(BuffCore.instance.sigilBuffIndex))
                 {
                     self.armor += 15 + 10 * (sigilCount - 1);
                     self.crit += 25 + 20 * (sigilCount - 1);
@@ -901,6 +902,36 @@ namespace Starstorm2.Cores
                 metroCharge -= Time.fixedDeltaTime / (2.0f * stack);
                 metroCharge = Math.Max(metroCharge, 0f);
                 body.RecalculateStats();
+            }
+        }
+    }
+
+    public class SigilBehavior : CharacterBody.ItemBehavior
+    {
+        private bool sigilActive = false;
+
+        public void Awake()
+        {
+            body = gameObject.GetComponent<CharacterBody>();
+        }
+
+        public void FixedUpdate()
+        {
+            if (body.notMovingStopwatch > 0f && !sigilActive)
+            {
+                Debug.Log("sigil on");
+                body.AddBuff(BuffCore.instance.sigilBuffIndex);
+                //add visual effect
+                sigilActive = true;
+                body.statsDirty = true;
+            }
+            else if (body.notMovingStopwatch == 0f && sigilActive)
+            {
+                Debug.Log("sigil off");
+                body.RemoveBuff(BuffCore.instance.sigilBuffIndex);
+                //remove visual effect
+                sigilActive = false;
+                body.statsDirty = true;
             }
         }
     }
