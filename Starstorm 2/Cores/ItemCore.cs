@@ -454,18 +454,6 @@ namespace Starstorm2.Cores
             On.RoR2.GlobalEventManager.OnHitEnemy += GlobalEventManager_OnHitEnemy;
             On.RoR2.CharacterMotor.OnLeaveStableGround += CharacterMotor_OnLeaveStableGround;
             On.RoR2.CharacterBody.RecalculateStats += CharacterBody_RecalculateStats;
-            //On.RoR2.CharacterBody.FixedUpdate += CharacterBody_FixedUpdate;
-        }
-
-        private void CharacterBody_FixedUpdate(On.RoR2.CharacterBody.orig_FixedUpdate orig, CharacterBody self)
-        {
-            Inventory inv = self.inventory;
-            if (inv)
-            {
-                if (inv.GetItemCount(huntersSigilIndex) > 0)
-                    self.RecalculateStats();
-            }
-            orig(self);
         }
 
         private void CharacterMotor_OnLeaveStableGround(On.RoR2.CharacterMotor.orig_OnLeaveStableGround orig, CharacterMotor self)
@@ -789,7 +777,7 @@ namespace Starstorm2.Cores
             var metronome = self.GetComponent<MetronomeBehavior>();
             if (metronome)
             {
-                self.moveSpeed += (self.baseMoveSpeed * metronome.metroCharge);
+                self.moveSpeed += (self.baseMoveSpeed * metronome.metroCharge * MetronomeBehavior.speedBoostMult);
             }
         }
 
@@ -878,6 +866,7 @@ namespace Starstorm2.Cores
     }
     public class MetronomeBehavior : CharacterBody.ItemBehavior
     {
+        public static float speedBoostMult = 2.0f;
         public float metroCharge;
 
         public void Awake()
@@ -894,14 +883,14 @@ namespace Starstorm2.Cores
                 {
                     metroCharge += Time.fixedDeltaTime / 4.0f;
                     metroCharge = Math.Min(metroCharge, 1.0f);
-                    body.RecalculateStats();
+                    body.statsDirty = true;
                 }
             }
             else if (metroCharge > 0f)
             {
                 metroCharge -= Time.fixedDeltaTime / (2.0f * stack);
                 metroCharge = Math.Max(metroCharge, 0f);
-                body.RecalculateStats();
+                body.statsDirty = true;
             }
         }
     }
