@@ -823,9 +823,9 @@ namespace Starstorm2.Cores
             if (body.isSprinting)
             {
                 timer += Time.deltaTime;
-                if (timer >= 5)
+                if (timer >= 1f)
                 {
-                    manager.HealFractionAuthority(.1f * stack);
+                    manager.HealFractionAuthority(.02f * stack);
                     timer = 0;
                 }
             }
