@@ -376,7 +376,7 @@ namespace Starstorm2.Cores
             LanguageAPI.Add("ITEM_DIARY_PICKUP", "Gain experience overtime.");
 
             LanguageAPI.Add("ITEM_COIN_NAME", "Molten Coin");
-            LanguageAPI.Add("ITEM_COIN_DESC", "<style=cIsHealing>4%</style> <style=cStack>(+3% per stack)</style> chance to <style=cIsDamage>ignite</style> enemies on hit for <style=cIsUtility>+$5</style>."); //by 2<style=cStack>(+1 per stack)</style> seconds.");
+            LanguageAPI.Add("ITEM_COIN_DESC", "<style=cIsDamage>6%</style> chance to <style=cIsDamage>ignite</style> enemies on hit for <style=cIsDamage>50%</style> base damage <style=cStack>(+50% per stack)</style> and earn <style=cIsUtility>$1</style> <style=cStack>(+$1 per stack)."); //by 2<style=cStack>(+1 per stack)</style> seconds.");
             LanguageAPI.Add("ITEM_COIN_PICKUP", "Chance to ignite enemies on hit.");
 
             LanguageAPI.Add("ITEM_ITEMONLEVELUP_NAME", "Nkota's Heritage");
@@ -538,7 +538,7 @@ namespace Starstorm2.Cores
                             {
                                 healAccum -= 15f;
                                 //sound/vfx here
-                                TeamManager.instance.GiveTeamMoney(body.teamComponent.teamIndex, (uint)amountToGift);
+                                body.master.GiveMoney((uint)amountToGift);
                             }
                         }
                     }
@@ -670,24 +670,25 @@ namespace Starstorm2.Cores
             if (self && attacker)
             {
                 var attackerBody = attacker.GetComponent<CharacterBody>();
+                var victimBody = victim.GetComponent<CharacterBody>();
                 var inventory = attackerBody.inventory;
                 if (inventory)
                 {
-                    var master = attacker.GetComponent<CharacterMaster>();
-                    int itemCount = inventory.GetItemCount(poisonOnHitIndex);
-                    int itemCount2 = inventory.GetItemCount(erraticGadgetIndex);
-                    if (itemCount > 0)
+                    int trematodeCount = inventory.GetItemCount(poisonOnHitIndex);
+                    if (trematodeCount > 0)
                     {
                         GameObject chad = attacker;
                         bool flag = (damageInfo.damageType & DamageType.PoisonOnHit) > DamageType.Generic;
-                        if ((itemCount > 0 || flag) && (flag || Util.CheckRoll((8.5f + (5f * (float)itemCount)) * damageInfo.procCoefficient, master)))
+                        if ((trematodeCount > 0 || flag) && (flag || Util.CheckRoll((8.5f + (5f * (float)trematodeCount)) * damageInfo.procCoefficient, attackerBody.master)))
                         {
                             ProcChainMask procChainMask = damageInfo.procChainMask;
                             procChainMask.AddProc(ProcType.BleedOnHit);
                             DotController.InflictDot(victim, chad, DoTCore.instance.strangeCanPoison, 3.5f, 1f);
                         }
                     }
-                    if (itemCount2 > 0)
+
+                    int gadgetCount = inventory.GetItemCount(erraticGadgetIndex);
+                    if (gadgetCount > 0)
                     {
                         if (damageInfo.crit)
                         {
@@ -696,16 +697,24 @@ namespace Starstorm2.Cores
                             {
                                 EffectData effectData = new EffectData
                                 {
-                                    origin = victim.GetComponent<CharacterBody>().corePosition,
+                                    origin = victimBody.corePosition,
                                     start = attackerBody.corePosition
                                 };
                                 EffectManager.SpawnEffect(erraticGadgetEffectPrefab, effectData, true);
                             }
                             DamageInfo newDamageInfo = damageInfo;
-                            newDamageInfo.damage = damageInfo.damage * (.5f * itemCount2);
+                            newDamageInfo.damage = damageInfo.damage * (.5f * gadgetCount);
                             victim.GetComponent<HealthComponent>().TakeDamage(newDamageInfo);
                             //This needs to be edited so that the effect actually originates from a body attachment
                         }
+                    }
+
+                    //molten coin
+                    int coinCount = inventory.GetItemCount(coinIndex);
+                    if (coinCount > 0 && Util.CheckRoll(6f, attackerBody.master))
+                    {
+                        DotController.InflictDot(victim, attacker, DotController.DotIndex.Burn, 4f, coinCount);
+                        attackerBody.master.GiveMoney((uint)coinCount);
                     }
 
                     //malice
