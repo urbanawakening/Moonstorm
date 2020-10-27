@@ -41,6 +41,7 @@ namespace Starstorm2.Cores
         protected internal ItemIndex coffeeIndex;
         protected internal ItemIndex metronomeIndex;
         protected internal ItemIndex huntersSigilIndex;
+        protected internal ItemIndex greenChocIndex;
 
         private const string modPrefix = "@Starstorm2:";
         private const string prefabPath = modPrefix + "Assets/Items/";
@@ -351,6 +352,22 @@ namespace Starstorm2.Cores
                 tier = ItemTier.Tier2,
                 unlockableName = ""
             });
+            ItemTag[] greenChocTags = new ItemTag[]
+            {
+                ItemTag.Damage
+            };
+            greenChocIndex = RegisterItem(new ItemDef
+            {
+                canRemove = true,
+                hidden = false,
+                loreToken = "",
+                name = "GreenChoc",
+                pickupIconPath = prefabPath + "GreenChocolate/GreenChocolate_Icon.png",
+
+                tags = greenChocTags,
+                tier = ItemTier.Tier3,
+                unlockableName = ""
+            });
 
             Hook();
         }
@@ -418,6 +435,10 @@ namespace Starstorm2.Cores
             LanguageAPI.Add("ITEM_SIGIL_NAME", "Hunter's Sigil");
             LanguageAPI.Add("ITEM_SIGIL_DESC", "While <style=cIsUtility>standing still</style>, gain <style=cIsUtility>15</style> armor <style=cStack>(+10 armor per stack)</style> and <style=cIsDamage>25%</style> critical chance <style=cStack>(+20% per stack)</style>.");
             LanguageAPI.Add("ITEM_SIGIL_PICKUP", "Standing still grants bonus armor and critical strike chance.");
+
+            LanguageAPI.Add("ITEM_GREENCHOC_NAME", "Green Chocolate");
+            LanguageAPI.Add("ITEM_GREENCHOC_DESC", "When damaged for at least <style=cIsHealth>20%</style> of your max HP, gain <style=cIsDamage>50%</style> base damage and <style=cIsDamage>30%</style> critical chance for <style=cIsDamage>6s</style> <style=cStack>(+2s per stack)</style>.");
+            LanguageAPI.Add("ITEM_GREENCHOC_PICKUP", "Gain a huge damage and critical chance bonus upon taking heavy damage.");
         }
 
         protected internal ItemIndex RegisterItem(ItemDef itemDef)
@@ -583,6 +604,20 @@ namespace Starstorm2.Cores
                             DotController.InflictDot(self.gameObject, attacker, DoTCore.instance.detritive, 3 * lightningOnCritCOunt, 1);
                         }
 
+                        if (self.body)
+                        {
+                            var victimInv = self.body.inventory;
+                            if (victimInv)
+                            {
+                                //green choc
+                                int greenChocCount = victimInv.GetItemCount(greenChocIndex);
+                                if (greenChocCount > 0 && damageInfo.damage >= self.fullHealth * 0.2f)
+                                {
+                                    Debug.Log(damageInfo.damage + " greater than threshold " + self.fullHealth * 0.2f);
+                                    self.body.AddTimedBuff(BuffCore.instance.greenChocBuffIndex, 4f + (2f * greenChocCount));
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -637,6 +672,7 @@ namespace Starstorm2.Cores
                         int itemCount = inventory.GetItemCount(fireOnEquipmentUseIndex);
                         if (itemCount > 0)
                         {
+                            // i rewrote your hottest sauce code btw so i could make it scale
                             var hits = new List<HurtBox>();
                             SphereSearch sauceSearch = new SphereSearch();
                             sauceSearch.ClearCandidates();

@@ -14,6 +14,7 @@ namespace Starstorm2.Cores
         protected internal BuffIndex greaterBannerIndex;
         protected internal BuffIndex strangeCanPoisonIndex;
         protected internal BuffIndex sigilBuffIndex;
+        protected internal BuffIndex greenChocBuffIndex;
 
         protected internal BuffIndex gougeIndex;
         protected internal BuffIndex awarenessIndex;
@@ -78,6 +79,15 @@ namespace Starstorm2.Cores
                 buffColor = Color.white
             });
 
+            greenChocBuffIndex = RegisterBuff(new BuffDef
+            {
+                canStack = false,
+                iconPath = "@Starstorm2:Assets/Items/GreenChocolate/GreenChocolate_Icon.png",
+                name = "GreenChocAttackBoost",
+                isDebuff = false,
+                buffColor = Color.white
+            });
+
             #region Nemmando
 
             gougeIndex = RegisterBuff(new BuffDef
@@ -126,8 +136,8 @@ namespace Starstorm2.Cores
                 }
                 if (self.HasBuff(greaterBannerIndex))
                 {
-                    self.SetPropertyValue("crit", crit += .2f);
-                    self.SetPropertyValue("regen", regen += .2f);
+                    self.SetPropertyValue("crit", crit += .2f); //this is 0.2% crit chance (not what you wanted?)
+                    self.SetPropertyValue("regen", regen += .2f); //and this is 0.2% max hp/sec
                     if (self.skillLocator)
                     {
                         var skillLocator = self.skillLocator;
@@ -151,6 +161,11 @@ namespace Starstorm2.Cores
                             skillLocator.special.cooldownScale = reduction;
                         }
                     }
+                }
+                if (self.HasBuff(greenChocBuffIndex))
+                {
+                    self.crit += 30f;
+                    self.damage += (self.baseDamage + self.levelDamage * (self.level - 1)) * 0.5f;
                 }
             }
         }

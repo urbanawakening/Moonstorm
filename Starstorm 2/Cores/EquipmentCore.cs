@@ -102,7 +102,7 @@ namespace Starstorm2.Cores
                 isLunar = false,
                 //loreToken = "EQUIPMENT_CLOAK_LORE",
                 name = "PressurizedCanister",
-                nameToken = "EQUIPMENT_CANIESTER_NAME",
+                nameToken = "EQUIPMENT_CANISTER_NAME",
                 pickupIconPath = prefabPath + "PressurizedCanister/PressurizedCanister_Icon.png",
                 //pickupModelPath = prefabPath + "GreaterWarbanner/MDLGreaterWarbanner.prefab",
                 pickupToken = "EQUIPMENT_CANISTER_PICKUP",
@@ -165,6 +165,10 @@ namespace Starstorm2.Cores
             LanguageAPI.Add("EQUIPMENT_CLOAK_NAME", "Cloaking Headband");
             LanguageAPI.Add("EQUIPMENT_CLOAK_PICKUP", "Becompe temporarily invisible.");
             LanguageAPI.Add("EQUIPMENT_CLOAK_DESC", "Become <style=cIsUtility>invisible</style> for 8 seconds.");
+
+            LanguageAPI.Add("EQUIPMENT_CANISTER_NAME", "Pressurized Canister");
+            LanguageAPI.Add("EQUIPMENT_CANISTER_PICKUP", "Launch yourself into the air.");
+            LanguageAPI.Add("EQUIPMENT_CANISTER_DESC", "Launch yourself into the air.");
         }
 
         protected internal EquipmentIndex RegisterNewEquip(EquipmentDef equipmentDef)

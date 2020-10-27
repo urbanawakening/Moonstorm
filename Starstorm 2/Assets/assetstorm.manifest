@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 476092882
+CRC: 1013162956
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: ec3588c93cd180d51a7812c09785dfdc
+    Hash: e61f894691cddbfc494f0ac248112d37
   TypeTreeHash:
     serializedVersion: 2
     Hash: 79c31612da9a127847ca328e3d297aed
@@ -87,6 +87,7 @@ Assets:
 - Assets/Nemmando/NemmandoAnimator.controller
 - Assets/Nemmando/NemmandoBodyUpper.mask
 - Assets/Nemmando/VFX/Materials/SlashShadow.mat
+- Assets/Items/GreenChocolate/GreenChocolate_Icon.png
 - Assets/Executioner/surprised-skull.png
 - Assets/Items/MoltenCoin/MDLMoltenCoin.prefab
 - Assets/Nemmando/Materials/NemmandoTex.mat
