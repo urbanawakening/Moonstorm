@@ -2,6 +2,7 @@
 using R2API.Utils;
 using RoR2;
 using UnityEngine;
+using UnityEngine.Networking;
 
 namespace Starstorm2.Cores
 {
@@ -19,7 +20,15 @@ namespace Starstorm2.Cores
         protected internal BuffIndex gougeIndex;
         protected internal BuffIndex awarenessIndex;
 
-        public BuffCore() => RegisterBuffs();
+        private GameObject greenChocPrefab;
+        private GameObject greenChocEffect;
+
+        public BuffCore()
+        {
+            RegisterBuffs();
+            RegisterEffects();
+            Hook();
+        }
 
         protected void RegisterBuffs()
         {
@@ -112,8 +121,25 @@ namespace Starstorm2.Cores
                 buffColor = Color.green
             });
             #endregion
+        }
 
+        private void RegisterEffects()
+        {
+            greenChocPrefab = PrefabAPI.InstantiateClone(Resources.Load<GameObject>("Prefabs/Effects/WarCryEffect"), "GreenChocEffect", true);
+            greenChocPrefab.AddComponent<NetworkIdentity>();
+            var particles = greenChocPrefab.GetComponentInChildren<ParticleSystem>();
+            if (particles)
+            {
+                var mainmod = particles.main;
+                //this doesn't do anything :(
+                mainmod.startColor = new Color(0.58f, 0.90f, 0.66f);
+            }
+        }
+
+        private void Hook()
+        {
             On.RoR2.CharacterBody.RecalculateStats += CharacterBody_RecalculateStats;
+            On.RoR2.CharacterBody.OnClientBuffsChanged += CharacterBody_OnClientBuffsChanged;
         }
 
         private void CharacterBody_RecalculateStats(On.RoR2.CharacterBody.orig_RecalculateStats orig, CharacterBody self)
@@ -167,6 +193,29 @@ namespace Starstorm2.Cores
                     self.crit += 30f;
                     self.damage += (self.baseDamage + self.levelDamage * (self.level - 1)) * 0.5f;
                 }
+            }
+        }
+
+        private void CharacterBody_OnClientBuffsChanged(On.RoR2.CharacterBody.orig_OnClientBuffsChanged orig, CharacterBody self)
+        {
+            orig(self);
+            if (self.HasBuff(greenChocBuffIndex) && !greenChocEffect)
+            {
+                Transform transform = self.mainHurtBox ? self.mainHurtBox.transform : self.transform;
+                if (transform)
+                {
+                    /*
+                    EffectData effectData = new EffectData();
+                    effectData.color = new Color(0.58f, 0.90f, 0.66f);
+                    effectData.start = transform.position;
+                    EffectManager.SpawnEffect(greenChocPrefab, effectData, true);
+                    */
+                    greenChocEffect = Object.Instantiate(greenChocPrefab, transform.position, Quaternion.identity, transform);
+                }
+            }
+            if (!self.HasBuff(greenChocBuffIndex) && greenChocEffect)
+            {
+                Object.Destroy(greenChocEffect);
             }
         }
 

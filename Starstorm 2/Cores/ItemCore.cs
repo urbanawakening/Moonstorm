@@ -613,7 +613,6 @@ namespace Starstorm2.Cores
                                 int greenChocCount = victimInv.GetItemCount(greenChocIndex);
                                 if (greenChocCount > 0 && damageInfo.damage >= self.fullHealth * 0.2f)
                                 {
-                                    Debug.Log(damageInfo.damage + " greater than threshold " + self.fullHealth * 0.2f);
                                     self.body.AddTimedBuff(BuffCore.instance.greenChocBuffIndex, 4f + (2f * greenChocCount));
                                 }
                             }
@@ -672,7 +671,6 @@ namespace Starstorm2.Cores
                         int itemCount = inventory.GetItemCount(fireOnEquipmentUseIndex);
                         if (itemCount > 0)
                         {
-                            // i rewrote your hottest sauce code btw so i could make it scale
                             var hits = new List<HurtBox>();
                             SphereSearch sauceSearch = new SphereSearch();
                             sauceSearch.ClearCandidates();
