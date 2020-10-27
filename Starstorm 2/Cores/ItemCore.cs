@@ -368,7 +368,7 @@ namespace Starstorm2.Cores
             LanguageAPI.Add("ITEM_BLOODTESTER_PICKUP", "Gain money on healing.");
 
             LanguageAPI.Add("ITEM_DORMANTFUNGUS_NAME", "Dormant Fungus");
-            LanguageAPI.Add("ITEM_DORMANTFUNGUS_DESC", "<style=cIsHealing>Heal 1%</style> <style=cStack>(+1% per stack)</style> every <style=cIsHealing>5</style> seconds while sprinting."); //by 2<style=cStack>(+1 per stack)</style> seconds.");
+            LanguageAPI.Add("ITEM_DORMANTFUNGUS_DESC", "<style=cIsHealing>Heal 2%</style> <style=cStack>(+2% per stack)</style> every second while sprinting."); //by 2<style=cStack>(+1 per stack)</style> seconds.");
             LanguageAPI.Add("ITEM_DORMANTFUNGUS_PICKUP", "Heal every five seconds while sprinting.");
 
             LanguageAPI.Add("ITEM_DIARY_NAME", "Diary");
@@ -637,26 +637,22 @@ namespace Starstorm2.Cores
                         int itemCount = inventory.GetItemCount(fireOnEquipmentUseIndex);
                         if (itemCount > 0)
                         {
-                            new BlastAttack()
+                            var hits = new List<HurtBox>();
+                            SphereSearch sauceSearch = new SphereSearch();
+                            sauceSearch.ClearCandidates();
+                            sauceSearch.origin = body.corePosition;
+                            sauceSearch.mask = LayerIndex.entityPrecise.mask;
+                            sauceSearch.radius = 30f;
+                            sauceSearch.RefreshCandidates();
+                            sauceSearch.FilterCandidatesByHurtBoxTeam(TeamMask.GetUnprotectedTeams(body.teamComponent.teamIndex));
+                            sauceSearch.FilterCandidatesByDistinctHurtBoxEntities();
+                            sauceSearch.GetHurtBoxes(hits);
+
+                            foreach(HurtBox hit in hits)
                             {
-                                attacker = self.gameObject,
-                                attackerFiltering = AttackerFiltering.Default,
-                                baseDamage = 0,
-                                baseForce = 100,
-                                //bonusForce = 0,
-                                crit = false,
-                                damageColorIndex = DamageColorIndex.Item,
-                                damageType = DamageTypeCore.burnOnHit,
-                                falloffModel = BlastAttack.FalloffModel.None,
-                                impactEffect = EffectIndex.Invalid,
-                                inflictor = self.gameObject,
-                                losType = BlastAttack.LoSType.None,
-                                position = self.transform.position,
-                                procChainMask = default,
-                                procCoefficient = 0,
-                                radius = 10,
-                                teamIndex = body.teamComponent.teamIndex
-                            }.Fire();
+                                if (hit.healthComponent)
+                                    DotController.InflictDot(hit.healthComponent.gameObject, self.gameObject, DotController.DotIndex.Burn, (1f + 4f * itemCount));
+                            }
                         }
                     }
                 }
