@@ -162,8 +162,10 @@ namespace Starstorm2.Cores
                 }
                 if (self.HasBuff(greaterBannerIndex))
                 {
-                    self.SetPropertyValue("crit", crit += .2f); //this is 0.2% crit chance (not what you wanted?)
-                    self.SetPropertyValue("regen", regen += .2f); //and this is 0.2% max hp/sec
+                    //self.SetPropertyValue("crit", crit += 20f); //this is 0.2% crit chance (not what you wanted?)
+                    //self.SetPropertyValue("regen", regen += 20f); //and this is 0.2% max hp/sec
+                    self.crit += 20f;
+                    self.regen = self.baseRegen * 1.5f;
                     if (self.skillLocator)
                     {
                         var skillLocator = self.skillLocator;

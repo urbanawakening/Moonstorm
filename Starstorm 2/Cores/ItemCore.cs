@@ -502,6 +502,7 @@ namespace Starstorm2.Cores
                             attacker = attacker,
                             baseDamage = damage,
                             radius = 7.5f,
+                            crit = self.GetComponent<CharacterBody>().RollCrit(),
                             falloffModel = BlastAttack.FalloffModel.None,
                             procCoefficient = 0f,
                             teamIndex = TeamIndex.Player,
